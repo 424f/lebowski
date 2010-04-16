@@ -1,1 +1,1 @@
-Oh hai
+Lebowski is a real-time collaborative text editor with Python integration
