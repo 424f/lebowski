@@ -1,0 +1,107 @@
+﻿<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{B3907A05-1EF4-4985-9440-46442FE1EFE6}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>Lebowski</RootNamespace>
+    <AssemblyName>Lebowski</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SourceAnalysisOverrideSettingsFile>D:\dev\lebowski\Source\Lebowski\Settings.SourceAnalysis</SourceAnalysisOverrideSettingsFile>
+    <StartupObject>Lebowski.Program</StartupObject>
+    <ReferencePath>D:\Dev\lebowski\Source\Lebowski\src\</ReferencePath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>Full</DebugType>
+    <Optimize>False</Optimize>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <DebugSymbols>False</DebugSymbols>
+    <DebugType>None</DebugType>
+    <Optimize>True</Optimize>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
+  <ItemGroup>
+    <Reference Include="ICSharpCode.TextEditor">
+      <HintPath>..\..\Libs\ICSharpCode.TextEditor.dll</HintPath>
+    </Reference>
+    <Reference Include="Lidgren.Network">
+      <HintPath>..\..\Libs\Lidgren.Network.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\Libs\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\Libs\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Source\IOperation.cs" />
+    <Compile Include="Source\MainForm.cs" />
+    <Compile Include="Source\MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\Net\ITextProtocol.cs" />
+    <Compile Include="Source\Net\Skype\SkypeProtocol.cs" />
+    <Compile Include="Source\Program.cs" />
+    <Compile Include="Source\StateVector.cs" />
+    <Compile Include="Source\Synchronization\DifferentialSynchronization\DifferentialSynchronizationStrategy.cs" />
+    <Compile Include="Source\Synchronization\DifferentialSynchronization\DiffMatchPatch.cs" />
+    <Compile Include="Source\Synchronization\dOPT\Model.cs" />
+    <Compile Include="Source\Synchronization\ISynchronizationStrategy.cs" />
+    <Compile Include="Source\TextModel\DeleteOperation.cs" />
+    <Compile Include="Source\TextModel\InsertOperation.cs" />
+    <Compile Include="Source\TextModel\ITextContext.cs" />
+    <Compile Include="Source\TextModel\ITextOperationVisitor.cs" />
+    <Compile Include="Source\TextModel\StringTextContext.cs" />
+    <Compile Include="Source\TextModel\TextOperation.cs" />
+    <Compile Include="Test\dOPTTest.cs" />
+    <Compile Include="Test\StringTextContextTest.cs" />
+    <EmbeddedResource Include="Source\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Source\Net" />
+    <Folder Include="Source\Net\Skype" />
+    <Folder Include="Source\Synchronization" />
+    <Folder Include="Source\Synchronization\DifferentialSynchronization" />
+    <Folder Include="Source\Synchronization\dOPT" />
+    <Folder Include="Source\TextModel" />
+    <COMReference Include="SKYPE4COMLib">
+      <Guid>{03282B5D-B38F-469D-849A-09B0A7F4881B}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+    </COMReference>
+  </ItemGroup>
+</Project>
