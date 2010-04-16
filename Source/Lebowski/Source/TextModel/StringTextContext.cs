@@ -4,9 +4,9 @@ namespace Lebowski.TextModel
 {
 	public class StringTextContext : ITextContext
 	{
-		public event EventHandler<EventArgs> Inserted;
-		
-		public event EventHandler<EventArgs> Deleted;
+		public event EventHandler<InsertEventArgs> Inserted;
+		public event EventHandler<DeleteEventArgs> Deleted;
+		public event EventHandler<EventArgs> Changed;
 		
 		public string Data { get; set; }
 		
@@ -15,14 +15,36 @@ namespace Lebowski.TextModel
 			Data = "";
 		}
 		
-		public void Insert(string text, int position)
+		public void Insert(InsertOperation operation, bool alreadyPerformed)
 		{
-			Data = Data.Substring(0, position) + text + Data.Substring(position);
+			if(!alreadyPerformed)
+			{
+				Data = Data.Substring(0, operation.Position) + operation.Character + Data.Substring(operation.Position);
+			}
+			if(Inserted != null)
+			{
+				Inserted(this, new InsertEventArgs(operation));
+			}
+			if(Changed != null)
+			{
+				Changed(this, null);
+			}
 		}
 		
-		public void Delete(int position, int length)
+		public void Delete(DeleteOperation operation, bool alreadyPerformed)
 		{
-			Data = Data.Substring(0, position) + Data.Substring(position+length);
+			if(!alreadyPerformed)
+			{
+				Data = Data.Substring(0, operation.Position) + Data.Substring(operation.Position+1);
+			}
+			if(Deleted != null)
+			{
+				Deleted(this, new DeleteEventArgs(operation));
+			}
+			if(Changed != null)
+			{
+				Changed(this, null);				
+			}
 		}
 	}
 }

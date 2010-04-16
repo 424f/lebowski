@@ -23,6 +23,16 @@ namespace Lebowski.Net
 	public interface ITextConnection
 	{
 		void Send(string message);
-		event EventHandler<EventArgs> Received;		
+		event EventHandler<ReceivedEventArgs> Received;		
+	}
+	
+	public class ReceivedEventArgs : EventArgs
+	{
+		public string Message { get; protected set; }
+		
+		public ReceivedEventArgs(string message)
+		{
+			Message = message;
+		}
 	}
 }

@@ -17,7 +17,7 @@ namespace Lebowski.TextModel
 		
 		public override void Apply(ITextContext context)
 		{
-			context.Insert(Character.ToString(), Position);
+			context.Insert(this, false);
 		}
 		
 		public override T Accept<T>(ITextOperationVisitor<T> visitor)

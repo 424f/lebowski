@@ -14,7 +14,7 @@ namespace Lebowski.TextModel
 		
 		public override void Apply(ITextContext context)
 		{
-			context.Delete(Position, 1);
+			context.Delete(this, false);
 		}
 		
 		public override T Accept<T>(ITextOperationVisitor<T> visitor)
