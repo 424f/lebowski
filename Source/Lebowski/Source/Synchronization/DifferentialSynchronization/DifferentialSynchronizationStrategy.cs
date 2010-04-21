@@ -12,24 +12,36 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
 		HavingToken
 	};
 	
+	[Serializable]
+	class DiffMessage
+	{
+		public string Diff { get; protected set; }
+		
+		public DiffMessage(string diff)
+		{
+			Diff = diff;
+		}
+	}
+	
 	public class DifferentialSynchronizationStrategy
 	{
 		public int SiteId { get; protected set; }
-		ITextConnection Connection;
+		IConnection Connection;
 		ITextContext Context;
-		List<ITextContext> Shadows;
+		StringTextContext Shadow;
 		diff_match_patch DiffMatchPatch = new diff_match_patch();
 		
 		bool hasChanged = false;
 		State state;
 		
-		public DifferentialSynchronizationStrategy(bool isServer, ITextContext context, ITextConnection connection)
+		public DifferentialSynchronizationStrategy(int siteId, ITextContext context, IConnection connection)
 		{
+			SiteId = siteId;
 			DiffMatchPatch =  new diff_match_patch();
 			Context = context;
 			Connection = connection;
 			
-			if(isServer)
+			if(siteId == 0)
 			{
 				state = State.HavingToken;
 			}
@@ -38,6 +50,15 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
 				state = State.WaitingForToken;
 			}
 				
+			Connection.Received += delegate(object sender, ReceivedEventArgs e)
+			{
+				if(e.Message is DiffMessage)
+				{
+					DiffMessage diffMessage = (DiffMessage)e.Message;
+					ApplyPatches(diffMessage.Diff);
+					
+				}
+			};
 			
 			Context.Changed += delegate(object sender, EventArgs e)
 			{
@@ -55,22 +76,27 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
 		
 		protected void SendPatches()
 		{
-			
+			// Create patch local
+			var localDiffs = DiffMatchPatch.diff_main(Shadow.Data, Context.Data);
+			Shadow.Data = Context.Data;		
+			var delta = DiffMatchPatch.diff_toDelta(localDiffs);
+			Connection.Send(new DiffMessage(delta));
 		}
 		
 		public void ReceivePatches(int remoteSite, List<Patch> patches)
 		{
-			Shadows[remoteSite].Data = (string)DiffMatchPatch.patch_apply(patches, Context.Data)[0];
+			Shadow.Data = (string)DiffMatchPatch.patch_apply(patches, Context.Data)[0];
 			Context.Data = (string)DiffMatchPatch.patch_apply(patches, Context.Data)[0];
 		}
 		
-		void ApplyPatches(List<Patch> patches, ITextContext context)
+		void ApplyPatches(string delta)
 		{
-			foreach(Patch patch in patches)
-			{
-				
-			}
-			context.Data = (string)DiffMatchPatch.patch_apply(patches, context.Data)[0];
+			// Apply at remote host
+			var diffs = DiffMatchPatch.diff_fromDelta(Shadow.Data, delta);
+			var shadowPatch = DiffMatchPatch.patch_make(Shadow.Data, diffs);
+			Shadow.Data = (string)DiffMatchPatch.patch_apply(shadowPatch, Shadow.Data)[0];
+			var textPatch = DiffMatchPatch.patch_make(Context.Data, diffs);
+			Context.Data = (string)DiffMatchPatch.patch_apply(textPatch, Context.Data)[0];			
 		}
 	}
 }

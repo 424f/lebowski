@@ -17,15 +17,15 @@ namespace Lebowski.Test.Synchronization
 		[Test]
 		public void TestThis()
 		{
-			LocalTextConnection serverConnection = new LocalTextConnection();
-			LocalTextConnection clientConnection = new LocalTextConnection();
-			LocalTextProtocol.Connect(serverConnection, clientConnection);
+			LocalConnection serverConnection = new LocalConnection();
+			LocalConnection clientConnection = new LocalConnection();
+			LocalProtocol.Connect(serverConnection, clientConnection);
 			
 			ITextContext serverContext = new StringTextContext();
 			ITextContext clientContext = new StringTextContext();
 			
-			var server = new DifferentialSynchronizationStrategy(serverContext, serverConnection);
-			var client = new DifferentialSynchronizationStrategy(clientContext, clientConnection);
+			var server = new DifferentialSynchronizationStrategy(0, serverContext, serverConnection);
+			var client = new DifferentialSynchronizationStrategy(1, clientContext, clientConnection);
 			
 			serverContext.Insert(new InsertOperation('f', 0), false);
 			serverContext.Insert(new InsertOperation('o', 1), false);
