@@ -2,7 +2,7 @@
 
 namespace Lebowski.TextModel
 {
-	abstract public class TextOperation : IOperation<ITextContext>
+	abstract public class TextOperation
 	{		
 		public ITextOperationVisitor<TextOperation> Transformer { get; protected set; }
 		
@@ -11,13 +11,12 @@ namespace Lebowski.TextModel
 		{
 		}
 
-		public IOperation<ITextContext> Transform(IOperation<ITextContext> other)
+		public TextOperation Transform(TextOperation other)
 		{
 			TextOperation textOperation = (TextOperation)other;
 			return textOperation.Accept<TextOperation>(Transformer);
 		}		
 		
 		abstract public ReturnType Accept<ReturnType>(ITextOperationVisitor<ReturnType> operation);
-		abstract public void Apply(ITextContext context);
 	}
 }

@@ -3,7 +3,7 @@ using SKYPE4COMLib;
 
 namespace Lebowski.Net.Skype
 {
-	public class SkypeProtocol : ITextProtocol
+	public class SkypeProtocol
 	{
 		private const string ApplicationName = "LEBOWSKI-01";
 		private Application Application;
@@ -36,7 +36,7 @@ namespace Lebowski.Net.Skype
 
 		}
 		
-		ITextConnection ITextProtocol.Connect(object settings)
+		object Connect(object settings)
 		{
 			Application.Connect((string)settings, true);
 			Application.SendDatagram("HI", Application.SendingStreams);

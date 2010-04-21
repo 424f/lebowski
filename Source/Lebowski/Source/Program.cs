@@ -8,9 +8,16 @@ namespace Lebowski
 		[STAThread]
 		private static void Main(string[] args)
 		{
-			Application.EnableVisualStyles();
+			Console.WriteLine("Lebowski");
+			
+			var test = new Lebowski.Test.Synchronization.DifferentialSynchronizationTest();
+			test.TestThis();
+			
+			Console.ReadKey();
+			
+			/*Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new LebowskiMockups.MainForm());
+			Application.Run(new LebowskiMockups.MainForm());*/
 		}
 	}
 }

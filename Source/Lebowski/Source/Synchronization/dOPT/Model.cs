@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Lebowski.TextModel;
 
 using Lebowski;
 
@@ -22,7 +23,7 @@ namespace Lebowski.Synchronization.dOPT
 	}
 
 	public class Model<OperationType, ContextType>
-		where OperationType : IOperation<ContextType>
+		where OperationType : TextOperation
 	{
 		int SiteId;
 		List<Request<OperationType>> Requests;
@@ -126,7 +127,8 @@ namespace Lebowski.Synchronization.dOPT
 				
 				if(oj != null)
 				{
-					oj.Apply(Context);
+					// TODO: oj.Apply(Context);
+					throw new NotImplementedException();
 				}
 				
 				Log.Add(new Request<OperationType>(j, State, oj, pj));

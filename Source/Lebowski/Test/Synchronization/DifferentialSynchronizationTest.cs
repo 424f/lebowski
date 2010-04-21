@@ -27,14 +27,31 @@ namespace Lebowski.Test.Synchronization
 			var server = new DifferentialSynchronizationStrategy(0, serverContext, serverConnection);
 			var client = new DifferentialSynchronizationStrategy(1, clientContext, clientConnection);
 			
-			serverContext.Insert(new InsertOperation('f', 0), false);
-			serverContext.Insert(new InsertOperation('o', 1), false);
-			serverContext.Insert(new InsertOperation('o', 2), false);
+			clientContext.Insert(clientContext, new InsertOperation('f', 0));
+			clientContext.Insert(clientContext, new InsertOperation('o', 1));
+			clientContext.Insert(clientContext, new InsertOperation('o', 2));
 			
-			System.Threading.Thread.Sleep(100);
+			Assert.AreNotEqual(client.State, server.State);
 			
-			Assert.AreEqual("foo", clientContext.Data);
-			Assert.AreEqual("foo", serverContext.Data);
+			server.FlushToken();
+			
+			Assert.AreNotEqual(client.State, server.State);
+			
+			serverContext.Insert(serverContext, new InsertOperation('!', 0));
+			
+			Assert.AreNotEqual(client.State, server.State);
+			
+			client.FlushToken();
+			server.FlushToken();
+			client.FlushToken();
+			
+			Assert.AreNotEqual(client.State, server.State);
+			
+			Assert.AreEqual(clientContext.Data, serverContext.Data);
+
+			Assert.AreEqual("!foo", clientContext.Data);
+			Assert.AreEqual("!foo", serverContext.Data);
+			
 		}
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Timers;
 using System.Collections.Generic;
 using Lebowski.TextModel;
 using Lebowski.Net;
@@ -6,7 +7,7 @@ using DiffMatchPatch;
 
 namespace Lebowski.Synchronization.DifferentialSynchronization
 {
-	enum State
+	public enum State
 	{
 		WaitingForToken,
 		HavingToken
@@ -32,7 +33,11 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
 		diff_match_patch DiffMatchPatch = new diff_match_patch();
 		
 		bool hasChanged = false;
-		State state;
+		public State State { get; protected set; }
+		
+		
+		public bool EnableAutoFlush { get; set; }
+		private Timer FlushTimer;
 		
 		public DifferentialSynchronizationStrategy(int siteId, ITextContext context, IConnection connection)
 		{
@@ -40,32 +45,60 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
 			DiffMatchPatch =  new diff_match_patch();
 			Context = context;
 			Connection = connection;
+			Shadow = new StringTextContext();
+			
+			EnableAutoFlush = false;
+			FlushTimer = new Timer(10);
+			FlushTimer.AutoReset = false;
+			FlushTimer.Elapsed += delegate { FlushToken(); };			
 			
 			if(siteId == 0)
 			{
-				state = State.HavingToken;
+				State = State.HavingToken;
 			}
 			else
 			{
-				state = State.WaitingForToken;
+				State = State.WaitingForToken;
 			}
 				
 			Connection.Received += delegate(object sender, ReceivedEventArgs e)
 			{
 				if(e.Message is DiffMessage)
 				{
+					State = State.HavingToken;
 					DiffMessage diffMessage = (DiffMessage)e.Message;
-					ApplyPatches(diffMessage.Diff);
+					if(diffMessage.Diff != "") 
+					{
+						ApplyPatches(diffMessage.Diff);
+					}
 					
+					if(hasChanged)
+					{
+						hasChanged = false;
+						State = State.WaitingForToken;	
+						SendPatches();
+					}
+					else if(EnableAutoFlush)
+					{
+						FlushTimer.Stop();
+						FlushTimer.Start();
+					}
+				}
+				else 
+				{
+					throw new Exception(String.Format("Encountered unknown message type '{0}'", e.GetType().Name));
 				}
 			};
 			
-			Context.Changed += delegate(object sender, EventArgs e)
+			Context.Changed += delegate(object sender, ChangeEventArgs e)
 			{
-				if(state == State.HavingToken)
+				if(e.Issuer == this)
+					return;
+				if(State == State.HavingToken)
 				{
-					SendPatches();
 					hasChanged = false;
+					State = State.WaitingForToken;					
+					SendPatches();
 				}
 				else
 				{
@@ -83,20 +116,32 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
 			Connection.Send(new DiffMessage(delta));
 		}
 		
-		public void ReceivePatches(int remoteSite, List<Patch> patches)
-		{
-			Shadow.Data = (string)DiffMatchPatch.patch_apply(patches, Context.Data)[0];
-			Context.Data = (string)DiffMatchPatch.patch_apply(patches, Context.Data)[0];
-		}
-		
 		void ApplyPatches(string delta)
 		{
+			string old = Context.Data;
+			
 			// Apply at remote host
 			var diffs = DiffMatchPatch.diff_fromDelta(Shadow.Data, delta);
 			var shadowPatch = DiffMatchPatch.patch_make(Shadow.Data, diffs);
 			Shadow.Data = (string)DiffMatchPatch.patch_apply(shadowPatch, Shadow.Data)[0];
 			var textPatch = DiffMatchPatch.patch_make(Context.Data, diffs);
 			Context.Data = (string)DiffMatchPatch.patch_apply(textPatch, Context.Data)[0];			
+			
+			Console.WriteLine("Was {0} now {1}", old, Context.Data);
+		}
+		
+		/// <summary>
+		/// This will return the tokens that this site currently has to the
+		/// other participants, thus ensuring that they can propagate their
+		/// changes back to us.
+		/// </summary>
+		public void FlushToken()
+		{
+			if(State == State.HavingToken)
+			{
+				State = State.WaitingForToken;
+				Connection.Send(new DiffMessage(""));
+			}
 		}
 	}
 }
