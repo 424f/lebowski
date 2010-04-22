@@ -70,5 +70,10 @@ namespace Lebowski.TextModel
 			SelectionStart = start;
 			SelectionEnd = last;
 		}		
+		
+		public void Invoke(Action d)
+		{
+			d();
+		}
 	}
 }

@@ -147,11 +147,50 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
 			{
 				System.Console.WriteLine(patch);
 			}
-			int[] offsets = {Context.SelectionStart, Context.SelectionEnd};
-			Context.Data = (string)patch_apply(textPatch, Context.Data, offsets)[0];			
-			Context.SetSelection(offsets[0], offsets[1]);
-			
-			Console.WriteLine("Was {0} now {1}", old, Context.Data);
+			Context.Invoke((Action)delegate {
+			    Console.WriteLine("Selection was: {0} {1}", Context.SelectionStart, Context.SelectionEnd);
+				int[] offsets = {Context.SelectionStart, Context.SelectionEnd};
+				Context.Data = (string)patch_apply(textPatch, Context.Data, offsets)[0];			
+				
+				// We restore the offset locations using absolute referencing
+				// See: http://neil.fraser.name/writing/cursor/
+				// TODO: is offset transformation in patch_apply still needed?
+				foreach(Patch patch in textPatch)
+				{
+					foreach(Diff diff in patch.diffs)
+					{
+						int index = 0;
+						switch(diff.operation)
+						{
+							case Operation.DELETE:
+								for(int i = 0; i < offsets.Length; ++i)
+								{
+									if(offsets[i] > index) 
+									{
+										offsets[i] -= diff.text.Length;
+									}
+								}								
+								break;
+							case Operation.EQUAL:
+								index += diff.text.Length;								
+								break;
+							case Operation.INSERT:
+								for(int i = 0; i < offsets.Length; ++i)
+								{
+									if(offsets[i] > index) 
+									{
+										offsets[i] += diff.text.Length;
+									}
+								}
+								index += diff.text.Length;
+								break;
+						}
+					}
+				}
+				Context.SetSelection(offsets[0], offsets[1]);			               	
+				Console.WriteLine("Selection is: {0} {1}", offsets[0], offsets[1]);
+				Console.WriteLine("Was {0} now {1}", old, Context.Data);
+			});
 		}
 		
 		/// <summary>

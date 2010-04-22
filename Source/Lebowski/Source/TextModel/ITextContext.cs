@@ -12,6 +12,13 @@ namespace Lebowski.TextModel
 		void Delete(object issuer, DeleteOperation operation);
 		void SetSelection(int start, int last);
 		
+		/// <summary>
+		/// Invokes the given action in a thread that has read-write access
+		/// to this context. If you are not operating on e.g. a UI control,
+		/// you can just implement this method by calling the delegate directly.
+		/// </summary>
+		void Invoke(Action action);
+		
 		event EventHandler<InsertEventArgs> Inserted;
 		event EventHandler<DeleteEventArgs> Deleted;
 		event EventHandler<ChangeEventArgs> Changed;
