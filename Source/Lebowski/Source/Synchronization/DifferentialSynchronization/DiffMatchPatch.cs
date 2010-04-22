@@ -239,7 +239,7 @@ namespace DiffMatchPatch
         public short Patch_Margin = 4;
 
         // The number of bits in an int.
-        private int Match_MaxBits = 32;
+        public int Match_MaxBits { get { return 32; } }
 
 
         //  DIFF FUNCTIONS
@@ -2294,7 +2294,7 @@ namespace DiffMatchPatch
                 - nullPadding.Length);
             return new Object[] { text, results };
         }
-
+        
         /**
          * Add some padding on text start and end so that edges can match something.
          * Intended to be called only from within patch_apply.

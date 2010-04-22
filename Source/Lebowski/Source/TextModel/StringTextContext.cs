@@ -9,6 +9,8 @@ namespace Lebowski.TextModel
 		public event EventHandler<ChangeEventArgs> Changed;
 		
 		public string Data { get; set; }
+		public int SelectionStart { get; protected set; }
+		public int SelectionEnd { get; protected set; }
 		
 		public StringTextContext()
 		{
@@ -39,7 +41,7 @@ namespace Lebowski.TextModel
 		
 		public virtual void Insert(object issuer, InsertOperation operation)
 		{
-			Data = Data.Substring(0, operation.Position) + operation.Character + Data.Substring(operation.Position);
+			Data = Data.Substring(0, operation.Position) + operation.Text + Data.Substring(operation.Position);
 			if(Inserted != null)
 			{
 				Inserted(this, new InsertEventArgs(issuer, operation));
@@ -62,5 +64,11 @@ namespace Lebowski.TextModel
 				Changed(this, new ChangeEventArgs(issuer));				
 			}
 		}
+		
+		public void SetSelection(int start, int last)
+		{
+			SelectionStart = start;
+			SelectionEnd = last;
+		}		
 	}
 }

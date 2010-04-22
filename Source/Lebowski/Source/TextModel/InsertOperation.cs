@@ -4,15 +4,20 @@ namespace Lebowski.TextModel
 {
 	public class InsertOperation : TextOperation
 	{	
-		public char Character { get; set; }
+		public string Text { get; set; }
 		
 		public int Position	{ get; set; }
 		
-		public InsertOperation(char character, int position)
+		public InsertOperation(string text, int position)
 		{
 			Transformer = new InsertOperationTransformer(this);
-			Character = character;
+			Text = text;
 			Position = position;
+		}
+		
+		public InsertOperation(char c, int position) : this(Convert.ToString(c), position)
+		{
+			
 		}
 		
 		public override T Accept<T>(ITextOperationVisitor<T> visitor)
@@ -22,7 +27,7 @@ namespace Lebowski.TextModel
 		
 		public override string ToString()
 		{
-			return String.Format("insert({0}, {1})", Character, Position);
+			return String.Format("insert({0}, {1})", Text, Position);
 		}		
 	}
 	
@@ -53,11 +58,11 @@ def insert_insert(oi, oj, pi, pj):
 			}
 			else if(Operation.Position > other.Position)
 			{
-				return new InsertOperation(Operation.Character, Operation.Position+1);
+				return new InsertOperation(Operation.Text, Operation.Position+1);
 			}
 			else
 			{
-				if(Operation.Character == other.Character)
+				if(Operation.Text == other.Text)
 				{
 					return null;
 				}
@@ -82,11 +87,11 @@ def insert_insert(oi, oj, pi, pj):
 		{
 			if(Operation.Position < other.Position) 
 			{
-				return new InsertOperation(Operation.Character, Operation.Position);
+				return new InsertOperation(Operation.Text, Operation.Position);
 			}
 			else
 			{
-				return new InsertOperation(Operation.Character, Operation.Position-1);
+				return new InsertOperation(Operation.Text, Operation.Position-1);
 			}
 		}		
 	}

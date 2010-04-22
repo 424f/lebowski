@@ -1,5 +1,6 @@
-﻿
-using System;
+﻿using System;
+using System.Threading;
+using System.Collections.Generic;
 
 namespace Lebowski.Net
 {
@@ -16,7 +17,20 @@ namespace Lebowski.Net
 	{
 		public LocalConnection Endpoint { set; protected get; }
 		
+		private Thread dispatcherThread;
+		private Queue<ReceivedEventArgs> eventQueue;
+		
 		public event EventHandler<ReceivedEventArgs> Received;
+
+		public LocalConnection()
+		{
+			eventQueue = new Queue<ReceivedEventArgs>();
+			
+			// Start dispatcher thread
+			ThreadStart threadStart = new ThreadStart(RunDispatcher);
+			dispatcherThread = new Thread(threadStart);
+			dispatcherThread.Start();
+		}
 		
 		protected virtual void OnReceived(ReceivedEventArgs e)
 		{
@@ -27,7 +41,31 @@ namespace Lebowski.Net
 		
 		public void Send(object message)
 		{
-			Endpoint.OnReceived(new ReceivedEventArgs(message));
+			System.Console.WriteLine("Send({0})", message);
+			lock(eventQueue)
+			{
+				eventQueue.Enqueue(new ReceivedEventArgs(message));
+				Monitor.PulseAll(eventQueue);
+			}
+		}
+		
+		private void RunDispatcher()
+		{
+			bool running = true;
+			while(running)
+			{
+				ReceivedEventArgs e = null;
+				lock(eventQueue)
+				{
+					while(eventQueue.Count == 0)
+					{
+						Monitor.Wait(eventQueue);
+					}
+					e = eventQueue.Dequeue();
+				}
+				System.Console.WriteLine("Receive({0})", e.Message);
+				Endpoint.OnReceived(e);
+			}
 		}
 	}
 }

@@ -5,9 +5,12 @@ namespace Lebowski.TextModel
 	public interface ITextContext
 	{
 		string Data { get; set; }
+		int SelectionStart { get; }
+		int SelectionEnd { get; }
 		
 		void Insert(object issuer, InsertOperation operation);
 		void Delete(object issuer, DeleteOperation operation);
+		void SetSelection(int start, int last);
 		
 		event EventHandler<InsertEventArgs> Inserted;
 		event EventHandler<DeleteEventArgs> Deleted;

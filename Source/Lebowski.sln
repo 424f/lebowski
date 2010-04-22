@@ -4,6 +4,8 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # SharpDevelop 3.2.0.5505
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lebowski", "Lebowski\Lebowski.csproj", "{B3907A05-1EF4-4985-9440-46442FE1EFE6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwinEditor", "TwinEditor\TwinEditor.csproj", "{89548DEC-46B8-42FA-89BB-948B5C570762}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -14,6 +16,10 @@ Global
 		{B3907A05-1EF4-4985-9440-46442FE1EFE6}.Debug|x86.Build.0 = Debug|x86
 		{B3907A05-1EF4-4985-9440-46442FE1EFE6}.Release|x86.ActiveCfg = Release|x86
 		{B3907A05-1EF4-4985-9440-46442FE1EFE6}.Release|x86.Build.0 = Release|x86
+		{89548DEC-46B8-42FA-89BB-948B5C570762}.Debug|x86.Build.0 = Debug|x86
+		{89548DEC-46B8-42FA-89BB-948B5C570762}.Debug|x86.ActiveCfg = Debug|x86
+		{89548DEC-46B8-42FA-89BB-948B5C570762}.Release|x86.Build.0 = Release|x86
+		{89548DEC-46B8-42FA-89BB-948B5C570762}.Release|x86.ActiveCfg = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
