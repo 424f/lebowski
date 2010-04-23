@@ -24,17 +24,26 @@ namespace Lebowski.TextModel
 		public string Data
 		{
 			get { return TextBox.Text; }
-			set { TextBox.Text = value; }
+			set
+			{
+				TextBox.TextChanged -= TextBoxChanged;
+				TextBox.Text = value;
+				TextBox.TextChanged += TextBoxChanged;
+			}
 		}
 		
 		public void Insert(object issuer, InsertOperation operation)
 		{
+			TextBox.TextChanged -= TextBoxChanged;
 			TextBox.Text.Insert(operation.Position, operation.Text.ToString());
+			TextBox.TextChanged += TextBoxChanged;
 		}
 		
 		public void Delete(object issuer, DeleteOperation operation)
 		{
+			TextBox.TextChanged -= TextBoxChanged;
 			TextBox.Text.Remove(operation.Position, 1);
+			TextBox.TextChanged += TextBoxChanged;
 		}
 		
 		TextBox TextBox;
@@ -42,11 +51,14 @@ namespace Lebowski.TextModel
 		public TextBoxTextContext(TextBox textBox)
 		{
 			TextBox = textBox;
-			TextBox.TextChanged += delegate(object sender, EventArgs e) { 
-				OnChanged(new ChangeEventArgs(this));
-			};
+			TextBox.TextChanged += TextBoxChanged;
 			
 			// TODO: implement insert / delete
+		}
+		
+		public void TextBoxChanged(object sender, EventArgs e)
+		{
+			OnChanged(new ChangeEventArgs(this));
 		}
 		
 		public void SetSelection(int start, int last)

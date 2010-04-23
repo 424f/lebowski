@@ -29,6 +29,19 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
 		}
 	}
 	
+	[Serializable]
+	/// <summary>
+	/// This message is sent, when a client would like to send its updates, but doesn't currently hold
+	/// the token.
+	/// </summary>
+	class TokenRequestMessage
+	{
+		public override string ToString()
+		{
+			return "TokenRequestMessage()";
+		}
+	}
+	
 	public class DifferentialSynchronizationStrategy
 	{
 		public int SiteId { get; protected set; }
@@ -39,10 +52,7 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
 		
 		public bool HasChanged { get; private set; }
 		public State State { get; protected set; }
-		
-		
-		public bool EnableAutoFlush { get; set; }
-		private Timer FlushTimer;
+		public bool TokenRequestSent = false;
 		
 		public DifferentialSynchronizationStrategy(int siteId, ITextContext context, IConnection connection)
 		{
@@ -53,18 +63,6 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
 			Shadow = new StringTextContext();
 			
 			HasChanged = false;
-			
-			EnableAutoFlush = false;
-			FlushTimer = new Timer(250);
-			FlushTimer.AutoReset = false;
-			FlushTimer.Enabled = EnableAutoFlush;
-			FlushTimer.Elapsed += delegate {
-				System.Console.WriteLine("{0}: FlushTimer", SiteId);
-				lock(this)
-				{
-					FlushToken();
-				}
-			};
 			
 			State = SiteId == 0 ? State.HavingToken : State.WaitingForToken;
 			
@@ -77,6 +75,7 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
 					{
 						System.Diagnostics.Debug.Assert(State == State.WaitingForToken);
 						State = State.HavingToken;
+						TokenRequestSent = false;
 						DiffMessage diffMessage = (DiffMessage)e.Message;
 						if(diffMessage.Diff != "") 
 						{
@@ -89,11 +88,11 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
 							State = State.WaitingForToken;	
 							SendPatches();
 						}
-						else if(EnableAutoFlush)
-						{
-							FlushTimer.Stop();
-							FlushTimer.Start();
-						}
+					}
+					else if(e.Message is TokenRequestMessage)
+					{
+						TokenRequestMessage message = (TokenRequestMessage)e.Message;
+						FlushToken();
 					}
 					else 
 					{
@@ -104,6 +103,7 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
 			
 			Context.Changed += delegate(object sender, ChangeEventArgs e)
 			{
+				System.Console.WriteLine("{0}'s context changed by {1}", SiteId, e.Issuer);
 				lock(this)
 				{
 					if(e.Issuer == this)
@@ -116,6 +116,11 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
 					}
 					else
 					{
+						if(!TokenRequestSent)
+						{
+							Connection.Send(new TokenRequestMessage());
+						}
+						TokenRequestSent = true;
 						HasChanged = true;
 					}
 				}
