@@ -45,13 +45,11 @@ namespace TwinEditor
 			LocalConnection clientConnection = new LocalConnection();
 			LocalProtocol.Connect(serverConnection, clientConnection);
 			
-			ITextContext serverContext = new TextBoxTextContext(serverForm.SourceCode);
-			ITextContext clientContext = new TextBoxTextContext(clientForm.SourceCode);
+			ITextContext serverContext = new TextEditorTextContext(serverForm.SourceCode);
+			ITextContext clientContext = new TextEditorTextContext(clientForm.SourceCode);
 			
-			server = new DifferentialSynchronizationStrategy(0, serverContext, clientConnection);
-			server.EnableAutoFlush = true;
-			client = new DifferentialSynchronizationStrategy(1, clientContext, serverConnection);				
-			client.EnableAutoFlush = true;
+			server = new DifferentialSynchronizationStrategy(0, serverContext, serverConnection);
+			client = new DifferentialSynchronizationStrategy(1, clientContext, clientConnection);				
 			
 			var timer = new System.Timers.Timer(20);
 			timer.Elapsed += delegate { 

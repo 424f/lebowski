@@ -29,14 +29,13 @@ namespace TwinEditor
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.SourceCode = new System.Windows.Forms.TextBox();
+			this.SourceCode = new ICSharpCode.TextEditor.TextEditorControl();
 			this.label1 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// SourceCode
 			// 
 			this.SourceCode.Location = new System.Drawing.Point(13, 13);
-			this.SourceCode.Multiline = true;
 			this.SourceCode.Name = "SourceCode";
 			this.SourceCode.Size = new System.Drawing.Size(445, 351);
 			this.SourceCode.TabIndex = 0;
@@ -62,6 +61,6 @@ namespace TwinEditor
 			this.PerformLayout();
 		}
 		public System.Windows.Forms.Label label1;
-		public System.Windows.Forms.TextBox SourceCode;
+		public ICSharpCode.TextEditor.TextEditorControl SourceCode;
 	}
 }

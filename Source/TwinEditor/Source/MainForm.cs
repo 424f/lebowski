@@ -18,6 +18,8 @@ namespace TwinEditor
 			//
 			InitializeComponent();
 			
+			SourceCode.SetHighlighting("C#");
+			
 			//
 			// TODO: Add constructor code after the InitializeComponent() call.
 			//

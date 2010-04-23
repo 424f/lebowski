@@ -21,6 +21,8 @@ namespace Lebowski.Net
 		private Queue<ReceivedEventArgs> eventQueue;
 		
 		public event EventHandler<ReceivedEventArgs> Received;
+		
+		private int ReceiveDelay = 0;
 
 		public LocalConnection()
 		{
@@ -62,6 +64,10 @@ namespace Lebowski.Net
 						Monitor.Wait(eventQueue);
 					}
 					e = eventQueue.Dequeue();
+				}
+				if(ReceiveDelay > 0)
+				{
+					Thread.Sleep(ReceiveDelay);
 				}
 				System.Console.WriteLine("Receive({0})", e.Message);
 				Endpoint.OnReceived(e);

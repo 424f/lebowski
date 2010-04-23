@@ -82,6 +82,7 @@
     <Compile Include="Source\TextModel\ITextOperationVisitor.cs" />
     <Compile Include="Source\TextModel\StringTextContext.cs" />
     <Compile Include="Source\TextModel\TextBoxTextContext.cs" />
+    <Compile Include="Source\TextModel\TextEditorTextContext.cs" />
     <Compile Include="Source\TextModel\TextOperation.cs" />
     <Compile Include="Test\dOPTTest.cs" />
     <Compile Include="Test\Net\EncodingTest.cs" />
