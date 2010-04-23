@@ -68,6 +68,7 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Source\Net\IConnection.cs" />
+    <Compile Include="Source\Net\Lidgren\TcpProtocol.cs" />
     <Compile Include="Source\Net\LocalProtocol.cs" />
     <Compile Include="Source\Net\Skype\SkypeProtocol.cs" />
     <Compile Include="Source\Program.cs" />
@@ -93,6 +94,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Source\Net" />
+    <Folder Include="Source\Net\Lidgren" />
     <Folder Include="Source\Net\Skype" />
     <Folder Include="Source\Synchronization" />
     <Folder Include="Source\Synchronization\DifferentialSynchronization" />
