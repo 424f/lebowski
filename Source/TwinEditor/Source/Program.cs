@@ -4,6 +4,7 @@ using System.Windows.Forms;
 
 using Lebowski;
 using Lebowski.Net;
+using Lebowski.Net.Lidgren;
 using Lebowski.TextModel;
 using Lebowski.Synchronization.DifferentialSynchronization;
 
@@ -32,6 +33,12 @@ namespace TwinEditor
 		
 		private void Run()
 		{
+			ServerConnection s = new ServerConnection();
+			System.Console.WriteLine("Server created..");
+			
+			ClientConnection c = new ClientConnection("localhost", ClientConnection.Port);
+			Console.WriteLine("Client connected..");
+			
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);		
 			
@@ -41,9 +48,9 @@ namespace TwinEditor
 			serverForm = new MainForm();			
 			serverForm.Text = "Server (0)";
 
-			LocalConnection serverConnection = new LocalConnection();
-			LocalConnection clientConnection = new LocalConnection();
-			LocalProtocol.Connect(serverConnection, clientConnection);
+			IConnection serverConnection = s; // new LocalConnection();
+			IConnection clientConnection = c; // new LocalConnection();
+			//LocalProtocol.Connect(serverConnection, clientConnection);
 			
 			ITextContext serverContext = new TextEditorTextContext(serverForm.SourceCode);
 			ITextContext clientContext = new TextEditorTextContext(clientForm.SourceCode);

@@ -1,5 +1,8 @@
 ﻿using System;
+using System.IO;
 using System.Threading;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using Lidgren.Network;
 
 namespace Lebowski.Net.Lidgren
@@ -14,6 +17,7 @@ namespace Lebowski.Net.Lidgren
 	public abstract class LidgrenConnection : IConnection
 	{
 		public const string AppName = "LEBOWSKI";
+		public const int Port = 12345;
 		
 		public event EventHandler<ReceivedEventArgs> Received;	
 		
@@ -27,12 +31,22 @@ namespace Lebowski.Net.Lidgren
 		
 		protected void SerializeToBuffer(object o, NetBuffer buffer)
 		{
-			
+			MemoryStream ms = new MemoryStream();
+			BinaryFormatter formatter = new BinaryFormatter();
+			formatter.Serialize(ms, o);
+			ms.Close();
+			buffer.Write(ms.ToArray());
 		}
 		
 		protected object DeserializeFromBuffer(NetBuffer buffer)
 		{
-			return null;
+			MemoryStream ms = new MemoryStream();
+			int length = buffer.LengthBytes;
+			ms.Write(buffer.ReadBytes(length), 0, length);
+			ms.Seek(0, SeekOrigin.Begin);
+			
+			BinaryFormatter formatter = new BinaryFormatter();
+			return formatter.Deserialize(ms);
 		}
 		
 		public abstract void Send(object o);
@@ -80,6 +94,7 @@ namespace Lebowski.Net.Lidgren
 		public override void Send(object o)
 		{
 			NetBuffer buffer = Socket.CreateBuffer();
+			SerializeToBuffer(o, buffer);
 			Socket.SendMessage(buffer, NetChannel.ReliableInOrder1);
 		}
 		
@@ -90,10 +105,59 @@ namespace Lebowski.Net.Lidgren
 		NetServer Socket;
 		NetConnection Client;
 		
+		public ServerConnection()
+		{
+			NetConfiguration config = new NetConfiguration(AppName);
+			config.MaxConnections = 1;
+			config.Port = Port;
+			Socket = new NetServer(config);
+			
+			// Create networking thread
+			ThreadStart threadStart = new ThreadStart(RunNetworkingThread);
+			Thread thread = new Thread(threadStart);
+			thread.Start();			
+		}
+		
+		private void RunNetworkingThread()
+		{
+			Socket.SetMessageTypeEnabled(NetMessageType.ConnectionApproval, true);
+			Socket.Start();
+			
+			NetBuffer buffer = Socket.CreateBuffer();
+			
+			bool running = true;
+			while(running)
+			{
+				NetMessageType type;
+				NetConnection sender;
+				
+				while(Socket.ReadMessage(buffer, out type, out sender))
+				{
+					switch(type)
+					{
+						case NetMessageType.ConnectionApproval:
+							sender.Approve();
+							break;
+						
+						case NetMessageType.StatusChanged:
+							break;
+						
+						case NetMessageType.Data:
+							Object message = DeserializeFromBuffer(buffer);
+							OnReceived(new ReceivedEventArgs(message));
+							break;							
+					}
+				}
+				
+				Thread.Sleep(1);
+			}
+		}
+		
 		public override void Send(object o)
 		{
 			NetBuffer buffer = Socket.CreateBuffer();
-			Socket.SendMessage(buffer, Client, NetChannel.ReliableInOrder1);
+			SerializeToBuffer(o, buffer);
+			Socket.SendToAll(buffer, NetChannel.ReliableInOrder1);
 		}
 		
 	}

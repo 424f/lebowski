@@ -96,7 +96,7 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
 					}
 					else 
 					{
-						throw new Exception(String.Format("Encountered unknown message type '{0}'", e.GetType().Name));
+						throw new Exception(String.Format("Encountered unknown message type '{0}'", e.Message.GetType().Name));
 					}
 				}
 			};
