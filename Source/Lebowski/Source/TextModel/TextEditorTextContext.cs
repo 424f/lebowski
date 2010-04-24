@@ -1,9 +1,11 @@
 ﻿using System;
-using System.Windows.Forms;
+using ICSharpCode.TextEditor;
+
+// TODO: extract common functionality with TextBoxTextContext into common abstract superclass
 
 namespace Lebowski.TextModel
 {
-	public class TextBoxTextContext : ITextContext
+	public class TextEditorTextContext : ITextContext
 	{
 		public event EventHandler<InsertEventArgs> Inserted;
 		
@@ -13,12 +15,12 @@ namespace Lebowski.TextModel
 		
 		public int SelectionStart
 		{
-			get { return TextBox.SelectionStart;	}
+			get { return 0; } //TextBox.ActiveTextAreaControl.SelectionManager.SelectionCollection[0].Offset;	}
 		}
 		
 		public int SelectionEnd
 		{
-			get { return TextBox.SelectionStart + TextBox.SelectionLength; }
+			get { return 0; } //SelectionStart + TextBox.ActiveTextAreaControl.SelectionManager.SelectionCollection[0].Length; }
 		}
 		
 		public string Data
@@ -46,9 +48,9 @@ namespace Lebowski.TextModel
 			TextBox.TextChanged += TextBoxChanged;
 		}
 		
-		TextBox TextBox;
+		TextEditorControl TextBox;
 		
-		public TextBoxTextContext(TextBox textBox)
+		public TextEditorTextContext(TextEditorControl textBox)
 		{
 			TextBox = textBox;
 			TextBox.TextChanged += TextBoxChanged;
@@ -63,8 +65,10 @@ namespace Lebowski.TextModel
 		
 		public void SetSelection(int start, int last)
 		{			
-			TextBox.SelectionStart = start;
-			TextBox.SelectionLength = last - start;
+			/*var selection = TextBox.ActiveTextAreaControl.SelectionManager.SelectionCollection[0];
+			selection.Offset = start;
+			selection.Length = last - start;
+			TextBox.ActiveTextAreaControl.SelectionManager.SetSelection(selection);*/
 		}			
 		
 		protected virtual void OnInserted(InsertEventArgs e)
