@@ -35,9 +35,12 @@ namespace TwinEditor
 			// 
 			// SourceCode
 			// 
+			this.SourceCode.AutoScroll = true;
+			this.SourceCode.IsReadOnly = false;
 			this.SourceCode.Location = new System.Drawing.Point(13, 13);
+			this.SourceCode.Margin = new System.Windows.Forms.Padding(0);
 			this.SourceCode.Name = "SourceCode";
-			this.SourceCode.Size = new System.Drawing.Size(445, 351);
+			this.SourceCode.Size = new System.Drawing.Size(613, 351);
 			this.SourceCode.TabIndex = 0;
 			// 
 			// label1
@@ -52,13 +55,12 @@ namespace TwinEditor
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(470, 404);
+			this.ClientSize = new System.Drawing.Size(635, 443);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.SourceCode);
 			this.Name = "MainForm";
 			this.Text = "TwinEditor";
 			this.ResumeLayout(false);
-			this.PerformLayout();
 		}
 		public System.Windows.Forms.Label label1;
 		public ICSharpCode.TextEditor.TextEditorControl SourceCode;

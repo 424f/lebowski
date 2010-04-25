@@ -70,6 +70,7 @@
     <Compile Include="Source\Net\IConnection.cs" />
     <Compile Include="Source\Net\Lidgren\TcpProtocol.cs" />
     <Compile Include="Source\Net\LocalProtocol.cs" />
+    <Compile Include="Source\Net\MultichannelConnection.cs" />
     <Compile Include="Source\Net\NetUtils.cs" />
     <Compile Include="Source\Net\Skype\SkypeProtocol.cs" />
     <Compile Include="Source\Program.cs" />

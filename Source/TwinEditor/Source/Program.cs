@@ -98,8 +98,13 @@ namespace TwinEditor
 					Console.ReadKey(true);
 					return;
 				}
-				sync = new DifferentialSynchronizationStrategy(1, context, connection);
 				
+				// We have to use a multichannel connection
+				MultichannelConnection mcc = new MultichannelConnection(connection);
+				sync = new DifferentialSynchronizationStrategy(1, context, mcc.CreateChannel());
+			
+				// Use 2nd channel to transport chat messages
+				var chatChannel = mcc.CreateChannel();
 			}
 			
 			var timer = new System.Timers.Timer(20);
