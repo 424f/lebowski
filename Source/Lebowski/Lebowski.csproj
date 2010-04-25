@@ -70,6 +70,7 @@
     <Compile Include="Source\Net\IConnection.cs" />
     <Compile Include="Source\Net\Lidgren\TcpProtocol.cs" />
     <Compile Include="Source\Net\LocalProtocol.cs" />
+    <Compile Include="Source\Net\NetUtils.cs" />
     <Compile Include="Source\Net\Skype\SkypeProtocol.cs" />
     <Compile Include="Source\Program.cs" />
     <Compile Include="Source\StateVector.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="Source\Synchronization\DifferentialSynchronization\DiffMatchPatch.cs" />
     <Compile Include="Source\Synchronization\dOPT\Model.cs" />
     <Compile Include="Source\Synchronization\ISynchronizationStrategy.cs" />
+    <Compile Include="Source\TextModel\AbstractTextContext.cs" />
     <Compile Include="Source\TextModel\DeleteOperation.cs" />
     <Compile Include="Source\TextModel\InsertOperation.cs" />
     <Compile Include="Source\TextModel\ITextContext.cs" />

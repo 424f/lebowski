@@ -3,25 +3,21 @@ using System.Windows.Forms;
 
 namespace Lebowski.TextModel
 {
-	public class TextBoxTextContext : ITextContext
-	{
-		public event EventHandler<InsertEventArgs> Inserted;
-		
-		public event EventHandler<DeleteEventArgs> Deleted;
-		
-		public event EventHandler<ChangeEventArgs> Changed;
-		
-		public int SelectionStart
+	public class TextBoxTextContext : AbstractTextContext
+	{		
+		public override int SelectionStart
 		{
-			get { return TextBox.SelectionStart;	}
+			get { return TextBox.SelectionStart; }
+			protected set { TextBox.SelectionStart = value; }
 		}
 		
-		public int SelectionEnd
+		public override int SelectionEnd
 		{
 			get { return TextBox.SelectionStart + TextBox.SelectionLength; }
+			protected set { TextBox.SelectionLength = value - TextBox.SelectionStart; }
 		}
 		
-		public string Data
+		public override string Data
 		{
 			get { return TextBox.Text; }
 			set
@@ -32,14 +28,14 @@ namespace Lebowski.TextModel
 			}
 		}
 		
-		public void Insert(object issuer, InsertOperation operation)
+		public override void Insert(object issuer, InsertOperation operation)
 		{
 			TextBox.TextChanged -= TextBoxChanged;
 			TextBox.Text.Insert(operation.Position, operation.Text.ToString());
 			TextBox.TextChanged += TextBoxChanged;
 		}
 		
-		public void Delete(object issuer, DeleteOperation operation)
+		public override void Delete(object issuer, DeleteOperation operation)
 		{
 			TextBox.TextChanged -= TextBoxChanged;
 			TextBox.Text.Remove(operation.Position, 1);
@@ -61,34 +57,13 @@ namespace Lebowski.TextModel
 			OnChanged(new ChangeEventArgs(this));
 		}
 		
-		public void SetSelection(int start, int last)
+		public override void SetSelection(int start, int last)
 		{			
 			TextBox.SelectionStart = start;
 			TextBox.SelectionLength = last - start;
 		}			
 		
-		protected virtual void OnInserted(InsertEventArgs e)
-		{
-			if (Inserted != null) {
-				Inserted(this, e);
-			}
-		}
-		
-		protected virtual void OnDeleted(DeleteEventArgs e)
-		{
-			if (Deleted != null) {
-				Deleted(this, e);
-			}
-		}
-		
-		protected virtual void OnChanged(ChangeEventArgs e)
-		{
-			if (Changed != null) {
-				Changed(this, e);
-			}
-		}
-		
-		public void Invoke(Action d) 
+		public override void Invoke(Action d) 
 		{
 			TextBox.BeginInvoke(d);
 		}

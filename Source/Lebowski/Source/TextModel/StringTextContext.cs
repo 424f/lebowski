@@ -2,76 +2,38 @@
 
 namespace Lebowski.TextModel
 {
-	public class StringTextContext : ITextContext
+	public class StringTextContext : AbstractTextContext
 	{
-		public event EventHandler<InsertEventArgs> Inserted;
-		public event EventHandler<DeleteEventArgs> Deleted;
-		public event EventHandler<ChangeEventArgs> Changed;
-		
-		public string Data { get; set; }
-		public int SelectionStart { get; protected set; }
-		public int SelectionEnd { get; protected set; }
+		public override string Data { get; set; }
+		public override int SelectionStart { get; protected set; }
+		public override int SelectionEnd { get; protected set; }
 		
 		public StringTextContext()
 		{
 			Data = "";
-		}
+		}		
 		
-		protected virtual void OnInserted(InsertEventArgs e)
-		{
-			if (Inserted != null) {
-				Inserted(this, e);
-			}
-		}
-		
-		protected virtual void OnDeleted(DeleteEventArgs e)
-		{
-			if (Deleted != null) {
-				Deleted(this, e);
-			}
-		}
-		
-		protected virtual void OnChanged(ChangeEventArgs e)
-		{
-			if (Changed != null) {
-				Changed(this, e);
-			}
-		}
-		
-		
-		public virtual void Insert(object issuer, InsertOperation operation)
+		public override void Insert(object issuer, InsertOperation operation)
 		{
 			Data = Data.Substring(0, operation.Position) + operation.Text + Data.Substring(operation.Position);
-			if(Inserted != null)
-			{
-				Inserted(this, new InsertEventArgs(issuer, operation));
-			}
-			if(Changed != null)
-			{
-				Changed(this, new ChangeEventArgs(issuer));
-			}
+			OnInserted(new InsertEventArgs(issuer, operation));
+			OnChanged(new ChangeEventArgs(issuer));
 		}
 		
-		public virtual void Delete(object issuer, DeleteOperation operation)
+		public override void Delete(object issuer, DeleteOperation operation)
 		{
 			Data = Data.Substring(0, operation.Position) + Data.Substring(operation.Position+1);
-			if(Deleted != null)
-			{
-				Deleted(this, new DeleteEventArgs(issuer, operation));
-			}
-			if(Changed != null)
-			{
-				Changed(this, new ChangeEventArgs(issuer));				
-			}
+			OnDeleted(new DeleteEventArgs(issuer, operation));
+			OnChanged(new ChangeEventArgs(issuer));				
 		}
 		
-		public void SetSelection(int start, int last)
+		public override void SetSelection(int start, int last)
 		{
 			SelectionStart = start;
 			SelectionEnd = last;
 		}		
 		
-		public void Invoke(Action d)
+		public override void Invoke(Action d)
 		{
 			d();
 		}

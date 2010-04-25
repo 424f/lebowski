@@ -5,25 +5,44 @@ using ICSharpCode.TextEditor;
 
 namespace Lebowski.TextModel
 {
-	public class TextEditorTextContext : ITextContext
+	public class TextEditorTextContext : AbstractTextContext
 	{
-		public event EventHandler<InsertEventArgs> Inserted;
-		
-		public event EventHandler<DeleteEventArgs> Deleted;
-		
-		public event EventHandler<ChangeEventArgs> Changed;
-		
-		public int SelectionStart
+		public override int SelectionStart
 		{
-			get { return 0; } //TextBox.ActiveTextAreaControl.SelectionManager.SelectionCollection[0].Offset;	}
+			get
+			{ 
+				if(!TextBox.ActiveTextAreaControl.SelectionManager.HasSomethingSelected)
+					return 0;
+				return TextBox.ActiveTextAreaControl.SelectionManager.SelectionCollection[0].Offset;
+			}
+			protected set { throw new NotImplementedException(); }
 		}
 		
-		public int SelectionEnd
+		public override int SelectionEnd
 		{
-			get { return 0; } //SelectionStart + TextBox.ActiveTextAreaControl.SelectionManager.SelectionCollection[0].Length; }
+			get
+			{
+				if(!TextBox.ActiveTextAreaControl.SelectionManager.HasSomethingSelected)
+					return 0;				
+				return SelectionStart + TextBox.ActiveTextAreaControl.SelectionManager.SelectionCollection[0].Length;
+			}
+			protected set { throw new NotImplementedException(); }
 		}
 		
-		public string Data
+		public override int CaretPosition
+		{
+			get 
+			{
+				return TextBox.ActiveTextAreaControl.Caret.Offset;
+			}
+			
+			set
+			{
+				TextBox.ActiveTextAreaControl.Caret.Position = TextBox.Document.OffsetToPosition(value);
+			}
+		}
+		
+		public override string Data
 		{
 			get { return TextBox.Text; }
 			set
@@ -34,14 +53,14 @@ namespace Lebowski.TextModel
 			}
 		}
 		
-		public void Insert(object issuer, InsertOperation operation)
+		public override void Insert(object issuer, InsertOperation operation)
 		{
 			TextBox.TextChanged -= TextBoxChanged;
 			TextBox.Text.Insert(operation.Position, operation.Text.ToString());
 			TextBox.TextChanged += TextBoxChanged;
 		}
 		
-		public void Delete(object issuer, DeleteOperation operation)
+		public override void Delete(object issuer, DeleteOperation operation)
 		{
 			TextBox.TextChanged -= TextBoxChanged;
 			TextBox.Text.Remove(operation.Position, 1);
@@ -63,36 +82,14 @@ namespace Lebowski.TextModel
 			OnChanged(new ChangeEventArgs(this));
 		}
 		
-		public void SetSelection(int start, int last)
-		{			
-			/*var selection = TextBox.ActiveTextAreaControl.SelectionManager.SelectionCollection[0];
-			selection.Offset = start;
-			selection.Length = last - start;
-			TextBox.ActiveTextAreaControl.SelectionManager.SetSelection(selection);*/
+		public override void SetSelection(int start, int last)
+		{	
+			TextLocation startLocation = TextBox.Document.OffsetToPosition(start);
+			TextLocation lastLocation = TextBox.Document.OffsetToPosition(last);
+			TextBox.ActiveTextAreaControl.SelectionManager.SetSelection(startLocation, lastLocation);
 		}			
 		
-		protected virtual void OnInserted(InsertEventArgs e)
-		{
-			if (Inserted != null) {
-				Inserted(this, e);
-			}
-		}
-		
-		protected virtual void OnDeleted(DeleteEventArgs e)
-		{
-			if (Deleted != null) {
-				Deleted(this, e);
-			}
-		}
-		
-		protected virtual void OnChanged(ChangeEventArgs e)
-		{
-			if (Changed != null) {
-				Changed(this, e);
-			}
-		}
-		
-		public void Invoke(Action d) 
+		public override void Invoke(Action d) 
 		{
 			TextBox.BeginInvoke(d);
 		}

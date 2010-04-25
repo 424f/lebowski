@@ -7,6 +7,8 @@ namespace Lebowski.TextModel
 		string Data { get; set; }
 		int SelectionStart { get; }
 		int SelectionEnd { get; }
+		int CaretPosition { get; set; }
+		string SelectedText { get; }
 		
 		void Insert(object issuer, InsertOperation operation);
 		void Delete(object issuer, DeleteOperation operation);

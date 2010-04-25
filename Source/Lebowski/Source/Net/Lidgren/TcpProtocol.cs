@@ -4,14 +4,21 @@ using System.Threading;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using Lidgren.Network;
+using log4net;
+using Lebowski.Net;
 
 namespace Lebowski.Net.Lidgren
-{
+{	
 	public class TcpProtocol
 	{
 		public TcpProtocol()
 		{
 		}
+	}
+	
+	public class ConnectionFailedException : Exception
+	{
+		public ConnectionFailedException(string message) : base(message) {}
 	}
 	
 	public abstract class LidgrenConnection : IConnection
@@ -31,22 +38,12 @@ namespace Lebowski.Net.Lidgren
 		
 		protected void SerializeToBuffer(object o, NetBuffer buffer)
 		{
-			MemoryStream ms = new MemoryStream();
-			BinaryFormatter formatter = new BinaryFormatter();
-			formatter.Serialize(ms, o);
-			ms.Close();
-			buffer.Write(ms.ToArray());
+			buffer.Write(NetUtils.Serialize(o));
 		}
 		
 		protected object DeserializeFromBuffer(NetBuffer buffer)
 		{
-			MemoryStream ms = new MemoryStream();
-			int length = buffer.LengthBytes;
-			ms.Write(buffer.ReadBytes(length), 0, length);
-			ms.Seek(0, SeekOrigin.Begin);
-			
-			BinaryFormatter formatter = new BinaryFormatter();
-			return formatter.Deserialize(ms);
+			return NetUtils.Deserialize(buffer.ReadBytes(buffer.LengthBytes));
 		}
 		
 		public abstract void Send(object o);
@@ -54,14 +51,40 @@ namespace Lebowski.Net.Lidgren
 	
 	public class ClientConnection : LidgrenConnection
 	{
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(LidgrenConnection));
+		
 		NetClient Socket;
 		bool Running = true;
 		
+		string address;
+		int port;
+		
 		public ClientConnection(string address, int port)
 		{
+			this.address = address;
+			this.port = port;
+			
 			NetConfiguration config = new NetConfiguration(AppName);
 			Socket = new NetClient(config);
-			Socket.Connect(address, port);
+			Socket.SetMessageTypeEnabled(NetMessageType.ConnectionRejected, true);
+			Socket.SetMessageTypeEnabled(NetMessageType.DebugMessage, true);
+
+			// Wait for connection 
+			const int maxWaitTime = 3000;
+			Socket.Connect(address, port, new byte[] { 123, 123 } );
+			/*int timeWaited = 0;
+			while(Socket.Status == NetConnectionStatus.Connecting && timeWaited < maxWaitTime)
+			{
+				Thread.Sleep(250);
+				timeWaited += 250;
+			}
+			
+			// Are we connected now?
+			if(Socket.Status != NetConnectionStatus.Connected)
+			{
+				throw new ConnectionFailedException(String.Format("Connection with host {0}:{1} could not be established", address, port));
+			}*/
+			
 			
 			// Create networking thread
 			ThreadStart threadStart = new ThreadStart(RunNetworkingThread);
@@ -70,7 +93,7 @@ namespace Lebowski.Net.Lidgren
 		}
 		
 		private void RunNetworkingThread()
-		{
+		{			
 			NetBuffer buffer = Socket.CreateBuffer();
 			while(Running)
 			{
@@ -82,6 +105,10 @@ namespace Lebowski.Net.Lidgren
 						case NetMessageType.Data:
 							Object message = DeserializeFromBuffer(buffer);
 							OnReceived(new ReceivedEventArgs(message));
+							break;
+						
+						case NetMessageType.ConnectionRejected:
+							Logger.Info("Your connection was rejected.");
 							break;
 							
 						default:
@@ -104,11 +131,12 @@ namespace Lebowski.Net.Lidgren
 	{
 		NetServer Socket;
 		NetConnection Client;
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(LidgrenConnection));
 		
 		public ServerConnection()
 		{
 			NetConfiguration config = new NetConfiguration(AppName);
-			config.MaxConnections = 1;
+			config.MaxConnections = 32; // TODO: only one connection
 			config.Port = Port;
 			Socket = new NetServer(config);
 			
@@ -136,6 +164,7 @@ namespace Lebowski.Net.Lidgren
 					switch(type)
 					{
 						case NetMessageType.ConnectionApproval:
+							Logger.Info(String.Format("Accepted connection by {0}", sender));
 							sender.Approve();
 							break;
 						

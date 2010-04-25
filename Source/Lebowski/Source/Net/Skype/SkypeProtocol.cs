@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Text;
 using SKYPE4COMLib;
+using Lebowski.Net;
 
 namespace Lebowski.Net.Skype
 {
@@ -46,6 +48,22 @@ namespace Lebowski.Net.Skype
 		public void Dispose()
 		{
 		}
+		
+	}
+	
+	public class SkypeConnection : IConnection
+	{
+		public event EventHandler<ReceivedEventArgs> Received;
+		
+		public void Send(object o)
+		{
+			byte[] buffer = NetUtils.Serialize(o);
+			Convert.ToBase64String(buffer);
+			
+			// TODO:
+		}
+		
+		
 		
 	}
 }

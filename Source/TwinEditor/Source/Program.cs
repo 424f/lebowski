@@ -30,18 +30,15 @@ namespace TwinEditor
 		
 		DifferentialSynchronizationStrategy server;
 		DifferentialSynchronizationStrategy client;
-		
-		private void Run()
+
+		private void RunLocalSample()
 		{
 			ServerConnection s = new ServerConnection();
 			System.Console.WriteLine("Server created..");
 			
 			ClientConnection c = new ClientConnection("localhost", ClientConnection.Port);
 			Console.WriteLine("Client connected..");
-			
-			Application.EnableVisualStyles();
-			Application.SetCompatibleTextRenderingDefault(false);		
-			
+
 			clientForm = new MainForm();
 			clientForm.Text = "Client (1)";
 			
@@ -65,7 +62,54 @@ namespace TwinEditor
 			timer.Enabled = true;
 			
 			clientForm.Show();
-			serverForm.Show();
+			serverForm.Show();			
+		}
+		
+		private void Run()
+		{
+			Application.EnableVisualStyles();
+			Application.SetCompatibleTextRenderingDefault(false);				
+			
+			Console.Write("Server (s) or client (c): ");
+			string choice = Console.ReadLine();
+			
+			IConnection connection;
+			DifferentialSynchronizationStrategy sync;
+			
+			MainForm form = new MainForm();
+			ITextContext context = new TextEditorTextContext(form.SourceCode);			
+			
+			if(choice == "s")
+			{
+				connection = new ServerConnection();	
+				sync = new DifferentialSynchronizationStrategy(0, context, connection);
+			}
+			else
+			{
+				Console.Write("Address: ");
+				string address = Console.ReadLine();
+				try 
+				{
+					connection = new ClientConnection(address, ClientConnection.Port);
+				}
+				catch(ConnectionFailedException e)
+				{
+					Console.WriteLine("**ERROR** " + e.ToString());
+					Console.ReadKey(true);
+					return;
+				}
+				sync = new DifferentialSynchronizationStrategy(1, context, connection);
+				
+			}
+			
+			var timer = new System.Timers.Timer(20);
+			timer.Elapsed += delegate { 
+				clientForm.BeginInvoke((Action)UpdateText);
+			};
+			timer.Enabled = true;			
+			
+			form.Show();	
+
 			
 			Application.Run();			
 		}

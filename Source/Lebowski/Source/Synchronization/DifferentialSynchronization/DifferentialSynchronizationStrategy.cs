@@ -153,46 +153,73 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
 				System.Console.WriteLine(patch);
 			}
 			Context.Invoke((Action)delegate {
-			    Console.WriteLine("Selection was: {0} {1}", Context.SelectionStart, Context.SelectionEnd);
-				int[] offsets = {Context.SelectionStart, Context.SelectionEnd};
+			    Console.WriteLine("--");
+			    Console.WriteLine("Selection was: {0} {1} = '{2}'", Context.SelectionStart, Context.SelectionEnd, Context.SelectedText);
+
+				int start = Context.SelectionStart;
+				int end = Context.SelectionEnd;
+				int caret = Context.CaretPosition;
+	
 				Context.Data = (string)DiffMatchPatch.patch_apply(textPatch, Context.Data)[0];			
 				
 				// We restore the offset locations using absolute referencing
 				// See: http://neil.fraser.name/writing/cursor/
 				foreach(Patch patch in textPatch)
 				{
+					int index = 0;
+					Console.WriteLine("index {0}, start {1}, end {2}, caret {3}", index, start, end, caret);
 					foreach(Diff diff in patch.diffs)
 					{
-						int index = 0;
+						Console.WriteLine("Diff {0}", diff.ToString());
 						switch(diff.operation)
 						{
 							case Operation.DELETE:
-								for(int i = 0; i < offsets.Length; ++i)
+								if(start > index) 
 								{
-									if(offsets[i] > index) 
-									{
-										offsets[i] -= diff.text.Length;
-									}
+									start -= diff.text.Length;
+								}
+								if(end > index) 
+								{
+									end -= diff.text.Length;
+								}							
+								if(caret > index) 
+								{
+									caret -= diff.text.Length;
 								}								
 								break;
+								
 							case Operation.EQUAL:
 								index += diff.text.Length;								
 								break;
+								
 							case Operation.INSERT:
-								for(int i = 0; i < offsets.Length; ++i)
+								if(start >= index) 
 								{
-									if(offsets[i] > index) 
-									{
-										offsets[i] += diff.text.Length;
-									}
+									start += diff.text.Length;
 								}
+								if(end > index) 
+								{
+									end += diff.text.Length;
+								}		
+								if(caret >= index) 
+								{
+									caret += diff.text.Length;
+								}								
 								index += diff.text.Length;
 								break;
 						}
+						Console.WriteLine("index {0}, start {1}, end {2}, caret {3}", index, start, end, caret);
 					}
 				}
-				Context.SetSelection(offsets[0], offsets[1]);			               	
-				Console.WriteLine("Selection is: {0} {1}", offsets[0], offsets[1]);
+				start = Math.Max(0, start);
+				caret = Math.Max(0, caret);
+				if(end < start)
+				{
+					end = start;				
+				}
+				Context.SetSelection(start, end);		
+				Context.CaretPosition = caret;
+				Console.WriteLine("Selection is: {0} {1}", start, end);
 				Console.WriteLine("Was {0} now {1}", old, Context.Data);
 			});
 		}

@@ -71,6 +71,27 @@ namespace Lebowski.Net
 				}
 				System.Console.WriteLine("Receive({0})", e.Message);
 				Endpoint.OnReceived(e);
+				lock(eventQueue)
+				{
+					Monitor.PulseAll(eventQueue);					
+				}
+			}
+		}
+		
+		/// <summary>
+		/// Makes sure that all packets currently enqueued are dispatched,
+		/// before the method returns. This is handy for writing tests, as
+		/// we have to wait until the packets have actually been dispatched
+		/// before we look at the context states.
+		/// </summary>
+		public void DispatchAll()
+		{
+			lock(eventQueue)
+			{
+				while(eventQueue.Count > 0)
+				{
+					Monitor.Wait(eventQueue);
+				}
 			}
 		}
 	}
