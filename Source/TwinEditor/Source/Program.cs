@@ -82,7 +82,14 @@ namespace TwinEditor
 			if(choice == "s")
 			{
 				connection = new ServerConnection();	
-				sync = new DifferentialSynchronizationStrategy(0, context, connection);
+				
+				// We have to use a multichannel connection
+				MultichannelConnection mcc = new MultichannelConnection(connection);
+				sync = new DifferentialSynchronizationStrategy(0, context, mcc.CreateChannel());
+			
+				// Use 2nd channel to transport chat messages
+				var chatChannel = mcc.CreateChannel();		
+				form.SetChatConnection(chatChannel);
 			}
 			else
 			{
@@ -105,7 +112,9 @@ namespace TwinEditor
 			
 				// Use 2nd channel to transport chat messages
 				var chatChannel = mcc.CreateChannel();
+				form.SetChatConnection(chatChannel);
 			}
+			
 			
 			var timer = new System.Timers.Timer(20);
 			timer.Elapsed += delegate { 
