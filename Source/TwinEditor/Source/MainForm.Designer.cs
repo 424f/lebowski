@@ -71,6 +71,9 @@ namespace TwinEditor
 			this.ChatText.Name = "ChatText";
 			this.ChatText.Size = new System.Drawing.Size(533, 20);
 			this.ChatText.TabIndex = 3;
+			this.ChatText.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ChatTextKeyDown);
+			this.ChatText.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ChatTextKeyUp);
+			this.ChatText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ChatTextKeyPress);
 			// 
 			// ChatSend
 			// 

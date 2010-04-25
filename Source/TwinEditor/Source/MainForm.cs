@@ -40,6 +40,8 @@ namespace TwinEditor
 		
 		void ChatSendClick(object sender, EventArgs e)
 		{
+			if(ChatText.Text.Length == 0)
+				return;
 			chatConnection.Send(ChatText.Text);
 			AddChatMessage(ChatText.Text);
 			ChatText.Text = "";
@@ -48,6 +50,35 @@ namespace TwinEditor
 		void AddChatMessage(string text)
 		{
 			ChatHistory.AppendText(text + Environment.NewLine);
+		}
+		
+		void ChatTextKeyDown(object sender, KeyEventArgs e)
+		{
+			if(e.KeyCode == Keys.Return)
+			{
+				e.Handled = true;
+				ChatSendClick(this, null);
+			}
+		}
+		
+		void ChatTextKeyUp(object sender, KeyEventArgs e)
+		{
+			if(e.KeyCode == Keys.Return)
+			{
+				e.Handled = true;
+			}
+		}
+		
+		void ChatTextKeyPress(object sender, KeyPressEventArgs e)
+		{
+			if(e.KeyChar == (char) 13)
+			{
+				e.Handled = true;
+			}
+			else
+			{
+				base.OnKeyPress(e);
+			}
 		}
 	}
 }

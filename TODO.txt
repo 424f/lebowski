@@ -1,0 +1,14 @@
+High priority
+=============
+[   ] Implement GUI for connecting
+[   ] Implement Skype AP2AP connection method
+[   ] File handling
+
+Medium priority
+===============
+[   ] More robust socket implementation
+[   ] Code execution
+
+Low priority
+============
+[   ] Use protocol buffers instead of .NET serialization
