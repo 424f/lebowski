@@ -166,7 +166,8 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
 				// See: http://neil.fraser.name/writing/cursor/
 				foreach(Patch patch in textPatch)
 				{
-					int index = 0;
+					Console.WriteLine("Patch = {0} ({1}, {2}, {3}, {4})", patch, patch.start1, patch.start2, patch.length1, patch.length2);
+					int index = patch.start1;
 					Console.WriteLine("index {0}, start {1}, end {2}, caret {3}", index, start, end, caret);
 					foreach(Diff diff in patch.diffs)
 					{
