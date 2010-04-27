@@ -4,6 +4,7 @@ using System.Windows.Forms;
 
 using Lebowski;
 using Lebowski.Net;
+using Lebowski.Net.Tcp;
 using Lebowski.Net.Lidgren;
 using Lebowski.TextModel;
 using Lebowski.Synchronization.DifferentialSynchronization;
@@ -81,7 +82,7 @@ namespace TwinEditor
 			
 			if(choice == "s")
 			{
-				connection = new ServerConnection();	
+				connection = new TcpServerConnection();	
 				
 				// We have to use a multichannel connection
 				MultichannelConnection mcc = new MultichannelConnection(connection);
@@ -97,7 +98,7 @@ namespace TwinEditor
 				string address = Console.ReadLine();
 				try 
 				{
-					connection = new ClientConnection(address, ClientConnection.Port);
+					connection = new TcpClientConnection(address);
 				}
 				catch(ConnectionFailedException e)
 				{

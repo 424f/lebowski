@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Net;
+using System.Net.Sockets;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
@@ -26,5 +28,17 @@ namespace Lebowski.Net
 			BinaryFormatter formatter = new BinaryFormatter();
 			return formatter.Deserialize(ms);
 		}
+
+		public static byte[] ReadBytes(NetworkStream stream, int numBytes)
+		{
+			byte[] buffer = new byte[numBytes];
+			int bytesRead = 0;
+			while(bytesRead < numBytes)
+			{
+				bytesRead += stream.Read(buffer, bytesRead, numBytes-bytesRead);
+			}
+			return buffer;
+		}
+
 	}
 }
