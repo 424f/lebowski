@@ -68,11 +68,12 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Source\Net\IConnection.cs" />
-    <Compile Include="Source\Net\Lidgren\TcpProtocol.cs" />
+    <Compile Include="Source\Net\Lidgren\UdpProtocol.cs" />
     <Compile Include="Source\Net\LocalProtocol.cs" />
     <Compile Include="Source\Net\MultichannelConnection.cs" />
     <Compile Include="Source\Net\NetUtils.cs" />
     <Compile Include="Source\Net\Skype\SkypeProtocol.cs" />
+    <Compile Include="Source\Net\Tcp\TcpConnection.cs" />
     <Compile Include="Source\Program.cs" />
     <Compile Include="Source\StateVector.cs" />
     <Compile Include="Source\Synchronization\DifferentialSynchronization\DifferentialSynchronizationStrategy.cs" />
@@ -89,7 +90,6 @@
     <Compile Include="Source\TextModel\TextEditorTextContext.cs" />
     <Compile Include="Source\TextModel\TextOperation.cs" />
     <Compile Include="Test\dOPTTest.cs" />
-    <Compile Include="Test\Net\EncodingTest.cs" />
     <Compile Include="Test\StringTextContextTest.cs" />
     <Compile Include="Test\Synchronization\DifferentialSynchronizationTest.cs" />
     <EmbeddedResource Include="Source\MainForm.resx">
@@ -99,6 +99,7 @@
   <ItemGroup>
     <Folder Include="Source\Net" />
     <Folder Include="Source\Net\Lidgren" />
+    <Folder Include="Source\Net\Tcp" />
     <Folder Include="Source\Net\Skype" />
     <Folder Include="Source\Synchronization" />
     <Folder Include="Source\Synchronization\DifferentialSynchronization" />

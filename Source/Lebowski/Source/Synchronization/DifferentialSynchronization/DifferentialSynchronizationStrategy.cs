@@ -201,7 +201,7 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
 								{
 									end += diff.text.Length;
 								}		
-								if(caret >= index) 
+								if(caret > index) 
 								{
 									caret += diff.text.Length;
 								}								
@@ -229,7 +229,7 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
 		/// other participants, thus ensuring that they can propagate their
 		/// changes back to us.
 		/// </summary>
-		public void FlushToken()
+		protected void FlushToken()
 		{
 			System.Console.WriteLine("{0} FlushTimer State: {1}", SiteId, State);
 			if(State == State.HavingToken)

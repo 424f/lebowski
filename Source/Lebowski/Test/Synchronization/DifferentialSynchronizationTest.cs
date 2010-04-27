@@ -60,6 +60,7 @@ namespace Lebowski.Test.Synchronization
 			var client = new DifferentialSynchronizationStrategy(1, clientContext, clientConnection);
 			
 			clientContext.Insert(clientContext, new InsertOperation("foo", 0));	
+			clientContext.CaretPosition = 2;
 			clientContext.SetSelection(0, 3);
 			
 			// TODO: find better solution for testing than sleeping (e.g. not using
@@ -70,10 +71,12 @@ namespace Lebowski.Test.Synchronization
 			serverContext.Insert(clientContext, new InsertOperation("bar", 0));
 			Thread.Sleep(100);
 			Assert.AreEqual("foo", clientContext.SelectedText);
+			Assert.AreEqual(5, clientContext.CaretPosition);
 			
 			serverContext.Insert(clientContext, new InsertOperation("bar", 6));
 			Thread.Sleep(100);
 			Assert.AreEqual("foo", clientContext.SelectedText);			
+			Assert.AreEqual(5, clientContext.CaretPosition);
 		}
 	}
 }
