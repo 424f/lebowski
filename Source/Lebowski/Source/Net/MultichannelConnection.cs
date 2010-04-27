@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using log4net;
 
 namespace Lebowski.Net
 {
@@ -11,21 +12,28 @@ namespace Lebowski.Net
 	/// </summary>
 	public class MultichannelConnection
 	{
+		private static ILog Logger = LogManager.GetLogger(typeof(MultichannelConnection));
+		
 		private IConnection Connection;
 		private Dictionary<int, TunneledConnection> channels;
 		private Dictionary<TunneledConnection, int> channelIds;
 		
 		internal void Send(TunneledConnection channel, object o)
 		{
-			// TODO: handle failure gracefully
 			int id = channelIds[channel];
 			Connection.Send(new MultichannelMessage(id, o));
 		}
 		
 		void ConnectionReceived(object sender, ReceivedEventArgs e)
-		{
-			// TODO: handle failure gracefully
+		{						
 			MultichannelMessage msg = (MultichannelMessage)e.Message;
+			
+			if(!channels.ContainsKey(msg.ChannelId))
+			{
+				Logger.Error(String.Format("Received message of type {0} on unknown channel {1} -- Will be ignored", msg.Message.GetType(), msg.ChannelId));
+				return;
+			}
+			   
 			TunneledConnection channel = channels[msg.ChannelId];
 			channel.OnReceived(new ReceivedEventArgs(msg.Message));
 		}
