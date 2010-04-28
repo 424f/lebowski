@@ -39,6 +39,7 @@ namespace TwinEditor
 			if(chatConnection != null)
 				throw new Exception("There already is a chat connection");
 			this.chatConnection = connection;
+			
 			this.chatConnection.Received += delegate(object sender, ReceivedEventArgs e) {
 				string s = (string)e.Message;
 				ChatText.Invoke((Action)delegate { AddChatMessage(s); });

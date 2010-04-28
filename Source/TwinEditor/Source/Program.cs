@@ -64,11 +64,7 @@ namespace TwinEditor
 		}
 		
 		private void Run()
-		{
-			var protocol = new Lebowski.Net.Skype.SkypeProtocol();
-			Console.ReadKey(true);
-			return;
-			
+		{			
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);				
 			

@@ -31,9 +31,8 @@ namespace Lebowski.Net.Skype
 				}
 			}
 			
-			string username = "b.bluntschli";
-			Application.Connect(username, true);
-			Application.ConnectableUsers.Add(username);
+			//Application.Connect(username, true);
+			//Application.ConnectableUsers.Add(username);
 		}
 		
 		public event EventHandler<EventArgs> Received;
