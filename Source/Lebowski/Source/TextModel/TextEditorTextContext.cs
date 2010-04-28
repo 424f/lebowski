@@ -49,6 +49,7 @@ namespace Lebowski.TextModel
 			{
 				TextBox.TextChanged -= TextBoxChanged;
 				TextBox.Text = value;
+				TextBox.Refresh();
 				TextBox.TextChanged += TextBoxChanged;
 			}
 		}
@@ -88,6 +89,15 @@ namespace Lebowski.TextModel
 			TextLocation lastLocation = TextBox.Document.OffsetToPosition(last);
 			TextBox.ActiveTextAreaControl.SelectionManager.SetSelection(startLocation, lastLocation);
 		}			
+		
+		public override bool HasSelection
+		{
+			get
+			{
+				return TextBox.ActiveTextAreaControl.SelectionManager.SelectionCollection.Count > 0 &&
+					     SelectionStart != SelectionEnd;
+			}
+		}		
 		
 		public override void Invoke(Action d) 
 		{

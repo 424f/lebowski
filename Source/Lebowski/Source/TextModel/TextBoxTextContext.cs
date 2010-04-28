@@ -62,6 +62,11 @@ namespace Lebowski.TextModel
 			TextBox.SelectionStart = start;
 			TextBox.SelectionLength = last - start;
 		}			
+
+		public override bool HasSelection
+		{
+			get { return true; }
+		}		
 		
 		public override void Invoke(Action d) 
 		{

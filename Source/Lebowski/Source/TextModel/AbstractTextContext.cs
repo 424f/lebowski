@@ -43,6 +43,7 @@ namespace Lebowski.TextModel
 		public abstract string Data { get; set;	}
 		public abstract int SelectionStart { get; protected set;}		
 		public abstract int SelectionEnd { get; protected set; }		
+		public abstract bool HasSelection { get; }
 		public abstract void Insert(object issuer, InsertOperation operation);		
 		public abstract void Delete(object issuer, DeleteOperation operation);		
 		public abstract void SetSelection(int start, int last);

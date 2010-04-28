@@ -44,6 +44,8 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
 	
 	public class DifferentialSynchronizationStrategy
 	{
+		static int activeThreads = 0;
+		
 		public int SiteId { get; protected set; }
 		IConnection Connection;
 		ITextContext Context;
@@ -68,6 +70,18 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
 			
 			Connection.Received += delegate(object sender, ReceivedEventArgs e)
 			{
+				Console.BackgroundColor = ConsoleColor.DarkRed;
+				Console.WriteLine("Thread {0}: {1}", System.Threading.Thread.CurrentThread.ManagedThreadId, e.Message.GetType().Name);
+				Console.ResetColor();
+				
+				lock(this.GetType())
+				{
+					activeThreads += 1;
+					if(activeThreads > 1)
+					{
+						Console.Error.Write("Multiple threads active!!!");
+					}
+				}
 				System.Console.WriteLine("{0} received: {1}", SiteId, e.Message);
 				lock(this)
 				{
@@ -99,6 +113,10 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
 						throw new Exception(String.Format("Encountered unknown message type '{0}'", e.Message.GetType().Name));
 					}
 				}
+				lock(this.GetType())
+				{
+					activeThreads -= 1;
+				}				
 			};
 			
 			Context.Changed += delegate(object sender, ChangeEventArgs e)
@@ -156,6 +174,7 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
 			    Console.WriteLine("--");
 			    Console.WriteLine("Selection was: {0} {1} = '{2}'", Context.SelectionStart, Context.SelectionEnd, Context.SelectedText);
 
+			    bool hadSelection = Context.HasSelection;
 				int start = Context.SelectionStart;
 				int end = Context.SelectionEnd;
 				int caret = Context.CaretPosition;
@@ -218,7 +237,10 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
 				{
 					end = start;				
 				}
-				Context.SetSelection(start, end);		
+				if(hadSelection)
+				{
+					Context.SetSelection(start, end);		
+				}
 				Context.CaretPosition = caret;
 				Console.WriteLine("Selection is: {0} {1}", start, end);
 				Console.WriteLine("Was {0} now {1}", old, Context.Data);

@@ -11,11 +11,24 @@ namespace Lebowski.Net.Tcp
 		protected const int Port = 12345;
 		public event EventHandler<ReceivedEventArgs> Received;	
 		protected NetworkStream stream;
+		static int activeConnections = 0;
 		
 		protected virtual void OnReceived(ReceivedEventArgs e)
 		{
+			lock(this.GetType())
+			{
+				activeConnections += 1;
+				if(activeConnections > 1)
+				{
+					Console.Error.WriteLine("Multiple active connections!!");
+				}
+			}
 			if (Received != null) {
 				Received(this, e);
+			}
+			lock(this.GetType())
+			{
+				activeConnections -= 1;
 			}
 		}		
 		

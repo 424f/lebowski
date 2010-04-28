@@ -11,9 +11,6 @@ using Lebowski.Synchronization.DifferentialSynchronization;
 
 namespace TwinEditor
 {
-	/// <summary>
-	/// Class with program entry point.
-	/// </summary>
 	internal sealed class Program
 	{
 		/// <summary>
@@ -131,8 +128,8 @@ namespace TwinEditor
 		
 		void UpdateText()
 		{
-			clientForm.label1.Text = String.Format("{0} {1}", client.State, client.HasChanged);
-			serverForm.label1.Text = String.Format("{0} {1}", server.State, server.HasChanged);			
+			//clientForm.label1.Text = String.Format("{0} {1}", client.State, client.HasChanged);
+			//serverForm.label1.Text = String.Format("{0} {1}", server.State, server.HasChanged);			
 		}
 		
 	}

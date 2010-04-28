@@ -33,6 +33,11 @@ namespace Lebowski.TextModel
 			SelectionEnd = last;
 		}		
 		
+		public override bool HasSelection
+		{
+			get { return true; }
+		}
+		
 		public override void Invoke(Action d)
 		{
 			d();

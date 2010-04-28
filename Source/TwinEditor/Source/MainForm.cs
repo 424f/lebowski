@@ -80,5 +80,10 @@ namespace TwinEditor
 				base.OnKeyPress(e);
 			}
 		}
+		
+		void NewToolStripMenuItemClick(object sender, EventArgs e)
+		{
+			
+		}
 	}
 }

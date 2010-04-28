@@ -5,8 +5,22 @@ namespace Lebowski.TextModel
 	public interface ITextContext
 	{
 		string Data { get; set; }
+		
+		/// <summary>
+		/// Returns the index of the first character that is part of the selection
+		/// </summary>
 		int SelectionStart { get; }
+		
+		/// <summary>
+		/// Returns the index of the first character that is not part of the selection
+		/// </summary>
 		int SelectionEnd { get; }
+		
+		/// <summary>
+		/// Returns true when the there currently is a selection
+		/// </summary>
+		bool HasSelection { get; }
+		
 		int CaretPosition { get; set; }
 		string SelectedText { get; }
 		
