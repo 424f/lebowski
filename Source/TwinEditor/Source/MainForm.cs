@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using Lebowski.Net;
+using Lebowski.UI.FileTypes;
 
 namespace TwinEditor
 {
@@ -22,9 +23,15 @@ namespace TwinEditor
 			
 			//SourceCode.SetHighlighting("C#");
 			
-			//
-			// TODO: Add constructor code after the InitializeComponent() call.
-			//
+			// Supported file types
+			IFileType[] fileTypes = new IFileType[]{ new TextFileType(), new PythonFileType() };
+			foreach(IFileType fileType in fileTypes)
+			{
+				//newToolStripMenuItem.DropDown.Items.Add(new ToolStripMenuItem(fileType.Name + " (" + fileType.FileNamePattern + ")", fileType.Icon));
+				newToolStripMenuItem.DropDown.Items.Add(new ToolStripMenuItem(fileType.Name + " (" + fileType.FileNamePattern + ")"));
+			}
+			
+			
 		}
 		
 		public void SetChatConnection(IConnection connection)

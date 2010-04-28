@@ -19,6 +19,21 @@ namespace Lebowski.Net.Skype
 			Application = API.get_Application(ApplicationName);
 			Application.Create();							
 			string user = API.CurrentUser.FullName;
+			
+			var friends = API.Friends;
+			
+			for(int i = 1; i <= friends.Count; ++i)
+			{
+				var friend = friends[i];
+				if(friend.OnlineStatus != TOnlineStatus.olsOffline)
+				{
+					Console.WriteLine(friend.FullName + " / " + friend.Handle + " / " + friend.DisplayName + " / " + friend.OnlineStatus);
+				}
+			}
+			
+			string username = "b.bluntschli";
+			Application.Connect(username, true);
+			Application.ConnectableUsers.Add(username);
 		}
 		
 		public event EventHandler<EventArgs> Received;
@@ -54,6 +69,11 @@ namespace Lebowski.Net.Skype
 	public class SkypeConnection : IConnection
 	{
 		public event EventHandler<ReceivedEventArgs> Received;
+		
+		public SkypeConnection()
+		{
+			
+		}
 		
 		public void Send(object o)
 		{

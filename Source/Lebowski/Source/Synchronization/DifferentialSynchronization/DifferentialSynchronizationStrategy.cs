@@ -202,7 +202,7 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
 								{
 									end -= diff.text.Length;
 								}							
-								if(caret > index) 
+								if(caret >= index) 
 								{
 									caret -= diff.text.Length;
 								}								
@@ -221,7 +221,7 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
 								{
 									end += diff.text.Length;
 								}		
-								if(caret > index) 
+								if(caret >= index) 
 								{
 									caret += diff.text.Length;
 								}								
