@@ -30,7 +30,6 @@ namespace TwinEditor
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-			this.SourceCode = new ICSharpCode.TextEditor.TextEditorControl();
 			this.ChatHistory = new System.Windows.Forms.TextBox();
 			this.ChatText = new System.Windows.Forms.TextBox();
 			this.ChatSend = new System.Windows.Forms.Button();
@@ -74,37 +73,37 @@ namespace TwinEditor
 			this.MainTabControl = new System.Windows.Forms.TabControl();
 			this.tabPage1 = new System.Windows.Forms.TabPage();
 			this.tabPage2 = new System.Windows.Forms.TabPage();
+			this.tabControl1 = new System.Windows.Forms.TabControl();
+			this.tabPage3 = new System.Windows.Forms.TabPage();
+			this.tabPage4 = new System.Windows.Forms.TabPage();
+			this.SourceCode = new ICSharpCode.TextEditor.TextEditorControl();
 			this.menuStrip1.SuspendLayout();
 			this.MainTabControl.SuspendLayout();
 			this.tabPage1.SuspendLayout();
+			this.tabControl1.SuspendLayout();
+			this.tabPage3.SuspendLayout();
 			this.SuspendLayout();
-			// 
-			// SourceCode
-			// 
-			this.SourceCode.AutoScroll = true;
-			this.SourceCode.IsReadOnly = false;
-			this.SourceCode.Location = new System.Drawing.Point(9, 12);
-			this.SourceCode.Margin = new System.Windows.Forms.Padding(0);
-			this.SourceCode.Name = "SourceCode";
-			this.SourceCode.Size = new System.Drawing.Size(613, 110);
-			this.SourceCode.TabIndex = 0;
 			// 
 			// ChatHistory
 			// 
+			this.ChatHistory.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+									| System.Windows.Forms.AnchorStyles.Right)));
 			this.ChatHistory.BackColor = System.Drawing.Color.White;
-			this.ChatHistory.Location = new System.Drawing.Point(6, 125);
+			this.ChatHistory.Location = new System.Drawing.Point(8, 408);
 			this.ChatHistory.Multiline = true;
 			this.ChatHistory.Name = "ChatHistory";
 			this.ChatHistory.ReadOnly = true;
 			this.ChatHistory.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.ChatHistory.Size = new System.Drawing.Size(613, 92);
+			this.ChatHistory.Size = new System.Drawing.Size(714, 106);
 			this.ChatHistory.TabIndex = 2;
 			// 
 			// ChatText
 			// 
-			this.ChatText.Location = new System.Drawing.Point(6, 224);
+			this.ChatText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+									| System.Windows.Forms.AnchorStyles.Right)));
+			this.ChatText.Location = new System.Drawing.Point(8, 522);
 			this.ChatText.Name = "ChatText";
-			this.ChatText.Size = new System.Drawing.Size(533, 20);
+			this.ChatText.Size = new System.Drawing.Size(621, 23);
 			this.ChatText.TabIndex = 3;
 			this.ChatText.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ChatTextKeyDown);
 			this.ChatText.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ChatTextKeyUp);
@@ -112,9 +111,10 @@ namespace TwinEditor
 			// 
 			// ChatSend
 			// 
-			this.ChatSend.Location = new System.Drawing.Point(545, 223);
+			this.ChatSend.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.ChatSend.Location = new System.Drawing.Point(637, 521);
 			this.ChatSend.Name = "ChatSend";
-			this.ChatSend.Size = new System.Drawing.Size(75, 20);
+			this.ChatSend.Size = new System.Drawing.Size(87, 23);
 			this.ChatSend.TabIndex = 4;
 			this.ChatSend.Text = "Send";
 			this.ChatSend.UseVisualStyleBackColor = true;
@@ -129,7 +129,8 @@ namespace TwinEditor
 									this.helpToolStripMenuItem});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
-			this.menuStrip1.Size = new System.Drawing.Size(639, 24);
+			this.menuStrip1.Padding = new System.Windows.Forms.Padding(7, 2, 0, 2);
+			this.menuStrip1.Size = new System.Drawing.Size(745, 24);
 			this.menuStrip1.TabIndex = 5;
 			this.menuStrip1.Text = "menuStrip1";
 			// 
@@ -422,22 +423,23 @@ namespace TwinEditor
 			// 
 			this.MainTabControl.Controls.Add(this.tabPage1);
 			this.MainTabControl.Controls.Add(this.tabPage2);
-			this.MainTabControl.Location = new System.Drawing.Point(0, 27);
+			this.MainTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.MainTabControl.Location = new System.Drawing.Point(0, 24);
 			this.MainTabControl.Name = "MainTabControl";
 			this.MainTabControl.SelectedIndex = 0;
-			this.MainTabControl.Size = new System.Drawing.Size(639, 503);
+			this.MainTabControl.Size = new System.Drawing.Size(745, 603);
 			this.MainTabControl.TabIndex = 6;
 			// 
 			// tabPage1
 			// 
-			this.tabPage1.Controls.Add(this.SourceCode);
+			this.tabPage1.Controls.Add(this.tabControl1);
 			this.tabPage1.Controls.Add(this.ChatSend);
 			this.tabPage1.Controls.Add(this.ChatHistory);
 			this.tabPage1.Controls.Add(this.ChatText);
-			this.tabPage1.Location = new System.Drawing.Point(4, 22);
+			this.tabPage1.Location = new System.Drawing.Point(4, 24);
 			this.tabPage1.Name = "tabPage1";
 			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage1.Size = new System.Drawing.Size(631, 477);
+			this.tabPage1.Size = new System.Drawing.Size(737, 575);
 			this.tabPage1.TabIndex = 0;
 			this.tabPage1.Text = "file.py";
 			this.tabPage1.UseVisualStyleBackColor = true;
@@ -447,18 +449,65 @@ namespace TwinEditor
 			this.tabPage2.Location = new System.Drawing.Point(4, 22);
 			this.tabPage2.Name = "tabPage2";
 			this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage2.Size = new System.Drawing.Size(192, 74);
+			this.tabPage2.Size = new System.Drawing.Size(737, 554);
 			this.tabPage2.TabIndex = 1;
 			this.tabPage2.Text = "tabPage2";
 			this.tabPage2.UseVisualStyleBackColor = true;
 			// 
+			// tabControl1
+			// 
+			this.tabControl1.Alignment = System.Windows.Forms.TabAlignment.Bottom;
+			this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+									| System.Windows.Forms.AnchorStyles.Left) 
+									| System.Windows.Forms.AnchorStyles.Right)));
+			this.tabControl1.Controls.Add(this.tabPage3);
+			this.tabControl1.Controls.Add(this.tabPage4);
+			this.tabControl1.Location = new System.Drawing.Point(9, 6);
+			this.tabControl1.Name = "tabControl1";
+			this.tabControl1.SelectedIndex = 0;
+			this.tabControl1.Size = new System.Drawing.Size(714, 396);
+			this.tabControl1.TabIndex = 5;
+			// 
+			// tabPage3
+			// 
+			this.tabPage3.Controls.Add(this.SourceCode);
+			this.tabPage3.Location = new System.Drawing.Point(4, 4);
+			this.tabPage3.Name = "tabPage3";
+			this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+			this.tabPage3.Size = new System.Drawing.Size(706, 368);
+			this.tabPage3.TabIndex = 0;
+			this.tabPage3.Text = "Source";
+			this.tabPage3.UseVisualStyleBackColor = true;
+			// 
+			// tabPage4
+			// 
+			this.tabPage4.Location = new System.Drawing.Point(4, 4);
+			this.tabPage4.Name = "tabPage4";
+			this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
+			this.tabPage4.Size = new System.Drawing.Size(706, 205);
+			this.tabPage4.TabIndex = 1;
+			this.tabPage4.Text = "Execution #1";
+			this.tabPage4.UseVisualStyleBackColor = true;
+			// 
+			// SourceCode
+			// 
+			this.SourceCode.AutoScroll = true;
+			this.SourceCode.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.SourceCode.IsReadOnly = false;
+			this.SourceCode.Location = new System.Drawing.Point(3, 3);
+			this.SourceCode.Margin = new System.Windows.Forms.Padding(0);
+			this.SourceCode.Name = "SourceCode";
+			this.SourceCode.Size = new System.Drawing.Size(700, 362);
+			this.SourceCode.TabIndex = 1;
+			// 
 			// MainForm
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(639, 532);
+			this.ClientSize = new System.Drawing.Size(745, 627);
 			this.Controls.Add(this.MainTabControl);
 			this.Controls.Add(this.menuStrip1);
+			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MainMenuStrip = this.menuStrip1;
 			this.Name = "MainForm";
@@ -468,9 +517,14 @@ namespace TwinEditor
 			this.MainTabControl.ResumeLayout(false);
 			this.tabPage1.ResumeLayout(false);
 			this.tabPage1.PerformLayout();
+			this.tabControl1.ResumeLayout(false);
+			this.tabPage3.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
+		private System.Windows.Forms.TabPage tabPage4;
+		private System.Windows.Forms.TabPage tabPage3;
+		private System.Windows.Forms.TabControl tabControl1;
 		private System.Windows.Forms.TabPage tabPage2;
 		private System.Windows.Forms.TabPage tabPage1;
 		private System.Windows.Forms.TabControl MainTabControl;

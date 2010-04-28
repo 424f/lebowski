@@ -42,6 +42,9 @@
     <Reference Include="log4net">
       <HintPath>..\..\Libs\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="Mono.TextEditor">
+      <HintPath>..\..\Libs\Mono.TextEditor.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\Libs\nunit.framework.dll</HintPath>
     </Reference>
@@ -89,6 +92,8 @@
     <Compile Include="Source\TextModel\TextBoxTextContext.cs" />
     <Compile Include="Source\TextModel\TextEditorTextContext.cs" />
     <Compile Include="Source\TextModel\TextOperation.cs" />
+    <Compile Include="Source\UI\FileTypes\IFileType.cs" />
+    <Compile Include="Source\UI\FileTypes\PythonFileType.cs" />
     <Compile Include="Test\dOPTTest.cs" />
     <Compile Include="Test\StringTextContextTest.cs" />
     <Compile Include="Test\Synchronization\DifferentialSynchronizationTest.cs" />
@@ -101,10 +106,12 @@
     <Folder Include="Source\Net\Lidgren" />
     <Folder Include="Source\Net\Tcp" />
     <Folder Include="Source\Net\Skype" />
+    <Folder Include="Source\UI" />
     <Folder Include="Source\Synchronization" />
     <Folder Include="Source\Synchronization\DifferentialSynchronization" />
     <Folder Include="Source\Synchronization\dOPT" />
     <Folder Include="Source\TextModel" />
+    <Folder Include="Source\UI\FileTypes" />
     <Folder Include="Test\Net" />
     <Folder Include="Test\Synchronization" />
     <COMReference Include="SKYPE4COMLib">
