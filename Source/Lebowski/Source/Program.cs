@@ -5,6 +5,8 @@ namespace Lebowski
 {
 	internal sealed class Program
 	{
+		static ApplicationStream stream;
+		
 		[STAThread]
 		private static void Main(string[] args)
 		{			
@@ -22,7 +24,16 @@ namespace Lebowski
 			
 			API.ApplicationStreams += delegate(Application pApp, ApplicationStreamCollection pStreams)
 			{
-				Console.WriteLine("Application stream..");
+				Console.Write("Application stream: ");
+				for(int i = 1; i <= pStreams.Count; ++i)
+				{
+					Console.Write("{0} {1} | ", pStreams[i].Handle, pStreams[i].PartnerHandle);
+				}
+				Console.WriteLine();
+				
+				stream = pStreams[1];
+				stream.Write("Testing..");
+				
 			};
 			
 			API.ApplicationConnecting += delegate(Application pApp, UserCollection pUsers)
@@ -49,9 +60,16 @@ namespace Lebowski
 			
 			API.ApplicationReceiving += delegate(Application pApp, ApplicationStreamCollection pStreams)
 			{ 
+				Console.Write("Receving: {0} ::", pApp.Name);
+				for(int i = 1; i <= pStreams.Count; ++i)
+				{
+					Console.Write("{0} ", pStreams[i].Handle);
+				}
+				Console.WriteLine();
+				
 				if(pStreams.Count == 0)
 					return;
-				if(pApp.ReceivedStreams[1].DataLength == 0)
+				if(pStreams[1].DataLength == 0)
 					return;
 				string received = pApp.ReceivedStreams[1].Read();
 				Console.WriteLine("RECV " + received);
