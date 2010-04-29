@@ -14,6 +14,12 @@ namespace Lebowski.UI.FileTypes
 		{
 			get { return "*.py"; }
 		}
+	
+		public bool FileNameMatches(string fileName)
+		{
+			return fileName.EndsWith(".py");
+		}
+		
 		
 		public Image Icon
 		{

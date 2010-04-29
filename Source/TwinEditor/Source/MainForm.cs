@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Drawing;
@@ -12,6 +13,10 @@ namespace TwinEditor
 	public partial class MainForm : Form
 	{
 		IConnection chatConnection;
+		protected IFileType[] fileTypes;
+		protected ICommunicationProtocol[] protocols;
+		List<FileTabControl> tabControls = new List<FileTabControl>();
+		List<TabPage> tabPages = new List<TabPage>();
 		
 		public MainForm()
 		{
@@ -22,22 +27,40 @@ namespace TwinEditor
 			
 			//SourceCode.SetHighlighting("C#");
 			
+			// Clear tabs
+			MainTab.TabPages.Clear();
+			
 			// Supported file types
-			IFileType[] fileTypes = ExtensionUtil.FindTypesImplementing(typeof(IFileType)).Select(
+			openFileDialog.Filter = "";
+			fileTypes = ExtensionUtil.FindTypesImplementing(typeof(IFileType)).Select(
 				(t) => t.GetConstructor(new Type[]{}).Invoke(new object[]{})
 			).Cast<IFileType>().ToArray();
 			foreach(IFileType fileType in fileTypes)
 			{
-				newToolStripMenuItem.DropDown.Items.Add(new ToolStripMenuItem(fileType.Name + " (" + fileType.FileNamePattern + ")"));
+				var menuItem = new ToolStripMenuItem(fileType.Name + " (" + fileType.FileNamePattern + ")");
+				menuItem.Click += delegate
+				{
+					CreateNewFile(fileType);
+				};
+				newToolStripMenuItem.DropDown.Items.Add(menuItem);
+				
+				// Add file type to open file dialog
+				string newFilter = string.Format("{0}|{1}", fileType.Name, fileType.FileNamePattern);
+				if(openFileDialog.Filter.Length > 0)
+				{
+					newFilter = "|" + newFilter;
+				}
+				openFileDialog.Filter += newFilter;
 			}
 			
 			// Supported communication protocols
-			ICommunicationProtocol[] protocols = ExtensionUtil.FindTypesImplementing(typeof(ICommunicationProtocol)).Select(
+			protocols = ExtensionUtil.FindTypesImplementing(typeof(ICommunicationProtocol)).Select(
 				(t) => t.GetConstructor(new Type[]{}).Invoke(new object[]{})
 			).Cast<ICommunicationProtocol>().ToArray();			
 			foreach(ICommunicationProtocol protocol in protocols)
 			{
-				shareToolStripMenuItem.DropDown.Items.Add(new ToolStripMenuItem(protocol.Name));
+				var menuItem = new ToolStripMenuItem(protocol.Name);
+				shareToolStripMenuItem.DropDown.Items.Add(menuItem);
 			}
 			
 		}
@@ -100,6 +123,61 @@ namespace TwinEditor
 		void NewToolStripMenuItemClick(object sender, EventArgs e)
 		{
 			
+		}
+		
+		
+		
+		public FileTabControl CreateNewFile(IFileType fileType)
+		{
+			// Create a new tab and add a FileTabControl to it
+			TabPage tabPage = new TabPage("???");
+			FileTabControl tab = new FileTabControl();
+			tab.Dock = DockStyle.Fill;
+			tabPage.Controls.Add(tab);
+			tabControls.Add(tab);
+			tabPages.Add(tabPage);
+			MainTab.TabPages.Add(tabPage);
+			return tab;
+		}
+		
+		void OpenToolStripMenuItemClick(object sender, EventArgs e)
+		{
+			openFileDialog.RestoreDirectory = true;
+			openFileDialog.ShowDialog();
+			MessageBox.Show("You selected: " + openFileDialog.FileName);
+			
+			// Create tab and initialize
+			IFileType type = null;
+			foreach(IFileType fileType in fileTypes)
+			{
+				fileType.FileNameMatches(openFileDialog.FileName);
+				type = fileType;
+			}
+			
+			// No appropriate file type has been found
+			if(type == null)
+			{
+				MessageBox.Show(
+					string.Format("We're sorry, but Lebowski does not currently support the file '{0}'", openFileDialog.FileName),
+					"Could not open file"
+				);
+				return;
+			}
+			
+			// Create a new tab for the file
+			FileTabControl tab = CreateNewFile(type);
+			tab.FileName = openFileDialog.FileName;
+			tab.FileType = type;
+			
+			// Put content into editor
+			string content = File.ReadAllText(openFileDialog.FileName);
+			tab.SourceCode.Text = content;
+			tabPages.Last().Text = openFileDialog.FileName;
+		}
+		
+		void PrintToolStripMenuItemClick(object sender, EventArgs e)
+		{
+			tabControls[MainTab.SelectedIndex].SourceCode.PrintDocument.Print();
 		}
 	}
 }

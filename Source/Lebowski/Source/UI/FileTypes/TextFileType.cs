@@ -15,6 +15,12 @@ namespace Lebowski.UI.FileTypes
 			get { return "*.txt"; }
 		}
 		
+		public bool FileNameMatches(string fileName)
+		{
+			return fileName.EndsWith(".txt");
+		}
+		
+		
 		public Image Icon
 		{
 			get { return Image.FromFile("../../../../Resources/Icons/text.png"); }

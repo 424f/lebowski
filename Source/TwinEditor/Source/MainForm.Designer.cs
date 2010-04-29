@@ -30,9 +30,6 @@ namespace TwinEditor
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-			this.ChatHistory = new System.Windows.Forms.TextBox();
-			this.ChatText = new System.Windows.Forms.TextBox();
-			this.ChatSend = new System.Windows.Forms.Button();
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -60,55 +57,23 @@ namespace TwinEditor
 			this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.guideToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.MainTabControl = new System.Windows.Forms.TabControl();
+			this.MainTab = new System.Windows.Forms.TabControl();
 			this.tabPage1 = new System.Windows.Forms.TabPage();
 			this.tabControl1 = new System.Windows.Forms.TabControl();
 			this.tabPage3 = new System.Windows.Forms.TabPage();
 			this.SourceCode = new ICSharpCode.TextEditor.TextEditorControl();
 			this.tabPage4 = new System.Windows.Forms.TabPage();
+			this.ChatSend = new System.Windows.Forms.Button();
+			this.ChatHistory = new System.Windows.Forms.TextBox();
+			this.ChatText = new System.Windows.Forms.TextBox();
 			this.tabPage2 = new System.Windows.Forms.TabPage();
+			this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
 			this.menuStrip1.SuspendLayout();
-			this.MainTabControl.SuspendLayout();
+			this.MainTab.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.tabControl1.SuspendLayout();
 			this.tabPage3.SuspendLayout();
 			this.SuspendLayout();
-			// 
-			// ChatHistory
-			// 
-			this.ChatHistory.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-									| System.Windows.Forms.AnchorStyles.Right)));
-			this.ChatHistory.BackColor = System.Drawing.Color.White;
-			this.ChatHistory.Location = new System.Drawing.Point(8, 408);
-			this.ChatHistory.Multiline = true;
-			this.ChatHistory.Name = "ChatHistory";
-			this.ChatHistory.ReadOnly = true;
-			this.ChatHistory.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.ChatHistory.Size = new System.Drawing.Size(714, 106);
-			this.ChatHistory.TabIndex = 2;
-			// 
-			// ChatText
-			// 
-			this.ChatText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-									| System.Windows.Forms.AnchorStyles.Right)));
-			this.ChatText.Location = new System.Drawing.Point(8, 522);
-			this.ChatText.Name = "ChatText";
-			this.ChatText.Size = new System.Drawing.Size(621, 23);
-			this.ChatText.TabIndex = 3;
-			this.ChatText.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ChatTextKeyDown);
-			this.ChatText.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ChatTextKeyUp);
-			this.ChatText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ChatTextKeyPress);
-			// 
-			// ChatSend
-			// 
-			this.ChatSend.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.ChatSend.Location = new System.Drawing.Point(637, 521);
-			this.ChatSend.Name = "ChatSend";
-			this.ChatSend.Size = new System.Drawing.Size(87, 23);
-			this.ChatSend.TabIndex = 4;
-			this.ChatSend.Text = "Send";
-			this.ChatSend.UseVisualStyleBackColor = true;
-			this.ChatSend.Click += new System.EventHandler(this.ChatSendClick);
 			// 
 			// menuStrip1
 			// 
@@ -156,6 +121,7 @@ namespace TwinEditor
 			this.openToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
 			this.openToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
 			this.openToolStripMenuItem.Text = "Open";
+			this.openToolStripMenuItem.Click += new System.EventHandler(this.OpenToolStripMenuItemClick);
 			// 
 			// closeToolStripMenuItem
 			// 
@@ -203,6 +169,7 @@ namespace TwinEditor
 			this.printToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
 			this.printToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
 			this.printToolStripMenuItem.Text = "Print";
+			this.printToolStripMenuItem.Click += new System.EventHandler(this.PrintToolStripMenuItemClick);
 			// 
 			// toolStripSeparator3
 			// 
@@ -295,7 +262,7 @@ namespace TwinEditor
 			this.compileToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("compileToolStripMenuItem.Image")));
 			this.compileToolStripMenuItem.Name = "compileToolStripMenuItem";
 			this.compileToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F8;
-			this.compileToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.compileToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
 			this.compileToolStripMenuItem.Text = "Compile";
 			// 
 			// runToolStripMenuItem
@@ -303,7 +270,7 @@ namespace TwinEditor
 			this.runToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("runToolStripMenuItem.Image")));
 			this.runToolStripMenuItem.Name = "runToolStripMenuItem";
 			this.runToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
-			this.runToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.runToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
 			this.runToolStripMenuItem.Text = "Run";
 			// 
 			// helpToolStripMenuItem
@@ -319,26 +286,26 @@ namespace TwinEditor
 			// 
 			this.guideToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("guideToolStripMenuItem.Image")));
 			this.guideToolStripMenuItem.Name = "guideToolStripMenuItem";
-			this.guideToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.guideToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
 			this.guideToolStripMenuItem.Text = "Guide";
 			// 
 			// aboutToolStripMenuItem
 			// 
 			this.aboutToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("aboutToolStripMenuItem.Image")));
 			this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-			this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.aboutToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
 			this.aboutToolStripMenuItem.Text = "About...";
 			// 
-			// MainTabControl
+			// MainTab
 			// 
-			this.MainTabControl.Controls.Add(this.tabPage1);
-			this.MainTabControl.Controls.Add(this.tabPage2);
-			this.MainTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.MainTabControl.Location = new System.Drawing.Point(0, 24);
-			this.MainTabControl.Name = "MainTabControl";
-			this.MainTabControl.SelectedIndex = 0;
-			this.MainTabControl.Size = new System.Drawing.Size(745, 603);
-			this.MainTabControl.TabIndex = 6;
+			this.MainTab.Controls.Add(this.tabPage1);
+			this.MainTab.Controls.Add(this.tabPage2);
+			this.MainTab.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.MainTab.Location = new System.Drawing.Point(0, 24);
+			this.MainTab.Name = "MainTab";
+			this.MainTab.SelectedIndex = 0;
+			this.MainTab.Size = new System.Drawing.Size(745, 603);
+			this.MainTab.TabIndex = 6;
 			// 
 			// tabPage1
 			// 
@@ -400,6 +367,42 @@ namespace TwinEditor
 			this.tabPage4.Text = "Execution #1";
 			this.tabPage4.UseVisualStyleBackColor = true;
 			// 
+			// ChatSend
+			// 
+			this.ChatSend.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.ChatSend.Location = new System.Drawing.Point(637, 521);
+			this.ChatSend.Name = "ChatSend";
+			this.ChatSend.Size = new System.Drawing.Size(87, 23);
+			this.ChatSend.TabIndex = 4;
+			this.ChatSend.Text = "Send";
+			this.ChatSend.UseVisualStyleBackColor = true;
+			this.ChatSend.Click += new System.EventHandler(this.ChatSendClick);
+			// 
+			// ChatHistory
+			// 
+			this.ChatHistory.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+									| System.Windows.Forms.AnchorStyles.Right)));
+			this.ChatHistory.BackColor = System.Drawing.Color.White;
+			this.ChatHistory.Location = new System.Drawing.Point(8, 408);
+			this.ChatHistory.Multiline = true;
+			this.ChatHistory.Name = "ChatHistory";
+			this.ChatHistory.ReadOnly = true;
+			this.ChatHistory.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.ChatHistory.Size = new System.Drawing.Size(714, 106);
+			this.ChatHistory.TabIndex = 2;
+			// 
+			// ChatText
+			// 
+			this.ChatText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+									| System.Windows.Forms.AnchorStyles.Right)));
+			this.ChatText.Location = new System.Drawing.Point(8, 522);
+			this.ChatText.Name = "ChatText";
+			this.ChatText.Size = new System.Drawing.Size(621, 23);
+			this.ChatText.TabIndex = 3;
+			this.ChatText.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ChatTextKeyDown);
+			this.ChatText.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ChatTextKeyUp);
+			this.ChatText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ChatTextKeyPress);
+			// 
 			// tabPage2
 			// 
 			this.tabPage2.Location = new System.Drawing.Point(4, 24);
@@ -415,7 +418,7 @@ namespace TwinEditor
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(745, 627);
-			this.Controls.Add(this.MainTabControl);
+			this.Controls.Add(this.MainTab);
 			this.Controls.Add(this.menuStrip1);
 			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -424,7 +427,7 @@ namespace TwinEditor
 			this.Text = "TwinEditor";
 			this.menuStrip1.ResumeLayout(false);
 			this.menuStrip1.PerformLayout();
-			this.MainTabControl.ResumeLayout(false);
+			this.MainTab.ResumeLayout(false);
 			this.tabPage1.ResumeLayout(false);
 			this.tabPage1.PerformLayout();
 			this.tabControl1.ResumeLayout(false);
@@ -432,12 +435,13 @@ namespace TwinEditor
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
+		private System.Windows.Forms.OpenFileDialog openFileDialog;
+		private System.Windows.Forms.TabControl MainTab;
 		private System.Windows.Forms.TabPage tabPage4;
 		private System.Windows.Forms.TabPage tabPage3;
 		private System.Windows.Forms.TabControl tabControl1;
 		private System.Windows.Forms.TabPage tabPage2;
 		private System.Windows.Forms.TabPage tabPage1;
-		private System.Windows.Forms.TabControl MainTabControl;
 		private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem guideToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
