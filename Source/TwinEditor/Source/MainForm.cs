@@ -198,13 +198,7 @@ namespace TwinEditor
 		}
 		
 		void SaveToolStripMenuItemClick(object sender, EventArgs e)
-		{
-			if(tabControls[MainTab.SelectedIndex].FileName == null)
-			{
-				SaveAsToolStripMenuItemClick(sender, e);
-				return;
-			}
-			
+		{			
 			SaveFile(tabControls[MainTab.SelectedIndex]);
 			
 		}
@@ -213,16 +207,36 @@ namespace TwinEditor
 		{
 			saveFileDialog.RestoreDirectory = true;
 			saveFileDialog.ShowDialog();
+			tabControls[MainTab.SelectedIndex].FileName = saveFileDialog.FileName;
 			
 			SaveFile(tabControls[MainTab.SelectedIndex]);
 		}
 		
 		void SaveFile(FileTabControl tabControl)
 		{
-			File.WriteAllText(tabControl.FileName, tabControls[MainTab.SelectedIndex].SourceCode.Text);			
-			tabControls[MainTab.SelectedIndex].FileName = saveFileDialog.FileName;
-			tabPages[MainTab.SelectedIndex].Text = System.IO.Path.GetFileName(saveFileDialog.FileName);			
+			if(tabControl.FileName == null)
+			{
+				saveFileDialog.RestoreDirectory = true;
+				saveFileDialog.ShowDialog();
+				tabControl.FileName = saveFileDialog.FileName;
+			}			
 			
+			File.WriteAllText(tabControl.FileName, tabControl.SourceCode.Text);			
+			((TabPage)tabControl.Parent).Text = System.IO.Path.GetFileName(tabControl.FileName);
+			
+		}
+		
+		void SaveAllToolStripMenuItemClick(object sender, EventArgs e)
+		{
+			foreach(FileTabControl tabControl in tabControls)
+			{
+				SaveFile(tabControl);
+			}
+		}
+		
+		void AboutToolStripMenuItemClick(object sender, EventArgs e)
+		{
+			new AboutDialog().ShowDialog();
 		}
 	}
 }

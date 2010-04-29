@@ -54,17 +54,24 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FileTabControl.cs" />
-    <Compile Include="FileTabControl.Designer.cs">
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Source\AboutDialog.cs" />
+    <Compile Include="Source\AboutDialog.Designer.cs">
+      <DependentUpon>AboutDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\FileTabControl.cs" />
+    <Compile Include="Source\FileTabControl.Designer.cs">
       <DependentUpon>FileTabControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Source\MainForm.cs" />
     <Compile Include="Source\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Source\Program.cs" />
-    <EmbeddedResource Include="FileTabControl.resx">
+    <EmbeddedResource Include="Source\AboutDialog.resx">
+      <DependentUpon>AboutDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\FileTabControl.resx">
       <DependentUpon>FileTabControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Source\MainForm.resx">
