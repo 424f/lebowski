@@ -7,20 +7,17 @@ namespace Lebowski
 	{
 		[STAThread]
 		private static void Main(string[] args)
-		{
-			Console.Write("Destination: ");
-			string user = Console.ReadLine();
-			
+		{			
 			string ApplicationName = "FooBar";
 			
 			Skype API = new SKYPE4COMLib.Skype();
 			Application app = API.get_Application(ApplicationName);
 			app.Create();	
 			
-			app.Connect(user, true);
-			
-			var sendStream = app.SendingStreams[app.SendingStreams.Count];
-			var receiveStream = app.ReceivedStreams[app.ReceivedStreams.Count];
+			Console.WriteLine("Application created..");
+						
+			/*var sendStream = app.SendingStreams[app.SendingStreams.Count];
+			var receiveStream = app.ReceivedStreams[app.ReceivedStreams.Count];*/
 			
 			API.ApplicationStreams += delegate(Application pApp, ApplicationStreamCollection pStreams)
 			{
@@ -29,6 +26,14 @@ namespace Lebowski
 			
 			API.ApplicationConnecting += delegate(Application pApp, UserCollection pUsers)
 			{
+				Console.Write("Connecting: " + pApp.Name + ":: ");
+				for(int i = 1; i <= pUsers.Count; ++i)
+				{
+					Console.Write(pUsers[i].Handle + " ");
+				}
+				Console.WriteLine();
+				
+				
 				if(pApp.Streams.Count == 0)
 				{
 					Console.WriteLine("Connecting...");
@@ -37,7 +42,7 @@ namespace Lebowski
 				if(pApp.Streams.Count == 1)
 				{
 					Console.WriteLine("Waiting for accept...");
-					app.Streams[1].Write("ROFL");
+					app.SendingStreams[1].Write("ROFL");
 				}
 			};
 			
@@ -45,9 +50,9 @@ namespace Lebowski
 			{ 
 				if(pStreams.Count == 0)
 					return;
-				if(pStreams[1].DataLength == 0)
+				if(pApp.ReceivedStreams[1].DataLength == 0)
 					return;
-				string received = receiveStream.Read();
+				string received = pApp.ReceivedStreams[1].Read();
 				Console.WriteLine("RECV " + received);
 			};
 			
@@ -56,6 +61,12 @@ namespace Lebowski
 				string txt = Console.ReadLine();
 				sendStream.SendDatagram(txt);
 			}*/
+			
+			Console.Write("Destination: ");
+			string user = Console.ReadLine();
+			app.Connect(user, true);
+			
+			
 			Console.ReadKey(true);
 		}
 	}
