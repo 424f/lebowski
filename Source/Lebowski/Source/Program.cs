@@ -34,12 +34,12 @@ namespace Lebowski
 				Console.WriteLine();
 				
 				
-				if(pApp.Streams.Count == 0)
+				if(pUsers.Count == 1)
 				{
 					Console.WriteLine("Connecting...");
 				}
 				
-				if(pApp.Streams.Count == 1)
+				if(pUsers.Count == 0)
 				{
 					Console.WriteLine("Waiting for accept...");
 					app.SendingStreams[1].Write("ROFL");
