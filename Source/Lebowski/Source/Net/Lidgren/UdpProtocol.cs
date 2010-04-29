@@ -8,5 +8,11 @@ namespace Lebowski.Net.Lidgren
 		{
 			get { return "UDP"; }
 		}
+		
+		public void Share(ISessionContext session)
+		{
+			throw new NotImplementedException();
+		}
+		
 	}
 }

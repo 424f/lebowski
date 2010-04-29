@@ -33,6 +33,11 @@ namespace TwinEditor
 			
 			// Clear tabs
 			MainTab.TabPages.Clear();
+			editToolStripMenuItem.Enabled = false;
+			scriptToolStripMenuItem.Enabled = false;			
+			closeToolStripMenuItem.Enabled = false;
+			saveToolStripMenuItem.Enabled = false;
+			saveAsToolStripMenuItem.Enabled = false;
 			
 			// Supported file types
 			openFileDialog.Filter = "";
@@ -42,9 +47,10 @@ namespace TwinEditor
 			foreach(IFileType fileType in fileTypes)
 			{
 				var menuItem = new ToolStripMenuItem(fileType.Name + " (" + fileType.FileNamePattern + ")");
+				IFileType currentFileType = fileType;
 				menuItem.Click += delegate
 				{
-					CreateNewTab(fileType);
+					CreateNewTab(currentFileType);
 				};
 				newToolStripMenuItem.DropDown.Items.Add(menuItem);
 				
@@ -63,7 +69,12 @@ namespace TwinEditor
 			).Cast<ICommunicationProtocol>().ToArray();			
 			foreach(ICommunicationProtocol protocol in protocols)
 			{
+				ICommunicationProtocol currentProtocol = protocol;
 				var menuItem = new ToolStripMenuItem(protocol.Name);
+				menuItem.Click += delegate 
+				{  
+					currentProtocol.Share(tabControls[MainTab.SelectedIndex]);
+				};
 				shareToolStripMenuItem.DropDown.Items.Add(menuItem);
 			}
 			
@@ -191,10 +202,25 @@ namespace TwinEditor
 		{
 			/* After having selected a new tab, we have to update the 
 			menus to reflect the actions that are possible */
-			var tab = tabControls[e.TabPageIndex];
-			compileToolStripMenuItem.Enabled = tab.FileType.CanCompile;
-			runToolStripMenuItem.Enabled = tab.FileType.CanExecute;
-			
+			if(e.TabPageIndex == -1)
+			{
+				editToolStripMenuItem.Enabled = false;
+				scriptToolStripMenuItem.Enabled = false;
+				closeToolStripMenuItem.Enabled = false;
+				saveToolStripMenuItem.Enabled = false;
+				saveAsToolStripMenuItem.Enabled = false;				
+			}
+			else
+			{
+				closeToolStripMenuItem.Enabled = true;
+				saveToolStripMenuItem.Enabled = true;
+				saveAsToolStripMenuItem.Enabled = true;				
+				editToolStripMenuItem.Enabled = true;
+				scriptToolStripMenuItem.Enabled = true;				
+				var tab = tabControls[e.TabPageIndex];
+				compileToolStripMenuItem.Enabled = tab.FileType.CanCompile;
+				runToolStripMenuItem.Enabled = tab.FileType.CanExecute;
+			}
 		}
 		
 		void SaveToolStripMenuItemClick(object sender, EventArgs e)
@@ -237,6 +263,17 @@ namespace TwinEditor
 		void AboutToolStripMenuItemClick(object sender, EventArgs e)
 		{
 			new AboutDialog().ShowDialog();
+		}
+		
+		void CloseToolStripMenuItemClick(object sender, EventArgs e)
+		{
+			// TODO: changes since last save?
+			FileTabControl tabControl = tabControls[MainTab.SelectedIndex];
+			tabControl.Close();
+			tabControls.RemoveAt(MainTab.SelectedIndex);
+			tabPages.RemoveAt(MainTab.SelectedIndex);
+			MainTab.TabPages.Remove(MainTab.SelectedTab);
+			
 		}
 	}
 }
