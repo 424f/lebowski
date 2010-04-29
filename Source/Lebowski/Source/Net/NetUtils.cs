@@ -20,6 +20,11 @@ namespace Lebowski.Net
 		
 		public static object Deserialize(byte[] buffer)
 		{
+			return Deserialize(buffer, 0, buffer.Length);
+		}
+		
+		public static object Deserialize(byte[] buffer, int offset, int count)
+		{
 			MemoryStream ms = new MemoryStream();
 			int length = buffer.Length;
 			ms.Write(buffer, 0, length);

@@ -21,6 +21,29 @@ namespace TwinEditor
 		List<FileTabControl> tabControls = new List<FileTabControl>();
 		List<TabPage> tabPages = new List<TabPage>();
 		
+		public void UpdateMenuItems()
+		{
+			if(MainTab.TabPages.Count == 0)
+			{
+				editToolStripMenuItem.Enabled = false;
+				scriptToolStripMenuItem.Enabled = false;			
+				closeToolStripMenuItem.Enabled = false;
+				saveToolStripMenuItem.Enabled = false;
+				saveAsToolStripMenuItem.Enabled = false;				
+			}
+			else
+			{
+				closeToolStripMenuItem.Enabled = true;
+				saveToolStripMenuItem.Enabled = true;
+				saveAsToolStripMenuItem.Enabled = true;				
+				editToolStripMenuItem.Enabled = true;
+				scriptToolStripMenuItem.Enabled = true;				
+				var tab = tabControls[MainTab.SelectedIndex];
+				compileToolStripMenuItem.Enabled = tab.FileType.CanCompile;
+				runToolStripMenuItem.Enabled = tab.FileType.CanExecute;			
+			}
+		}
+		
 		public MainForm()
 		{
 			//
@@ -33,11 +56,6 @@ namespace TwinEditor
 			
 			// Clear tabs
 			MainTab.TabPages.Clear();
-			editToolStripMenuItem.Enabled = false;
-			scriptToolStripMenuItem.Enabled = false;			
-			closeToolStripMenuItem.Enabled = false;
-			saveToolStripMenuItem.Enabled = false;
-			saveAsToolStripMenuItem.Enabled = false;
 			
 			// Supported file types
 			openFileDialog.Filter = "";
@@ -191,6 +209,8 @@ namespace TwinEditor
 			string content = File.ReadAllText(openFileDialog.FileName);
 			tab.SourceCode.Text = content;
 			tabPages.Last().Text = openFileDialog.FileName;
+			
+			UpdateMenuItems();
 		}
 		
 		void PrintToolStripMenuItemClick(object sender, EventArgs e)
@@ -202,31 +222,12 @@ namespace TwinEditor
 		{
 			/* After having selected a new tab, we have to update the 
 			menus to reflect the actions that are possible */
-			if(e.TabPageIndex == -1)
-			{
-				editToolStripMenuItem.Enabled = false;
-				scriptToolStripMenuItem.Enabled = false;
-				closeToolStripMenuItem.Enabled = false;
-				saveToolStripMenuItem.Enabled = false;
-				saveAsToolStripMenuItem.Enabled = false;				
-			}
-			else
-			{
-				closeToolStripMenuItem.Enabled = true;
-				saveToolStripMenuItem.Enabled = true;
-				saveAsToolStripMenuItem.Enabled = true;				
-				editToolStripMenuItem.Enabled = true;
-				scriptToolStripMenuItem.Enabled = true;				
-				var tab = tabControls[e.TabPageIndex];
-				compileToolStripMenuItem.Enabled = tab.FileType.CanCompile;
-				runToolStripMenuItem.Enabled = tab.FileType.CanExecute;
-			}
+			UpdateMenuItems();
 		}
 		
 		void SaveToolStripMenuItemClick(object sender, EventArgs e)
 		{			
-			SaveFile(tabControls[MainTab.SelectedIndex]);
-			
+			SaveFile(tabControls[MainTab.SelectedIndex]);			
 		}
 		
 		void SaveAsToolStripMenuItemClick(object sender, EventArgs e)
@@ -249,6 +250,7 @@ namespace TwinEditor
 			
 			File.WriteAllText(tabControl.FileName, tabControl.SourceCode.Text);			
 			((TabPage)tabControl.Parent).Text = System.IO.Path.GetFileName(tabControl.FileName);
+			UpdateMenuItems();
 			
 		}
 		
@@ -273,6 +275,7 @@ namespace TwinEditor
 			tabControls.RemoveAt(MainTab.SelectedIndex);
 			tabPages.RemoveAt(MainTab.SelectedIndex);
 			MainTab.TabPages.Remove(MainTab.SelectedTab);
+			UpdateMenuItems();
 			
 		}
 	}

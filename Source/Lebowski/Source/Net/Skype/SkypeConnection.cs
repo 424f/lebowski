@@ -11,43 +11,26 @@ namespace Lebowski.Net.Skype
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(SkypeProtocol));
 		
 		public event EventHandler<ReceivedEventArgs> Received;
-		private Application application;
-		private SKYPE4COMLib.Skype api;
+
+		private string remote;
+		private int connectionId;
+		private SkypeProtocol protocol;
 		
-		public SkypeConnection(SKYPE4COMLib.Skype api, Application application)
+		public SkypeConnection(SkypeProtocol protocol, string remote, int connectionId)
 		{
-			this.api = api;
-			this.application = application;
+			this.connectionId = connectionId;
+			this.protocol = protocol;
+			this.remote = remote;
 			
-			api.ApplicationDatagram += delegate(Application app, ApplicationStream stream, string text) { 
-				if(app != this.application)
-				{
-					return;
-				}
-				
-				// Decode message
-				Logger.Info(string.Format("Received skype datagram: {0}", text));
-				try
-				{
-					byte[] buffer = Convert.FromBase64String(text);
-					OnReceived(new ReceivedEventArgs(NetUtils.Deserialize(buffer)));
-				}
-				catch(Exception e)
-				{
-					Logger.Error("Received ill-formed skype datagram", e);
-				}
-			};			
+			Send("HAI");
 		}
 		
 		public void Send(object o)
 		{
-			byte[] buffer = NetUtils.Serialize(o);
-			string base64buffer = Convert.ToBase64String(buffer);
-			
-			application.SendDatagram(base64buffer, application.Streams);
+			protocol.Send(remote, connectionId, o);
 		}
 		
-		protected virtual void OnReceived(ReceivedEventArgs e)
+		internal virtual void OnReceived(ReceivedEventArgs e)
 		{
 			if (Received != null) {
 				Received(this, e);
