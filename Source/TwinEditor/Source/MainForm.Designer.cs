@@ -53,15 +53,7 @@ namespace TwinEditor
 			this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
 			this.shareToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.tCPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.uDPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.skypeAP2APToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.johndoeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.foobarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.connectToSharedDocumentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.tCPToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-			this.uDPToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-			this.skypeAP2APToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.scriptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.compileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.runToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -275,82 +267,19 @@ namespace TwinEditor
 			// 
 			// shareToolStripMenuItem
 			// 
-			this.shareToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-									this.tCPToolStripMenuItem,
-									this.uDPToolStripMenuItem,
-									this.skypeAP2APToolStripMenuItem});
 			this.shareToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("shareToolStripMenuItem.Image")));
 			this.shareToolStripMenuItem.Name = "shareToolStripMenuItem";
 			this.shareToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D1)));
 			this.shareToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
 			this.shareToolStripMenuItem.Text = "Share";
 			// 
-			// tCPToolStripMenuItem
-			// 
-			this.tCPToolStripMenuItem.Name = "tCPToolStripMenuItem";
-			this.tCPToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
-			this.tCPToolStripMenuItem.Text = "TCP";
-			// 
-			// uDPToolStripMenuItem
-			// 
-			this.uDPToolStripMenuItem.Name = "uDPToolStripMenuItem";
-			this.uDPToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
-			this.uDPToolStripMenuItem.Text = "UDP";
-			// 
-			// skypeAP2APToolStripMenuItem
-			// 
-			this.skypeAP2APToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-									this.johndoeToolStripMenuItem,
-									this.foobarToolStripMenuItem});
-			this.skypeAP2APToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("skypeAP2APToolStripMenuItem.Image")));
-			this.skypeAP2APToolStripMenuItem.Name = "skypeAP2APToolStripMenuItem";
-			this.skypeAP2APToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
-			this.skypeAP2APToolStripMenuItem.Text = "Skype AP2AP";
-			// 
-			// johndoeToolStripMenuItem
-			// 
-			this.johndoeToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("johndoeToolStripMenuItem.Image")));
-			this.johndoeToolStripMenuItem.Name = "johndoeToolStripMenuItem";
-			this.johndoeToolStripMenuItem.Size = new System.Drawing.Size(121, 22);
-			this.johndoeToolStripMenuItem.Text = "john.doe";
-			// 
-			// foobarToolStripMenuItem
-			// 
-			this.foobarToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("foobarToolStripMenuItem.Image")));
-			this.foobarToolStripMenuItem.Name = "foobarToolStripMenuItem";
-			this.foobarToolStripMenuItem.Size = new System.Drawing.Size(121, 22);
-			this.foobarToolStripMenuItem.Text = "foo.bar";
-			// 
 			// connectToSharedDocumentToolStripMenuItem
 			// 
-			this.connectToSharedDocumentToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-									this.tCPToolStripMenuItem1,
-									this.uDPToolStripMenuItem1,
-									this.skypeAP2APToolStripMenuItem1});
 			this.connectToSharedDocumentToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("connectToSharedDocumentToolStripMenuItem.Image")));
 			this.connectToSharedDocumentToolStripMenuItem.Name = "connectToSharedDocumentToolStripMenuItem";
 			this.connectToSharedDocumentToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D2)));
 			this.connectToSharedDocumentToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
 			this.connectToSharedDocumentToolStripMenuItem.Text = "Participate";
-			// 
-			// tCPToolStripMenuItem1
-			// 
-			this.tCPToolStripMenuItem1.Name = "tCPToolStripMenuItem1";
-			this.tCPToolStripMenuItem1.Size = new System.Drawing.Size(144, 22);
-			this.tCPToolStripMenuItem1.Text = "TCP";
-			// 
-			// uDPToolStripMenuItem1
-			// 
-			this.uDPToolStripMenuItem1.Name = "uDPToolStripMenuItem1";
-			this.uDPToolStripMenuItem1.Size = new System.Drawing.Size(144, 22);
-			this.uDPToolStripMenuItem1.Text = "UDP";
-			// 
-			// skypeAP2APToolStripMenuItem1
-			// 
-			this.skypeAP2APToolStripMenuItem1.Image = ((System.Drawing.Image)(resources.GetObject("skypeAP2APToolStripMenuItem1.Image")));
-			this.skypeAP2APToolStripMenuItem1.Name = "skypeAP2APToolStripMenuItem1";
-			this.skypeAP2APToolStripMenuItem1.Size = new System.Drawing.Size(144, 22);
-			this.skypeAP2APToolStripMenuItem1.Text = "Skype AP2AP";
 			// 
 			// scriptToolStripMenuItem
 			// 
@@ -366,7 +295,7 @@ namespace TwinEditor
 			this.compileToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("compileToolStripMenuItem.Image")));
 			this.compileToolStripMenuItem.Name = "compileToolStripMenuItem";
 			this.compileToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F8;
-			this.compileToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+			this.compileToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.compileToolStripMenuItem.Text = "Compile";
 			// 
 			// runToolStripMenuItem
@@ -374,7 +303,7 @@ namespace TwinEditor
 			this.runToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("runToolStripMenuItem.Image")));
 			this.runToolStripMenuItem.Name = "runToolStripMenuItem";
 			this.runToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
-			this.runToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+			this.runToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.runToolStripMenuItem.Text = "Run";
 			// 
 			// helpToolStripMenuItem
@@ -390,14 +319,14 @@ namespace TwinEditor
 			// 
 			this.guideToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("guideToolStripMenuItem.Image")));
 			this.guideToolStripMenuItem.Name = "guideToolStripMenuItem";
-			this.guideToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+			this.guideToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.guideToolStripMenuItem.Text = "Guide";
 			// 
 			// aboutToolStripMenuItem
 			// 
 			this.aboutToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("aboutToolStripMenuItem.Image")));
 			this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-			this.aboutToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+			this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.aboutToolStripMenuItem.Text = "About...";
 			// 
 			// MainTabControl
@@ -512,15 +441,7 @@ namespace TwinEditor
 		private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem guideToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem skypeAP2APToolStripMenuItem1;
-		private System.Windows.Forms.ToolStripMenuItem uDPToolStripMenuItem1;
-		private System.Windows.Forms.ToolStripMenuItem tCPToolStripMenuItem1;
 		private System.Windows.Forms.ToolStripMenuItem connectToSharedDocumentToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem foobarToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem johndoeToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem skypeAP2APToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem uDPToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem tCPToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem shareToolStripMenuItem;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;

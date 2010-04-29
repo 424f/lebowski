@@ -2,11 +2,14 @@
 using System.Text;
 using SKYPE4COMLib;
 using Lebowski.Net;
+using log4net;
 
 namespace Lebowski.Net.Skype
 {
-	public class SkypeProtocol
+	public class SkypeProtocol : ICommunicationProtocol
 	{
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(SkypeProtocol));
+		
 		private const string ApplicationName = "LEBOWSKI-01";
 		private Application Application;
 			
@@ -16,6 +19,7 @@ namespace Lebowski.Net.Skype
 		{
 			Initialize();
 			API = new SKYPE4COMLib.Skype();
+			
 			Application = API.get_Application(ApplicationName);
 			Application.Create();							
 			string user = API.CurrentUser.FullName;
@@ -34,8 +38,6 @@ namespace Lebowski.Net.Skype
 			//Application.Connect(username, true);
 			//Application.ConnectableUsers.Add(username);
 		}
-		
-		public event EventHandler<EventArgs> Received;
 		
 		public string Name {
 			get { return "Skype API"; }
@@ -67,22 +69,51 @@ namespace Lebowski.Net.Skype
 	
 	public class SkypeConnection : IConnection
 	{
-		public event EventHandler<ReceivedEventArgs> Received;
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(SkypeProtocol));
 		
-		public SkypeConnection()
+		public event EventHandler<ReceivedEventArgs> Received;
+		private Application application;
+		private SKYPE4COMLib.Skype api;
+		
+		public SkypeConnection(SKYPE4COMLib.Skype api, Application application)
 		{
+			this.api = api;
+			this.application = application;
 			
+			api.ApplicationDatagram += delegate(Application app, ApplicationStream stream, string text) { 
+				if(app != this.application)
+				{
+					return;
+				}
+				
+				// Decode message
+				Logger.Info(string.Format("Received skype datagram: {0}", text));
+				try
+				{
+					byte[] buffer = Convert.FromBase64String(text);
+					OnReceived(new ReceivedEventArgs(NetUtils.Deserialize(buffer)));
+				}
+				catch(Exception e)
+				{
+					Logger.Error("Received ill-formed skype datagram", e);
+				}
+			};			
 		}
 		
 		public void Send(object o)
 		{
 			byte[] buffer = NetUtils.Serialize(o);
-			Convert.ToBase64String(buffer);
+			string base64buffer = Convert.ToBase64String(buffer);
 			
-			// TODO:
+			application.SendDatagram(base64buffer, application.Streams);
 		}
 		
-		
+		protected virtual void OnReceived(ReceivedEventArgs e)
+		{
+			if (Received != null) {
+				Received(this, e);
+			}
+		}
 		
 	}
 }

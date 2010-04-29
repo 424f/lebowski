@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Drawing;
 using System.Windows.Forms;
+using Lebowski;
 using Lebowski.Net;
 using Lebowski.UI.FileTypes;
 
 namespace TwinEditor
 {
-	/// <summary>
-	/// Description of MainForm.
-	/// </summary>
 	public partial class MainForm : Form
 	{
 		IConnection chatConnection;
@@ -24,13 +23,22 @@ namespace TwinEditor
 			//SourceCode.SetHighlighting("C#");
 			
 			// Supported file types
-			IFileType[] fileTypes = new IFileType[]{ new TextFileType(), new PythonFileType() };
+			IFileType[] fileTypes = ExtensionUtil.FindTypesImplementing(typeof(IFileType)).Select(
+				(t) => t.GetConstructor(new Type[]{}).Invoke(new object[]{})
+			).Cast<IFileType>().ToArray();
 			foreach(IFileType fileType in fileTypes)
 			{
-				//newToolStripMenuItem.DropDown.Items.Add(new ToolStripMenuItem(fileType.Name + " (" + fileType.FileNamePattern + ")", fileType.Icon));
 				newToolStripMenuItem.DropDown.Items.Add(new ToolStripMenuItem(fileType.Name + " (" + fileType.FileNamePattern + ")"));
 			}
 			
+			// Supported communication protocols
+			ICommunicationProtocol[] protocols = ExtensionUtil.FindTypesImplementing(typeof(ICommunicationProtocol)).Select(
+				(t) => t.GetConstructor(new Type[]{}).Invoke(new object[]{})
+			).Cast<ICommunicationProtocol>().ToArray();			
+			foreach(ICommunicationProtocol protocol in protocols)
+			{
+				shareToolStripMenuItem.DropDown.Items.Add(new ToolStripMenuItem(protocol.Name));
+			}
 			
 		}
 		
