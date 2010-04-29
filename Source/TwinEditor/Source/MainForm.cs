@@ -7,11 +7,14 @@ using System.Windows.Forms;
 using Lebowski;
 using Lebowski.Net;
 using Lebowski.UI.FileTypes;
+using log4net;
 
 namespace TwinEditor
 {
 	public partial class MainForm : Form
 	{
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(MainForm));
+		
 		IConnection chatConnection;
 		protected IFileType[] fileTypes;
 		protected ICommunicationProtocol[] protocols;
@@ -24,7 +27,8 @@ namespace TwinEditor
 			// The InitializeComponent() call is required for Windows Forms designer support.
 			//
 			InitializeComponent();
-			
+
+			Logger.Info("MainForm component initialized.");
 			//SourceCode.SetHighlighting("C#");
 			
 			// Clear tabs
@@ -40,7 +44,7 @@ namespace TwinEditor
 				var menuItem = new ToolStripMenuItem(fileType.Name + " (" + fileType.FileNamePattern + ")");
 				menuItem.Click += delegate
 				{
-					CreateNewFile(fileType);
+					CreateNewTab(fileType);
 				};
 				newToolStripMenuItem.DropDown.Items.Add(menuItem);
 				
@@ -127,12 +131,15 @@ namespace TwinEditor
 		
 		
 		
-		public FileTabControl CreateNewFile(IFileType fileType)
+		public FileTabControl CreateNewTab(IFileType fileType)
 		{
+			Logger.Info(string.Format("Creating new tab of file type {0}", fileType.Name));
+			
 			// Create a new tab and add a FileTabControl to it
 			TabPage tabPage = new TabPage("???");
 			FileTabControl tab = new FileTabControl();
 			tab.Dock = DockStyle.Fill;
+			tab.FileType = fileType;
 			tabPage.Controls.Add(tab);
 			tabControls.Add(tab);
 			tabPages.Add(tabPage);
@@ -165,7 +172,7 @@ namespace TwinEditor
 			}
 			
 			// Create a new tab for the file
-			FileTabControl tab = CreateNewFile(type);
+			FileTabControl tab = CreateNewTab(type);
 			tab.FileName = openFileDialog.FileName;
 			tab.FileType = type;
 			
@@ -178,6 +185,44 @@ namespace TwinEditor
 		void PrintToolStripMenuItemClick(object sender, EventArgs e)
 		{
 			tabControls[MainTab.SelectedIndex].SourceCode.PrintDocument.Print();
+		}
+		
+		void MainTabSelected(object sender, TabControlEventArgs e)
+		{
+			/* After having selected a new tab, we have to update the 
+			menus to reflect the actions that are possible */
+			var tab = tabControls[e.TabPageIndex];
+			compileToolStripMenuItem.Enabled = tab.FileType.CanCompile;
+			runToolStripMenuItem.Enabled = tab.FileType.CanExecute;
+			
+		}
+		
+		void SaveToolStripMenuItemClick(object sender, EventArgs e)
+		{
+			if(tabControls[MainTab.SelectedIndex].FileName == null)
+			{
+				SaveAsToolStripMenuItemClick(sender, e);
+				return;
+			}
+			
+			SaveFile(tabControls[MainTab.SelectedIndex]);
+			
+		}
+		
+		void SaveAsToolStripMenuItemClick(object sender, EventArgs e)
+		{
+			saveFileDialog.RestoreDirectory = true;
+			saveFileDialog.ShowDialog();
+			
+			SaveFile(tabControls[MainTab.SelectedIndex]);
+		}
+		
+		void SaveFile(FileTabControl tabControl)
+		{
+			File.WriteAllText(tabControl.FileName, tabControls[MainTab.SelectedIndex].SourceCode.Text);			
+			tabControls[MainTab.SelectedIndex].FileName = saveFileDialog.FileName;
+			tabPages[MainTab.SelectedIndex].Text = System.IO.Path.GetFileName(saveFileDialog.FileName);			
+			
 		}
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Drawing;
 
 namespace Lebowski.UI.FileTypes
@@ -29,5 +30,11 @@ namespace Lebowski.UI.FileTypes
 		/// in the GUI (e.g. create file dialog, tab page, ...)
 		/// </summary>
 		Image Icon { get; }
+		
+		bool CanCompile { get; }
+		void Compile(string content, TextWriter stdout);
+		
+		bool CanExecute { get; }
+		void Execute(string content, TextWriter stdout);
 	}
 }

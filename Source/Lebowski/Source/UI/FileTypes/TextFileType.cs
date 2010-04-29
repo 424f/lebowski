@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Drawing;
 
 namespace Lebowski.UI.FileTypes
@@ -26,5 +27,24 @@ namespace Lebowski.UI.FileTypes
 			get { return Image.FromFile("../../../../Resources/Icons/text.png"); }
 		}
 		
+		public bool CanCompile
+		{
+			get { return false; }
+		}
+		
+		public void Compile(string content, TextWriter stdout)
+		{
+			
+		}		
+		
+		public bool CanExecute
+		{
+			get { return false; }
+		}				
+		
+		public void Execute(string content, TextWriter stdout)
+		{
+			
+		}			
 	}
 }

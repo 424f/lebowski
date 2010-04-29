@@ -68,13 +68,15 @@ namespace TwinEditor
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);				
 			
-			Console.Write("Server (s) or client (c): ");
+			MainForm form = new MainForm();
+			
+			/*Console.Write("Server (s) or client (c): ");
 			string choice = Console.ReadLine();
 			
 			IConnection connection;
 			DifferentialSynchronizationStrategy sync;
 			
-			MainForm form = new MainForm();
+			
 			ITextContext context = new TextEditorTextContext(form.SourceCode);			
 			
 			if(choice == "s")
@@ -118,7 +120,7 @@ namespace TwinEditor
 			timer.Elapsed += delegate { 
 				clientForm.BeginInvoke((Action)UpdateText);
 			};
-			timer.Enabled = true;			
+			timer.Enabled = true;		*/	
 			
 			form.Show();	
 

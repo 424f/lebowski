@@ -22,7 +22,7 @@ namespace Lebowski.Net.Skype
 			
 			Application = API.get_Application(ApplicationName);
 			Application.Create();							
-			string user = API.CurrentUser.FullName;
+			/*string user = API.CurrentUser.FullName;
 			
 			var friends = API.Friends;
 			
@@ -33,7 +33,7 @@ namespace Lebowski.Net.Skype
 				{
 					Console.WriteLine(friend.FullName + " / " + friend.Handle + " / " + friend.DisplayName + " / " + friend.OnlineStatus);
 				}
-			}
+			}*/
 			
 			//Application.Connect(username, true);
 			//Application.ConnectableUsers.Add(username);

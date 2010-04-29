@@ -68,6 +68,7 @@ namespace TwinEditor
 			this.ChatText = new System.Windows.Forms.TextBox();
 			this.tabPage2 = new System.Windows.Forms.TabPage();
 			this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+			this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
 			this.menuStrip1.SuspendLayout();
 			this.MainTab.SuspendLayout();
 			this.tabPage1.SuspendLayout();
@@ -142,12 +143,14 @@ namespace TwinEditor
 			this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
 			this.saveToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
 			this.saveToolStripMenuItem.Text = "Save";
+			this.saveToolStripMenuItem.Click += new System.EventHandler(this.SaveToolStripMenuItemClick);
 			// 
 			// saveAsToolStripMenuItem
 			// 
 			this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
 			this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
 			this.saveAsToolStripMenuItem.Text = "Save As...";
+			this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.SaveAsToolStripMenuItemClick);
 			// 
 			// saveAllToolStripMenuItem
 			// 
@@ -271,7 +274,7 @@ namespace TwinEditor
 			this.runToolStripMenuItem.Name = "runToolStripMenuItem";
 			this.runToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
 			this.runToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
-			this.runToolStripMenuItem.Text = "Run";
+			this.runToolStripMenuItem.Text = "Execute";
 			// 
 			// helpToolStripMenuItem
 			// 
@@ -306,6 +309,7 @@ namespace TwinEditor
 			this.MainTab.SelectedIndex = 0;
 			this.MainTab.Size = new System.Drawing.Size(745, 603);
 			this.MainTab.TabIndex = 6;
+			this.MainTab.Selected += new System.Windows.Forms.TabControlEventHandler(this.MainTabSelected);
 			// 
 			// tabPage1
 			// 
@@ -435,6 +439,7 @@ namespace TwinEditor
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
+		private System.Windows.Forms.SaveFileDialog saveFileDialog;
 		private System.Windows.Forms.OpenFileDialog openFileDialog;
 		private System.Windows.Forms.TabControl MainTab;
 		private System.Windows.Forms.TabPage tabPage4;

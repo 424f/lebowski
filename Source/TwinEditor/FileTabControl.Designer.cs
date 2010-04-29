@@ -33,11 +33,13 @@ namespace TwinEditor
 			this.tabPage3 = new System.Windows.Forms.TabPage();
 			this.SourceCode = new ICSharpCode.TextEditor.TextEditorControl();
 			this.tabPage4 = new System.Windows.Forms.TabPage();
+			this.textEditorControl1 = new ICSharpCode.TextEditor.TextEditorControl();
 			this.ChatSend = new System.Windows.Forms.Button();
 			this.ChatHistory = new System.Windows.Forms.TextBox();
 			this.ChatText = new System.Windows.Forms.TextBox();
 			this.TabControl.SuspendLayout();
 			this.tabPage3.SuspendLayout();
+			this.tabPage4.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// TabControl
@@ -51,7 +53,7 @@ namespace TwinEditor
 			this.TabControl.Location = new System.Drawing.Point(3, 3);
 			this.TabControl.Name = "TabControl";
 			this.TabControl.SelectedIndex = 0;
-			this.TabControl.Size = new System.Drawing.Size(688, 350);
+			this.TabControl.Size = new System.Drawing.Size(688, 372);
 			this.TabControl.TabIndex = 9;
 			// 
 			// tabPage3
@@ -60,7 +62,7 @@ namespace TwinEditor
 			this.tabPage3.Location = new System.Drawing.Point(4, 4);
 			this.tabPage3.Name = "tabPage3";
 			this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage3.Size = new System.Drawing.Size(680, 324);
+			this.tabPage3.Size = new System.Drawing.Size(680, 346);
 			this.tabPage3.TabIndex = 0;
 			this.tabPage3.Text = "Source";
 			this.tabPage3.UseVisualStyleBackColor = true;
@@ -73,18 +75,28 @@ namespace TwinEditor
 			this.SourceCode.Location = new System.Drawing.Point(3, 3);
 			this.SourceCode.Margin = new System.Windows.Forms.Padding(0);
 			this.SourceCode.Name = "SourceCode";
-			this.SourceCode.Size = new System.Drawing.Size(674, 318);
+			this.SourceCode.Size = new System.Drawing.Size(674, 340);
 			this.SourceCode.TabIndex = 1;
 			// 
 			// tabPage4
 			// 
+			this.tabPage4.Controls.Add(this.textEditorControl1);
 			this.tabPage4.Location = new System.Drawing.Point(4, 4);
 			this.tabPage4.Name = "tabPage4";
 			this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage4.Size = new System.Drawing.Size(680, 324);
+			this.tabPage4.Size = new System.Drawing.Size(680, 346);
 			this.tabPage4.TabIndex = 1;
 			this.tabPage4.Text = "Execution #1";
 			this.tabPage4.UseVisualStyleBackColor = true;
+			// 
+			// textEditorControl1
+			// 
+			this.textEditorControl1.IsReadOnly = false;
+			this.textEditorControl1.Location = new System.Drawing.Point(45, 33);
+			this.textEditorControl1.Name = "textEditorControl1";
+			this.textEditorControl1.Size = new System.Drawing.Size(608, 279);
+			this.textEditorControl1.TabIndex = 0;
+			this.textEditorControl1.Text = "textEditorControl1";
 			// 
 			// ChatSend
 			// 
@@ -101,12 +113,12 @@ namespace TwinEditor
 			this.ChatHistory.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
 									| System.Windows.Forms.AnchorStyles.Right)));
 			this.ChatHistory.BackColor = System.Drawing.Color.White;
-			this.ChatHistory.Location = new System.Drawing.Point(2, 359);
+			this.ChatHistory.Location = new System.Drawing.Point(2, 381);
 			this.ChatHistory.Multiline = true;
 			this.ChatHistory.Name = "ChatHistory";
 			this.ChatHistory.ReadOnly = true;
 			this.ChatHistory.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.ChatHistory.Size = new System.Drawing.Size(686, 106);
+			this.ChatHistory.Size = new System.Drawing.Size(686, 84);
 			this.ChatHistory.TabIndex = 6;
 			// 
 			// ChatText
@@ -128,9 +140,11 @@ namespace TwinEditor
 			this.Size = new System.Drawing.Size(691, 496);
 			this.TabControl.ResumeLayout(false);
 			this.tabPage3.ResumeLayout(false);
+			this.tabPage4.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
+		private ICSharpCode.TextEditor.TextEditorControl textEditorControl1;
 		public System.Windows.Forms.TabControl TabControl;
 		private System.Windows.Forms.TextBox ChatText;
 		private System.Windows.Forms.TextBox ChatHistory;
