@@ -83,10 +83,14 @@ namespace Lebowski
 			
 			Console.Write("Destination: ");
 			string user = Console.ReadLine();
-			app.Connect(user, true);
+			if(user != "") 
+			{
+				app.Connect(user, true);
+			}
 			
 			
-			Console.ReadKey(true);
+			
+			System.Windows.Forms.Application.Run();
 		}
 	}
 }
