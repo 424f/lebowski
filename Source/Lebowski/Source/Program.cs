@@ -11,6 +11,7 @@ namespace Lebowski
 			string ApplicationName = "FooBar";
 			
 			Skype API = new SKYPE4COMLib.Skype();
+			API.Attach(8, true);
 			Application app = API.get_Application(ApplicationName);
 			app.Create();	
 			
