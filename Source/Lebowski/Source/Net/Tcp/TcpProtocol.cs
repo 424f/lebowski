@@ -20,5 +20,15 @@ namespace Lebowski.Net.Tcp
 			var applicationChannel = mcc.CreateChannel();		
 			session.StartSession(sync, connection, applicationChannel);
 		}		
+		
+		public bool CanShare
+		{
+			get { return true; }
+		}
+		
+		public bool CanParticipate
+		{
+			get { return true; }
+		}		
 	}
 }

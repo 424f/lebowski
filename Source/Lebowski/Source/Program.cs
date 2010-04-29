@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Windows.Forms;
+using SKYPE4COMLib;
 
 namespace Lebowski
 {
@@ -8,16 +8,35 @@ namespace Lebowski
 		[STAThread]
 		private static void Main(string[] args)
 		{
-			Console.WriteLine("Lebowski");
+			Console.Write("Destination: ");
+			string user = Console.ReadLine();
 			
-			var test = new Lebowski.Test.Synchronization.DifferentialSynchronizationTest();
-			test.TestThis();
+			string ApplicationName = "FooBar";
 			
-			Console.ReadKey();
+			Skype API = new SKYPE4COMLib.Skype();
+			Application app = API.get_Application(ApplicationName);
+			app.Create();	
 			
-			/*Application.EnableVisualStyles();
-			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new LebowskiMockups.MainForm());*/
+			app.Connect(user, true);
+			
+			var sendStream = app.SendingStreams[app.SendingStreams.Count];
+			var receiveStream = app.ReceivedStreams[app.ReceivedStreams.Count];
+			
+			API.ApplicationReceiving += delegate(Application pApp, ApplicationStreamCollection pStreams)
+			{ 
+				if(pStreams.Count == 0)
+					return;
+				if(pStreams[1].DataLength == 0)
+					return;
+				string received = receiveStream.Read();
+				Console.WriteLine("RECV " + received);
+			};
+			
+			while(true)
+			{
+				string txt = Console.ReadLine();
+				sendStream.SendDatagram(txt);
+			}
 		}
 	}
 }

@@ -7,5 +7,9 @@ namespace Lebowski.Net
 	{
 		string Name { get; }
 		void Share(ISessionContext session);
+		
+		bool CanShare { get; }
+		bool CanParticipate { get; }
+		
 	}
 }

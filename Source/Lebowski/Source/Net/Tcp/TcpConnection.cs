@@ -91,7 +91,7 @@ namespace Lebowski.Net.Tcp
 		public TcpClientConnection(string address)
 		{
 			client = new TcpClient();
-			IPHostEntry hostEntry = Dns.Resolve(address);
+			IPHostEntry hostEntry = Dns.GetHostEntry(address);
 			IPEndPoint endpoint = new IPEndPoint(hostEntry.AddressList[0], Port);
 			client.Connect(endpoint);
 			

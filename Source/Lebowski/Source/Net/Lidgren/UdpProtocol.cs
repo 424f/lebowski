@@ -9,10 +9,20 @@ namespace Lebowski.Net.Lidgren
 			get { return "UDP"; }
 		}
 		
+		public bool CanShare
+		{
+			get { return true; }
+		}
+		
+		public bool CanParticipate
+		{
+			get { return true; }
+		}
+		
 		public void Share(ISessionContext session)
 		{
 			throw new NotImplementedException();
 		}
-		
+
 	}
 }

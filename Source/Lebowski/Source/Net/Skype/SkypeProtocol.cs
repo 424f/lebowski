@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Text;
+using System.Collections.Generic;
+using Lebowski.Synchronization.DifferentialSynchronization;
 using SKYPE4COMLib;
 using Lebowski.Net;
 using log4net;
+
+// TODO: remove dependencies on specific synchronization strategy
 
 namespace Lebowski.Net.Skype
 {
@@ -11,18 +15,29 @@ namespace Lebowski.Net.Skype
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(SkypeProtocol));
 		
 		private const string ApplicationName = "LEBOWSKI-01";
-		private Application Application;
+		private static Application Application;
 			
-		private SKYPE4COMLib.Skype API;
+		private static SKYPE4COMLib.Skype API;
+		
+		private static bool isInitialized = false;
+		
+		public List<string> friends = new List<string>();
 		
 		public SkypeProtocol()
 		{
-			//Initialize();
-			//API = new SKYPE4COMLib.Skype();
+			Initialize();
+
+			/*string user = API.CurrentUser.FullName;*/
 			
-			//Application = API.get_Application(ApplicationName);
-			//Application.Create();							
-			/*string user = API.CurrentUser.FullName;
+			UpdateFriends();
+			
+			//Application.Connect(username, true);
+			//Application.ConnectableUsers.Add(username);
+		}
+		
+		protected void UpdateFriends()
+		{
+			this.friends.Clear();
 			
 			var friends = API.Friends;
 			
@@ -33,10 +48,9 @@ namespace Lebowski.Net.Skype
 				{
 					Console.WriteLine(friend.FullName + " / " + friend.Handle + " / " + friend.DisplayName + " / " + friend.OnlineStatus);
 				}
-			}*/
+				this.friends.Add(friend.Handle);
+			}			
 			
-			//Application.Connect(username, true);
-			//Application.ConnectableUsers.Add(username);
 		}
 		
 		public string Name {
@@ -45,12 +59,15 @@ namespace Lebowski.Net.Skype
 		
 		public static void Initialize()
 		{
-			//String username = "foo";
-			//foreach(User user in API.SearchForUsers(username))
-			//{
-			//	Console.WriteLine(user.FullName);
-			//}
-			//s.SendMessage(username, "testing");
+			if(isInitialized)
+				return;
+
+			API = new SKYPE4COMLib.Skype();
+			
+			Application = API.get_Application(ApplicationName);
+			Application.Create();										
+			
+			isInitialized = true;
 
 		}
 		
@@ -67,9 +84,34 @@ namespace Lebowski.Net.Skype
 		
 		public void Share(ISessionContext session)
 		{
-			throw new NotImplementedException();
+			Initialize();
+			SkypeShareForm form = new SkypeShareForm(this);
+			form.Submit += delegate
+			{  
+				// Send an invitation
+				Application.Connect(form.SelectedUser, true);
+				string connectionName = Guid.NewGuid().ToString();
+				
+				
+				SkypeConnection connection = new SkypeConnection(API, Application);
+				
+				// We have to use a multichannel connection
+				MultichannelConnection mcc = new MultichannelConnection(connection);
+				var sync = new DifferentialSynchronizationStrategy(0, session.Context, mcc.CreateChannel());
+				var applicationChannel = mcc.CreateChannel();		
+				session.StartSession(sync, connection, applicationChannel);				
+			};
+			form.ShowDialog();
 		}
 		
+		public bool CanShare
+		{
+			get { return true; }
+		}
 		
+		public bool CanParticipate
+		{
+			get { return true; }
+		}		
 	}
 }

@@ -80,6 +80,10 @@
     <Compile Include="Source\Net\NetUtils.cs" />
     <Compile Include="Source\Net\Skype\SkypeConnection.cs" />
     <Compile Include="Source\Net\Skype\SkypeProtocol.cs" />
+    <Compile Include="Source\Net\Skype\SkypeShareForm.cs" />
+    <Compile Include="Source\Net\Skype\SkypeShareForm.Designer.cs">
+      <DependentUpon>SkypeShareForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Source\Net\Tcp\TcpConnection.cs" />
     <Compile Include="Source\Net\Tcp\TcpProtocol.cs" />
     <Compile Include="Source\Program.cs" />
@@ -106,6 +110,9 @@
     <Compile Include="Test\Synchronization\DifferentialSynchronizationTest.cs" />
     <EmbeddedResource Include="Source\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Net\Skype\SkypeShareForm.resx">
+      <DependentUpon>SkypeShareForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
