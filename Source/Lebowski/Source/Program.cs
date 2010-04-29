@@ -22,6 +22,25 @@ namespace Lebowski
 			var sendStream = app.SendingStreams[app.SendingStreams.Count];
 			var receiveStream = app.ReceivedStreams[app.ReceivedStreams.Count];
 			
+			API.ApplicationStreams += delegate(Application pApp, ApplicationStreamCollection pStreams)
+			{
+				Console.WriteLine("Application stream..");
+			};
+			
+			API.ApplicationConnecting += delegate(Application pApp, UserCollection pUsers)
+			{
+				if(pApp.Streams.Count == 0)
+				{
+					Console.WriteLine("Connecting...");
+				}
+				
+				if(pApp.Streams.Count == 1)
+				{
+					Console.WriteLine("Waiting for accept...");
+					app.Streams[1].Write("ROFL");
+				}
+			};
+			
 			API.ApplicationReceiving += delegate(Application pApp, ApplicationStreamCollection pStreams)
 			{ 
 				if(pStreams.Count == 0)
@@ -32,11 +51,12 @@ namespace Lebowski
 				Console.WriteLine("RECV " + received);
 			};
 			
-			while(true)
+			/*while(true)
 			{
 				string txt = Console.ReadLine();
 				sendStream.SendDatagram(txt);
-			}
+			}*/
+			Console.ReadKey(true);
 		}
 	}
 }
