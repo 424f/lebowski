@@ -23,6 +23,9 @@ namespace Lebowski.Net.Lidgren
 		{
 			throw new NotImplementedException();
 		}
+		
+		public event EventHandler<HostSessionEventArgs> HostSession;
+		public event EventHandler<JoinSessionEventArgs> JoinSession;
 
 	}
 }

@@ -5,6 +5,9 @@ namespace Lebowski.Net.Tcp
 {
 	public class TcpProtocol : ICommunicationProtocol
 	{
+		public event EventHandler<HostSessionEventArgs> HostSession;
+		public event EventHandler<JoinSessionEventArgs> JoinSession;
+		
 		public string Name
 		{
 			get { return "TCP"; }

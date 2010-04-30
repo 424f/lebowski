@@ -432,7 +432,7 @@ namespace TwinEditor
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MainMenuStrip = this.menuStrip1;
 			this.Name = "MainForm";
-			this.Text = "TwinEditor";
+			this.Text = "Lebowski";
 			this.menuStrip1.ResumeLayout(false);
 			this.menuStrip1.PerformLayout();
 			this.MainTab.ResumeLayout(false);

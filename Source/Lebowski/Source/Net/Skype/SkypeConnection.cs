@@ -6,31 +6,36 @@ using log4net;
 
 namespace Lebowski.Net.Skype
 {
-	public class SkypeConnection : IConnection
+	public sealed class SkypeConnection : IConnection
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(SkypeProtocol));
 		
 		public event EventHandler<ReceivedEventArgs> Received;
 
 		private string remote;
-		private int connectionId;
+		public int IncomingChannel { get; private set; }
+		public int OutgoingChannel { get; set; }
+		
 		private SkypeProtocol protocol;
 		
-		public SkypeConnection(SkypeProtocol protocol, string remote, int connectionId)
+		public SkypeConnection(SkypeProtocol protocol, string remote, int incomingChannel)
 		{
-			this.connectionId = connectionId;
+			this.IncomingChannel = incomingChannel;
 			this.protocol = protocol;
 			this.remote = remote;
-			
-			Send("HAI");
+			OutgoingChannel = -1;
 		}
 		
 		public void Send(object o)
 		{
-			protocol.Send(remote, connectionId, o);
+			if(OutgoingChannel == -1)
+			{
+				throw new InvalidOperationException("You have to define an outgoing channel before sending messages.");
+			}
+			protocol.Send(remote, OutgoingChannel, o);
 		}
 		
-		internal virtual void OnReceived(ReceivedEventArgs e)
+		internal void OnReceived(ReceivedEventArgs e)
 		{
 			if (Received != null) {
 				Received(this, e);

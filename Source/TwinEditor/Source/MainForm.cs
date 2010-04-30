@@ -5,6 +5,7 @@ using System.Linq;
 using System.Drawing;
 using System.Windows.Forms;
 using Lebowski;
+using Lebowski.Synchronization.DifferentialSynchronization;
 using Lebowski.Net;
 using Lebowski.UI.FileTypes;
 using Lebowski.Controller;
@@ -59,6 +60,7 @@ namespace TwinEditor
 			
 			// Clear tabs
 			MainTab.TabPages.Clear();
+			UpdateMenuItems();
 			
 			// Supported file types
 			openFileDialog.Filter = "";
@@ -97,6 +99,26 @@ namespace TwinEditor
 					currentProtocol.Share(tabControls[MainTab.SelectedIndex]);
 				};
 				shareToolStripMenuItem.DropDown.Items.Add(menuItem);
+				
+				// Register to communication protocol events
+				currentProtocol.HostSession += delegate(object sender, HostSessionEventArgs e)
+				{ 
+					var sync = new DifferentialSynchronizationStrategy(0, e.Session.Context, e.Connection);
+					// TODO: e.Connection might be redundant
+					e.Session.StartSession(sync, e.Connection, e.ApplicationConnection);
+					
+				};
+				
+				currentProtocol.JoinSession += delegate(object sender, JoinSessionEventArgs e)
+				{ 
+					// TODO: choose correct file type
+					FileTabControl tab = CreateNewTab(fileTypes[0]);
+					
+					var sync = new DifferentialSynchronizationStrategy(1, tab.Context, e.Connection);
+					// TODO: e.Connection might be redundant
+					tab.StartSession(sync, e.Connection, e.ApplicationConnection);
+					
+				};				
 			}
 			
 		}
@@ -177,14 +199,19 @@ namespace TwinEditor
 			tabControls.Add(tab);
 			tabPages.Add(tabPage);
 			MainTab.TabPages.Add(tabPage);
+			
+			UpdateMenuItems();
+			
 			return tab;
 		}
 		
 		void OpenToolStripMenuItemClick(object sender, EventArgs e)
 		{
 			openFileDialog.RestoreDirectory = true;
-			openFileDialog.ShowDialog();
-			MessageBox.Show("You selected: " + openFileDialog.FileName);
+			DialogResult result = openFileDialog.ShowDialog();
+			if(result != DialogResult.OK)
+				return;
+
 			
 			// Create tab and initialize
 			IFileType type = null;
@@ -238,7 +265,11 @@ namespace TwinEditor
 		void SaveAsToolStripMenuItemClick(object sender, EventArgs e)
 		{
 			saveFileDialog.RestoreDirectory = true;
-			saveFileDialog.ShowDialog();
+			DialogResult result = saveFileDialog.ShowDialog();
+			if(result != DialogResult.OK)
+				return;
+			
+			
 			tabControls[MainTab.SelectedIndex].FileName = saveFileDialog.FileName;
 			
 			SaveFile(tabControls[MainTab.SelectedIndex]);
@@ -249,7 +280,9 @@ namespace TwinEditor
 			if(tabControl.FileName == null)
 			{
 				saveFileDialog.RestoreDirectory = true;
-				saveFileDialog.ShowDialog();
+				DialogResult result = saveFileDialog.ShowDialog();
+				if(result != DialogResult.OK)
+					return;
 				tabControl.FileName = saveFileDialog.FileName;
 			}			
 			
