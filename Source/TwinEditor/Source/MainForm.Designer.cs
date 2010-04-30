@@ -69,6 +69,8 @@ namespace TwinEditor
 			this.tabPage2 = new System.Windows.Forms.TabPage();
 			this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
 			this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
+			this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();
 			this.MainTab.SuspendLayout();
 			this.tabPage1.SuspendLayout();
@@ -196,7 +198,9 @@ namespace TwinEditor
 									this.deleteToolStripMenuItem,
 									this.toolStripSeparator4,
 									this.shareToolStripMenuItem,
-									this.connectToSharedDocumentToolStripMenuItem});
+									this.connectToSharedDocumentToolStripMenuItem,
+									this.toolStripSeparator5,
+									this.toolStripMenuItem1});
 			this.editToolStripMenuItem.Name = "editToolStripMenuItem";
 			this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
 			this.editToolStripMenuItem.Text = "Edit";
@@ -420,6 +424,17 @@ namespace TwinEditor
 			this.tabPage2.Text = "tabPage2";
 			this.tabPage2.UseVisualStyleBackColor = true;
 			// 
+			// toolStripSeparator5
+			// 
+			this.toolStripSeparator5.Name = "toolStripSeparator5";
+			this.toolStripSeparator5.Size = new System.Drawing.Size(167, 6);
+			// 
+			// toolStripMenuItem1
+			// 
+			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(170, 22);
+			this.toolStripMenuItem1.Text = "Settings";
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -442,6 +457,8 @@ namespace TwinEditor
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
 		private System.Windows.Forms.SaveFileDialog saveFileDialog;
 		private System.Windows.Forms.OpenFileDialog openFileDialog;
 		private System.Windows.Forms.TabControl MainTab;
