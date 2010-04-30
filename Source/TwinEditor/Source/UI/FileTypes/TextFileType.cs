@@ -2,29 +2,29 @@
 using System.IO;
 using System.Drawing;
 
-namespace Lebowski.UI.FileTypes
+namespace TwinEditor.UI.FileTypes
 {
-	public class PythonFileType : IFileType
+	public class TextFileType : IFileType
 	{
 		public string Name
 		{
-			get { return "Python"; }
+			get { return "Text file"; }
 		}
 		
 		public string FileNamePattern
 		{
-			get { return "*.py"; }
+			get { return "*.txt"; }
 		}
-	
+		
 		public bool FileNameMatches(string fileName)
 		{
-			return fileName.EndsWith(".py");
+			return fileName.EndsWith(".txt");
 		}
 		
 		
 		public Image Icon
 		{
-			get { return Image.FromFile("../../../../Resources/Icons/python.png"); }
+			get { return Image.FromFile("../../../../Resources/Icons/text.png"); }
 		}
 		
 		public bool CanCompile
@@ -35,16 +35,16 @@ namespace Lebowski.UI.FileTypes
 		public void Compile(string content, TextWriter stdout)
 		{
 			
-		}
+		}		
 		
 		public bool CanExecute
 		{
-			get { return true; }
-		}		
+			get { return false; }
+		}				
 		
 		public void Execute(string content, TextWriter stdout)
 		{
 			
-		}		
+		}			
 	}
 }

@@ -2,7 +2,7 @@
 using System.IO;
 using System.Drawing;
 
-namespace Lebowski.UI.FileTypes
+namespace TwinEditor.UI.FileTypes
 {
 	public interface IFileType
 	{

@@ -4,9 +4,9 @@ using System.Drawing;
 using System.Windows.Forms;
 using Lebowski;
 using Lebowski.TextModel;
-using Lebowski.UI.FileTypes;
 using Lebowski.Net;
 using Lebowski.Synchronization.DifferentialSynchronization;
+using TwinEditor.UI.FileTypes;
 
 namespace TwinEditor
 {

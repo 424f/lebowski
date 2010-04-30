@@ -1,19 +1,8 @@
-﻿/*
- * Created by SharpDevelop.
- * User: laiw
- * Date: 30.04.2010
- * Time: 10:40
- * 
- * To change this template use Tools | Options | Coding | Edit Standard Headers.
- */
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace TwinEditor
 {
-	/// <summary>
-	/// Description of Controller.
-	/// </summary>
 	public class Controller
 	{	
 		internal PythonInterpreter py;
@@ -25,12 +14,12 @@ namespace TwinEditor
 			this.fileNumber = 0;
 		}
 		
-		public int getNextFileNumber() {
+		public int GetNextFileNumber() {
 			return ++fileNumber;
 		}
 		
-		public void executePython(string statement) {
-			py.CompileSourceAndExecute(statement);
+		public void ExecutePython(string statement) {
+			py.ExecuteCode(statement);
 		}
 		
 		

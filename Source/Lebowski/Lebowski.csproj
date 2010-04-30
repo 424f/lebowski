@@ -36,29 +36,11 @@
     <Reference Include="ICSharpCode.TextEditor">
       <HintPath>..\..\Libs\ICSharpCode.TextEditor.dll</HintPath>
     </Reference>
-    <Reference Include="IronPython">
-      <HintPath>..\..\Libs\IronPython.dll</HintPath>
-    </Reference>
-    <Reference Include="IronPython.Modules">
-      <HintPath>..\..\Libs\IronPython.Modules.dll</HintPath>
-    </Reference>
     <Reference Include="Lidgren.Network">
       <HintPath>..\..\Libs\Lidgren.Network.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\Libs\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Dynamic">
-      <HintPath>..\..\Libs\Microsoft.Dynamic.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Scripting">
-      <HintPath>..\..\Libs\Microsoft.Scripting.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Scripting.Core">
-      <HintPath>..\..\Libs\Microsoft.Scripting.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Scripting.Debugging">
-      <HintPath>..\..\Libs\Microsoft.Scripting.Debugging.dll</HintPath>
     </Reference>
     <Reference Include="Mono.TextEditor">
       <HintPath>..\..\Libs\Mono.TextEditor.dll</HintPath>
@@ -108,6 +90,10 @@
       <DependentUpon>TcpParticipateForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Source\Net\Tcp\TcpProtocol.cs" />
+    <Compile Include="Source\Net\Tcp\TcpShareForm.cs" />
+    <Compile Include="Source\Net\Tcp\TcpShareForm.Designer.cs">
+      <DependentUpon>TcpShareForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Source\Program.cs" />
     <Compile Include="Source\ISessionContext.cs" />
     <Compile Include="Source\StateVector.cs" />
@@ -124,9 +110,6 @@
     <Compile Include="Source\TextModel\TextBoxTextContext.cs" />
     <Compile Include="Source\TextModel\TextEditorTextContext.cs" />
     <Compile Include="Source\TextModel\TextOperation.cs" />
-    <Compile Include="Source\UI\FileTypes\IFileType.cs" />
-    <Compile Include="Source\UI\FileTypes\PythonFileType.cs" />
-    <Compile Include="Source\UI\FileTypes\TextFileType.cs" />
     <Compile Include="Test\dOPTTest.cs" />
     <Compile Include="Test\StringTextContextTest.cs" />
     <Compile Include="Test\Synchronization\DifferentialSynchronizationTest.cs" />
@@ -148,12 +131,11 @@
     <Folder Include="Source\Net\Lidgren" />
     <Folder Include="Source\Net\Tcp" />
     <Folder Include="Source\Net\Skype" />
-    <Folder Include="Source\UI" />
     <Folder Include="Source\Synchronization" />
     <Folder Include="Source\Synchronization\DifferentialSynchronization" />
     <Folder Include="Source\Synchronization\dOPT" />
     <Folder Include="Source\TextModel" />
-    <Folder Include="Source\UI\FileTypes" />
+    <Folder Include="Test\Net" />
     <Folder Include="Test\Synchronization" />
     <COMReference Include="SKYPE4COMLib">
       <Guid>{03282B5D-B38F-469D-849A-09B0A7F4881B}</Guid>

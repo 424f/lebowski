@@ -56,6 +56,12 @@
     <Reference Include="Microsoft.Scripting.Debugging">
       <HintPath>..\..\Libs\Microsoft.Scripting.Debugging.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Scripting.ExtensionAttribute">
+      <HintPath>..\..\Libs\Microsoft.Scripting.ExtensionAttribute.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\Libs\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -87,7 +93,10 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Source\Program.cs" />
-    <Compile Include="Source\PythonInterpleter.cs" />
+    <Compile Include="Source\PythonInterpreter.cs" />
+    <Compile Include="Source\UI\FileTypes\IFileType.cs" />
+    <Compile Include="Source\UI\FileTypes\PythonFileType.cs" />
+    <Compile Include="Source\UI\FileTypes\TextFileType.cs" />
     <EmbeddedResource Include="Source\AboutDialog.resx">
       <DependentUpon>AboutDialog.cs</DependentUpon>
     </EmbeddedResource>
@@ -100,6 +109,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Source" />
+    <Folder Include="Source\UI" />
+    <Folder Include="Source\UI\FileTypes" />
     <ProjectReference Include="..\Lebowski\Lebowski.csproj">
       <Project>{B3907A05-1EF4-4985-9440-46442FE1EFE6}</Project>
       <Name>Lebowski</Name>
