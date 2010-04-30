@@ -85,6 +85,10 @@
       <DependentUpon>SkypeShareForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Source\Net\Tcp\TcpConnection.cs" />
+    <Compile Include="Source\Net\Tcp\TcpParticipateForm.cs" />
+    <Compile Include="Source\Net\Tcp\TcpParticipateForm.Designer.cs">
+      <DependentUpon>TcpParticipateForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Source\Net\Tcp\TcpProtocol.cs" />
     <Compile Include="Source\Net\Tcp\TcpShareForm.cs" />
     <Compile Include="Source\Net\Tcp\TcpShareForm.Designer.cs">
@@ -117,6 +121,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Source\Net\Skype\SkypeShareForm.resx">
       <DependentUpon>SkypeShareForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Net\Tcp\TcpParticipateForm.resx">
+      <DependentUpon>TcpParticipateForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\Net\Tcp\TcpShareForm.resx">
+      <DependentUpon>TcpShareForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

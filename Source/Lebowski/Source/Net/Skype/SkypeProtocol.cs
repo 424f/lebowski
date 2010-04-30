@@ -78,7 +78,7 @@ namespace Lebowski.Net.Skype
 		private const string ApplicationName = "LEBOWSKI-01";
 		private SKYPE4COMLib.Application Application;
 			
-		private SKYPE4COMLib.Skype API;
+		private SKYPE4COMLib.SkypeClass API;
 		
 		private bool isInitialized = false;
 		
@@ -101,12 +101,23 @@ namespace Lebowski.Net.Skype
 		int numInvitations = 0;
 		
 		public SkypeProtocol()
-		{
-			Initialize();
+		{			
+			API = new SKYPE4COMLib.SkypeClass();
+			API.Attach(8, false);	
+			
+			API._ISkypeEvents_Event_AttachmentStatus += delegate(TAttachmentStatus status)
+			{
+				if(status == TAttachmentStatus.apiAttachSuccess)
+				{
+					Initialize();
+				}
+			};
+			
+			//Initialize();
 
 			/*string user = API.CurrentUser.FullName;*/
 			
-			UpdateFriends();
+			//UpdateFriends();
 			
 			//Application.Connect(username, true);
 			//Application.ConnectableUsers.Add(username);
@@ -161,19 +172,17 @@ namespace Lebowski.Net.Skype
 			get { return "Skype API"; }
 		}
 		
-		public void Initialize()
+		private void Initialize()
 		{
 			if(isInitialized)
 				return;
 			
-			API = new SKYPE4COMLib.Skype();
-			API.Attach(8, true);
 			Application = API.get_Application(ApplicationName);
 			Application.Create();	
 			
 			Console.WriteLine("Application created..");
 						
-			API.ApplicationStreams += delegate(SKYPE4COMLib.Application pApp, ApplicationStreamCollection pStreams)
+			API._ISkypeEvents_Event_ApplicationStreams += delegate(SKYPE4COMLib.Application pApp, ApplicationStreamCollection pStreams)
 			{
 				if(pApp.Name != Application.Name)
 					return;
@@ -353,7 +362,7 @@ namespace Lebowski.Net.Skype
 		
 		public void Share(ISessionContext session)
 		{
-			Initialize();
+			UpdateFriends();
 			SkypeShareForm form = new SkypeShareForm(this);
 			form.Submit += delegate
 			{  
@@ -412,6 +421,16 @@ namespace Lebowski.Net.Skype
 				JoinSession(this, e);
 			}
 		}
+		
+		public void Participate()
+		{
+			throw new NotImplementedException();
+		}
+		
+		public bool Enabled
+		{
+			get { return true; }
+		}		
 		
 	}
 }

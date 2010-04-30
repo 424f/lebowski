@@ -7,12 +7,15 @@ namespace Lebowski.Net
 	{
 		string Name { get; }
 		void Share(ISessionContext session);
+		void Participate();
 		
 		bool CanShare { get; }
 		bool CanParticipate { get; }
 		
 		event EventHandler<HostSessionEventArgs> HostSession;
 		event EventHandler<JoinSessionEventArgs> JoinSession;
+		
+		bool Enabled { get; }
 	}
 	
 	public sealed class HostSessionEventArgs : EventArgs

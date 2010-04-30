@@ -48,7 +48,7 @@ namespace TwinEditor
 		}
 		
 		public MainForm(Controller controller)
-		{
+		{			
 			this.controller = controller;
 			//
 			// The InitializeComponent() call is required for Windows Forms designer support.
@@ -87,18 +87,36 @@ namespace TwinEditor
 			}
 			
 			// Supported communication protocols
-			protocols = ExtensionUtil.FindTypesImplementing(typeof(ICommunicationProtocol)).Select(
-				(t) => t.GetConstructor(new Type[]{}).Invoke(new object[]{})
-			).Cast<ICommunicationProtocol>().ToArray();			
+			protocols = ExtensionUtil.FindTypesImplementing(typeof(ICommunicationProtocol))
+				.Select((t) => t.GetConstructor(new Type[]{}).Invoke(new object[]{}))
+				.Cast<ICommunicationProtocol>()
+				.Where((p) => p.Enabled)
+				.ToArray();
 			foreach(ICommunicationProtocol protocol in protocols)
 			{
 				ICommunicationProtocol currentProtocol = protocol;
-				var menuItem = new ToolStripMenuItem(protocol.Name);
-				menuItem.Click += delegate 
-				{  
-					currentProtocol.Share(tabControls[MainTab.SelectedIndex]);
-				};
-				shareToolStripMenuItem.DropDown.Items.Add(menuItem);
+				
+				// Add menu item to share session
+				if(protocol.CanShare)
+				{
+					var menuItem = new ToolStripMenuItem(protocol.Name);
+					menuItem.Click += delegate 
+					{  
+						currentProtocol.Share(tabControls[MainTab.SelectedIndex]);
+					};
+					shareToolStripMenuItem.DropDown.Items.Add(menuItem);
+				}
+				
+				// Add menu item to join session
+				if(protocol.CanParticipate)
+				{
+					var menuItem = new ToolStripMenuItem(protocol.Name);
+					menuItem.Click += delegate 
+					{  
+						currentProtocol.Participate();
+					};
+					participateToolStripMenuItem.DropDown.Items.Add(menuItem);
+				}
 				
 				// Register to communication protocol events
 				currentProtocol.HostSession += delegate(object sender, HostSessionEventArgs e)

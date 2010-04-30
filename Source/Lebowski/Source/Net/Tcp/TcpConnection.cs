@@ -59,6 +59,9 @@ namespace Lebowski.Net.Tcp
 	
 	public class TcpServerConnection : TcpConnection
 	{		
+		public event EventHandler<EventArgs> ClientConnected;
+		public event EventHandler<EventArgs> ClientDisconnected;
+		
 		private TcpListener tcpListener;
 		private TcpClient client;
 		
@@ -79,8 +82,25 @@ namespace Lebowski.Net.Tcp
 			client = tcpListener.AcceptTcpClient();
 			stream = client.GetStream();	
 			
+			OnClientConnected(new EventArgs());
+			
 			RunReceiveThread();
 		}		
+		
+		protected virtual void OnClientConnected(EventArgs e)
+		{
+			if (ClientConnected != null) {
+				ClientConnected(this, e);
+			}
+		}
+		
+		protected virtual void OnClientDisconnected(EventArgs e)
+		{
+			if (ClientDisconnected != null) {
+				ClientDisconnected(this, e);
+			}
+		}
+		
 		
 	}
 	
@@ -91,7 +111,7 @@ namespace Lebowski.Net.Tcp
 		public TcpClientConnection(string address)
 		{
 			client = new TcpClient();
-			IPHostEntry hostEntry = Dns.GetHostEntry(address);
+			IPHostEntry hostEntry = Dns.Resolve(address);
 			IPEndPoint endpoint = new IPEndPoint(hostEntry.AddressList[0], Port);
 			client.Connect(endpoint);
 			

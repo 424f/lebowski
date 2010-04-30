@@ -20,6 +20,7 @@ namespace TwinEditor
 		[STAThread]
 		private static void Main(string[] args)
 		{
+			log4net.Config.BasicConfigurator.Configure();
 			Program prog = new Program();
 			prog.Run();
 		}

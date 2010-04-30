@@ -27,5 +27,15 @@ namespace Lebowski.Net.Lidgren
 		public event EventHandler<HostSessionEventArgs> HostSession;
 		public event EventHandler<JoinSessionEventArgs> JoinSession;
 
+		public void Participate()
+		{
+			throw new NotImplementedException();
+		}
+		
+		public bool Enabled
+		{
+			get { return false; }
+		}
+		
 	}
 }

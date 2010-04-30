@@ -15,13 +15,24 @@ namespace Lebowski.Net.Tcp
 		
 		public void Share(ISessionContext session)
 		{
-			TcpServerConnection connection = new TcpServerConnection();	
-			
-			// We have to use a multichannel connection
-			MultichannelConnection mcc = new MultichannelConnection(connection);
-			var sync = new DifferentialSynchronizationStrategy(0, session.Context, mcc.CreateChannel());
-			var applicationChannel = mcc.CreateChannel();		
-			session.StartSession(sync, connection, applicationChannel);
+			TcpShareForm form = new TcpShareForm();
+			form.Submit += delegate
+			{
+				form.Enabled = false;
+				TcpServerConnection connection = new TcpServerConnection();	
+				connection.ClientConnected += delegate
+				{
+					MultichannelConnection mcc = new MultichannelConnection(connection);
+					OnHostSession(new HostSessionEventArgs(session, mcc.CreateChannel(), mcc.CreateChannel()));					
+					form.Invoke((Action) delegate
+					{
+						form.Close();
+					});
+				};
+				
+
+			};
+			form.ShowDialog();
 		}		
 		
 		public bool CanShare
@@ -33,5 +44,49 @@ namespace Lebowski.Net.Tcp
 		{
 			get { return true; }
 		}		
+		
+		protected virtual void OnHostSession(HostSessionEventArgs e)
+		{
+			if (HostSession != null) {
+				HostSession(this, e);
+			}
+		}
+		
+		protected virtual void OnJoinSession(JoinSessionEventArgs e)
+		{
+			if (JoinSession != null) {
+				JoinSession(this, e);
+			}
+		}
+	
+		public void Participate()
+		{
+			TcpParticipateForm form = new TcpParticipateForm();
+			
+			form.Submit += delegate
+			{
+				try
+				{
+					TcpClientConnection connection = new TcpClientConnection(form.Address);
+					MultichannelConnection mcc = new MultichannelConnection(connection);
+					OnJoinSession(new JoinSessionEventArgs(mcc.CreateChannel(), mcc.CreateChannel()));
+				}
+				catch(Exception e)
+				{
+					System.Windows.Forms.MessageBox.Show("An error occurred:\n" + e.ToString(), "Error");
+				}
+				finally
+				{
+					form.Close();
+				}
+			};
+			
+			form.ShowDialog();
+		}
+		
+		public bool Enabled
+		{
+			get { return true; }
+		}				
 	}
 }
