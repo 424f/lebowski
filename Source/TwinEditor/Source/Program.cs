@@ -71,9 +71,7 @@ namespace TwinEditor
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);				
 			
-			MainForm form = new MainForm();
-			Controller controller = new Controller();
-			MainForm form = new MainForm(controller);
+			MainForm form = new MainForm(new Controller());
 			form.Show();	
 
 			
