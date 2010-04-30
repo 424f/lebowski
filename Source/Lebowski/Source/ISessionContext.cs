@@ -9,6 +9,7 @@ namespace Lebowski
 		DifferentialSynchronizationStrategy SynchronizationStrategy { get; }
 		IConnection Connection { get; }
 		TextModel.ITextContext Context { get; }
+		string FileName { get; }
 		
 		void StartSession(
 			DifferentialSynchronizationStrategy strategy,

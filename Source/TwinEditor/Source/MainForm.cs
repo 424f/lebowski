@@ -5,6 +5,7 @@ using System.Linq;
 using System.Drawing;
 using System.Windows.Forms;
 using Lebowski;
+using Lebowski.Synchronization.DifferentialSynchronization;
 using Lebowski.Net;
 using Lebowski.UI.FileTypes;
 using log4net;
@@ -95,6 +96,26 @@ namespace TwinEditor
 					currentProtocol.Share(tabControls[MainTab.SelectedIndex]);
 				};
 				shareToolStripMenuItem.DropDown.Items.Add(menuItem);
+				
+				// Register to communication protocol events
+				currentProtocol.HostSession += delegate(object sender, HostSessionEventArgs e)
+				{ 
+					var sync = new DifferentialSynchronizationStrategy(0, e.Session.Context, e.Connection);
+					// TODO: e.Connection might be redundant
+					e.Session.StartSession(sync, e.Connection, e.ApplicationConnection);
+					
+				};
+				
+				currentProtocol.JoinSession += delegate(object sender, JoinSessionEventArgs e)
+				{ 
+					// TODO: choose correct file type
+					FileTabControl tab = CreateNewTab(fileTypes[0]);
+					
+					var sync = new DifferentialSynchronizationStrategy(1, tab.Context, e.Connection);
+					// TODO: e.Connection might be redundant
+					tab.StartSession(sync, e.Connection, e.ApplicationConnection);
+					
+				};				
 			}
 			
 		}

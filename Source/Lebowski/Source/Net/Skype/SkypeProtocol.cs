@@ -71,6 +71,9 @@ namespace Lebowski.Net.Skype
 	
 	sealed public class SkypeProtocol : ICommunicationProtocol
 	{
+		public event EventHandler<HostSessionEventArgs> HostSession;
+		public event EventHandler<JoinSessionEventArgs> JoinSession;
+		
 		private const int ApplicationConnectionId = 0;
 		
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(SkypeProtocol));
@@ -96,6 +99,7 @@ namespace Lebowski.Net.Skype
 		
 		Dictionary<int, SharingInvitationMessage> invitations = new Dictionary<int, SharingInvitationMessage>();
 		Dictionary<int, SkypeConnection> invitationChannels = new Dictionary<int, SkypeConnection>();
+		Dictionary<int, ISessionContext> invitationSessions = new Dictionary<int, ISessionContext>();
 		
 		int numInvitations = 0;
 		
@@ -256,6 +260,10 @@ namespace Lebowski.Net.Skype
 							{
 								SkypeConnection connection = Connect(partner);
 								connection.OutgoingChannel = sharingInvitation.Channel;
+								
+								MultichannelConnection mcc = new MultichannelConnection(connection);
+								OnJoinSession(new JoinSessionEventArgs(mcc.CreateChannel(), mcc.CreateChannel()));
+								                                       
 								Send(partner, 0, new AcceptSharingInvitationMessage(sharingInvitation.InvitationId, connection.IncomingChannel));
 								//Send(partner, 0, new AcceptSharingInvitationMessage());
 									
@@ -282,10 +290,19 @@ namespace Lebowski.Net.Skype
 								Logger.Error(string.Format("{0} accepted {1} intended for {2}", partner, sharingInvitation, sharingInvitation.InvitedUser));
 							}
 							
+							IConnection connection = invitationChannels[accept.InvitationId];
+							ISessionContext session = invitationSessions[accept.InvitationId];
+							
 							invitations.Remove(accept.InvitationId);
 							invitationChannels.Remove(accept.InvitationId);
+							invitationSessions.Remove(accept.InvitationId);
 							
 							MessageBox.Show("Invitation was accepted");
+				
+							// We have to use a multichannel connection
+							
+							MultichannelConnection mcc = new MultichannelConnection(connection);
+							OnHostSession(new HostSessionEventArgs(session, mcc.CreateChannel(), mcc.CreateChannel()));
 						}
 						
 						// Another user has rejected a sharing invitation
@@ -306,6 +323,7 @@ namespace Lebowski.Net.Skype
 							
 							invitations.Remove(decline.InvitationId);
 							invitationChannels.Remove(decline.InvitationId);
+							invitationSessions.Remove(decline.InvitationId);
 							
 							MessageBox.Show("Invitation was rejected");
 						}						
@@ -339,19 +357,11 @@ namespace Lebowski.Net.Skype
 				SkypeConnection connection = Connect(form.SelectedUser);
 				
 				// Send out the invite
-				SharingInvitationMessage invitationMessage = new SharingInvitationMessage(++numInvitations, "fooo", form.SelectedUser, connection.IncomingChannel);
+				SharingInvitationMessage invitationMessage = new SharingInvitationMessage(++numInvitations, session.FileName, form.SelectedUser, connection.IncomingChannel);
 				invitations[invitationMessage.InvitationId] = invitationMessage;
 				invitationChannels[invitationMessage.InvitationId] = connection;
+				invitationSessions[invitationMessage.InvitationId] = session;
 				Send(form.SelectedUser, ApplicationConnectionId, invitationMessage);
-				
-				/*// Send an invitation
-				SkypeConnection connection = Connect(form.SelectedUser);
-				
-				// We have to use a multichannel connection
-				MultichannelConnection mcc = new MultichannelConnection(connection);
-				var sync = new DifferentialSynchronizationStrategy(0, session.Context, mcc.CreateChannel());
-				var applicationChannel = mcc.CreateChannel();		
-				session.StartSession(sync, connection, applicationChannel);	*/			
 			};
 			form.ShowDialog();
 		}
@@ -381,5 +391,20 @@ namespace Lebowski.Net.Skype
 			
 			stream.Write(base64buffer);			
 		}
+		
+		void OnHostSession(HostSessionEventArgs e)
+		{
+			if (HostSession != null) {
+				HostSession(this, e);
+			}
+		}
+		
+		void OnJoinSession(JoinSessionEventArgs e)
+		{
+			if (JoinSession != null) {
+				JoinSession(this, e);
+			}
+		}
+		
 	}
 }
