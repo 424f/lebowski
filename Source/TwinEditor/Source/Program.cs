@@ -8,7 +8,6 @@ using Lebowski.Net.Tcp;
 using Lebowski.Net.Lidgren;
 using Lebowski.TextModel;
 using Lebowski.Synchronization.DifferentialSynchronization;
-using Lebowski.Controller;
 
 namespace TwinEditor
 {
