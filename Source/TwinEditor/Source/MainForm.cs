@@ -63,9 +63,10 @@ namespace TwinEditor
 			
 			// Supported file types
 			openFileDialog.Filter = "";
-			fileTypes = ExtensionUtil.FindTypesImplementing(typeof(IFileType)).Select(
-				(t) => t.GetConstructor(new Type[]{}).Invoke(new object[]{})
-			).Cast<IFileType>().ToArray();
+			fileTypes = ExtensionUtil.FindTypesImplementing(typeof(IFileType))
+				.Select((t) => t.GetConstructor(new Type[]{}).Invoke(new object[]{}))
+				.Cast<IFileType>()
+				.ToArray();
 			foreach(IFileType fileType in fileTypes)
 			{
 				var menuItem = new ToolStripMenuItem(fileType.Name + " (" + fileType.FileNamePattern + ")");
@@ -335,8 +336,17 @@ namespace TwinEditor
 		}
 		
 		void RunToolStripMenuItemItemClick(object sender, EventArgs e) {
-//			tabControls.
+			FileTabControl tabControl = tabControls[MainTab.SelectedIndex];		
+			StringWriter writer = new StringWriter();
+			tabControl.FileType.Execute(tabControl.SourceCode.Text, writer);
 			
+			// Create new executions tab
+			tabControl.IncrementNumExections();
+			TabPage newPage = new TabPage(string.Format("Execution #{0}", tabControl.NumExecutions));
+			ExecutionTabControl execution = new ExecutionTabControl();
+			execution.SetStandardOutput(writer.GetStringBuilder().ToString());
+			newPage.Controls.Add(execution);
+			tabControl.TabControl.TabPages.Add(newPage);
 		}
 	}
 }

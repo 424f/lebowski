@@ -84,6 +84,10 @@
       <DependentUpon>AboutDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Source\Controller.cs" />
+    <Compile Include="Source\ExecutionTabControl.cs" />
+    <Compile Include="Source\ExecutionTabControl.Designer.cs">
+      <DependentUpon>ExecutionTabControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Source\FileTabControl.cs" />
     <Compile Include="Source\FileTabControl.Designer.cs">
       <DependentUpon>FileTabControl.cs</DependentUpon>
@@ -99,6 +103,9 @@
     <Compile Include="Source\UI\FileTypes\TextFileType.cs" />
     <EmbeddedResource Include="Source\AboutDialog.resx">
       <DependentUpon>AboutDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Source\ExecutionTabControl.resx">
+      <DependentUpon>ExecutionTabControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Source\FileTabControl.resx">
       <DependentUpon>FileTabControl.cs</DependentUpon>

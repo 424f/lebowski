@@ -25,6 +25,12 @@ namespace TwinEditor
 				SourceCode.SetHighlighting("Boo");
 			}
 		}
+		public int NumExecutions { get; protected set; }
+		public void IncrementNumExections()
+		{
+			NumExecutions += 1;
+		}
+		
 		public ITextContext Context { get; protected set; }
 		
 		public IConnection Connection { get; protected set; }

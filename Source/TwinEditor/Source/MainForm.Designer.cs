@@ -64,7 +64,6 @@ namespace TwinEditor
 			this.tabControl1 = new System.Windows.Forms.TabControl();
 			this.tabPage3 = new System.Windows.Forms.TabPage();
 			this.SourceCode = new ICSharpCode.TextEditor.TextEditorControl();
-			this.tabPage4 = new System.Windows.Forms.TabPage();
 			this.ChatSend = new System.Windows.Forms.Button();
 			this.ChatHistory = new System.Windows.Forms.TextBox();
 			this.ChatText = new System.Windows.Forms.TextBox();
@@ -292,7 +291,7 @@ namespace TwinEditor
 			this.runToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
 			this.runToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
 			this.runToolStripMenuItem.Text = "Execute";
-			this.runToolStripMenuItem.Click += new System.EventHandler(this.OpenToolStripMenuItemClick);
+			this.runToolStripMenuItem.Click += new System.EventHandler(this.RunToolStripMenuItemItemClick);
 			// 
 			// helpToolStripMenuItem
 			// 
@@ -351,7 +350,6 @@ namespace TwinEditor
 									| System.Windows.Forms.AnchorStyles.Left) 
 									| System.Windows.Forms.AnchorStyles.Right)));
 			this.tabControl1.Controls.Add(this.tabPage3);
-			this.tabControl1.Controls.Add(this.tabPage4);
 			this.tabControl1.Location = new System.Drawing.Point(9, 6);
 			this.tabControl1.Name = "tabControl1";
 			this.tabControl1.SelectedIndex = 0;
@@ -379,16 +377,6 @@ namespace TwinEditor
 			this.SourceCode.Name = "SourceCode";
 			this.SourceCode.Size = new System.Drawing.Size(700, 362);
 			this.SourceCode.TabIndex = 1;
-			// 
-			// tabPage4
-			// 
-			this.tabPage4.Location = new System.Drawing.Point(4, 4);
-			this.tabPage4.Name = "tabPage4";
-			this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage4.Size = new System.Drawing.Size(706, 368);
-			this.tabPage4.TabIndex = 1;
-			this.tabPage4.Text = "Execution #1";
-			this.tabPage4.UseVisualStyleBackColor = true;
 			// 
 			// ChatSend
 			// 
@@ -464,7 +452,6 @@ namespace TwinEditor
 		private System.Windows.Forms.SaveFileDialog saveFileDialog;
 		private System.Windows.Forms.OpenFileDialog openFileDialog;
 		private System.Windows.Forms.TabControl MainTab;
-		private System.Windows.Forms.TabPage tabPage4;
 		private System.Windows.Forms.TabPage tabPage3;
 		private System.Windows.Forms.TabControl tabControl1;
 		private System.Windows.Forms.TabPage tabPage2;

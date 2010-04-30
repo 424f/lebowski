@@ -6,6 +6,13 @@ namespace TwinEditor.UI.FileTypes
 {
 	public class PythonFileType : IFileType
 	{
+		private PythonInterpreter interpreter;
+		
+		public PythonFileType()
+		{
+			interpreter = new PythonInterpreter();
+		}
+		
 		public string Name
 		{
 			get { return "Python"; }
@@ -44,7 +51,9 @@ namespace TwinEditor.UI.FileTypes
 		
 		public void Execute(string content, TextWriter stdout)
 		{
-			
+			var writer = new PythonStringWriter();
+			interpreter.ExecuteCode(content, writer);
+			stdout.Write(writer.GetContent().ToString());
 		}		
 	}
 }

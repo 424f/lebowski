@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace Lebowski
 {
@@ -8,11 +9,14 @@ namespace Lebowski
 		public static Type[] FindTypesImplementing(Type type)
 		{
 			List<Type> result = new List<Type>();
-			foreach(Type t in typeof(ExtensionUtil).Assembly.GetTypes())
+			foreach(Assembly assembly in AppDomain.CurrentDomain.GetAssemblies()) 
 			{
-				if(t.IsClass && t.GetConstructors().Length > 0 && type.IsAssignableFrom(t))
+				foreach(Type t in assembly.GetTypes())
 				{
-					result.Add(t);
+					if(t.IsClass && t.GetConstructors().Length > 0 && type.IsAssignableFrom(t))
+					{
+						result.Add(t);
+					}
 				}
 			}
 			return result.ToArray();
