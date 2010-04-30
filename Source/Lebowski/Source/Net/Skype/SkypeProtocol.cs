@@ -137,6 +137,7 @@ namespace Lebowski.Net.Skype
 			connectionsForUser[user] = connectionsForUser.ContainsKey(user) ? connectionsForUser[user]+1 : 1;
 			Console.WriteLine("Creating connection {0} for user {1}", connectionsForUser[user], user);
 			SkypeConnection connection = new SkypeConnection(this, user, connectionsForUser[user]);
+			connections[user][connectionsForUser[user]] = connection;
 			
 			return connection;
 		}
