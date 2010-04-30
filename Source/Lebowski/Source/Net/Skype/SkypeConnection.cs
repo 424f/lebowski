@@ -24,8 +24,6 @@ namespace Lebowski.Net.Skype
 			this.protocol = protocol;
 			this.remote = remote;
 			OutgoingChannel = -1;
-			
-			Send("HAI");
 		}
 		
 		public void Send(object o)
