@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using Lebowski;
 using Lebowski.Net;
 using Lebowski.UI.FileTypes;
+using Lebowski.Controller;
 using log4net;
 
 namespace TwinEditor
@@ -20,6 +21,7 @@ namespace TwinEditor
 		protected ICommunicationProtocol[] protocols;
 		List<FileTabControl> tabControls = new List<FileTabControl>();
 		List<TabPage> tabPages = new List<TabPage>();
+		Controller controller;
 		
 		public void UpdateMenuItems()
 		{
@@ -44,8 +46,9 @@ namespace TwinEditor
 			}
 		}
 		
-		public MainForm()
+		public MainForm(Controller controller)
 		{
+			this.controller = controller;
 			//
 			// The InitializeComponent() call is required for Windows Forms designer support.
 			//
@@ -165,7 +168,8 @@ namespace TwinEditor
 			Logger.Info(string.Format("Creating new tab of file type {0}", fileType.Name));
 			
 			// Create a new tab and add a FileTabControl to it
-			TabPage tabPage = new TabPage("???");
+			
+			TabPage tabPage = new TabPage("File " + controller.FileNumber);
 			FileTabControl tab = new FileTabControl();
 			tab.Dock = DockStyle.Fill;
 			tab.FileType = fileType;
@@ -206,6 +210,7 @@ namespace TwinEditor
 			tab.FileType = type;
 			
 			// Put content into editor
+			// case when user cancelled dialog not handled yet
 			string content = File.ReadAllText(openFileDialog.FileName);
 			tab.SourceCode.Text = content;
 			tabPages.Last().Text = openFileDialog.FileName;
@@ -276,6 +281,11 @@ namespace TwinEditor
 			tabPages.RemoveAt(MainTab.SelectedIndex);
 			MainTab.TabPages.Remove(MainTab.SelectedTab);
 			UpdateMenuItems();
+			
+		}
+		
+		void RunToolStripMenuItemItemClick(object sender, EventArgs e) {
+//			tabControls.
 			
 		}
 	}

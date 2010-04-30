@@ -13,7 +13,18 @@ namespace TwinEditor
 	public partial class FileTabControl : UserControl, ISessionContext
 	{
 		public string FileName { get; set; }
-		public IFileType FileType { get; set; }
+		private IFileType fileType;
+		public IFileType FileType {
+			get {
+				return fileType;
+			}
+			set {
+				fileType = value;
+				// TODO: build new .dll to include python syntax highlight definition (.xshd)
+				// SourceCode.SetHighlighting(fileType.Name);
+				SourceCode.SetHighlighting("Boo");
+			}
+		}
 		public ITextContext Context { get; protected set; }
 		
 		public IConnection Connection { get; protected set; }

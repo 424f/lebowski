@@ -66,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Source\Controller\Controller.cs" />
     <Compile Include="Source\ExtensionUtil.cs" />
     <Compile Include="Source\MainForm.cs" />
     <Compile Include="Source\MainForm.Designer.cs">
@@ -120,6 +121,7 @@
     <Folder Include="Source\Net\Lidgren" />
     <Folder Include="Source\Net\Tcp" />
     <Folder Include="Source\Net\Skype" />
+    <Folder Include="Source\Controller" />
     <Folder Include="Source\UI" />
     <Folder Include="Source\Synchronization" />
     <Folder Include="Source\Synchronization\DifferentialSynchronization" />

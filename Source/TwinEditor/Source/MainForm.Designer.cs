@@ -267,7 +267,7 @@ namespace TwinEditor
 			this.compileToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("compileToolStripMenuItem.Image")));
 			this.compileToolStripMenuItem.Name = "compileToolStripMenuItem";
 			this.compileToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F8;
-			this.compileToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+			this.compileToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.compileToolStripMenuItem.Text = "Compile";
 			// 
 			// runToolStripMenuItem
@@ -275,8 +275,9 @@ namespace TwinEditor
 			this.runToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("runToolStripMenuItem.Image")));
 			this.runToolStripMenuItem.Name = "runToolStripMenuItem";
 			this.runToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
-			this.runToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+			this.runToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.runToolStripMenuItem.Text = "Execute";
+			this.runToolStripMenuItem.Click += new System.EventHandler(this.OpenToolStripMenuItemClick);
 			// 
 			// helpToolStripMenuItem
 			// 
@@ -291,14 +292,14 @@ namespace TwinEditor
 			// 
 			this.guideToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("guideToolStripMenuItem.Image")));
 			this.guideToolStripMenuItem.Name = "guideToolStripMenuItem";
-			this.guideToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+			this.guideToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.guideToolStripMenuItem.Text = "Guide";
 			// 
 			// aboutToolStripMenuItem
 			// 
 			this.aboutToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("aboutToolStripMenuItem.Image")));
 			this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-			this.aboutToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+			this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.aboutToolStripMenuItem.Text = "About...";
 			this.aboutToolStripMenuItem.Click += new System.EventHandler(this.AboutToolStripMenuItemClick);
 			// 

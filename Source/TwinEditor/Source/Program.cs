@@ -8,6 +8,7 @@ using Lebowski.Net.Tcp;
 using Lebowski.Net.Lidgren;
 using Lebowski.TextModel;
 using Lebowski.Synchronization.DifferentialSynchronization;
+using Lebowski.Controller;
 
 namespace TwinEditor
 {
@@ -37,10 +38,12 @@ namespace TwinEditor
 			ClientConnection c = new ClientConnection("localhost", ClientConnection.Port);
 			Console.WriteLine("Client connected..");
 
-			clientForm = new MainForm();
+			Controller clientController = new Controller();
+			clientForm = new MainForm(clientController);
 			clientForm.Text = "Client (1)";
 			
-			serverForm = new MainForm();			
+			Controller serverController = new Controller();
+			serverForm = new MainForm(serverController);			
 			serverForm.Text = "Server (0)";
 
 			IConnection serverConnection = s; // new LocalConnection();
@@ -68,7 +71,8 @@ namespace TwinEditor
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);				
 			
-			MainForm form = new MainForm();
+			Controller controller = new Controller();
+			MainForm form = new MainForm(controller);
 			
 			/*Console.Write("Server (s) or client (c): ");
 			string choice = Console.ReadLine();
