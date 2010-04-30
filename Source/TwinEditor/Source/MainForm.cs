@@ -8,7 +8,6 @@ using Lebowski;
 using Lebowski.Synchronization.DifferentialSynchronization;
 using Lebowski.Net;
 using Lebowski.UI.FileTypes;
-using Lebowski.Controller;
 using log4net;
 
 namespace TwinEditor
@@ -191,7 +190,7 @@ namespace TwinEditor
 			
 			// Create a new tab and add a FileTabControl to it
 			
-			TabPage tabPage = new TabPage("File " + controller.FileNumber);
+			TabPage tabPage = new TabPage("File " + controller.getNextFileNumber());
 			FileTabControl tab = new FileTabControl();
 			tab.Dock = DockStyle.Fill;
 			tab.FileType = fileType;

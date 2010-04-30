@@ -9,28 +9,30 @@
 using System;
 using System.Collections.Generic;
 
-
-namespace Lebowski.Controller
+namespace TwinEditor
 {
 	/// <summary>
 	/// Description of Controller.
 	/// </summary>
 	public class Controller
-	{
+	{	
+		internal PythonInterpreter py;
 		private int fileNumber;
-		public int FileNumber {
-			get {
-				fileNumber++;
-				return fileNumber;
-			}
-		}
 		
 		public Controller()
-		{
+		{	
+			this.py = new PythonInterpreter();
 			this.fileNumber = 0;
-
-			
 		}
+		
+		public int getNextFileNumber() {
+			return ++fileNumber;
+		}
+		
+		public void executePython(string statement) {
+			py.CompileSourceAndExecute(statement);
+		}
+		
 		
 		
 	}
