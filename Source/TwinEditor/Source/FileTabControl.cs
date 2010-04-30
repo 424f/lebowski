@@ -14,11 +14,11 @@ namespace TwinEditor
 	{
 		public string FileName { get; set; }
 		private IFileType fileType;
-		public IFileType FileType {
-			get {
-				return fileType;
-			}
-			set {
+		public IFileType FileType
+		{
+			get { return fileType; }
+			set
+			{
 				fileType = value;
 				// TODO: build new .dll to include python syntax highlight definition (.xshd)
 				// SourceCode.SetHighlighting(fileType.Name);

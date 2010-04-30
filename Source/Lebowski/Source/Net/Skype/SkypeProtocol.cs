@@ -2,13 +2,10 @@
 using System.Text;
 using System.Threading;
 using System.Collections.Generic;
-using Lebowski.Synchronization.DifferentialSynchronization;
 using SKYPE4COMLib;
 using System.Windows.Forms;
 using Lebowski.Net;
 using log4net;
-
-// TODO: remove dependencies on specific synchronization strategy
 
 namespace Lebowski.Net.Skype
 {
@@ -382,7 +379,8 @@ namespace Lebowski.Net.Skype
 		
 		public bool CanParticipate
 		{
-			get { return true; }
+			// As when using skype, we're actively sending invitations, there is no way to manually participate in a session
+			get { return false; }
 		}		
 		
 		internal void Send(string user, int connectionId, object o)

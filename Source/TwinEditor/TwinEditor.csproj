@@ -59,6 +59,7 @@
     <Compile Include="Source\AboutDialog.Designer.cs">
       <DependentUpon>AboutDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Source\Controller.cs" />
     <Compile Include="Source\FileTabControl.cs" />
     <Compile Include="Source\FileTabControl.Designer.cs">
       <DependentUpon>FileTabControl.cs</DependentUpon>
