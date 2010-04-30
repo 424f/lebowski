@@ -4,6 +4,7 @@ using System.Threading;
 using System.Collections.Generic;
 using Lebowski.Synchronization.DifferentialSynchronization;
 using SKYPE4COMLib;
+using System.Windows.Forms;
 using Lebowski.Net;
 using log4net;
 
@@ -11,24 +12,71 @@ using log4net;
 
 namespace Lebowski.Net.Skype
 {
+	[Serializable]
 	sealed class SharingInvitationMessage
 	{
+		/// <summary>
+		/// An identifier uniquely identifying the invitation on the host side
+		/// </summary>
+		public int InvitationId { get; private set; }
+		
+		/// <summary>
+		/// The name of the document that the host would like to share
+		/// </summary>
 		public string DocumentName { get; private set; }
 		
-		public SharingInvitationMessage(string documentName)
+		/// <summary>
+		/// The name of the invited user
+		/// </summary>
+		public string InvitedUser { get; private set; }
+		
+		/// <summary>
+		/// The channel, i.e. the connectionId to we, after the session is established, should send our
+		/// data
+		/// </summary>
+		public int Channel { get; private set; }
+		
+		public SharingInvitationMessage(int invitationId, string documentName, string invitedUser, int channel)
 		{
+			InvitationId = invitationId;
 			DocumentName = documentName;
+			InvitedUser = invitedUser;
+			Channel = channel;
 		}
 	}
 	
-	public class SkypeProtocol : ICommunicationProtocol
+	[Serializable]
+	sealed class DeclineSharingInvitationMessage
+	{
+		public int InvitationId { get; private set; }
+		
+		public DeclineSharingInvitationMessage(int invitationId)
+		{
+			InvitationId = invitationId;
+		}
+	}	
+
+	[Serializable]
+	sealed class AcceptSharingInvitationMessage
+	{
+		public int InvitationId { get; private set; }
+		public int Channel { get; private set; }
+		
+		public AcceptSharingInvitationMessage(int invitationId, int channel)
+		{
+			InvitationId = invitationId;
+			Channel = channel;
+		}
+	}		
+	
+	sealed public class SkypeProtocol : ICommunicationProtocol
 	{
 		private const int ApplicationConnectionId = 0;
 		
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(SkypeProtocol));
 		
 		private const string ApplicationName = "LEBOWSKI-01";
-		private Application Application;
+		private SKYPE4COMLib.Application Application;
 			
 		private SKYPE4COMLib.Skype API;
 		
@@ -42,9 +90,14 @@ namespace Lebowski.Net.Skype
 		/// every packet that is sent over a stream. The connectionId 0 is reserver for 
 		/// application-wide messages (e.g. invitations)
 		/// </summary>
-		public Dictionary<string, ApplicationStream> streams = new Dictionary<string, ApplicationStream>();
-		public Dictionary<string, Dictionary<int, SkypeConnection>> connections = new Dictionary<string, Dictionary<int, SkypeConnection>>();
-		public Dictionary<string, int> connectionsForUser = new Dictionary<string, int>();
+		Dictionary<string, ApplicationStream> streams = new Dictionary<string, ApplicationStream>();
+		Dictionary<string, Dictionary<int, SkypeConnection>> connections = new Dictionary<string, Dictionary<int, SkypeConnection>>();
+		Dictionary<string, int> connectionsForUser = new Dictionary<string, int>();
+		
+		Dictionary<int, SharingInvitationMessage> invitations = new Dictionary<int, SharingInvitationMessage>();
+		Dictionary<int, SkypeConnection> invitationChannels = new Dictionary<int, SkypeConnection>();
+		
+		int numInvitations = 0;
 		
 		public SkypeProtocol()
 		{
@@ -84,7 +137,7 @@ namespace Lebowski.Net.Skype
 			return connection;
 		}
 		
-		protected void UpdateFriends()
+		void UpdateFriends()
 		{
 			this.friends.Clear();
 			
@@ -118,7 +171,7 @@ namespace Lebowski.Net.Skype
 			
 			Console.WriteLine("Application created..");
 						
-			API.ApplicationStreams += delegate(Application pApp, ApplicationStreamCollection pStreams)
+			API.ApplicationStreams += delegate(SKYPE4COMLib.Application pApp, ApplicationStreamCollection pStreams)
 			{
 				if(pApp.Name != Application.Name)
 					return;
@@ -138,7 +191,7 @@ namespace Lebowski.Net.Skype
 				connections[pStreams[1].PartnerHandle] = new Dictionary<int, SkypeConnection>();
 			};
 			
-			API.ApplicationConnecting += delegate(Application pApp, UserCollection pUsers)
+			API.ApplicationConnecting += delegate(SKYPE4COMLib.Application pApp, UserCollection pUsers)
 			{
 				Console.Write("Connecting: " + pApp.Name + ":: ");
 				for(int i = 1; i <= pUsers.Count; ++i)
@@ -160,7 +213,7 @@ namespace Lebowski.Net.Skype
 			};
 						
 			
-			API.ApplicationReceiving += delegate(Application pApp, ApplicationStreamCollection pStreams)
+			API.ApplicationReceiving += delegate(SKYPE4COMLib.Application pApp, ApplicationStreamCollection pStreams)
 			{ 
 				Console.Write("Receving: {0} ::", pApp.Name);
 				for(int i = 1; i <= pStreams.Count; ++i)
@@ -187,13 +240,75 @@ namespace Lebowski.Net.Skype
 
 					object message = NetUtils.Deserialize(both, 4, both.Length-4);
 					
+					string partner = pStreams[1].PartnerHandle;
+					
 					if(connectionId == ApplicationConnectionId)
 					{
+						// Received a sharing invitation:
+						// the user might now either accept or reject the invitation
+						// and we'll have to notify the host about his choice.
 						if(message is SharingInvitationMessage)
 						{
 							SharingInvitationMessage sharingInvitation = (SharingInvitationMessage)message;
-							System.Windows.Forms.MessageBox.Show("Received invitation!!");
+							text = string.Format("You received an invitation from {0} via Skype to share document {1}. Would you like to accept?", partner, sharingInvitation.DocumentName);
+							var result = MessageBox.Show(text, "Invitation", MessageBoxButtons.YesNo);
+							if(result == DialogResult.Yes)
+							{
+								SkypeConnection connection = Connect(partner);
+								connection.OutgoingChannel = sharingInvitation.Channel;
+								Send(partner, 0, new AcceptSharingInvitationMessage(sharingInvitation.InvitationId, connection.IncomingChannel));
+								//Send(partner, 0, new AcceptSharingInvitationMessage());
+									
+								// TODO: set up new editor for the session
+							}
+							else
+							{
+								Send(partner, 0, new DeclineSharingInvitationMessage(sharingInvitation.InvitationId));
+							}
 						}
+						// Another user has accepted a sharing invitation
+						else if(message is AcceptSharingInvitationMessage)
+						{
+							AcceptSharingInvitationMessage accept = (AcceptSharingInvitationMessage)message;
+							if(!invitations.ContainsKey(accept.InvitationId))
+							{
+								Logger.Error(string.Format("Received {0} but no such invitation was sent.", message));
+								return;
+							}
+							
+							SharingInvitationMessage sharingInvitation = invitations[accept.InvitationId];
+							if(sharingInvitation.InvitedUser != partner)
+							{
+								Logger.Error(string.Format("{0} accepted {1} intended for {2}", partner, sharingInvitation, sharingInvitation.InvitedUser));
+							}
+							
+							invitations.Remove(accept.InvitationId);
+							invitationChannels.Remove(accept.InvitationId);
+							
+							MessageBox.Show("Invitation was accepted");
+						}
+						
+						// Another user has rejected a sharing invitation
+						else if(message is DeclineSharingInvitationMessage)
+						{
+							DeclineSharingInvitationMessage decline = (DeclineSharingInvitationMessage)message;
+							if(!invitations.ContainsKey(decline.InvitationId))
+							{
+								Logger.Error(string.Format("Received {0} but no such invitation was sent.", message));
+								return;
+							}
+							
+							SharingInvitationMessage sharingInvitation = invitations[decline.InvitationId];
+							if(sharingInvitation.InvitedUser != partner)
+							{
+								Logger.Error(string.Format("{0} rejected {1} intended for {2}", partner, sharingInvitation, sharingInvitation.InvitedUser));
+							}
+							
+							invitations.Remove(decline.InvitationId);
+							invitationChannels.Remove(decline.InvitationId);
+							
+							MessageBox.Show("Invitation was rejected");
+						}						
 					}
 					else
 					{
@@ -202,6 +317,7 @@ namespace Lebowski.Net.Skype
 				}
 				catch(Exception e)
 				{
+					Console.Error.WriteLine("Receive error: {0}", e);
 					Logger.Error("Received ill-formed skype datagram", e);
 				}				
 				
@@ -218,7 +334,15 @@ namespace Lebowski.Net.Skype
 			form.Submit += delegate
 			{  
 				EstablishConnection(form.SelectedUser);
-				Send(form.SelectedUser, ApplicationConnectionId, new SharingInvitationMessage("fooo"));
+				
+				// Create channel for this session
+				SkypeConnection connection = Connect(form.SelectedUser);
+				
+				// Send out the invite
+				SharingInvitationMessage invitationMessage = new SharingInvitationMessage(++numInvitations, "fooo", form.SelectedUser, connection.IncomingChannel);
+				invitations[invitationMessage.InvitationId] = invitationMessage;
+				invitationChannels[invitationMessage.InvitationId] = connection;
+				Send(form.SelectedUser, ApplicationConnectionId, invitationMessage);
 				
 				/*// Send an invitation
 				SkypeConnection connection = Connect(form.SelectedUser);

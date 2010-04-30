@@ -9,7 +9,7 @@ using Lebowski.Net;
 
 namespace Lebowski.Net.Lidgren
 {		
-	public class ConnectionFailedException : Exception
+	public sealed class ConnectionFailedException : Exception
 	{
 		public ConnectionFailedException(string message) : base(message) {}
 	}
@@ -42,7 +42,7 @@ namespace Lebowski.Net.Lidgren
 		public abstract void Send(object o);
 	}
 	
-	public class ClientConnection : LidgrenConnection
+	public sealed class ClientConnection : LidgrenConnection
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(LidgrenConnection));
 		
@@ -120,7 +120,7 @@ namespace Lebowski.Net.Lidgren
 		
 	}
 	
-	public class ServerConnection : LidgrenConnection
+	public sealed class ServerConnection : LidgrenConnection
 	{
 		NetServer Socket;
 		NetConnection Client;

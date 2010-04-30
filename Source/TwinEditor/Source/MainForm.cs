@@ -56,6 +56,7 @@ namespace TwinEditor
 			
 			// Clear tabs
 			MainTab.TabPages.Clear();
+			UpdateMenuItems();
 			
 			// Supported file types
 			openFileDialog.Filter = "";
@@ -173,14 +174,19 @@ namespace TwinEditor
 			tabControls.Add(tab);
 			tabPages.Add(tabPage);
 			MainTab.TabPages.Add(tabPage);
+			
+			UpdateMenuItems();
+			
 			return tab;
 		}
 		
 		void OpenToolStripMenuItemClick(object sender, EventArgs e)
 		{
 			openFileDialog.RestoreDirectory = true;
-			openFileDialog.ShowDialog();
-			MessageBox.Show("You selected: " + openFileDialog.FileName);
+			DialogResult result = openFileDialog.ShowDialog();
+			if(result != DialogResult.OK)
+				return;
+
 			
 			// Create tab and initialize
 			IFileType type = null;
@@ -233,7 +239,11 @@ namespace TwinEditor
 		void SaveAsToolStripMenuItemClick(object sender, EventArgs e)
 		{
 			saveFileDialog.RestoreDirectory = true;
-			saveFileDialog.ShowDialog();
+			DialogResult result = saveFileDialog.ShowDialog();
+			if(result != DialogResult.OK)
+				return;
+			
+			
 			tabControls[MainTab.SelectedIndex].FileName = saveFileDialog.FileName;
 			
 			SaveFile(tabControls[MainTab.SelectedIndex]);
@@ -244,7 +254,9 @@ namespace TwinEditor
 			if(tabControl.FileName == null)
 			{
 				saveFileDialog.RestoreDirectory = true;
-				saveFileDialog.ShowDialog();
+				DialogResult result = saveFileDialog.ShowDialog();
+				if(result != DialogResult.OK)
+					return;
 				tabControl.FileName = saveFileDialog.FileName;
 			}			
 			

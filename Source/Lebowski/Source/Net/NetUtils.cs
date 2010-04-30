@@ -26,8 +26,7 @@ namespace Lebowski.Net
 		public static object Deserialize(byte[] buffer, int offset, int count)
 		{
 			MemoryStream ms = new MemoryStream();
-			int length = buffer.Length;
-			ms.Write(buffer, 0, length);
+			ms.Write(buffer, offset, count);
 			ms.Seek(0, SeekOrigin.Begin);
 			
 			BinaryFormatter formatter = new BinaryFormatter();
