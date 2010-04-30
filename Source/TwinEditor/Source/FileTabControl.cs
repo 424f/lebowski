@@ -54,5 +54,10 @@ namespace TwinEditor
 			ApplicationConnection = applicationConnection;
 		}
 		
+		public void CloseSession()
+		{
+			
+		}
+		
 	}
 }

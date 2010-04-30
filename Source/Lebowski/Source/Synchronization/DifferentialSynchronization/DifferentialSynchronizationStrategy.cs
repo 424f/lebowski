@@ -105,8 +105,11 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
 					}
 					else if(e.Message is TokenRequestMessage)
 					{
-						TokenRequestMessage message = (TokenRequestMessage)e.Message;
-						FlushToken();
+						//TokenRequestMessage message = (TokenRequestMessage)e.Message;
+						//FlushToken();
+						HasChanged = false;
+						State = State.WaitingForToken;					
+						SendPatches();						
 					}
 					else 
 					{

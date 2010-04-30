@@ -190,10 +190,18 @@ namespace Lebowski.Net.Skype
 				
 				if(streams.ContainsKey(pStreams[1].PartnerHandle))
 				{
-					throw new Exception("Already a stream available for " + pStreams[1].PartnerHandle);
+					//throw new Exception("Already a stream available for " + pStreams[1].PartnerHandle);
+					Logger.Info(string.Format("New connection to {0} replaces old one.", pStreams[1].PartnerHandle));
 				}
+				else
+				{
+					connections[pStreams[1].PartnerHandle] = new Dictionary<int, SkypeConnection>();
+				}
+				
 				streams[pStreams[1].PartnerHandle] = pStreams[1];				
-				connections[pStreams[1].PartnerHandle] = new Dictionary<int, SkypeConnection>();
+				
+				
+				
 			};
 			
 			API.ApplicationConnecting += delegate(SKYPE4COMLib.Application pApp, UserCollection pUsers)
