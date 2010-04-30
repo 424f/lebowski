@@ -32,7 +32,7 @@ namespace Lebowski.Net.Skype
 			{
 				throw new InvalidOperationException("You have to define an outgoing channel before sending messages.");
 			}
-			protocol.Send(remote, IncomingChannel, o);
+			protocol.Send(remote, OutgoingChannel, o);
 		}
 		
 		internal void OnReceived(ReceivedEventArgs e)
