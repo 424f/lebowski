@@ -290,7 +290,7 @@ namespace Lebowski.Net.Skype
 								Logger.Error(string.Format("{0} accepted {1} intended for {2}", partner, sharingInvitation, sharingInvitation.InvitedUser));
 							}
 							
-							IConnection connection = invitationChannels[accept.InvitationId];
+							SkypeConnection connection = invitationChannels[accept.InvitationId];
 							ISessionContext session = invitationSessions[accept.InvitationId];
 							
 							invitations.Remove(accept.InvitationId);
@@ -300,7 +300,7 @@ namespace Lebowski.Net.Skype
 							MessageBox.Show("Invitation was accepted");
 				
 							// We have to use a multichannel connection
-							
+							connection.OutgoingChannel = accept.Channel;
 							MultichannelConnection mcc = new MultichannelConnection(connection);
 							OnHostSession(new HostSessionEventArgs(session, mcc.CreateChannel(), mcc.CreateChannel()));
 						}
