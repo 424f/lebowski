@@ -40,9 +40,12 @@ namespace TwinEditor
 		    engine.Operations.SetMember(sys, "stdout", writer);
 		    engine.Operations.SetMember(sys, "stderr", writer);
 		    Object o = null;
-		    try {
+		    try
+		    {
 		    	o = compiled.Execute(scope);
-		    } catch (Exception e) {
+		    } 
+		    catch (Exception e)
+		    {
 		    	ExceptionOperations eo = engine.GetService<ExceptionOperations>();
 			    string error = eo.FormatException(e);
 			    writer.write(error);

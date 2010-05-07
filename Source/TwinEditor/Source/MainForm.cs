@@ -31,13 +31,15 @@ namespace TwinEditor
 				scriptToolStripMenuItem.Enabled = false;			
 				closeToolStripMenuItem.Enabled = false;
 				saveToolStripMenuItem.Enabled = false;
-				saveAsToolStripMenuItem.Enabled = false;				
+				saveAsToolStripMenuItem.Enabled = false;
+				saveAllToolStripMenuItem.Enabled = false;
 			}
 			else
 			{
 				closeToolStripMenuItem.Enabled = true;
 				saveToolStripMenuItem.Enabled = true;
-				saveAsToolStripMenuItem.Enabled = true;				
+				saveAsToolStripMenuItem.Enabled = true;
+				saveAllToolStripMenuItem.Enabled = true;
 				editToolStripMenuItem.Enabled = true;
 				scriptToolStripMenuItem.Enabled = true;				
 				var tab = tabControls[MainTab.SelectedIndex];
@@ -198,7 +200,7 @@ namespace TwinEditor
 		
 		void NewToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			
+			// Sub menu items are attached at runtime
 		}
 		
 		
@@ -208,18 +210,18 @@ namespace TwinEditor
 			Logger.Info(string.Format("Creating new tab of file type {0}", fileType.Name));
 			
 			// Create a new tab and add a FileTabControl to it
-			
-			TabPage tabPage = new TabPage("File " + controller.GetNextFileNumber());
+			string filename = "New " + controller.GetNextFileNumber() + fileType.FileExtension;
+			TabPage tabPage = new TabPage(filename);
 			FileTabControl tab = new FileTabControl();
 			tab.Dock = DockStyle.Fill;
 			tab.FileType = fileType;
+			tab.FileName = filename;
 			tabPage.Controls.Add(tab);
 			tabControls.Add(tab);
 			tabPages.Add(tabPage);
 			MainTab.TabPages.Add(tabPage);
-			
+			MainTab.SelectedTab = tabPage;
 			UpdateMenuItems();
-			
 			return tab;
 		}
 		
@@ -229,7 +231,6 @@ namespace TwinEditor
 			DialogResult result = openFileDialog.ShowDialog();
 			if(result != DialogResult.OK)
 				return;
-
 			
 			// Create tab and initialize
 			IFileType type = null;
@@ -276,38 +277,38 @@ namespace TwinEditor
 		}
 		
 		void SaveToolStripMenuItemClick(object sender, EventArgs e)
-		{			
-			SaveFile(tabControls[MainTab.SelectedIndex]);			
+		{	
+			FileTabControl tabControl = tabControls[MainTab.SelectedIndex];
+			if(!tabControl.OnDisk)
+			{
+				SaveAsToolStripMenuItemClick(sender, e);
+			}
+			else
+			{
+				SaveFile(tabControl);
+			}
 		}
 		
 		void SaveAsToolStripMenuItemClick(object sender, EventArgs e)
-		{
+		{	
+			FileTabControl tabControl = tabControls[MainTab.SelectedIndex];
 			saveFileDialog.RestoreDirectory = true;
+			saveFileDialog.FileName = tabControl.FileName;
+			saveFileDialog.Filter = string.Format("{0}|{1}", tabControl.FileType.Name, tabControl.FileType.FileNamePattern);
 			DialogResult result = saveFileDialog.ShowDialog();
 			if(result != DialogResult.OK)
+				// TODO: throw an exception?
 				return;
-			
-			
-			tabControls[MainTab.SelectedIndex].FileName = saveFileDialog.FileName;
-			
-			SaveFile(tabControls[MainTab.SelectedIndex]);
+			tabControl.FileName = saveFileDialog.FileName;
+			SaveFile(tabControl);
 		}
 		
 		void SaveFile(FileTabControl tabControl)
-		{
-			if(tabControl.FileName == null)
-			{
-				saveFileDialog.RestoreDirectory = true;
-				DialogResult result = saveFileDialog.ShowDialog();
-				if(result != DialogResult.OK)
-					return;
-				tabControl.FileName = saveFileDialog.FileName;
-			}			
-			
+		{			
 			File.WriteAllText(tabControl.FileName, tabControl.SourceCode.Text);			
 			((TabPage)tabControl.Parent).Text = System.IO.Path.GetFileName(tabControl.FileName);
+			tabControl.OnDisk = true;
 			UpdateMenuItems();
-			
 		}
 		
 		void SaveAllToolStripMenuItemClick(object sender, EventArgs e)
@@ -332,7 +333,6 @@ namespace TwinEditor
 			tabPages.RemoveAt(MainTab.SelectedIndex);
 			MainTab.TabPages.Remove(MainTab.SelectedTab);
 			UpdateMenuItems();
-			
 		}
 		
 		void RunToolStripMenuItemItemClick(object sender, EventArgs e) {
@@ -348,6 +348,7 @@ namespace TwinEditor
 			newPage.Controls.Add(execution);
 			execution.Dock = System.Windows.Forms.DockStyle.Fill;
 			tabControl.TabControl.TabPages.Add(newPage);
+			tabControl.TabControl.SelectedTab = newPage;
 		}
 	}
 }

@@ -16,11 +16,15 @@ namespace TwinEditor.UI.FileTypes
 			get { return "*.txt"; }
 		}
 		
-		public bool FileNameMatches(string fileName)
+		public string FileExtension
 		{
-			return fileName.EndsWith(".txt");
+			get { return ".txt"; }
 		}
 		
+		public bool FileNameMatches(string fileName)
+		{
+			return fileName.EndsWith(FileExtension);
+		}
 		
 		public Image Icon
 		{

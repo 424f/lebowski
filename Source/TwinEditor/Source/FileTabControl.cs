@@ -13,6 +13,7 @@ namespace TwinEditor
 	public partial class FileTabControl : UserControl, ISessionContext
 	{
 		public string FileName { get; set; }
+		public bool OnDisk { get; set; }
 		private IFileType fileType;
 		public IFileType FileType
 		{
@@ -39,6 +40,7 @@ namespace TwinEditor
 	
 		public FileTabControl()
 		{
+			this.OnDisk = false;
 			//
 			// The InitializeComponent() call is required for Windows Forms designer support.
 			//

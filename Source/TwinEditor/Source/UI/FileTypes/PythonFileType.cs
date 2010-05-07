@@ -22,12 +22,16 @@ namespace TwinEditor.UI.FileTypes
 		{
 			get { return "*.py"; }
 		}
+		
+		public string FileExtension
+		{
+			get { return ".py"; }
+		}
 	
 		public bool FileNameMatches(string fileName)
 		{
-			return fileName.EndsWith(".py");
+			return fileName.EndsWith(FileExtension);
 		}
-		
 		
 		public Image Icon
 		{

@@ -48,6 +48,8 @@ namespace TwinEditor
 			this.StandardOutput.Name = "StandardOutput";
 			this.StandardOutput.Size = new System.Drawing.Size(524, 339);
 			this.StandardOutput.TabIndex = 0;
+			this.StandardOutput.ReadOnly = true;
+			this.StandardOutput.Font = new System.Drawing.Font("Courier New", 10);
 			// 
 			// ExecutionTabControl
 			// 

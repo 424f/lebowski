@@ -20,6 +20,12 @@ namespace TwinEditor.UI.FileTypes
 		string FileNamePattern { get; }
 		
 		/// <summary>
+		/// The extenstion of the file type
+		/// This is basically the same as the FileNamePattern but without the asterisk
+		/// </summary>
+		string FileExtension { get; }
+		
+		/// <summary>
 		/// Checks whether `fileName` appears to be the name of a file
 		/// of this type.
 		/// </summary>
