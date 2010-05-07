@@ -39,8 +39,15 @@ namespace TwinEditor
 		    object sys = runtime.GetSysModule();
 		    engine.Operations.SetMember(sys, "stdout", writer);
 		    engine.Operations.SetMember(sys, "stderr", writer);
-		    
-		    return compiled.Execute(scope);
+		    Object o = null;
+		    try {
+		    	o = compiled.Execute(scope);
+		    } catch (Exception e) {
+		    	ExceptionOperations eo = engine.GetService<ExceptionOperations>();
+			    string error = eo.FormatException(e);
+			    writer.write(error);
+		    }
+		    return o;
 		}
 	}
 	
