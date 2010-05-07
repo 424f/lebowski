@@ -346,6 +346,7 @@ namespace TwinEditor
 			ExecutionTabControl execution = new ExecutionTabControl();
 			execution.SetStandardOutput(writer.GetStringBuilder().ToString());
 			newPage.Controls.Add(execution);
+			execution.Dock = System.Windows.Forms.DockStyle.Fill;
 			tabControl.TabControl.TabPages.Add(newPage);
 		}
 	}

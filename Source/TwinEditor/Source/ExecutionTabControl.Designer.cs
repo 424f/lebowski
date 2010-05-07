@@ -41,6 +41,8 @@ namespace TwinEditor
 			// 
 			// StandardOutput
 			// 
+			this.StandardOutput.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+			this.StandardOutput.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.StandardOutput.Location = new System.Drawing.Point(4, 4);
 			this.StandardOutput.Multiline = true;
 			this.StandardOutput.Name = "StandardOutput";
