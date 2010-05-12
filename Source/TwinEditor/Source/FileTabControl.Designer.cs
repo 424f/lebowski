@@ -79,7 +79,8 @@ namespace TwinEditor
 			// 
 			// ChatHistory
 			// 
-			this.ChatHistory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.ChatHistory.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+									| System.Windows.Forms.AnchorStyles.Right)));
 			this.ChatHistory.BackColor = System.Drawing.Color.White;
 			this.ChatHistory.Location = new System.Drawing.Point(522, 6);
 			this.ChatHistory.Multiline = true;
@@ -96,15 +97,16 @@ namespace TwinEditor
 			this.ChatText.Name = "ChatText";
 			this.ChatText.Size = new System.Drawing.Size(157, 22);
 			this.ChatText.TabIndex = 7;
+			this.ChatText.TextChanged += new System.EventHandler(this.ChatTextTextChanged);
 			this.ChatText.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ChatTextKeyDown);
 			this.ChatText.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ChatTextKeyUp);
 			this.ChatText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ChatTextKeyPress);
 			// 
 			// connectionStatusLabel
 			// 
-			this.connectionStatusLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.connectionStatusLabel.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.connectionStatusLabel.Location = new System.Drawing.Point(549, 574);
+			this.connectionStatusLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.connectionStatusLabel.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.connectionStatusLabel.Location = new System.Drawing.Point(555, 574);
 			this.connectionStatusLabel.Name = "connectionStatusLabel";
 			this.connectionStatusLabel.Size = new System.Drawing.Size(100, 24);
 			this.connectionStatusLabel.TabIndex = 10;
@@ -113,11 +115,12 @@ namespace TwinEditor
 			// 
 			// connectionStatusPicture
 			// 
-			this.connectionStatusPicture.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.connectionStatusPicture.Image = ((System.Drawing.Image)(resources.GetObject("connectionStatusPicture.Image")));
-			this.connectionStatusPicture.Location = new System.Drawing.Point(655, 574);
+			this.connectionStatusPicture.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.connectionStatusPicture.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("connectionStatusPicture.BackgroundImage")));
+			this.connectionStatusPicture.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+			this.connectionStatusPicture.Location = new System.Drawing.Point(657, 579);
 			this.connectionStatusPicture.Name = "connectionStatusPicture";
-			this.connectionStatusPicture.Size = new System.Drawing.Size(24, 24);
+			this.connectionStatusPicture.Size = new System.Drawing.Size(16, 16);
 			this.connectionStatusPicture.TabIndex = 11;
 			this.connectionStatusPicture.TabStop = false;
 			// 

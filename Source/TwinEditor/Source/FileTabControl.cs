@@ -114,14 +114,20 @@ namespace TwinEditor
 		{
             if(ChatText.Text.Length == 0)
 				return;
-			ApplicationConnection.Send(ChatText.Text);
-			AddChatMessage(ChatText.Text);
+            string message = Environment.UserName + ": " + ChatText.Text;
+			ApplicationConnection.Send(message);
+			AddChatMessage(message);
 			ChatText.Text = "";		    
 		}
 		
 		private void AddChatMessage(string text)
 		{
 		    ChatHistory.AppendText(text + Environment.NewLine);
+		}
+		
+		void ChatTextTextChanged(object sender, EventArgs e)
+		{
+			
 		}
 	}
 }
