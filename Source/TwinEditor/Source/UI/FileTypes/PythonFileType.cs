@@ -57,7 +57,9 @@ namespace TwinEditor.UI.FileTypes
 		{
 			var writer = new PythonStringWriter();
 			interpreter.ExecuteCode(content, writer);
-			stdout.Write(writer.GetContent().ToString());
+			string output = writer.GetContent().ToString();
+			output = output.Replace("\n", Environment.NewLine);
+			stdout.Write(output);
 		}		
 	}
 }
