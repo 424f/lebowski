@@ -276,13 +276,9 @@ namespace Lebowski.Net.Skype
 								SkypeConnection connection = Connect(partner);
 								connection.OutgoingChannel = sharingInvitation.Channel;
 								
-								MultichannelConnection mcc = new MultichannelConnection(connection);
-								OnJoinSession(new JoinSessionEventArgs(mcc.CreateChannel(), mcc.CreateChannel()));
+								OnJoinSession(new JoinSessionEventArgs(connection));
 								                                       
 								Send(partner, 0, new AcceptSharingInvitationMessage(sharingInvitation.InvitationId, connection.IncomingChannel));
-								//Send(partner, 0, new AcceptSharingInvitationMessage());
-									
-								// TODO: set up new editor for the session
 							}
 							else
 							{
@@ -316,8 +312,7 @@ namespace Lebowski.Net.Skype
 				
 							// We have to use a multichannel connection
 							connection.OutgoingChannel = accept.Channel;
-							MultichannelConnection mcc = new MultichannelConnection(connection);
-							OnHostSession(new HostSessionEventArgs(session, mcc.CreateChannel(), mcc.CreateChannel()));
+							OnHostSession(new HostSessionEventArgs(session, connection));
 						}
 						
 						// Another user has rejected a sharing invitation

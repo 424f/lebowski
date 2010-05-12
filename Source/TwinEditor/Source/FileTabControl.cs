@@ -33,8 +33,6 @@ namespace TwinEditor
 		}
 		
 		public ITextContext Context { get; protected set; }
-		
-		public IConnection Connection { get; protected set; }
 		public IConnection ApplicationConnection { get; protected set; }
 		public DifferentialSynchronizationStrategy SynchronizationStrategy { get; protected set; }
 	
@@ -55,11 +53,26 @@ namespace TwinEditor
 			
 		}
 		
-		public void StartSession(Lebowski.Synchronization.DifferentialSynchronization.DifferentialSynchronizationStrategy strategy, Lebowski.Net.IConnection connection, IConnection applicationConnection)
+		public void StartSession(DifferentialSynchronizationStrategy strategy, IConnection applicationConnection)
 		{
+		    if(SynchronizationStrategy != null)
+		    {
+		        throw new InvalidOperationException("synchronization stategy has already been set.");
+		    }
+		    if(ApplicationConnection != null)
+		    {
+		        throw new InvalidOperationException("application connection has already been set.");
+		    }
+		    		    
 			SynchronizationStrategy = strategy;
-			Connection = connection;
 			ApplicationConnection = applicationConnection;
+			
+			// When we receive a chat message, display it in the text field
+            ApplicationConnection.Received += delegate(object sender, ReceivedEventArgs e) {
+				string s = (string)e.Message;
+				ChatText.Invoke((Action)delegate { AddChatMessage(s); });
+			};		    
+			
 		}
 		
 		public void CloseSession()
@@ -67,5 +80,48 @@ namespace TwinEditor
 			
 		}
 		
+		
+		void ChatTextKeyDown(object sender, KeyEventArgs e)
+		{
+            if(e.KeyCode == Keys.Return)
+			{
+				e.Handled = true;
+				SendChatMessage();
+			}			
+		}
+		
+		void ChatTextKeyPress(object sender, KeyPressEventArgs e)
+		{
+			if(e.KeyChar == (char) 13)
+			{
+				e.Handled = true;
+			}
+			else
+			{
+				base.OnKeyPress(e);
+			}
+		}
+		
+		void ChatTextKeyUp(object sender, KeyEventArgs e)
+		{
+			if(e.KeyCode == Keys.Return)
+			{
+				e.Handled = true;
+			}
+		}
+		
+		private void SendChatMessage()
+		{
+            if(ChatText.Text.Length == 0)
+				return;
+			ApplicationConnection.Send(ChatText.Text);
+			AddChatMessage(ChatText.Text);
+			ChatText.Text = "";		    
+		}
+		
+		private void AddChatMessage(string text)
+		{
+		    ChatHistory.AppendText(text + Environment.NewLine);
+		}
 	}
 }

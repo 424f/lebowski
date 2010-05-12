@@ -74,6 +74,8 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
 				Console.WriteLine("Thread {0}: {1}", System.Threading.Thread.CurrentThread.ManagedThreadId, e.Message.GetType().Name);
 				Console.ResetColor();
 				
+				// TODO: remove multithreading debug code
+				
 				lock(this.GetType())
 				{
 					activeThreads += 1;

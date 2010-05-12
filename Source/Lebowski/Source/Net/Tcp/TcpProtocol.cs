@@ -22,8 +22,7 @@ namespace Lebowski.Net.Tcp
 				TcpServerConnection connection = new TcpServerConnection();	
 				connection.ClientConnected += delegate
 				{
-					MultichannelConnection mcc = new MultichannelConnection(connection);
-					OnHostSession(new HostSessionEventArgs(session, mcc.CreateChannel(), mcc.CreateChannel()));					
+					OnHostSession(new HostSessionEventArgs(session, connection));					
 					form.Invoke((Action) delegate
 					{
 						form.Close();
@@ -68,8 +67,7 @@ namespace Lebowski.Net.Tcp
 				try
 				{
 					TcpClientConnection connection = new TcpClientConnection(form.Address);
-					MultichannelConnection mcc = new MultichannelConnection(connection);
-					OnJoinSession(new JoinSessionEventArgs(mcc.CreateChannel(), mcc.CreateChannel()));
+					OnJoinSession(new JoinSessionEventArgs(connection));
 				}
 				catch(Exception e)
 				{

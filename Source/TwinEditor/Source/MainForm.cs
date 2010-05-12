@@ -123,9 +123,11 @@ namespace TwinEditor
 				// Register to communication protocol events
 				currentProtocol.HostSession += delegate(object sender, HostSessionEventArgs e)
 				{ 
-					var sync = new DifferentialSynchronizationStrategy(0, e.Session.Context, e.Connection);
-					// TODO: e.Connection might be redundant
-					e.Session.StartSession(sync, e.Connection, e.ApplicationConnection);
+					MultichannelConnection mcc = new MultichannelConnection(e.Connection);
+					var syncConnection = mcc.CreateChannel();
+					var sync = new DifferentialSynchronizationStrategy(0, e.Session.Context, syncConnection);
+
+					e.Session.StartSession(sync, mcc.CreateChannel());
 					
 				};
 				
@@ -134,9 +136,10 @@ namespace TwinEditor
 					// TODO: choose correct file type
 					FileTabControl tab = CreateNewTab(fileTypes[0]);
 					
-					var sync = new DifferentialSynchronizationStrategy(1, tab.Context, e.Connection);
-					// TODO: e.Connection might be redundant
-					tab.StartSession(sync, e.Connection, e.ApplicationConnection);
+					MultichannelConnection mcc = new MultichannelConnection(e.Connection);
+					var syncConnection = mcc.CreateChannel();
+					var sync = new DifferentialSynchronizationStrategy(1, tab.Context, syncConnection);
+					tab.StartSession(sync, mcc.CreateChannel());
 					
 				};				
 			}
@@ -157,11 +160,7 @@ namespace TwinEditor
 		
 		void ChatSendClick(object sender, EventArgs e)
 		{
-			if(ChatText.Text.Length == 0)
-				return;
-			chatConnection.Send(ChatText.Text);
-			AddChatMessage(ChatText.Text);
-			ChatText.Text = "";
+			
 		}
 		
 		void AddChatMessage(string text)
