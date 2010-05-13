@@ -21,12 +21,19 @@ namespace TwinEditor
 		public const string MESSAGE_CLOSE = "Save changes?";
 		public const string CAPTION_CLOSE = "Save";
 		
-		IConnection chatConnection;
 		protected IFileType[] fileTypes;
 		protected ICommunicationProtocol[] protocols;
-		List<FileTabControl> tabControls = new List<FileTabControl>();
+		List<SessionTabControl> tabControls = new List<SessionTabControl>();
 		List<TabPage> tabPages = new List<TabPage>();
 		Controller controller;
+		
+		/// <summary>
+		/// Updates GUI elements after the program state has changed
+		/// </summary>
+		public void UpdateGuiState()
+		{
+		    UpdateMenuItems();
+		}
 		
 		public void UpdateMenuItems()
 		{
@@ -70,31 +77,8 @@ namespace TwinEditor
 			MainTab.TabPages.Clear();
 			UpdateMenuItems();
 
-			// Traverse the static part of the menu strip and translate every label
-			Queue<ToolStripMenuItem> menuItems = new Queue<ToolStripMenuItem>();
-			foreach(ToolStripMenuItem item in menuStrip1.Items)
-			{
-			    menuItems.Enqueue(item);
-			}
-			
-			while(menuItems.Count != 0)
-			{
-			    ToolStripMenuItem item = menuItems.Dequeue();
-			    Console.WriteLine(item + " of " + item.GetType().Name);
-			    string id = item.Text;
-			    item.Text = ApplicationUtil.LanguageResources.GetString(id);
-			    if(item.Text == null)
-			    {
-			        item.Text = "{" + id + "}";
-			    }
-			    foreach(object child in item.DropDown.Items)
-			    {
-			        if(child is ToolStripMenuItem)
-			        {
-			            menuItems.Enqueue((ToolStripMenuItem)child);
-			        }
-			    }
-			}			
+			// Translate the menu
+			TranslationUtil.TranslateMenuStrip(menuStrip1, ApplicationUtil.LanguageResources);
 			
 			// Supported file types
 			openFileDialog.Filter = "";
@@ -167,7 +151,7 @@ namespace TwinEditor
 				currentProtocol.JoinSession += delegate(object sender, JoinSessionEventArgs e)
 				{ 
 					// TODO: choose correct file type
-					FileTabControl tab = CreateNewTab(fileTypes[0]);
+					SessionTabControl tab = CreateNewTab(fileTypes[0]);
 					
 					MultichannelConnection mcc = new MultichannelConnection(e.Connection);
 					var syncConnection = mcc.CreateChannel();
@@ -182,73 +166,15 @@ namespace TwinEditor
 		{
 		    item.Text = ApplicationUtil.LanguageResources.GetString(id);
 		}
-		
-		public void SetChatConnection(IConnection connection)
-		{
-			if(chatConnection != null)
-				throw new Exception("There already is a chat connection");
-			this.chatConnection = connection;
-			
-			this.chatConnection.Received += delegate(object sender, ReceivedEventArgs e) {
-				string s = (string)e.Message;
-				ChatText.Invoke((Action)delegate { AddChatMessage(s); });
-			};
-		}
-		
-		void ChatSendClick(object sender, EventArgs e)
-		{
-			
-		}
-		
-		void AddChatMessage(string text)
-		{
-			ChatHistory.AppendText(text + Environment.NewLine);
-		}
-		
-		void ChatTextKeyDown(object sender, KeyEventArgs e)
-		{
-			if(e.KeyCode == Keys.Return)
-			{
-				e.Handled = true;
-				ChatSendClick(this, null);
-			}
-		}
-		
-		void ChatTextKeyUp(object sender, KeyEventArgs e)
-		{
-			if(e.KeyCode == Keys.Return)
-			{
-				e.Handled = true;
-			}
-		}
-		
-		void ChatTextKeyPress(object sender, KeyPressEventArgs e)
-		{
-			if(e.KeyChar == (char) 13)
-			{
-				e.Handled = true;
-			}
-			else
-			{
-				base.OnKeyPress(e);
-			}
-		}
-		
-		void NewToolStripMenuItemClick(object sender, EventArgs e)
-		{
-			// Sub menu items are attached at runtime
-		}
-		
-		
-		
-		public FileTabControl CreateNewTab(IFileType fileType)
+	
+		public SessionTabControl CreateNewTab(IFileType fileType)
 		{
 			Logger.Info(string.Format("Creating new tab of file type {0}", fileType.Name));
 			
 			// Create a new tab and add a FileTabControl to it
 			string filename = "New " + controller.GetNextFileNumber() + fileType.FileExtension;
 			TabPage tabPage = new TabPage(filename);
-			FileTabControl tab = new FileTabControl();
+			SessionTabControl tab = new SessionTabControl();
 			tab.Dock = DockStyle.Fill;
 			tab.FileType = fileType;
 			tab.FileName = filename;
@@ -287,7 +213,7 @@ namespace TwinEditor
 			}
 			
 			// Create a new tab for the file
-			FileTabControl tab = CreateNewTab(type);
+			SessionTabControl tab = CreateNewTab(type);
 			tab.FileName = openFileDialog.FileName;
 			tab.FileType = type;
 			
@@ -314,18 +240,18 @@ namespace TwinEditor
 		
 		void SaveToolStripMenuItemClick(object sender, EventArgs e)
 		{	
-			FileTabControl tabControl = tabControls[MainTab.SelectedIndex];
+			SessionTabControl tabControl = tabControls[MainTab.SelectedIndex];
 			SaveRequest(tabControl);
 		}
 		
 		void SaveAsToolStripMenuItemClick(object sender, EventArgs e)
 		{	
-			FileTabControl tabControl = tabControls[MainTab.SelectedIndex];
+			SessionTabControl tabControl = tabControls[MainTab.SelectedIndex];
 			SaveWithDialog(tabControl);
 		}
 		
 		// checks whether the tab is already on disk, and if yes calls 'Save' else calls 'SaveWithDialog'.
-		void SaveRequest(FileTabControl tabControl) {
+		void SaveRequest(SessionTabControl tabControl) {
 			if(!tabControl.OnDisk)
 			{
 				SaveWithDialog(tabControl);
@@ -337,7 +263,7 @@ namespace TwinEditor
 		}
 		
 		// opens saveFileDialog
-		void SaveWithDialog(FileTabControl tabControl) {
+		void SaveWithDialog(SessionTabControl tabControl) {
 			saveFileDialog.RestoreDirectory = true;
 			saveFileDialog.FileName = System.IO.Path.GetFileName(tabControl.FileName);
 			saveFileDialog.Filter = string.Format("{0}|{1}", tabControl.FileType.Name, tabControl.FileType.FileNamePattern);
@@ -354,7 +280,7 @@ namespace TwinEditor
 		}
 		
 		// saves file
-		void Save(FileTabControl tabControl)
+		void Save(SessionTabControl tabControl)
 		{			
 			try
 			{
@@ -373,7 +299,7 @@ namespace TwinEditor
 		
 		void SaveAllToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			foreach(FileTabControl tabControl in tabControls)
+			foreach(SessionTabControl tabControl in tabControls)
 			{
 				SaveRequest(tabControl);
 			}
@@ -386,7 +312,7 @@ namespace TwinEditor
 		
 		void CloseToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			FileTabControl tabControl = tabControls[MainTab.SelectedIndex];
+			SessionTabControl tabControl = tabControls[MainTab.SelectedIndex];
 			if (tabControl.FileModified)
 			{
 				if (MessageBox.Show(MESSAGE_CLOSE, CAPTION_CLOSE, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
@@ -403,7 +329,7 @@ namespace TwinEditor
 		}
 		
 		void RunToolStripMenuItemItemClick(object sender, EventArgs e) {
-			FileTabControl tabControl = tabControls[MainTab.SelectedIndex];		
+			SessionTabControl tabControl = tabControls[MainTab.SelectedIndex];		
 			StringWriter writer = new StringWriter();
 			tabControl.FileType.Execute(tabControl.SourceCode.Text, writer);
 			

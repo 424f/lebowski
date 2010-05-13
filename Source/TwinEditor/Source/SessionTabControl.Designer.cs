@@ -1,7 +1,7 @@
 ﻿
 namespace TwinEditor
 {
-	partial class FileTabControl
+	partial class SessionTabControl
 	{
 		/// <summary>
 		/// Designer variable used to keep track of non-visual components.
@@ -29,7 +29,7 @@ namespace TwinEditor
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FileTabControl));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SessionTabControl));
 			this.TabControl = new System.Windows.Forms.TabControl();
 			this.tabPage3 = new System.Windows.Forms.TabPage();
 			this.SourceCode = new ICSharpCode.TextEditor.TextEditorControl();

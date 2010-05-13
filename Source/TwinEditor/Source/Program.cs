@@ -30,42 +30,6 @@ namespace TwinEditor
 		
 		DifferentialSynchronizationStrategy server;
 		DifferentialSynchronizationStrategy client;
-
-		private void RunLocalSample()
-		{
-			ServerConnection s = new ServerConnection();
-			System.Console.WriteLine("Server created..");
-			
-			ClientConnection c = new ClientConnection("localhost", ClientConnection.Port);
-			Console.WriteLine("Client connected..");
-
-			Controller clientController = new Controller();
-			clientForm = new MainForm(clientController);
-			clientForm.Text = "Client (1)";
-			
-			Controller serverController = new Controller();
-			serverForm = new MainForm(serverController);			
-			serverForm.Text = "Server (0)";
-
-			IConnection serverConnection = s; // new LocalConnection();
-			IConnection clientConnection = c; // new LocalConnection();
-			//LocalProtocol.Connect(serverConnection, clientConnection);
-			
-			ITextContext serverContext = new TextEditorTextContext(serverForm.SourceCode);
-			ITextContext clientContext = new TextEditorTextContext(clientForm.SourceCode);
-			
-			server = new DifferentialSynchronizationStrategy(0, serverContext, serverConnection);
-			client = new DifferentialSynchronizationStrategy(1, clientContext, clientConnection);				
-			
-			var timer = new System.Timers.Timer(20);
-			timer.Elapsed += delegate { 
-				clientForm.BeginInvoke((Action)UpdateText);
-			};
-			timer.Enabled = true;
-			
-			clientForm.Show();
-			serverForm.Show();			
-		}
 		
 		private void Run()
 		{			

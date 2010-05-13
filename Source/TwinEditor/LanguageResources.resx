@@ -175,7 +175,7 @@
     <value>Delete</value>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value />
+    <value>Delete</value>
   </data>
   <data name="Share" xml:space="preserve">
     <value />
@@ -184,13 +184,13 @@
     <value>Settings</value>
   </data>
   <data name="Settings" xml:space="preserve">
-    <value />
+    <value>Settings</value>
   </data>
   <data name="Compile" xml:space="preserve">
-    <value>Execute</value>
+    <value>Compile</value>
   </data>
   <data name="Execute" xml:space="preserve">
-    <value />
+    <value>Execute</value>
   </data>
   <data name=" new string entry 1" xml:space="preserve">
     <value />

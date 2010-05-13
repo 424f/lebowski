@@ -61,20 +61,11 @@ namespace TwinEditor
 			this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.MainTab = new System.Windows.Forms.TabControl();
 			this.tabPage1 = new System.Windows.Forms.TabPage();
-			this.tabControl1 = new System.Windows.Forms.TabControl();
-			this.tabPage3 = new System.Windows.Forms.TabPage();
-			this.SourceCode = new ICSharpCode.TextEditor.TextEditorControl();
-			this.ChatSend = new System.Windows.Forms.Button();
-			this.ChatHistory = new System.Windows.Forms.TextBox();
-			this.ChatText = new System.Windows.Forms.TextBox();
 			this.tabPage2 = new System.Windows.Forms.TabPage();
 			this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
 			this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
 			this.menuStrip1.SuspendLayout();
 			this.MainTab.SuspendLayout();
-			this.tabPage1.SuspendLayout();
-			this.tabControl1.SuspendLayout();
-			this.tabPage3.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// menuStrip1
@@ -115,7 +106,6 @@ namespace TwinEditor
 			this.newToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
 			this.newToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
 			this.newToolStripMenuItem.Text = "New";
-			this.newToolStripMenuItem.Click += new System.EventHandler(this.NewToolStripMenuItemClick);
 			// 
 			// openToolStripMenuItem
 			// 
@@ -281,7 +271,7 @@ namespace TwinEditor
 			this.compileToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("compileToolStripMenuItem.Image")));
 			this.compileToolStripMenuItem.Name = "compileToolStripMenuItem";
 			this.compileToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F8;
-			this.compileToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.compileToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
 			this.compileToolStripMenuItem.Text = "Compile";
 			// 
 			// runToolStripMenuItem
@@ -289,7 +279,7 @@ namespace TwinEditor
 			this.runToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("runToolStripMenuItem.Image")));
 			this.runToolStripMenuItem.Name = "runToolStripMenuItem";
 			this.runToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
-			this.runToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.runToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
 			this.runToolStripMenuItem.Text = "Execute";
 			this.runToolStripMenuItem.Click += new System.EventHandler(this.RunToolStripMenuItemItemClick);
 			// 
@@ -306,14 +296,14 @@ namespace TwinEditor
 			// 
 			this.guideToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("guideToolStripMenuItem.Image")));
 			this.guideToolStripMenuItem.Name = "guideToolStripMenuItem";
-			this.guideToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.guideToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
 			this.guideToolStripMenuItem.Text = "Guide";
 			// 
 			// aboutToolStripMenuItem
 			// 
 			this.aboutToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("aboutToolStripMenuItem.Image")));
 			this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-			this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
 			this.aboutToolStripMenuItem.Text = "About";
 			this.aboutToolStripMenuItem.Click += new System.EventHandler(this.AboutToolStripMenuItemClick);
 			// 
@@ -331,10 +321,6 @@ namespace TwinEditor
 			// 
 			// tabPage1
 			// 
-			this.tabPage1.Controls.Add(this.tabControl1);
-			this.tabPage1.Controls.Add(this.ChatSend);
-			this.tabPage1.Controls.Add(this.ChatHistory);
-			this.tabPage1.Controls.Add(this.ChatText);
 			this.tabPage1.Location = new System.Drawing.Point(4, 24);
 			this.tabPage1.Name = "tabPage1";
 			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -342,77 +328,6 @@ namespace TwinEditor
 			this.tabPage1.TabIndex = 0;
 			this.tabPage1.Text = "file.py";
 			this.tabPage1.UseVisualStyleBackColor = true;
-			// 
-			// tabControl1
-			// 
-			this.tabControl1.Alignment = System.Windows.Forms.TabAlignment.Bottom;
-			this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-									| System.Windows.Forms.AnchorStyles.Left) 
-									| System.Windows.Forms.AnchorStyles.Right)));
-			this.tabControl1.Controls.Add(this.tabPage3);
-			this.tabControl1.Location = new System.Drawing.Point(9, 6);
-			this.tabControl1.Name = "tabControl1";
-			this.tabControl1.SelectedIndex = 0;
-			this.tabControl1.Size = new System.Drawing.Size(714, 396);
-			this.tabControl1.TabIndex = 5;
-			// 
-			// tabPage3
-			// 
-			this.tabPage3.Controls.Add(this.SourceCode);
-			this.tabPage3.Location = new System.Drawing.Point(4, 4);
-			this.tabPage3.Name = "tabPage3";
-			this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage3.Size = new System.Drawing.Size(706, 368);
-			this.tabPage3.TabIndex = 0;
-			this.tabPage3.Text = "Source";
-			this.tabPage3.UseVisualStyleBackColor = true;
-			// 
-			// SourceCode
-			// 
-			this.SourceCode.AutoScroll = true;
-			this.SourceCode.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.SourceCode.IsReadOnly = false;
-			this.SourceCode.Location = new System.Drawing.Point(3, 3);
-			this.SourceCode.Margin = new System.Windows.Forms.Padding(0);
-			this.SourceCode.Name = "SourceCode";
-			this.SourceCode.Size = new System.Drawing.Size(700, 362);
-			this.SourceCode.TabIndex = 1;
-			// 
-			// ChatSend
-			// 
-			this.ChatSend.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.ChatSend.Location = new System.Drawing.Point(637, 521);
-			this.ChatSend.Name = "ChatSend";
-			this.ChatSend.Size = new System.Drawing.Size(87, 23);
-			this.ChatSend.TabIndex = 4;
-			this.ChatSend.Text = "Send";
-			this.ChatSend.UseVisualStyleBackColor = true;
-			this.ChatSend.Click += new System.EventHandler(this.ChatSendClick);
-			// 
-			// ChatHistory
-			// 
-			this.ChatHistory.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-									| System.Windows.Forms.AnchorStyles.Right)));
-			this.ChatHistory.BackColor = System.Drawing.Color.White;
-			this.ChatHistory.Location = new System.Drawing.Point(8, 408);
-			this.ChatHistory.Multiline = true;
-			this.ChatHistory.Name = "ChatHistory";
-			this.ChatHistory.ReadOnly = true;
-			this.ChatHistory.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.ChatHistory.Size = new System.Drawing.Size(714, 106);
-			this.ChatHistory.TabIndex = 2;
-			// 
-			// ChatText
-			// 
-			this.ChatText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-									| System.Windows.Forms.AnchorStyles.Right)));
-			this.ChatText.Location = new System.Drawing.Point(8, 522);
-			this.ChatText.Name = "ChatText";
-			this.ChatText.Size = new System.Drawing.Size(621, 23);
-			this.ChatText.TabIndex = 3;
-			this.ChatText.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ChatTextKeyDown);
-			this.ChatText.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ChatTextKeyUp);
-			this.ChatText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ChatTextKeyPress);
 			// 
 			// tabPage2
 			// 
@@ -439,10 +354,6 @@ namespace TwinEditor
 			this.menuStrip1.ResumeLayout(false);
 			this.menuStrip1.PerformLayout();
 			this.MainTab.ResumeLayout(false);
-			this.tabPage1.ResumeLayout(false);
-			this.tabPage1.PerformLayout();
-			this.tabControl1.ResumeLayout(false);
-			this.tabPage3.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
@@ -452,8 +363,6 @@ namespace TwinEditor
 		private System.Windows.Forms.SaveFileDialog saveFileDialog;
 		private System.Windows.Forms.OpenFileDialog openFileDialog;
 		private System.Windows.Forms.TabControl MainTab;
-		private System.Windows.Forms.TabPage tabPage3;
-		private System.Windows.Forms.TabControl tabControl1;
 		private System.Windows.Forms.TabPage tabPage2;
 		private System.Windows.Forms.TabPage tabPage1;
 		private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
@@ -482,9 +391,5 @@ namespace TwinEditor
 		private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
 		private System.Windows.Forms.MenuStrip menuStrip1;
-		private System.Windows.Forms.Button ChatSend;
-		private System.Windows.Forms.TextBox ChatText;
-		private System.Windows.Forms.TextBox ChatHistory;
-		public ICSharpCode.TextEditor.TextEditorControl SourceCode;
 	}
 }
