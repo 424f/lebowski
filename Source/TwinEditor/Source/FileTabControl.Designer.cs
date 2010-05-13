@@ -76,6 +76,7 @@ namespace TwinEditor
 			this.SourceCode.Name = "SourceCode";
 			this.SourceCode.Size = new System.Drawing.Size(502, 560);
 			this.SourceCode.TabIndex = 1;
+			this.SourceCode.TextChanged += new System.EventHandler(this.SourceCodeTextChanged);
 			// 
 			// ChatHistory
 			// 
@@ -147,5 +148,7 @@ namespace TwinEditor
 		private System.Windows.Forms.TextBox ChatHistory;
 		public ICSharpCode.TextEditor.TextEditorControl SourceCode;
 		private System.Windows.Forms.TabPage tabPage3;
+		
+		
 	}
 }

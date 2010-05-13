@@ -100,8 +100,6 @@ namespace Lebowski.Net.Tcp
 				ClientDisconnected(this, e);
 			}
 		}
-		
-		
 	}
 	
 	public class TcpClientConnection : TcpConnection
@@ -114,7 +112,6 @@ namespace Lebowski.Net.Tcp
 			IPHostEntry hostEntry = Dns.Resolve(address);
 			IPEndPoint endpoint = new IPEndPoint(hostEntry.AddressList[0], Port);
 			client.Connect(endpoint);
-			
 			
 			// Create networking thread
 			ThreadStart threadStart = new ThreadStart(RunNetworkingThread);
