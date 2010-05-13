@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lebowski", "Lebowski\Lebows
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwinEditor", "TwinEditor\TwinEditor.csproj", "{89548DEC-46B8-42FA-89BB-948B5C570762}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceTest", "ResourceTest\ResourceTest.csproj", "{23022F27-8EB7-4E31-924F-A91244A2E618}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -20,6 +22,10 @@ Global
 		{89548DEC-46B8-42FA-89BB-948B5C570762}.Debug|x86.ActiveCfg = Debug|x86
 		{89548DEC-46B8-42FA-89BB-948B5C570762}.Release|x86.Build.0 = Release|x86
 		{89548DEC-46B8-42FA-89BB-948B5C570762}.Release|x86.ActiveCfg = Release|x86
+		{23022F27-8EB7-4E31-924F-A91244A2E618}.Debug|x86.Build.0 = Debug|x86
+		{23022F27-8EB7-4E31-924F-A91244A2E618}.Debug|x86.ActiveCfg = Debug|x86
+		{23022F27-8EB7-4E31-924F-A91244A2E618}.Release|x86.Build.0 = Release|x86
+		{23022F27-8EB7-4E31-924F-A91244A2E618}.Release|x86.ActiveCfg = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

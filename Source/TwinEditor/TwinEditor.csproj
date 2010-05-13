@@ -10,13 +10,24 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <SourceAnalysisOverrideSettingsFile>C:\Users\Bo\AppData\Roaming\ICSharpCode/SharpDevelop3.0\Settings.SourceAnalysis</SourceAnalysisOverrideSettingsFile>
     <ApplicationIcon>..\..\Resources\ApplicationIcon\lebowski.ico</ApplicationIcon>
+    <StartupObject>TwinEditor.Program</StartupObject>
+    <SignAssembly>False</SignAssembly>
+    <DelaySign>False</DelaySign>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <NoStdLib>False</NoStdLib>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
     <PlatformTarget>x86</PlatformTarget>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <BaseAddress>4194304</BaseAddress>
+    <FileAlignment>4096</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <OutputPath>bin\Debug\</OutputPath>
-    <DebugSymbols>True</DebugSymbols>
+    <DebugSymbols>true</DebugSymbols>
     <DebugType>Full</DebugType>
     <Optimize>False</Optimize>
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
@@ -78,6 +89,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Source\AboutDialog.cs" />
     <Compile Include="Source\AboutDialog.Designer.cs">
@@ -101,6 +113,8 @@
     <Compile Include="Source\UI\FileTypes\IFileType.cs" />
     <Compile Include="Source\UI\FileTypes\PythonFileType.cs" />
     <Compile Include="Source\UI\FileTypes\TextFileType.cs" />
+    <EmbeddedResource Include="LanguageResources.de.resx" />
+    <EmbeddedResource Include="LanguageResources.resx" />
     <EmbeddedResource Include="Source\AboutDialog.resx">
       <DependentUpon>AboutDialog.cs</DependentUpon>
     </EmbeddedResource>

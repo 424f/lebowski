@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Resources;
+using System.Reflection;
 using Lebowski;
 using Lebowski.Synchronization.DifferentialSynchronization;
 using Lebowski.Net;
@@ -62,6 +64,32 @@ namespace TwinEditor
 			// Clear tabs
 			MainTab.TabPages.Clear();
 			UpdateMenuItems();
+
+			// Traverse the static part of the menu strip and translate every label
+			Queue<ToolStripMenuItem> menuItems = new Queue<ToolStripMenuItem>();
+			foreach(ToolStripMenuItem item in menuStrip1.Items)
+			{
+			    menuItems.Enqueue(item);
+			}
+			
+			while(menuItems.Count != 0)
+			{
+			    ToolStripMenuItem item = menuItems.Dequeue();
+			    Console.WriteLine(item + " of " + item.GetType().Name);
+			    string id = item.Text;
+			    item.Text = ApplicationUtil.LanguageResources.GetString(id);
+			    if(item.Text == null)
+			    {
+			        item.Text = "{" + id + "}";
+			    }
+			    foreach(object child in item.DropDown.Items)
+			    {
+			        if(child is ToolStripMenuItem)
+			        {
+			            menuItems.Enqueue((ToolStripMenuItem)child);
+			        }
+			    }
+			}			
 			
 			// Supported file types
 			openFileDialog.Filter = "";
@@ -143,7 +171,11 @@ namespace TwinEditor
 					
 				};				
 			}
-			
+		}
+		
+		private void Translate(ToolStripMenuItem item, string id)
+		{
+		    item.Text = ApplicationUtil.LanguageResources.GetString(id);
 		}
 		
 		public void SetChatConnection(IConnection connection)
