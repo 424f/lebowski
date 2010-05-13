@@ -11,7 +11,7 @@ using log4net;
 
 namespace TwinEditor
 {
-	public partial class FileTabControl : UserControl, ISessionContext
+	public partial class SessionTabControl : UserControl, ISessionContext
 	{	
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(MainForm));
 		
@@ -40,7 +40,7 @@ namespace TwinEditor
 		public IConnection ApplicationConnection { get; protected set; }
 		public DifferentialSynchronizationStrategy SynchronizationStrategy { get; protected set; }
 	
-		public FileTabControl()
+		public SessionTabControl()
 		{
 			this.OnDisk = false;
 			this.FileModified = false;

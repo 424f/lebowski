@@ -10,13 +10,24 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <SourceAnalysisOverrideSettingsFile>C:\Users\Bo\AppData\Roaming\ICSharpCode/SharpDevelop3.0\Settings.SourceAnalysis</SourceAnalysisOverrideSettingsFile>
     <ApplicationIcon>..\..\Resources\ApplicationIcon\lebowski.ico</ApplicationIcon>
+    <StartupObject>TwinEditor.Program</StartupObject>
+    <SignAssembly>False</SignAssembly>
+    <DelaySign>False</DelaySign>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <NoStdLib>False</NoStdLib>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
     <PlatformTarget>x86</PlatformTarget>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <BaseAddress>4194304</BaseAddress>
+    <FileAlignment>4096</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <OutputPath>bin\Debug\</OutputPath>
-    <DebugSymbols>True</DebugSymbols>
+    <DebugSymbols>true</DebugSymbols>
     <DebugType>Full</DebugType>
     <Optimize>False</Optimize>
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
@@ -88,36 +99,37 @@
     <Compile Include="Source\ExecutionTabControl.Designer.cs">
       <DependentUpon>ExecutionTabControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Source\FileTabControl.cs" />
-    <Compile Include="Source\FileTabControl.Designer.cs">
-      <DependentUpon>FileTabControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Source\MainForm.cs" />
     <Compile Include="Source\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Source\Program.cs" />
     <Compile Include="Source\PythonInterpreter.cs" />
+    <Compile Include="Source\SessionTabControl.cs" />
+    <Compile Include="Source\SessionTabControl.Designer.cs">
+      <DependentUpon>SessionTabControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Source\TranslationUtil.cs" />
+    <Compile Include="Source\UI\ApplicationUtil.cs" />
     <Compile Include="Source\UI\FileTypes\IFileType.cs" />
     <Compile Include="Source\UI\FileTypes\PythonFileType.cs" />
     <Compile Include="Source\UI\FileTypes\TextFileType.cs" />
-    <Compile Include="Test\PythonInterpreterTest.cs" />
-    <Compile Include="Test\UITester.cs" />
+    <Compile Include="Test\PythonInterpreterTest.cs" />    <Compile Include="Test\UITester.cs" />    <EmbeddedResource Include="LanguageResources.de.resx" />
+    <EmbeddedResource Include="LanguageResources.resx" />
     <EmbeddedResource Include="Source\AboutDialog.resx">
       <DependentUpon>AboutDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Source\ExecutionTabControl.resx">
       <DependentUpon>ExecutionTabControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Source\FileTabControl.resx">
-      <DependentUpon>FileTabControl.cs</DependentUpon>
+    <EmbeddedResource Include="Source\SessionTabControl.resx">
+      <DependentUpon>SessionTabControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Source\MainForm.resx">
       <DependentUpon>MainForm.Designer.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Test" />
     <Folder Include="Source" />
     <Folder Include="Source\UI" />
     <Folder Include="Source\UI\FileTypes" />
