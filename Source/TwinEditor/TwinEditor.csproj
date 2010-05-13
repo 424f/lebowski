@@ -101,6 +101,8 @@
     <Compile Include="Source\UI\FileTypes\IFileType.cs" />
     <Compile Include="Source\UI\FileTypes\PythonFileType.cs" />
     <Compile Include="Source\UI\FileTypes\TextFileType.cs" />
+    <Compile Include="Test\PythonInterpreterTest.cs" />
+    <Compile Include="Test\UITester.cs" />
     <EmbeddedResource Include="Source\AboutDialog.resx">
       <DependentUpon>AboutDialog.cs</DependentUpon>
     </EmbeddedResource>
@@ -115,6 +117,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Test" />
     <Folder Include="Source" />
     <Folder Include="Source\UI" />
     <Folder Include="Source\UI\FileTypes" />
