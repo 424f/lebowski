@@ -178,10 +178,10 @@
     <value>Delete</value>
   </data>
   <data name="Share" xml:space="preserve">
-    <value />
+    <value>Share</value>
   </data>
   <data name="Participate" xml:space="preserve">
-    <value>Settings</value>
+    <value>Participate</value>
   </data>
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>

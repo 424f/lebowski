@@ -48,6 +48,7 @@ namespace TwinEditor
 			// The InitializeComponent() call is required for Windows Forms designer support.
 			//
 			InitializeComponent();
+			ChatText.Enabled = false;
 			
 			// Create a text context for the source code editor
 			Context = new TextEditorTextContext(SourceCode);
@@ -72,6 +73,8 @@ namespace TwinEditor
 			SynchronizationStrategy = strategy;
 			ApplicationConnection = applicationConnection;
 			
+			ChatText.Invoke((Action)delegate { ChatText.Enabled = true; });
+			
 			// When we receive a chat message, display it in the text field
             ApplicationConnection.Received += delegate(object sender, ReceivedEventArgs e) {
 				string s = (string)e.Message;
@@ -82,7 +85,7 @@ namespace TwinEditor
 		
 		public void CloseSession()
 		{
-			
+			ChatText.Enabled = false;
 		}
 		
 		void ChatTextKeyDown(object sender, KeyEventArgs e)
@@ -140,7 +143,6 @@ namespace TwinEditor
 			if(!FileModified) 
 			{
 				FileModified = true;
-				Logger.Info("asdf");
 				((TabPage)this.Parent).Text += " *";
 			}
 		}

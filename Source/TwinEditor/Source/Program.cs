@@ -37,7 +37,7 @@ namespace TwinEditor
 			Application.SetCompatibleTextRenderingDefault(false);				
 			
 			MainForm form = new MainForm(new Controller());
-			form.Show();	
+			form.Show();
 
 			
 			Application.Run();			
