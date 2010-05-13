@@ -7,13 +7,17 @@ using Lebowski.TextModel;
 using Lebowski.Net;
 using Lebowski.Synchronization.DifferentialSynchronization;
 using TwinEditor.UI.FileTypes;
+using log4net;
 
 namespace TwinEditor
 {
 	public partial class FileTabControl : UserControl, ISessionContext
-	{
+	{	
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(MainForm));
+		
 		public string FileName { get; set; }
 		public bool OnDisk { get; set; }
+		public bool FileModified { get; set; }
 		private IFileType fileType;
 		public IFileType FileType
 		{
@@ -39,6 +43,7 @@ namespace TwinEditor
 		public FileTabControl()
 		{
 			this.OnDisk = false;
+			this.FileModified = false;
 			//
 			// The InitializeComponent() call is required for Windows Forms designer support.
 			//
@@ -79,7 +84,6 @@ namespace TwinEditor
 		{
 			
 		}
-		
 		
 		void ChatTextKeyDown(object sender, KeyEventArgs e)
 		{
@@ -128,6 +132,17 @@ namespace TwinEditor
 		void ChatTextTextChanged(object sender, EventArgs e)
 		{
 			
+		}
+		
+		
+		void SourceCodeTextChanged(object sender, System.EventArgs e)
+		{
+			if(!FileModified) 
+			{
+				FileModified = true;
+				Logger.Info("asdf");
+				((TabPage)this.Parent).Text += " *";
+			}
 		}
 	}
 }

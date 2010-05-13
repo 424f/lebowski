@@ -16,6 +16,9 @@ namespace TwinEditor
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(MainForm));
 		
+		public const string MESSAGE_CLOSE = "Save changes?";
+		public const string CAPTION_CLOSE = "Save";
+		
 		IConnection chatConnection;
 		protected IFileType[] fileTypes;
 		protected ICommunicationProtocol[] protocols;
@@ -33,6 +36,7 @@ namespace TwinEditor
 				saveToolStripMenuItem.Enabled = false;
 				saveAsToolStripMenuItem.Enabled = false;
 				saveAllToolStripMenuItem.Enabled = false;
+				printToolStripMenuItem.Enabled = false;
 			}
 			else
 			{
@@ -41,7 +45,8 @@ namespace TwinEditor
 				saveAsToolStripMenuItem.Enabled = true;
 				saveAllToolStripMenuItem.Enabled = true;
 				editToolStripMenuItem.Enabled = true;
-				scriptToolStripMenuItem.Enabled = true;				
+				scriptToolStripMenuItem.Enabled = true;
+				printToolStripMenuItem.Enabled = true;
 				var tab = tabControls[MainTab.SelectedIndex];
 				compileToolStripMenuItem.Enabled = tab.FileType.CanCompile;
 				runToolStripMenuItem.Enabled = tab.FileType.CanExecute;			
@@ -278,43 +283,67 @@ namespace TwinEditor
 		void SaveToolStripMenuItemClick(object sender, EventArgs e)
 		{	
 			FileTabControl tabControl = tabControls[MainTab.SelectedIndex];
-			if(!tabControl.OnDisk)
-			{
-				SaveAsToolStripMenuItemClick(sender, e);
-			}
-			else
-			{
-				SaveFile(tabControl);
-			}
+			SaveRequest(tabControl);
 		}
 		
 		void SaveAsToolStripMenuItemClick(object sender, EventArgs e)
 		{	
 			FileTabControl tabControl = tabControls[MainTab.SelectedIndex];
-			saveFileDialog.RestoreDirectory = true;
-			saveFileDialog.FileName = tabControl.FileName;
-			saveFileDialog.Filter = string.Format("{0}|{1}", tabControl.FileType.Name, tabControl.FileType.FileNamePattern);
-			DialogResult result = saveFileDialog.ShowDialog();
-			if(result != DialogResult.OK)
-				// TODO: throw an exception?
-				return;
-			tabControl.FileName = saveFileDialog.FileName;
-			SaveFile(tabControl);
+			SaveWithDialog(tabControl);
 		}
 		
-		void SaveFile(FileTabControl tabControl)
+		// checks whether the tab is already on disk, and if yes calls 'Save' else calls 'SaveWithDialog'.
+		void SaveRequest(FileTabControl tabControl) {
+			if(!tabControl.OnDisk)
+			{
+				SaveWithDialog(tabControl);
+			}
+			else
+			{
+				Save(tabControl);
+			}
+		}
+		
+		// opens saveFileDialog
+		void SaveWithDialog(FileTabControl tabControl) {
+			saveFileDialog.RestoreDirectory = true;
+			saveFileDialog.FileName = System.IO.Path.GetFileName(tabControl.FileName);
+			saveFileDialog.Filter = string.Format("{0}|{1}", tabControl.FileType.Name, tabControl.FileType.FileNamePattern);
+			DialogResult result = saveFileDialog.ShowDialog();
+			if(result == DialogResult.OK)
+			{
+				tabControl.FileName = saveFileDialog.FileName;
+				Save(tabControl);
+			}
+			else
+			{
+				Logger.Info(string.Format("User cancelled saving action {0}", saveFileDialog.FileName));
+			}
+		}
+		
+		// saves file
+		void Save(FileTabControl tabControl)
 		{			
-			File.WriteAllText(tabControl.FileName, tabControl.SourceCode.Text);			
-			((TabPage)tabControl.Parent).Text = System.IO.Path.GetFileName(tabControl.FileName);
-			tabControl.OnDisk = true;
-			UpdateMenuItems();
+			try
+			{
+				File.WriteAllText(tabControl.FileName, tabControl.SourceCode.Text);
+				Logger.Info(string.Format("{0} has been saved successfully", tabControl.FileName));
+				((TabPage)tabControl.Parent).Text = System.IO.Path.GetFileName(tabControl.FileName);
+				tabControl.OnDisk = true;
+				tabControl.FileModified = false;
+				UpdateMenuItems();
+			}
+			catch (Exception e)
+			{
+				Logger.Error(string.Format("{0} could not be saved due to {1}", saveFileDialog.FileName, e.Message));
+			}
 		}
 		
 		void SaveAllToolStripMenuItemClick(object sender, EventArgs e)
 		{
 			foreach(FileTabControl tabControl in tabControls)
 			{
-				SaveFile(tabControl);
+				SaveRequest(tabControl);
 			}
 		}
 		
@@ -325,9 +354,16 @@ namespace TwinEditor
 		
 		void CloseToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			// TODO: changes since last save?
 			FileTabControl tabControl = tabControls[MainTab.SelectedIndex];
+			if (tabControl.FileModified)
+			{
+				if (MessageBox.Show(MESSAGE_CLOSE, CAPTION_CLOSE, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
+				{
+					SaveRequest(tabControl);
+				}
+			}
 			tabControl.Close();
+			Logger.Info(string.Format("{0} has been closed", tabControl.FileName));
 			tabControls.RemoveAt(MainTab.SelectedIndex);
 			tabPages.RemoveAt(MainTab.SelectedIndex);
 			MainTab.TabPages.Remove(MainTab.SelectedTab);
