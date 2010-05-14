@@ -2,7 +2,7 @@
 using Lebowski.Synchronization.DifferentialSynchronization;
 
 namespace Lebowski.Net.Tcp
-{
+{	
 	public class TcpProtocol : ICommunicationProtocol
 	{
 		public event EventHandler<HostSessionEventArgs> HostSession;
@@ -19,7 +19,7 @@ namespace Lebowski.Net.Tcp
 			form.Submit += delegate
 			{
 				form.Enabled = false;
-				TcpServerConnection connection = new TcpServerConnection();	
+				TcpServerConnection connection = new TcpServerConnection(form.Port);	
 				connection.ClientConnected += delegate
 				{
 					OnHostSession(new HostSessionEventArgs(session, connection));					
@@ -66,7 +66,7 @@ namespace Lebowski.Net.Tcp
 			{
 				try
 				{
-					TcpClientConnection connection = new TcpClientConnection(form.Address);
+					TcpClientConnection connection = new TcpClientConnection(form.Address, form.Port);
 					OnJoinSession(new JoinSessionEventArgs(connection));
 				}
 				catch(Exception e)

@@ -55,7 +55,7 @@ namespace TwinEditor
 			
 			// Display main form
 			MainForm form = new MainForm(new Controller());
-			form.Show();	
+			form.Show();
 
 			
 			Application.Run();			

@@ -6,12 +6,23 @@ using Lebowski.Net;
 
 namespace Lebowski.Net.Tcp
 {
+	public class ConnectionFailedException : Exception
+	{
+		public ConnectionFailedException(string message) : base(message) {}
+		public ConnectionFailedException(string message, Exception cause) : base(message, cause) {}
+	}	
+	
 	public abstract class TcpConnection : IConnection
 	{
-		protected const int Port = 12345;
+		/// <summary>
+		/// Occurs when the connection has been closed 
+		/// </summary>
+		public event EventHandler<EventArgs> ConnectionClosed;
+		
 		public event EventHandler<ReceivedEventArgs> Received;	
 		protected NetworkStream stream;
 		static int activeConnections = 0;
+		private bool running = true;
 		
 		protected virtual void OnReceived(ReceivedEventArgs e)
 		{
@@ -34,15 +45,27 @@ namespace Lebowski.Net.Tcp
 		
 		protected void RunReceiveThread()
 		{
-			bool running = true;
-			while(running)
+			running = true;
+			try
 			{
-				// First, read the package length
-				int packetLength = BitConverter.ToInt32(NetUtils.ReadBytes(stream, 4), 0);
-				byte[] packet = NetUtils.ReadBytes(stream, packetLength);
-				object message = NetUtils.Deserialize(packet);
-				OnReceived(new ReceivedEventArgs(message));
-			}			
+				while(running)
+				{
+					// First, read the package length
+					int packetLength = BitConverter.ToInt32(NetUtils.ReadBytes(stream, 4), 0);
+					byte[] packet = NetUtils.ReadBytes(stream, packetLength);
+					object message = NetUtils.Deserialize(packet);
+					OnReceived(new ReceivedEventArgs(message));						
+				}	
+			}
+			catch(Exception e)
+			{
+				// TODO: log
+			}
+			finally
+			{
+				OnConnectionClosed(new EventArgs());
+				stream.Close();
+			}
 		}
 		
 		public void Send(object o)
@@ -55,6 +78,19 @@ namespace Lebowski.Net.Tcp
 			stream.Write(packetWithHeader, 0, packetWithHeader.Length);
 			stream.Flush();
 		}		
+		
+		public virtual void Close()
+		{
+			stream.Close();
+			running = false;
+		}
+		
+		protected virtual void OnConnectionClosed(EventArgs e)
+		{
+			if (ConnectionClosed != null) {
+				ConnectionClosed(this, e);
+			}
+		}			
 	}
 	
 	public class TcpServerConnection : TcpConnection
@@ -65,9 +101,9 @@ namespace Lebowski.Net.Tcp
 		private TcpListener tcpListener;
 		private TcpClient client;
 		
-		public TcpServerConnection()
+		public TcpServerConnection(int port)
 		{
-			tcpListener = new TcpListener(IPAddress.Any, Port);
+			tcpListener = new TcpListener(IPAddress.Any, port);
 			
 			// Create networking thread
 			ThreadStart threadStart = new ThreadStart(RunNetworkingThread);
@@ -75,11 +111,18 @@ namespace Lebowski.Net.Tcp
 			thread.Start();				
 		}
 		
+		public override void Close()
+		{
+			tcpListener.Stop();
+			base.Close();
+		}
+		
 		protected void RunNetworkingThread()
 		{
 			tcpListener.Start();
 			// TODO: handle multiple clients
 			client = tcpListener.AcceptTcpClient();
+			tcpListener.Stop();
 			stream = client.GetStream();	
 			
 			OnClientConnected(new EventArgs());
@@ -103,15 +146,22 @@ namespace Lebowski.Net.Tcp
 	}
 	
 	public class TcpClientConnection : TcpConnection
-	{
+	{			
 		TcpClient client;
 		
-		public TcpClientConnection(string address)
+		public TcpClientConnection(string address, int port)
 		{
-			client = new TcpClient();
-			IPHostEntry hostEntry = Dns.Resolve(address);
-			IPEndPoint endpoint = new IPEndPoint(hostEntry.AddressList[0], Port);
-			client.Connect(endpoint);
+			try
+			{
+				client = new TcpClient();
+				IPHostEntry hostEntry = Dns.Resolve(address);
+				IPEndPoint endpoint = new IPEndPoint(hostEntry.AddressList[0], port);
+				client.Connect(endpoint);
+			}
+			catch(Exception e)
+			{
+				throw new ConnectionFailedException(string.Format("Could not connect to remote host {0}:{1}", address, port), e);
+			}
 			
 			// Create networking thread
 			ThreadStart threadStart = new ThreadStart(RunNetworkingThread);
@@ -123,6 +173,6 @@ namespace Lebowski.Net.Tcp
 		{
 			stream = client.GetStream();			
 			RunReceiveThread();
-		}
+		}		
 	}
 }
