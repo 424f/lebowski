@@ -96,6 +96,7 @@
     </Compile>
     <Compile Include="Source\Program.cs" />
     <Compile Include="Source\ISessionContext.cs" />
+    <Compile Include="Source\SessionState.cs" />
     <Compile Include="Source\StateVector.cs" />
     <Compile Include="Source\Synchronization\DifferentialSynchronization\DifferentialSynchronizationStrategy.cs" />
     <Compile Include="Source\Synchronization\DifferentialSynchronization\DiffMatchPatch.cs" />

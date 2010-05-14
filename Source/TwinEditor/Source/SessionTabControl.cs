@@ -15,6 +15,7 @@ namespace TwinEditor
 	{	
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(MainForm));
 		
+		public SessionState State { get; private set; }
 		public string FileName { get; set; }
 		public bool OnDisk { get; set; }
 		public bool FileModified { get; set; }
@@ -51,11 +52,33 @@ namespace TwinEditor
 			
 			// Create a text context for the source code editor
 			Context = new TextEditorTextContext(SourceCode);
+			
+			State = SessionState.Disconnected;
 		}
 		
 		public void Close()
 		{
 			
+		}
+		
+		public void SetState(SessionState state)
+		{
+		    State = state;
+		    switch(State)
+		    {
+		        case SessionState.Disconnected:
+		            this.connectionStatusLabel.Text = "Disconnected";
+		            break;
+		        case SessionState.Connecting:
+		            this.connectionStatusLabel.Text = "Connecting";
+		            break;
+		        case SessionState.Connected:
+		            this.connectionStatusLabel.Text = "Connected";
+		            break;
+		        case SessionState.AwaitingConnection:
+		            this.connectionStatusLabel.Text = "Awaiting connection";
+		            break;
+		    }
 		}
 		
 		public void StartSession(DifferentialSynchronizationStrategy strategy, IConnection applicationConnection)
@@ -143,6 +166,11 @@ namespace TwinEditor
 				Logger.Info("asdf");
 				((TabPage)this.Parent).Text += " *";
 			}
+		}
+		
+		void SessionTabControlLoad(object sender, EventArgs e)
+		{
+			
 		}
 	}
 }

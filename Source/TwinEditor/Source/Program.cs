@@ -1,6 +1,6 @@
-﻿
-using System;
+﻿using System;
 using System.Windows.Forms;
+using System.Configuration;
 
 using Lebowski;
 using Lebowski.Net;
@@ -20,34 +20,45 @@ namespace TwinEditor
 		private static void Main(string[] args)
 		{
 			log4net.Config.BasicConfigurator.Configure();
-			ApplicationUtil.Initialize();
 			Program prog = new Program();
 			prog.Run();
 		}
 		
-		MainForm clientForm;
-		MainForm serverForm;
-		
-		DifferentialSynchronizationStrategy server;
-		DifferentialSynchronizationStrategy client;
+		private void SetupConfiguration()
+		{		    
+			// Set up configuration if necessary
+			var c = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal);
+		    
+			
+			// Retrieve username from system if none has been set explicitly
+			string userName = c.AppSettings.Settings["UserName"] != null ? c.AppSettings.Settings["UserName"].Value : null;
+			if(userName == null || userName == "")
+			{
+			    userName = Environment.UserName;
+			}
+			c.AppSettings.Settings["UserName"].Value = userName;
+			
+			// Save configuration and refresh
+			c.Save(ConfigurationSaveMode.Modified);
+			ConfigurationManager.RefreshSection("appSettings");
+			
+			System.Console.WriteLine("Welcome, {0}", c.AppSettings.Settings["UserName"].Value);
+		}
 		
 		private void Run()
-		{			
+		{
+		    ApplicationUtil.Initialize();
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);				
 			
+			SetupConfiguration();
+			
+			// Display main form
 			MainForm form = new MainForm(new Controller());
 			form.Show();	
 
 			
 			Application.Run();			
-		}
-		
-		void UpdateText()
-		{
-			//clientForm.label1.Text = String.Format("{0} {1}", client.State, client.HasChanged);
-			//serverForm.label1.Text = String.Format("{0} {1}", server.State, server.HasChanged);			
-		}
-		
+		}		
 	}
 }

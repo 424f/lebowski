@@ -117,15 +117,15 @@ namespace TwinEditor
 			// connectionStatusPicture
 			// 
 			this.connectionStatusPicture.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.connectionStatusPicture.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("connectionStatusPicture.BackgroundImage")));
 			this.connectionStatusPicture.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+			this.connectionStatusPicture.Image = ((System.Drawing.Image)(resources.GetObject("connectionStatusPicture.Image")));
 			this.connectionStatusPicture.Location = new System.Drawing.Point(657, 579);
 			this.connectionStatusPicture.Name = "connectionStatusPicture";
 			this.connectionStatusPicture.Size = new System.Drawing.Size(16, 16);
 			this.connectionStatusPicture.TabIndex = 11;
 			this.connectionStatusPicture.TabStop = false;
 			// 
-			// FileTabControl
+			// SessionTabControl
 			// 
 			this.Controls.Add(this.connectionStatusPicture);
 			this.Controls.Add(this.connectionStatusLabel);
@@ -133,8 +133,9 @@ namespace TwinEditor
 			this.Controls.Add(this.ChatHistory);
 			this.Controls.Add(this.ChatText);
 			this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.Name = "FileTabControl";
+			this.Name = "SessionTabControl";
 			this.Size = new System.Drawing.Size(682, 598);
+			this.Load += new System.EventHandler(this.SessionTabControlLoad);
 			this.TabControl.ResumeLayout(false);
 			this.tabPage3.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.connectionStatusPicture)).EndInit();

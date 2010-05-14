@@ -58,7 +58,8 @@ namespace TwinEditor
 				printToolStripMenuItem.Enabled = true;
 				var tab = tabControls[MainTab.SelectedIndex];
 				compileToolStripMenuItem.Enabled = tab.FileType.CanCompile;
-				runToolStripMenuItem.Enabled = tab.FileType.CanExecute;			
+				runToolStripMenuItem.Enabled = tab.FileType.CanExecute;		
+				shareToolStripMenuItem.Enabled = tab.State == SessionState.Disconnected;
 			}
 		}
 		

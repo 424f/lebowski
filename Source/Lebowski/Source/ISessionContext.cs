@@ -6,7 +6,8 @@ namespace Lebowski
 {
 	public interface ISessionContext
 	{
-		DifferentialSynchronizationStrategy SynchronizationStrategy { get; }
+	    SessionState State { get; }
+	    DifferentialSynchronizationStrategy SynchronizationStrategy { get; }
 		TextModel.ITextContext Context { get; }
 		string FileName { get; }
 		
