@@ -34,14 +34,14 @@ namespace TwinEditor
 		public object ExecuteCode(string code, PythonWriter writer)
 		{
 		    ScriptSource source = engine.CreateScriptSourceFromString(code, SourceCodeKind.Statements);
-		    CompiledCode compiled = source.Compile();
-		    object sys = runtime.GetSysModule();
-		    engine.Operations.SetMember(sys, "stdout", writer);
-		    engine.Operations.SetMember(sys, "stderr", writer);
 		    Object o = null;
 		    try
 		    {
-		    	o = compiled.Execute(scope);
+			    CompiledCode compiled = source.Compile();
+			    object sys = runtime.GetSysModule();
+			    engine.Operations.SetMember(sys, "stdout", writer);
+			    engine.Operations.SetMember(sys, "stderr", writer);
+			    	o = compiled.Execute(scope);
 		    } 
 		    catch (Exception e)
 		    {
