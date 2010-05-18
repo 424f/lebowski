@@ -26,9 +26,9 @@ namespace TwinEditor
 			set
 			{
 				fileType = value;
-				// TODO: build new .dll to include python syntax highlight definition (.xshd)
-				// SourceCode.SetHighlighting(fileType.Name);
-				SourceCode.SetHighlighting("Boo");
+				// ICSharpCode.TextEditor.dll does include a seperate syntax highlight definition (.xshd) for python and text.
+				// However python-mode.xshd is identical to boo.xshd
+				SourceCode.SetHighlighting(fileType.Name);
 			}
 		}
 		public int NumExecutions { get; protected set; }

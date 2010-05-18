@@ -50,7 +50,7 @@ namespace Lebowski.Net.Tcp
 			{
 				while(running)
 				{
-					// First, read the package length
+					// First, read the packet length
 					int packetLength = BitConverter.ToInt32(NetUtils.ReadBytes(stream, 4), 0);
 					byte[] packet = NetUtils.ReadBytes(stream, packetLength);
 					object message = NetUtils.Deserialize(packet);
