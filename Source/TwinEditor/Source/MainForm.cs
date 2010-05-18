@@ -18,9 +18,6 @@ namespace TwinEditor
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(MainForm));
 		
-		public const string MESSAGE_CLOSE = "Save changes?";
-		public const string CAPTION_CLOSE = "Save";
-		
 		protected IFileType[] fileTypes;
 		protected ICommunicationProtocol[] protocols;
 		List<SessionTabControl> tabControls = new List<SessionTabControl>();
@@ -314,9 +311,10 @@ namespace TwinEditor
 		void CloseToolStripMenuItemClick(object sender, EventArgs e)
 		{
 			SessionTabControl tabControl = tabControls[MainTab.SelectedIndex];
+			// check if the file has been modified since last save
 			if (tabControl.FileModified)
-			{
-				if (MessageBox.Show(MESSAGE_CLOSE, CAPTION_CLOSE, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
+			{	
+				if (MessageBox.Show(ApplicationUtil.LanguageResources.GetString("_MessageBoxOnCloseMessage"), ApplicationUtil.LanguageResources.GetString("_MessageBoxOnCloseCaption"), MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
 				{
 					SaveRequest(tabControl);
 				}

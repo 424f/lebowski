@@ -27,9 +27,8 @@ namespace TwinEditor
 		private void SetupConfiguration()
 		{		    
 			// Set up configuration if necessary
-			var c = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal);
+			var c = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
 		    
-			
 			// Retrieve username from system if none has been set explicitly
 			string userName = c.AppSettings.Settings["UserName"] != null ? c.AppSettings.Settings["UserName"].Value : null;
 			if(userName == null || userName == "")
@@ -37,7 +36,7 @@ namespace TwinEditor
 			    userName = Environment.UserName;
 			}
 			c.AppSettings.Settings["UserName"].Value = userName;
-			
+				
 			// Save configuration and refresh
 			c.Save(ConfigurationSaveMode.Modified);
 			ConfigurationManager.RefreshSection("appSettings");
@@ -47,17 +46,19 @@ namespace TwinEditor
 		
 		private void Run()
 		{
+			// initialize application utilities (e.g. language resources)
 		    ApplicationUtil.Initialize();
-			Application.EnableVisualStyles();
+			// http://blogs.msdn.com/rprabhu/archive/2003/09/28/56540.aspx
+		    Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);				
 			
+			// TODO: Set back to ConfigurationUserLevel.PerUserRoamingAndLocal (causes an Exception on my machine as AppSettings cannot be written to?)
 			SetupConfiguration();
 			
 			// Display main form
 			MainForm form = new MainForm(new Controller());
 			form.Show();
 
-			
 			Application.Run();			
 		}		
 	}
