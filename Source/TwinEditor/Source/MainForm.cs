@@ -36,12 +36,12 @@ namespace TwinEditor
 		{
 			if(MainTab.TabPages.Count == 0)
 			{
-//				pasteToolStripMenuItem.Enabled = false;
-//				copyToolStripMenuItem.Enabled = false;
-//				cutToolStripMenuItem.Enabled = false;
-//				deleteToolStripMenuItem.Enabled = false;
-//				shareToolStripMenuItem.Enabled = false;
-				editToolStripMenuItem.Enabled = false;
+				pasteToolStripMenuItem.Enabled = false;
+				copyToolStripMenuItem.Enabled = false;
+				cutToolStripMenuItem.Enabled = false;
+				deleteToolStripMenuItem.Enabled = false;
+				shareToolStripMenuItem.Enabled = false;
+//				editToolStripMenuItem.Enabled = false;
 				scriptToolStripMenuItem.Enabled = false;			
 				closeToolStripMenuItem.Enabled = false;
 				saveToolStripMenuItem.Enabled = false;
@@ -51,12 +51,12 @@ namespace TwinEditor
 			}
 			else
 			{
-//				pasteToolStripMenuItem.Enabled = false;
-//				copyToolStripMenuItem.Enabled = true;
-//				cutToolStripMenuItem.Enabled = true;
-//				deleteToolStripMenuItem.Enabled = true;
-//				shareToolStripMenuItem.Enabled = true;
-				editToolStripMenuItem.Enabled = true;
+				pasteToolStripMenuItem.Enabled = false;
+				copyToolStripMenuItem.Enabled = true;
+				cutToolStripMenuItem.Enabled = true;
+				deleteToolStripMenuItem.Enabled = true;
+				shareToolStripMenuItem.Enabled = true;
+//				editToolStripMenuItem.Enabled = true;
 				closeToolStripMenuItem.Enabled = true;
 				saveToolStripMenuItem.Enabled = true;
 				saveAsToolStripMenuItem.Enabled = true;

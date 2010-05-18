@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Text.RegularExpressions;
 
 namespace Lebowski.Net
 {
@@ -43,6 +44,19 @@ namespace Lebowski.Net
 			}
 			return buffer;
 		}
-
+		
+		public static bool IsValidIP(string ip)
+        {
+            string pattern = @"\b((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$\b";
+            Regex regex = new Regex(pattern);
+            try
+            {
+                return regex.IsMatch(ip, 0);
+            }
+            catch (ArgumentNullException e)
+            {
+                return false;
+            }
+        }
 	}
 }

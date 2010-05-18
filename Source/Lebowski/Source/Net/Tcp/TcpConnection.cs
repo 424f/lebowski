@@ -94,21 +94,22 @@ namespace Lebowski.Net.Tcp
 	}
 	
 	public class TcpServerConnection : TcpConnection
-	{		
+	{	
 		public event EventHandler<EventArgs> ClientConnected;
 		public event EventHandler<EventArgs> ClientDisconnected;
 		
 		private TcpListener tcpListener;
-		private TcpClient client;
+		private TcpClient tcpClient;
 		
 		public TcpServerConnection(int port)
 		{
 			tcpListener = new TcpListener(IPAddress.Any, port);
 			
 			// Create networking thread
-			ThreadStart threadStart = new ThreadStart(RunNetworkingThread);
-			Thread thread = new Thread(threadStart);
-			thread.Start();				
+			RunNetworkingThread();
+			//ThreadStart threadStart = new ThreadStart(RunNetworkingThread);
+			//Thread thread = new Thread(threadStart);
+			//thread.Start();				
 		}
 		
 		public override void Close()
@@ -121,25 +122,34 @@ namespace Lebowski.Net.Tcp
 		{
 			tcpListener.Start();
 			// TODO: handle multiple clients
-			client = tcpListener.AcceptTcpClient();
+			tcpListener.BeginAcceptTcpClient(new AsyncCallback(DoAcceptTcpClientCallback), tcpListener);
+		}
+		
+		/// <summary>
+		/// AsyncCallback passed on BeginAcceptTcpClient to avoid the application to block when waiting for a client connection
+		/// </summary>
+		protected void DoAcceptTcpClientCallback(IAsyncResult ar)
+		{
+			tcpListener = (TcpListener) ar.AsyncState;
+			tcpClient = tcpListener.EndAcceptTcpClient(ar);
 			tcpListener.Stop();
-			stream = client.GetStream();	
-			
+			stream = tcpClient.GetStream();
 			OnClientConnected(new EventArgs());
-			
 			RunReceiveThread();
-		}		
+		}
 		
 		protected virtual void OnClientConnected(EventArgs e)
 		{
-			if (ClientConnected != null) {
+			if (ClientConnected != null)
+			{
 				ClientConnected(this, e);
 			}
 		}
 		
 		protected virtual void OnClientDisconnected(EventArgs e)
 		{
-			if (ClientDisconnected != null) {
+			if (ClientDisconnected != null)
+			{
 				ClientDisconnected(this, e);
 			}
 		}
