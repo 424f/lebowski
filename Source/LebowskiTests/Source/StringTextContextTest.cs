@@ -2,7 +2,7 @@
 using Lebowski.TextModel;
 using NUnit.Framework;
 
-namespace Lebowski.Test
+namespace LebowskiTests
 {
 	[TestFixture]
 	public class StringTextContextTest

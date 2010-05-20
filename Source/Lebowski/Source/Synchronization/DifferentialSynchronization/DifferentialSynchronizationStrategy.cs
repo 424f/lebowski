@@ -67,10 +67,12 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
 		/// </summary>
 		public bool TokenRequestSent { get; private set; }
 		
-		/// <summary>
-		/// 
-		/// </summary>
 		private diff_match_patch DiffMatchPatch = new diff_match_patch();
+		
+		/// <summary>
+		/// Indicates whether the session has already been set up
+		/// </summary>
+		private bool isSessionEstablished = false;
 		
 		/// <summary>
 		/// Creates a new differential synchronization session on an already established
@@ -95,10 +97,22 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
 			Connection.Received += ConnectionReceived;
 			Context.Changed += ContextChanged;
 			
+			isSessionEstablished = false;
+		}
+		
+		public void EstablishSession()
+		{
+		    if(isSessionEstablished)
+		    {
+		        throw new InvalidOperationException("EstablishSession must not be called after a session has been established previously");
+		    }
+		    
 			/* If we are the server, we first have to send the client an initial 
 			patch based on his empty state */
 			TokenState = TokenState.WaitingForToken;					
 			SendPatches();
+			
+			isSessionEstablished = true;
 		}
 		
 		private void SendPatches()
@@ -110,7 +124,7 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
 			Connection.Send(new DiffMessage(delta));
 		}
 		
-		void ApplyPatches(string delta)
+		private void ApplyPatches(string delta)
 		{
 			string old = Context.Data;
 			
@@ -222,6 +236,8 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
 		
 		private void ConnectionReceived(object sender, ReceivedEventArgs e)
 		{
+		    isSessionEstablished = true;
+		    
             Console.BackgroundColor = ConsoleColor.DarkRed;
 			Console.WriteLine("Thread {0}: {1}", System.Threading.Thread.CurrentThread.ManagedThreadId, e.Message.GetType().Name);
 			Console.ResetColor();

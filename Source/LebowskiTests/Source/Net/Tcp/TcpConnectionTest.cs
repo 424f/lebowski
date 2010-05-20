@@ -52,8 +52,8 @@ namespace LebowskiTests.Net.Tcp
 			client.Send("Bar");
 			server.Send("Foo");
 			
-			TestUtil.WaitAreEqual("FooBar", ref serverReceived, 500);
-			TestUtil.WaitAreEqual("BarFoo", ref clientReceived, 500);
+			TestUtil.WaitAreEqual("FooBar", () =>  serverReceived, 500);
+			TestUtil.WaitAreEqual("BarFoo", () =>  clientReceived, 500);
 			
 			server.Close();
 		}
@@ -81,7 +81,7 @@ namespace LebowskiTests.Net.Tcp
 			
 			client.Send(text);
 			
-			TestUtil.WaitAreEqual(text, ref serverReceived, 250);
+			TestUtil.WaitAreEqual(text, () => serverReceived, 250);
 			
 			server.Close();
 		}
@@ -111,10 +111,10 @@ namespace LebowskiTests.Net.Tcp
 			
 			client.Send(text);
 			
-			TestUtil.WaitAreEqual(text, ref serverReceived, 250);
+			TestUtil.WaitAreEqual(text, () => serverReceived, 250);
 			server.Close();
 			
-			TestUtil.WaitAreEqual(true, ref connectionClosed, 250);
+			TestUtil.WaitAreEqual(true, () => connectionClosed, 250);
 			
 		}		
 	}

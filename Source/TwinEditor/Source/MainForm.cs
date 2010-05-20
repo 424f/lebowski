@@ -34,15 +34,16 @@ namespace TwinEditor
 		
 		public void UpdateMenuItems()
 		{
-			copyToolStripMenuItem.Enabled = MainTab.TabPages.Count > 0;
-			pasteToolStripMenuItem.Enabled = MainTab.TabPages.Count > 0;
-			shareToolStripMenuItem.Enabled = MainTab.TabPages.Count > 0;
-		    cutToolStripMenuItem.Enabled = MainTab.TabPages.Count > 0;
-		    deleteToolStripMenuItem.Enabled = MainTab.TabPages.Count > 0;
+		    bool fileOpen = MainTab.TabPages.Count > 0;
+		    
+			copyToolStripMenuItem.Enabled = fileOpen;
+			pasteToolStripMenuItem.Enabled = fileOpen;
+			shareToolStripMenuItem.Enabled = fileOpen;
+		    cutToolStripMenuItem.Enabled = fileOpen;
+		    deleteToolStripMenuItem.Enabled = fileOpen;
 		    
 			if(MainTab.TabPages.Count == 0)
 			{
-				editToolStripMenuItem.Enabled = false;
 				scriptToolStripMenuItem.Enabled = false;			
 				closeToolStripMenuItem.Enabled = false;
 				saveToolStripMenuItem.Enabled = false;
@@ -58,12 +59,6 @@ namespace TwinEditor
 			}
 			else
 			{
-				pasteToolStripMenuItem.Enabled = false;
-				copyToolStripMenuItem.Enabled = true;
-				cutToolStripMenuItem.Enabled = true;
-				deleteToolStripMenuItem.Enabled = true;
-				shareToolStripMenuItem.Enabled = true;
-//				editToolStripMenuItem.Enabled = true;
 				closeToolStripMenuItem.Enabled = true;
 				saveToolStripMenuItem.Enabled = true;
 				saveAsToolStripMenuItem.Enabled = true;
@@ -158,6 +153,7 @@ namespace TwinEditor
 					MultichannelConnection mcc = new MultichannelConnection(e.Connection);
 					var syncConnection = mcc.CreateChannel();
 					var sync = new DifferentialSynchronizationStrategy(0, e.Session.Context, syncConnection);
+					sync.EstablishSession();
 
 					e.Session.StartSession(sync, mcc.CreateChannel());
 					
