@@ -106,10 +106,10 @@ namespace Lebowski.Net.Tcp
 			tcpListener = new TcpListener(IPAddress.Any, port);
 			
 			// Create networking thread
-			RunNetworkingThread();
-			//ThreadStart threadStart = new ThreadStart(RunNetworkingThread);
-			//Thread thread = new Thread(threadStart);
-			//thread.Start();				
+//			RunAsyncNetworkingThread();
+			ThreadStart threadStart = new ThreadStart(RunNetworkingThread);
+			Thread thread = new Thread(threadStart);
+			thread.Start();				
 		}
 		
 		public override void Close()
@@ -119,6 +119,19 @@ namespace Lebowski.Net.Tcp
 		}
 		
 		protected void RunNetworkingThread()
+		{
+			tcpListener.Start();
+			// TODO: handle multiple clients
+			// waits for incoming client connection
+			tcpClient = tcpListener.AcceptTcpClient();
+			// stops listening when first client connection has been accepted 
+			tcpListener.Stop();
+			stream = tcpClient.GetStream();
+			OnClientConnected(new EventArgs());
+			RunReceiveThread();	
+		}
+		
+		protected void RunAsyncNetworkingThread()
 		{
 			tcpListener.Start();
 			// TODO: handle multiple clients

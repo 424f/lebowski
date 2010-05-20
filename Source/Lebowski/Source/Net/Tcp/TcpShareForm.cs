@@ -12,8 +12,7 @@ namespace Lebowski.Net.Tcp
 		
 		public TcpShareForm()
 		{
-			InitializeComponent();
-			
+			InitializeComponent();		
 		}
 		
 		void ShareButtonClick(object sender, EventArgs e)

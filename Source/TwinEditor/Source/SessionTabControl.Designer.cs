@@ -33,6 +33,7 @@ namespace TwinEditor
 			this.TabControl = new System.Windows.Forms.TabControl();
 			this.tabPage3 = new System.Windows.Forms.TabPage();
 			this.SourceCode = new ICSharpCode.TextEditor.TextEditorControl();
+			this.connectionStopWaitingButton = new System.Windows.Forms.Button();
 			this.ChatHistory = new System.Windows.Forms.TextBox();
 			this.ChatText = new System.Windows.Forms.TextBox();
 			this.connectionStatusLabel = new System.Windows.Forms.Label();
@@ -78,6 +79,19 @@ namespace TwinEditor
 			this.SourceCode.TabIndex = 1;
 			this.SourceCode.TextChanged += new System.EventHandler(this.SourceCodeTextChanged);
 			// 
+			// connectionStopWaitingButton
+			// 
+			this.connectionStopWaitingButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.connectionStopWaitingButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.connectionStopWaitingButton.Location = new System.Drawing.Point(658, 577);
+			this.connectionStopWaitingButton.Name = "connectionStopWaitingButton";
+			this.connectionStopWaitingButton.Size = new System.Drawing.Size(20, 20);
+			this.connectionStopWaitingButton.TabIndex = 12;
+			this.connectionStopWaitingButton.Text = "x";
+			this.connectionStopWaitingButton.UseVisualStyleBackColor = true;
+			this.connectionStopWaitingButton.Click += new System.EventHandler(this.ConnectionStopWaitingButtonClick);
+			this.connectionStopWaitingButton.Visible = false;
+			// 
 			// ChatHistory
 			// 
 			this.ChatHistory.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -107,19 +121,20 @@ namespace TwinEditor
 			// 
 			this.connectionStatusLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.connectionStatusLabel.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.connectionStatusLabel.Location = new System.Drawing.Point(555, 574);
+			this.connectionStatusLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.connectionStatusLabel.Location = new System.Drawing.Point(522, 574);
 			this.connectionStatusLabel.Name = "connectionStatusLabel";
-			this.connectionStatusLabel.Size = new System.Drawing.Size(100, 24);
+			this.connectionStatusLabel.Size = new System.Drawing.Size(108, 24);
 			this.connectionStatusLabel.TabIndex = 10;
 			this.connectionStatusLabel.Text = "Disconnected";
-			this.connectionStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.connectionStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// connectionStatusPicture
 			// 
 			this.connectionStatusPicture.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.connectionStatusPicture.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
 			this.connectionStatusPicture.Image = ((System.Drawing.Image)(resources.GetObject("connectionStatusPicture.Image")));
-			this.connectionStatusPicture.Location = new System.Drawing.Point(657, 579);
+			this.connectionStatusPicture.Location = new System.Drawing.Point(636, 579);
 			this.connectionStatusPicture.Name = "connectionStatusPicture";
 			this.connectionStatusPicture.Size = new System.Drawing.Size(16, 16);
 			this.connectionStatusPicture.TabIndex = 11;
@@ -127,6 +142,7 @@ namespace TwinEditor
 			// 
 			// SessionTabControl
 			// 
+			this.Controls.Add(this.connectionStopWaitingButton);
 			this.Controls.Add(this.connectionStatusPicture);
 			this.Controls.Add(this.connectionStatusLabel);
 			this.Controls.Add(this.TabControl);
@@ -135,13 +151,14 @@ namespace TwinEditor
 			this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Name = "SessionTabControl";
 			this.Size = new System.Drawing.Size(682, 598);
-			this.Load += new System.EventHandler(this.SessionTabControlLoad);
 			this.TabControl.ResumeLayout(false);
 			this.tabPage3.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.connectionStatusPicture)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
+		
+		private System.Windows.Forms.Button connectionStopWaitingButton;
 		private System.Windows.Forms.PictureBox connectionStatusPicture;
 		private System.Windows.Forms.Label connectionStatusLabel;
 		public System.Windows.Forms.TabControl TabControl;

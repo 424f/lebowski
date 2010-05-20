@@ -48,6 +48,12 @@ namespace TwinEditor
 				saveAsToolStripMenuItem.Enabled = false;
 				saveAllToolStripMenuItem.Enabled = false;
 				printToolStripMenuItem.Enabled = false;
+				if(MainTab.SelectedTab != null) {
+					if(((SessionTabControl) MainTab.SelectedTab.Controls[0]).State != SessionState.Disconnected)
+					{
+						shareToolStripMenuItem.Enabled = false;
+					}
+				}
 			}
 			else
 			{
@@ -186,6 +192,14 @@ namespace TwinEditor
 			tab.Dock = DockStyle.Fill;
 			tab.FileType = fileType;
 			tab.FileName = filename;
+			// Add callback for StateChanged in order to disable share menu item, when already shared
+			tab.StateChanged += delegate(object sender, StateChangedEventArgs e)
+				{
+					if (e.State != SessionState.Disconnected)
+					{
+						this.shareToolStripMenuItem.Enabled = false;
+					}
+				};
 			tabPage.Controls.Add(tab);
 			tabControls.Add(tab);
 			tabPages.Add(tabPage);

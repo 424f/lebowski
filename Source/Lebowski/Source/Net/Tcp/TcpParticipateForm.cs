@@ -18,12 +18,6 @@ namespace Lebowski.Net.Tcp
 		
 		void ParticipateClick(object sender, EventArgs e)
 		{
-			// Validate IPv4 address
-			if (!NetUtils.IsValidIP(addressText.Text))
-			{
-				MessageBox.Show("Please enter valid IPv4 address", "Invalid IPv4 address");
-				return;
-			}
 			// Validate port
 			int port;
 			if(!int.TryParse(portText.Text, out port))

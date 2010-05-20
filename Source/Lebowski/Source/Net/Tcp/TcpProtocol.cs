@@ -19,13 +19,14 @@ namespace Lebowski.Net.Tcp
 			TcpShareForm form = new TcpShareForm();
 			form.Submit += delegate
 			{
+				session.AwaitingSession();
 				form.Enabled = false;
 				form.Invoke((Action) delegate
 				{
-					form.Close();
+					form.Dispose();
 				});
-				// TODO: Fire waiting event and implement indicator in UI
 				TcpServerConnection connection = new TcpServerConnection(form.Port);
+				session.AwaitingSession();
 				connection.ClientConnected += delegate
 				{
 					OnHostSession(new HostSessionEventArgs(session, connection));
