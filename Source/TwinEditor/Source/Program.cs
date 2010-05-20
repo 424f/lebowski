@@ -27,7 +27,7 @@ namespace TwinEditor
 		private void SetupConfiguration()
 		{		    
 			// Set up configuration if necessary
-			var c = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal);
+			var c = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
 		    
 			
 			// Retrieve username from system if none has been set explicitly
