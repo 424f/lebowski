@@ -6,56 +6,79 @@ using Lebowski.Net;
 using DiffMatchPatch;
 
 namespace Lebowski.Synchronization.DifferentialSynchronization
-{
-	public enum State
+{			
+    /// <summary>
+    /// This class provides an implementation of the Differential Synchronization
+    /// synchronization algorithm by Neil Fraser. It is based around sending patches 
+    /// of local changes to other sites and is described in detail in [1].
+    /// 
+    /// Our current implementation has the following limitations:
+    ///     - Does only allow for two sites
+    ///     - Uses a simplistic cursor preservation technique that does not 
+    ///       work in all cases
+    /// 
+    /// [1] http://neil.fraser.name/writing/sync/
+    /// </summary>
+	public sealed class DifferentialSynchronizationStrategy
 	{
-		WaitingForToken,
-		HavingToken
-	};
-	
-	[Serializable]
-	class DiffMessage
-	{
-		public string Diff { get; protected set; }
-		
-		public DiffMessage(string diff)
-		{
-			Diff = diff;
-		}
-		
-		public override string ToString()
-		{
-			return String.Format("DiffMessage({0})", Diff);
-		}
-	}
-	
-	[Serializable]
-	/// <summary>
-	/// This message is sent, when a client would like to send its updates, but doesn't currently hold
-	/// the token.
-	/// </summary>
-	class TokenRequestMessage
-	{
-		public override string ToString()
-		{
-			return "TokenRequestMessage()";
-		}
-	}
-	
-	public class DifferentialSynchronizationStrategy
-	{
+	    // TODO: remove debug member
 		static int activeThreads = 0;
 		
-		public int SiteId { get; protected set; }
-		IConnection Connection;
-		ITextContext Context;
-		StringTextContext Shadow;
-		diff_match_patch DiffMatchPatch = new diff_match_patch();
+		// Constant used to give a unique identifier to the server site
+		private const int ServerId = 0;
 		
+		/// <summary>
+		/// A unique integer identifying this client in the current session.
+		/// Use ServerId for the server and ServerId + i for the i-th client.
+		/// </summary>
+		public int SiteId { get; private set; }
+		
+		/// <summary>
+		/// The connection that is used to communicate with the other site
+		/// </summary>
+		private IConnection Connection;
+		
+		/// <summary>
+		/// The text context that remote changes are applied to and which is monitored
+		/// for local changes.
+		/// </summary>
+		private ITextContext Context;
+		
+		/// <summary>
+		/// A shadow text context that represents the last known state of the
+		/// remote site
+		/// </summary>
+		private StringTextContext Shadow;
+		
+		/// <summary>
+		/// Indicates whether there are local changes that have not yet been
+		/// propagated to other clients.
+		/// </summary>
 		public bool HasChanged { get; private set; }
-		public State State { get; protected set; }
-		public bool TokenRequestSent = false;
 		
+		/// <summary>
+		/// Indicates whether this client currently holds the token.
+		/// </summary>
+		public TokenState TokenState { get; private set; }
+		
+		/// <summary>
+		/// Indicates whether this client has already sent a TokenRequestMessage
+		/// to the other participant.
+		/// </summary>
+		public bool TokenRequestSent { get; private set; }
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		private diff_match_patch DiffMatchPatch = new diff_match_patch();
+		
+		/// <summary>
+		/// Creates a new differential synchronization session on an already established
+		/// networking connection.
+		/// </summary>
+		/// <param name="siteId">The <see cref="SiteId">SiteId</see> for this site.</param>
+		/// <param name="context">The <see cref="Context">text context</see> to be operate on.</param>
+		/// <param name="connection">The connection that is used to communicate with the other site.</param>
 		public DifferentialSynchronizationStrategy(int siteId, ITextContext context, IConnection connection)
 		{
 			SiteId = siteId;
@@ -63,94 +86,22 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
 			Context = context;
 			Connection = connection;
 			Shadow = new StringTextContext();
+			TokenRequestSent = false;
 			
 			HasChanged = false;
 			
-			State = SiteId == 0 ? State.HavingToken : State.WaitingForToken;
+			TokenState = SiteId == 0 ? TokenState.HavingToken : TokenState.WaitingForToken;
 			
-			Connection.Received += delegate(object sender, ReceivedEventArgs e)
-			{
-				Console.BackgroundColor = ConsoleColor.DarkRed;
-				Console.WriteLine("Thread {0}: {1}", System.Threading.Thread.CurrentThread.ManagedThreadId, e.Message.GetType().Name);
-				Console.ResetColor();
-				
-				// TODO: remove multithreading debug code
-				
-				lock(this.GetType())
-				{
-					activeThreads += 1;
-					if(activeThreads > 1)
-					{
-						Console.Error.Write("Multiple threads active!!!");
-					}
-				}
-				System.Console.WriteLine("{0} received: {1}", SiteId, e.Message);
-				lock(this)
-				{
-					if(e.Message is DiffMessage)
-					{
-						System.Diagnostics.Debug.Assert(State == State.WaitingForToken);
-						State = State.HavingToken;
-						TokenRequestSent = false;
-						DiffMessage diffMessage = (DiffMessage)e.Message;
-						if(diffMessage.Diff != "") 
-						{
-							ApplyPatches(diffMessage.Diff);
-						}
-						
-						if(HasChanged)
-						{
-							HasChanged = false;
-							State = State.WaitingForToken;	
-							SendPatches();
-						}
-					}
-					else if(e.Message is TokenRequestMessage)
-					{
-						//TokenRequestMessage message = (TokenRequestMessage)e.Message;
-						//FlushToken();
-						HasChanged = false;
-						State = State.WaitingForToken;					
-						SendPatches();						
-					}
-					else 
-					{
-						throw new Exception(String.Format("Encountered unknown message type '{0}'", e.Message.GetType().Name));
-					}
-				}
-				lock(this.GetType())
-				{
-					activeThreads -= 1;
-				}				
-			};
+			Connection.Received += ConnectionReceived;
+			Context.Changed += ContextChanged;
 			
-			Context.Changed += delegate(object sender, ChangeEventArgs e)
-			{
-				System.Console.WriteLine("{0}'s context changed by {1}", SiteId, e.Issuer);
-				lock(this)
-				{
-					if(e.Issuer == this)
-						return;
-					if(State == State.HavingToken)
-					{
-						HasChanged = false;
-						State = State.WaitingForToken;					
-						SendPatches();
-					}
-					else
-					{
-						if(!TokenRequestSent)
-						{
-							Connection.Send(new TokenRequestMessage());
-						}
-						TokenRequestSent = true;
-						HasChanged = true;
-					}
-				}
-			};
+			/* If we are the server, we first have to send the client an initial 
+			patch based on his empty state */
+			TokenState = TokenState.WaitingForToken;					
+			SendPatches();
 		}
 		
-		protected void SendPatches()
+		private void SendPatches()
 		{
 			// Create patch local
 			var localDiffs = DiffMatchPatch.diff_main(Shadow.Data, Context.Data);
@@ -257,15 +208,98 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
 		/// other participants, thus ensuring that they can propagate their
 		/// changes back to us.
 		/// </summary>
-		protected void FlushToken()
+		private void FlushToken()
 		{
-			System.Console.WriteLine("{0} FlushTimer State: {1}", SiteId, State);
-			if(State == State.HavingToken)
+			System.Console.WriteLine("{0} FlushTimer State: {1}", SiteId, TokenState);
+			if(TokenState == TokenState.HavingToken)
 			{
 				System.Console.WriteLine("{0} wants to Flush", SiteId);
-				State = State.WaitingForToken;
+				TokenState = TokenState.WaitingForToken;
 				Connection.Send(new DiffMessage(""));
 				System.Console.WriteLine("{0} flushing token", SiteId);
+			}
+		}
+		
+		private void ConnectionReceived(object sender, ReceivedEventArgs e)
+		{
+            Console.BackgroundColor = ConsoleColor.DarkRed;
+			Console.WriteLine("Thread {0}: {1}", System.Threading.Thread.CurrentThread.ManagedThreadId, e.Message.GetType().Name);
+			Console.ResetColor();
+			
+			// TODO: remove multithreading debug code
+			
+			lock(this.GetType())
+			{
+				activeThreads += 1;
+				if(activeThreads > 1)
+				{
+					Console.Error.Write("Multiple threads active!!!");
+				}
+			}
+			System.Console.WriteLine("{0} received: {1}", SiteId, e.Message);
+			lock(this)
+			{
+				if(e.Message is DiffMessage)
+				{
+					System.Diagnostics.Debug.Assert(TokenState == TokenState.WaitingForToken);
+					TokenState = TokenState.HavingToken;
+					TokenRequestSent = false;
+					DiffMessage diffMessage = (DiffMessage)e.Message;
+					if(diffMessage.Diff != "") 
+					{
+						ApplyPatches(diffMessage.Diff);
+					}
+					
+					if(HasChanged)
+					{
+						HasChanged = false;
+						TokenState = TokenState.WaitingForToken;	
+						SendPatches();
+					}
+				}
+				else if(e.Message is TokenRequestMessage)
+				{
+					//TokenRequestMessage message = (TokenRequestMessage)e.Message;
+					//FlushToken();
+					HasChanged = false;
+					TokenState = TokenState.WaitingForToken;					
+					SendPatches();						
+				}
+				else 
+				{
+					throw new Exception(String.Format("Encountered unknown message type '{0}'", e.Message.GetType().Name));
+				}
+			}
+			lock(this.GetType())
+			{
+				activeThreads -= 1;
+			}				    
+		}
+		
+		private void ContextChanged(object sender, ChangeEventArgs e)
+		{
+			System.Console.WriteLine("{0}'s context changed by {1}", SiteId, e.Issuer);
+			lock(this)
+			{
+				if(e.Issuer == this)
+					return;
+				// If we currently have the token, we can just send this single change...
+				if(TokenState == TokenState.HavingToken)
+				{
+					HasChanged = false;
+					TokenState = TokenState.WaitingForToken;					
+					SendPatches();
+				}
+				// .. otherwise we first have to request the it.
+				else
+				{
+					if(!TokenRequestSent)
+					{
+						Connection.Send(new TokenRequestMessage());
+					}
+					TokenRequestSent = true;
+					HasChanged = true;
+				}
 			}
 		}
 	}

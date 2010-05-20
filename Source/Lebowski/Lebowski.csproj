@@ -113,6 +113,9 @@
     <Compile Include="Source\StateVector.cs" />
     <Compile Include="Source\Synchronization\DifferentialSynchronization\DifferentialSynchronizationStrategy.cs" />
     <Compile Include="Source\Synchronization\DifferentialSynchronization\DiffMatchPatch.cs" />
+    <Compile Include="Source\Synchronization\DifferentialSynchronization\DiffMessage.cs" />
+    <Compile Include="Source\Synchronization\DifferentialSynchronization\TokenRequestMessage.cs" />
+    <Compile Include="Source\Synchronization\DifferentialSynchronization\TokenState.cs" />
     <Compile Include="Source\Synchronization\dOPT\Model.cs" />
     <Compile Include="Source\Synchronization\ISynchronizationStrategy.cs" />
     <Compile Include="Source\TextModel\AbstractTextContext.cs" />

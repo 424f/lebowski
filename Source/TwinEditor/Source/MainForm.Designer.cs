@@ -48,9 +48,6 @@ namespace TwinEditor
 			this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-			this.shareToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.participateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.scriptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -64,6 +61,9 @@ namespace TwinEditor
 			this.tabPage2 = new System.Windows.Forms.TabPage();
 			this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
 			this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
+			this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+			this.shareToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.participateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();
 			this.MainTab.SuspendLayout();
 			this.SuspendLayout();
@@ -225,27 +225,6 @@ namespace TwinEditor
 			this.deleteToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
 			this.deleteToolStripMenuItem.Text = "Delete";
 			// 
-			// toolStripSeparator4
-			// 
-			this.toolStripSeparator4.Name = "toolStripSeparator4";
-			this.toolStripSeparator4.Size = new System.Drawing.Size(167, 6);
-			// 
-			// shareToolStripMenuItem
-			// 
-			this.shareToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("shareToolStripMenuItem.Image")));
-			this.shareToolStripMenuItem.Name = "shareToolStripMenuItem";
-			this.shareToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D1)));
-			this.shareToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
-			this.shareToolStripMenuItem.Text = "Share";
-			// 
-			// participateToolStripMenuItem
-			// 
-			this.participateToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("participateToolStripMenuItem.Image")));
-			this.participateToolStripMenuItem.Name = "participateToolStripMenuItem";
-			this.participateToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D2)));
-			this.participateToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
-			this.participateToolStripMenuItem.Text = "Participate";
-			// 
 			// toolStripSeparator5
 			// 
 			this.toolStripSeparator5.Name = "toolStripSeparator5";
@@ -271,7 +250,7 @@ namespace TwinEditor
 			this.compileToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("compileToolStripMenuItem.Image")));
 			this.compileToolStripMenuItem.Name = "compileToolStripMenuItem";
 			this.compileToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F8;
-			this.compileToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+			this.compileToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.compileToolStripMenuItem.Text = "Compile";
 			// 
 			// runToolStripMenuItem
@@ -279,7 +258,7 @@ namespace TwinEditor
 			this.runToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("runToolStripMenuItem.Image")));
 			this.runToolStripMenuItem.Name = "runToolStripMenuItem";
 			this.runToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
-			this.runToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+			this.runToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.runToolStripMenuItem.Text = "Execute";
 			this.runToolStripMenuItem.Click += new System.EventHandler(this.RunToolStripMenuItemItemClick);
 			// 
@@ -339,6 +318,27 @@ namespace TwinEditor
 			this.tabPage2.Text = "tabPage2";
 			this.tabPage2.UseVisualStyleBackColor = true;
 			// 
+			// toolStripSeparator4
+			// 
+			this.toolStripSeparator4.Name = "toolStripSeparator4";
+			this.toolStripSeparator4.Size = new System.Drawing.Size(167, 6);
+			// 
+			// shareToolStripMenuItem
+			// 
+			this.shareToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("shareToolStripMenuItem.Image")));
+			this.shareToolStripMenuItem.Name = "shareToolStripMenuItem";
+			this.shareToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D1)));
+			this.shareToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
+			this.shareToolStripMenuItem.Text = "Share";
+			// 
+			// participateToolStripMenuItem
+			// 
+			this.participateToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("participateToolStripMenuItem.Image")));
+			this.participateToolStripMenuItem.Name = "participateToolStripMenuItem";
+			this.participateToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D2)));
+			this.participateToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
+			this.participateToolStripMenuItem.Text = "Participate";
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -357,6 +357,7 @@ namespace TwinEditor
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
 		private System.Windows.Forms.ToolStripMenuItem participateToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
@@ -369,7 +370,6 @@ namespace TwinEditor
 		private System.Windows.Forms.ToolStripMenuItem guideToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem shareToolStripMenuItem;
-		private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;

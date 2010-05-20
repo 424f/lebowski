@@ -34,14 +34,15 @@ namespace TwinEditor
 		
 		public void UpdateMenuItems()
 		{
+			copyToolStripMenuItem.Enabled = MainTab.TabPages.Count > 0;
+			pasteToolStripMenuItem.Enabled = MainTab.TabPages.Count > 0;
+			shareToolStripMenuItem.Enabled = MainTab.TabPages.Count > 0;
+		    cutToolStripMenuItem.Enabled = MainTab.TabPages.Count > 0;
+		    deleteToolStripMenuItem.Enabled = MainTab.TabPages.Count > 0;
+		    
 			if(MainTab.TabPages.Count == 0)
 			{
-				pasteToolStripMenuItem.Enabled = false;
-				copyToolStripMenuItem.Enabled = false;
-				cutToolStripMenuItem.Enabled = false;
-				deleteToolStripMenuItem.Enabled = false;
-				shareToolStripMenuItem.Enabled = false;
-//				editToolStripMenuItem.Enabled = false;
+				editToolStripMenuItem.Enabled = false;
 				scriptToolStripMenuItem.Enabled = false;			
 				closeToolStripMenuItem.Enabled = false;
 				saveToolStripMenuItem.Enabled = false;
