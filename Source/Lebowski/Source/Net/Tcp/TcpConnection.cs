@@ -70,6 +70,8 @@ namespace Lebowski.Net.Tcp
 		
 		public void Send(object o)
 		{
+		    Console.WriteLine("Sending packet on stream from thread " + Thread.CurrentThread.Name);
+		    
 			// TODO: might have to be made thread-safe
 			byte[] packet = NetUtils.Serialize(o);
 			byte[] packetWithHeader = new byte[packet.Length + 4];

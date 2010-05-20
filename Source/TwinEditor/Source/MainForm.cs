@@ -43,7 +43,6 @@ namespace TwinEditor
 			if(MainTab.TabPages.Count == 0)
 			{
 				editToolStripMenuItem.Enabled = false;
-			{				
 				scriptToolStripMenuItem.Enabled = false;			
 				closeToolStripMenuItem.Enabled = false;
 				saveToolStripMenuItem.Enabled = false;
