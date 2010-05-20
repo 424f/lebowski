@@ -225,11 +225,12 @@ namespace TwinEditor
 			}
 			
 			// No appropriate file type has been found
+			// Does never happen as we already filter file types in the openFileDialog
 			if(type == null)
 			{
 				MessageBox.Show(
-					string.Format("We're sorry, but Lebowski does not currently support the file '{0}'", openFileDialog.FileName),
-					"Could not open file"
+					string.Format((TranslationUtil.GetString(ApplicationUtil.LanguageResources, "_MessageBoxUnsupportedFileType") + " '{0}'"), openFileDialog.FileName),
+					TranslationUtil.GetString(ApplicationUtil.LanguageResources, "_MessageBoxUnsupportedFileTypeCaption")
 				);
 				return;
 			}
@@ -338,7 +339,7 @@ namespace TwinEditor
 			// check if the file has been modified since last save
 			if (tabControl.FileModified)
 			{	
-				if (MessageBox.Show(ApplicationUtil.LanguageResources.GetString("_MessageBoxOnCloseMessage"), ApplicationUtil.LanguageResources.GetString("_MessageBoxOnCloseCaption"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+				if (MessageBox.Show(TranslationUtil.GetString(ApplicationUtil.LanguageResources, "_MessageBoxOnCloseMessage"), TranslationUtil.GetString(ApplicationUtil.LanguageResources, "_MessageBoxOnCloseCaption"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
 				{
 					SaveRequest(tabControl);
 				}
