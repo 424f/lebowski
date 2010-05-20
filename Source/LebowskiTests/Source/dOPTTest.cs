@@ -4,7 +4,7 @@ using Lebowski.Synchronization.dOPT;
 using Lebowski.TextModel;
 using ModelType = Lebowski.Synchronization.dOPT.Model<Lebowski.TextModel.TextOperation, Lebowski.TextModel.ITextContext>;
 
-namespace Lebowski.Test
+namespace LebowskiTests
 {
 	/// <summary>
 	/// Tests the dOPT implementation using text operaitons. Note that some tests

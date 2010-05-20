@@ -6,7 +6,9 @@ using Lebowski.Net;
 using Lebowski.Synchronization.DifferentialSynchronization;
 using NUnit.Framework;
 
-namespace Lebowski.Test.Synchronization
+using LebowskiTests;
+
+namespace LebowskiTests.Synchronization
 {
 	[TestFixture]
 	public class DifferentialSynchronizationTest
@@ -34,16 +36,15 @@ namespace Lebowski.Test.Synchronization
 			clientContext.Insert(clientContext, new InsertOperation('o', 1));
 			clientContext.Insert(clientContext, new InsertOperation('o', 2));
 			serverConnection.DispatchAll();
-			clientConnection.DispatchAll();			
-			Assert.AreEqual("foo", clientContext.Data);
-			Assert.AreEqual("foo", serverContext.Data);			
+			clientConnection.DispatchAll();		
+			TestUtil.WaitAreEqual("foo", () => clientContext.Data, 250);
+			TestUtil.WaitAreEqual("foo", () => serverContext.Data, 250);
 			
 			serverContext.Insert(serverContext, new InsertOperation('!', 0));			
 			serverConnection.DispatchAll();
-			clientConnection.DispatchAll();						
-			Assert.AreEqual("!foo", clientContext.Data);
-			Assert.AreEqual("!foo", serverContext.Data);
-			
+			clientConnection.DispatchAll();
+			TestUtil.WaitAreEqual("!foo", () => clientContext.Data, 250);
+			TestUtil.WaitAreEqual("!foo", () => serverContext.Data, 250);			
 		}
 		
 		[Test]
@@ -77,6 +78,30 @@ namespace Lebowski.Test.Synchronization
 			Thread.Sleep(100);
 			Assert.AreEqual("foo", clientContext.SelectedText);			
 			Assert.AreEqual(5, clientContext.CaretPosition);
+		}
+		
+		[Test]
+		/// <summary>
+		/// Tests that the client starts out with the server's current context
+		/// </summary>
+		public void TestSharedContextEstablishment()
+		{
+            LocalConnection serverConnection = new LocalConnection();
+			LocalConnection clientConnection = new LocalConnection();
+			LocalProtocol.Connect(serverConnection, clientConnection);
+			
+			string testString = "foo bar";
+			StringTextContext serverContext = new StringTextContext();
+			serverContext.Data = testString;
+			
+			StringTextContext clientContext = new StringTextContext();
+			
+			var server = new DifferentialSynchronizationStrategy(0, serverContext, serverConnection);
+			var client = new DifferentialSynchronizationStrategy(1, clientContext, clientConnection);
+			
+			server.EstablishSession();
+			
+			TestUtil.WaitAreEqual(testString, () => clientContext.Data, 250);
 		}
 	}
 }
