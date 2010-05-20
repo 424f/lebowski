@@ -332,7 +332,11 @@ namespace TwinEditor
 		
 		void CloseToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			SessionTabControl tabControl = tabControls[MainTab.SelectedIndex];
+			CloseTab(MainTab.SelectedIndex);		
+		}
+		
+		void CloseTab(int index) {
+			SessionTabControl tabControl = tabControls[index];
 			// check if the file has been modified since last save
 			if (tabControl.FileModified)
 			{	
@@ -343,10 +347,11 @@ namespace TwinEditor
 			}
 			tabControl.Close();
 			Logger.Info(string.Format("{0} has been closed", tabControl.FileName));
-			tabControls.RemoveAt(MainTab.SelectedIndex);
-			tabPages.RemoveAt(MainTab.SelectedIndex);
-			MainTab.TabPages.Remove(MainTab.SelectedTab);
+			tabControls.RemoveAt(index);
+			tabPages.RemoveAt(index);
+			MainTab.TabPages.RemoveAt(index);
 			UpdateMenuItems();
+			
 		}
 		
 		void RunToolStripMenuItemItemClick(object sender, EventArgs e) {
