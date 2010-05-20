@@ -70,7 +70,7 @@ namespace Lebowski.Net.Tcp
 		
 		public void Send(object o)
 		{
-		    Console.WriteLine("Sending packet on stream from thread " + Thread.CurrentThread.Name);
+		    Console.WriteLine("Sending packet on stream from thread '{0}' #{1}", Thread.CurrentThread.Name, Thread.CurrentThread.ManagedThreadId);
 		    
 			// TODO: might have to be made thread-safe
 			byte[] packet = NetUtils.Serialize(o);
@@ -111,6 +111,7 @@ namespace Lebowski.Net.Tcp
 //			RunAsyncNetworkingThread();
 			ThreadStart threadStart = new ThreadStart(RunNetworkingThread);
 			Thread thread = new Thread(threadStart);
+			thread.Name = "TcpServerConnection Thread";
 			thread.Start();				
 		}
 		
@@ -191,6 +192,7 @@ namespace Lebowski.Net.Tcp
 			// Create networking thread
 			ThreadStart threadStart = new ThreadStart(RunNetworkingThread);
 			Thread thread = new Thread(threadStart);
+			thread.Name = "TcpClientConnection Thread";
 			thread.Start();				
 		}
 		

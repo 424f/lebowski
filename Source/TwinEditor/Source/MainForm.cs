@@ -41,7 +41,6 @@ namespace TwinEditor
 			shareToolStripMenuItem.Enabled = fileOpen;
 		    cutToolStripMenuItem.Enabled = fileOpen;
 		    deleteToolStripMenuItem.Enabled = fileOpen;
-		    editToolStripMenuItem.Enabled = fileOpen;
 		    
 			if(MainTab.TabPages.Count == 0)
 			{
@@ -154,6 +153,7 @@ namespace TwinEditor
 					MultichannelConnection mcc = new MultichannelConnection(e.Connection);
 					var syncConnection = mcc.CreateChannel();
 					var sync = new DifferentialSynchronizationStrategy(0, e.Session.Context, syncConnection);
+					sync.EstablishSession();
 
 					e.Session.StartSession(sync, mcc.CreateChannel());
 					

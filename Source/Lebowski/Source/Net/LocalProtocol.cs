@@ -31,6 +31,7 @@ namespace Lebowski.Net
 			// Start dispatcher thread
 			ThreadStart threadStart = new ThreadStart(RunDispatcher);
 			dispatcherThread = new Thread(threadStart);
+			dispatcherThread.Name = "LocalConnection Dispatcher Thread";
 			dispatcherThread.Start();
 		}
 		

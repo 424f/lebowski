@@ -82,6 +82,7 @@ namespace Lebowski.Net.Lidgren
 			// Create networking thread
 			ThreadStart threadStart = new ThreadStart(RunNetworkingThread);
 			Thread thread = new Thread(threadStart);
+			thread.Name = "Udp Networking Thread";
 			thread.Start();
 		}
 		
@@ -136,6 +137,7 @@ namespace Lebowski.Net.Lidgren
 			// Create networking thread
 			ThreadStart threadStart = new ThreadStart(RunNetworkingThread);
 			Thread thread = new Thread(threadStart);
+			thread.Name = "Udp Networking Thread (Server)";
 			thread.Start();			
 		}
 		
