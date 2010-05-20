@@ -15,6 +15,8 @@ namespace TwinEditor
 	{	
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(MainForm));
 		
+		public event EventHandler<StateChangedEventArgs> StateChanged;
+		
 		public SessionState State { get; private set; }
 		public string FileName { get; set; }
 		public bool OnDisk { get; set; }
@@ -26,9 +28,9 @@ namespace TwinEditor
 			set
 			{
 				fileType = value;
-				// TODO: build new .dll to include python syntax highlight definition (.xshd)
-				// SourceCode.SetHighlighting(fileType.Name);
-				SourceCode.SetHighlighting("Boo");
+				// ICSharpCode.TextEditor.dll does include a seperate syntax highlight definition (.xshd) for python and text.
+				// However python-mode.xshd is identical to boo.xshd
+				SourceCode.SetHighlighting(fileType.Name);
 			}
 		}
 		public int NumExecutions { get; protected set; }
@@ -54,7 +56,7 @@ namespace TwinEditor
 			// Create a text context for the source code editor
 			Context = new TextEditorTextContext(SourceCode);
 			
-			State = SessionState.Disconnected;
+			this.SetState(SessionState.Disconnected);
 		}
 		
 		public void Close()
@@ -64,22 +66,55 @@ namespace TwinEditor
 		
 		public void SetState(SessionState state)
 		{
+			if (State != state)
+			{
+				OnStateChanged(new StateChangedEventArgs(state));
+			}
 		    State = state;
 		    switch(State)
 		    {
 		        case SessionState.Disconnected:
-		            this.connectionStatusLabel.Text = "Disconnected";
+		    		this.ChangeStatus("Disconnected", false, false);
 		            break;
 		        case SessionState.Connecting:
-		            this.connectionStatusLabel.Text = "Connecting";
+		            this.ChangeStatus("Connecting...", true, false);
 		            break;
 		        case SessionState.Connected:
-		            this.connectionStatusLabel.Text = "Connected";
+		           	this.ChangeStatus("Connected", false, false);
 		            break;
 		        case SessionState.AwaitingConnection:
-		            this.connectionStatusLabel.Text = "Awaiting connection";
+		            this.ChangeStatus("Awaiting...", true, true);
 		            break;
 		    }
+		    
+		}
+		
+		private void ChangeStatus(String status, bool spinner, bool cancellable)
+		{
+			if (this.connectionStatusLabel.InvokeRequired)
+		    		{
+			            this.connectionStatusLabel.Invoke((Action) delegate
+		    			                                  {
+		    			                                  	this.connectionStatusLabel.Text = status;
+		    			                                  	this.connectionStatusPicture.Visible = spinner;
+		            										//this.connectionStopWaitingButton.Visible = cancellable;
+		    			                                  });
+		            }
+		            else
+		            {
+                      	this.connectionStatusLabel.Text = status;
+                      	this.connectionStatusPicture.Visible = spinner;
+						//this.connectionStopWaitingButton.Visible = cancellable;		            	
+		            }
+		}
+		
+		
+		protected void OnStateChanged(StateChangedEventArgs e)
+		{
+			if (StateChanged != null)
+			{
+				StateChanged(this, e);
+			}
 		}
 		
 		public void StartSession(DifferentialSynchronizationStrategy strategy, IConnection applicationConnection)
@@ -103,12 +138,18 @@ namespace TwinEditor
 				string s = (string)e.Message;
 				ChatText.Invoke((Action)delegate { AddChatMessage(s); });
 			};		    
-			
+			this.SetState(SessionState.Connected);
+		}
+		
+		public void AwaitingSession()
+		{
+			this.SetState(SessionState.AwaitingConnection);
 		}
 		
 		public void CloseSession()
 		{
 			ChatText.Enabled = false;
+			this.SetState(SessionState.Disconnected);
 		}
 		
 		void ChatTextKeyDown(object sender, KeyEventArgs e)
@@ -169,10 +210,22 @@ namespace TwinEditor
 				((TabPage)this.Parent).Text += " *";
 			}
 		}
-		
-		void SessionTabControlLoad(object sender, EventArgs e)
-		{
 			
+		void ConnectionStopWaitingButtonClick(object sender, EventArgs e)
+		{
+			// TODO: if elegantly possible for all protocols, consider implementing this.
+		}
+	}
+	
+	public sealed class StateChangedEventArgs : EventArgs
+	{
+		//public IConnection Connection { get; private set; }
+		//public ISessionContext Session { get; private set; }
+		public SessionState State { get; private set; }
+		
+		public StateChangedEventArgs(SessionState state)
+		{
+			State = state;
 		}
 	}
 }

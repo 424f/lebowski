@@ -18,9 +18,6 @@ namespace TwinEditor
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(MainForm));
 		
-		public const string MESSAGE_CLOSE = "Save changes?";
-		public const string CAPTION_CLOSE = "Save";
-		
 		protected IFileType[] fileTypes;
 		protected ICommunicationProtocol[] protocols;
 		List<SessionTabControl> tabControls = new List<SessionTabControl>();
@@ -44,6 +41,8 @@ namespace TwinEditor
 		    deleteToolStripMenuItem.Enabled = MainTab.TabPages.Count > 0;
 		    
 			if(MainTab.TabPages.Count == 0)
+			{
+				editToolStripMenuItem.Enabled = false;
 			{				
 				scriptToolStripMenuItem.Enabled = false;			
 				closeToolStripMenuItem.Enabled = false;
@@ -51,9 +50,21 @@ namespace TwinEditor
 				saveAsToolStripMenuItem.Enabled = false;
 				saveAllToolStripMenuItem.Enabled = false;
 				printToolStripMenuItem.Enabled = false;
+				if(MainTab.SelectedTab != null) {
+					if(((SessionTabControl) MainTab.SelectedTab.Controls[0]).State != SessionState.Disconnected)
+					{
+						shareToolStripMenuItem.Enabled = false;
+					}
+				}
 			}
 			else
 			{
+				pasteToolStripMenuItem.Enabled = false;
+				copyToolStripMenuItem.Enabled = true;
+				cutToolStripMenuItem.Enabled = true;
+				deleteToolStripMenuItem.Enabled = true;
+				shareToolStripMenuItem.Enabled = true;
+//				editToolStripMenuItem.Enabled = true;
 				closeToolStripMenuItem.Enabled = true;
 				saveToolStripMenuItem.Enabled = true;
 				saveAsToolStripMenuItem.Enabled = true;
@@ -183,6 +194,14 @@ namespace TwinEditor
 			tab.Dock = DockStyle.Fill;
 			tab.FileType = fileType;
 			tab.FileName = filename;
+			// Add callback for StateChanged in order to disable share menu item, when already shared
+			tab.StateChanged += delegate(object sender, StateChangedEventArgs e)
+				{
+					if (e.State != SessionState.Disconnected)
+					{
+						this.shareToolStripMenuItem.Enabled = false;
+					}
+				};
 			tabPage.Controls.Add(tab);
 			tabControls.Add(tab);
 			tabPages.Add(tabPage);
@@ -318,9 +337,10 @@ namespace TwinEditor
 		void CloseToolStripMenuItemClick(object sender, EventArgs e)
 		{
 			SessionTabControl tabControl = tabControls[MainTab.SelectedIndex];
+			// check if the file has been modified since last save
 			if (tabControl.FileModified)
-			{
-				if (MessageBox.Show(MESSAGE_CLOSE, CAPTION_CLOSE, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
+			{	
+				if (MessageBox.Show(ApplicationUtil.LanguageResources.GetString("_MessageBoxOnCloseMessage"), ApplicationUtil.LanguageResources.GetString("_MessageBoxOnCloseCaption"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
 				{
 					SaveRequest(tabControl);
 				}
@@ -347,6 +367,9 @@ namespace TwinEditor
 			execution.Dock = System.Windows.Forms.DockStyle.Fill;
 			tabControl.TabControl.TabPages.Add(newPage);
 			tabControl.TabControl.SelectedTab = newPage;
+			
+			// Add
+			//this.scriptToolStripMenuItem.DropDownItems.Add
 		}
 	}
 }

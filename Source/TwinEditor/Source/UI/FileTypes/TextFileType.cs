@@ -8,7 +8,7 @@ namespace TwinEditor.UI.FileTypes
 	{
 		public string Name
 		{
-			get { return "Text file"; }
+			get { return "Text"; }
 		}
 		
 		public string FileNamePattern

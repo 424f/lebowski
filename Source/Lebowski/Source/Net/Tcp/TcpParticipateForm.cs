@@ -14,8 +14,6 @@ namespace Lebowski.Net.Tcp
 		public TcpParticipateForm()
 		{
 			InitializeComponent();
-			
-		
 		}
 		
 		void ParticipateClick(object sender, EventArgs e)

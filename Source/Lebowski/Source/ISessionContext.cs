@@ -16,6 +16,8 @@ namespace Lebowski
 			IConnection applicationConnection
 		);
 		
+		void AwaitingSession();
+		
 		void CloseSession();
 			
 	}

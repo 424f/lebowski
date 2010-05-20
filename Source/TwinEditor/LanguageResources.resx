@@ -192,7 +192,10 @@
   <data name="Execute" xml:space="preserve">
     <value>Execute</value>
   </data>
-  <data name=" new string entry 1" xml:space="preserve">
-    <value />
+  <data name="_MessageBoxOnCloseMessage" xml:space="preserve">
+    <value>Save changes?</value>
+  </data>
+  <data name="_MessageBoxOnCloseCaption" xml:space="preserve">
+    <value>Save</value>
   </data>
 </root>

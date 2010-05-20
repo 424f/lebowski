@@ -7,6 +7,7 @@ namespace Lebowski.Net.Tcp
 	{
 		public event EventHandler<HostSessionEventArgs> HostSession;
 		public event EventHandler<JoinSessionEventArgs> JoinSession;
+		public event EventHandler<EventArgs> Waiting;
 		
 		public string Name
 		{
@@ -18,18 +19,18 @@ namespace Lebowski.Net.Tcp
 			TcpShareForm form = new TcpShareForm();
 			form.Submit += delegate
 			{
+				session.AwaitingSession();
 				form.Enabled = false;
-				TcpServerConnection connection = new TcpServerConnection(form.Port);	
+				form.Invoke((Action) delegate
+				{
+					form.Dispose();
+				});
+				TcpServerConnection connection = new TcpServerConnection(form.Port);
+				session.AwaitingSession();
 				connection.ClientConnected += delegate
 				{
-					OnHostSession(new HostSessionEventArgs(session, connection));					
-					form.Invoke((Action) delegate
-					{
-						form.Close();
-					});
+					OnHostSession(new HostSessionEventArgs(session, connection));
 				};
-				
-
 			};
 			form.ShowDialog();
 		}		
@@ -46,15 +47,25 @@ namespace Lebowski.Net.Tcp
 		
 		protected virtual void OnHostSession(HostSessionEventArgs e)
 		{
-			if (HostSession != null) {
+			if (HostSession != null)
+			{
 				HostSession(this, e);
 			}
 		}
 		
 		protected virtual void OnJoinSession(JoinSessionEventArgs e)
 		{
-			if (JoinSession != null) {
+			if (JoinSession != null)
+			{
 				JoinSession(this, e);
+			}
+		}
+		
+		protected virtual void OnWaiting(EventArgs e)
+		{
+			if (Waiting != null)
+			{
+				Waiting(this, e);
 			}
 		}
 	
@@ -68,6 +79,10 @@ namespace Lebowski.Net.Tcp
 				{
 					TcpClientConnection connection = new TcpClientConnection(form.Address, form.Port);
 					OnJoinSession(new JoinSessionEventArgs(connection));
+				}
+				catch(ConnectionFailedException e)
+				{
+					System.Windows.Forms.MessageBox.Show("Could not connect to " + form.Address + ":" + form.Port);
 				}
 				catch(Exception e)
 				{

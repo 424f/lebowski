@@ -50,7 +50,7 @@ namespace Lebowski.Net.Tcp
 			{
 				while(running)
 				{
-					// First, read the package length
+					// First, read the packet length
 					int packetLength = BitConverter.ToInt32(NetUtils.ReadBytes(stream, 4), 0);
 					byte[] packet = NetUtils.ReadBytes(stream, packetLength);
 					object message = NetUtils.Deserialize(packet);
@@ -94,18 +94,19 @@ namespace Lebowski.Net.Tcp
 	}
 	
 	public class TcpServerConnection : TcpConnection
-	{		
+	{	
 		public event EventHandler<EventArgs> ClientConnected;
 		public event EventHandler<EventArgs> ClientDisconnected;
 		
 		private TcpListener tcpListener;
-		private TcpClient client;
+		private TcpClient tcpClient;
 		
 		public TcpServerConnection(int port)
 		{
 			tcpListener = new TcpListener(IPAddress.Any, port);
 			
 			// Create networking thread
+//			RunAsyncNetworkingThread();
 			ThreadStart threadStart = new ThreadStart(RunNetworkingThread);
 			Thread thread = new Thread(threadStart);
 			thread.Start();				
@@ -121,25 +122,47 @@ namespace Lebowski.Net.Tcp
 		{
 			tcpListener.Start();
 			// TODO: handle multiple clients
-			client = tcpListener.AcceptTcpClient();
+			// waits for incoming client connection
+			tcpClient = tcpListener.AcceptTcpClient();
+			// stops listening when first client connection has been accepted 
 			tcpListener.Stop();
-			stream = client.GetStream();	
-			
+			stream = tcpClient.GetStream();
 			OnClientConnected(new EventArgs());
-			
+			RunReceiveThread();	
+		}
+		
+		protected void RunAsyncNetworkingThread()
+		{
+			tcpListener.Start();
+			// TODO: handle multiple clients
+			tcpListener.BeginAcceptTcpClient(new AsyncCallback(DoAcceptTcpClientCallback), tcpListener);
+		}
+		
+		/// <summary>
+		/// AsyncCallback passed on BeginAcceptTcpClient to avoid the application to block when waiting for a client connection
+		/// </summary>
+		protected void DoAcceptTcpClientCallback(IAsyncResult ar)
+		{
+			tcpListener = (TcpListener) ar.AsyncState;
+			tcpClient = tcpListener.EndAcceptTcpClient(ar);
+			tcpListener.Stop();
+			stream = tcpClient.GetStream();
+			OnClientConnected(new EventArgs());
 			RunReceiveThread();
-		}		
+		}
 		
 		protected virtual void OnClientConnected(EventArgs e)
 		{
-			if (ClientConnected != null) {
+			if (ClientConnected != null)
+			{
 				ClientConnected(this, e);
 			}
 		}
 		
 		protected virtual void OnClientDisconnected(EventArgs e)
 		{
-			if (ClientDisconnected != null) {
+			if (ClientDisconnected != null)
+			{
 				ClientDisconnected(this, e);
 			}
 		}
