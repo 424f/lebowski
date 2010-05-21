@@ -54,35 +54,52 @@ namespace Lebowski.Net.Tcp
 					int packetLength = BitConverter.ToInt32(NetUtils.ReadBytes(stream, 4), 0);
 					byte[] packet = NetUtils.ReadBytes(stream, packetLength);
 					object message = NetUtils.Deserialize(packet);
-					OnReceived(new ReceivedEventArgs(message));						
+					try
+					{
+					    OnReceived(new ReceivedEventArgs(message));						
+					}
+					catch(Exception e)
+					{
+					    System.Console.WriteLine("Encountered error while dispatching message: {0}", e);
+					}
 				}	
 			}
 			catch(Exception e)
 			{
 				// TODO: log
+				System.Console.WriteLine("**ERROR** {0}", e.ToString());
 			}
 			finally
 			{
 				OnConnectionClosed(new EventArgs());
-				stream.Close();
+				Close();
 			}
 		}
 		
 		public void Send(object o)
 		{
-		    Console.WriteLine("Sending packet on stream from thread '{0}' #{1}", Thread.CurrentThread.Name, Thread.CurrentThread.ManagedThreadId);
+		    Console.WriteLine("Sending packet {2} on stream from thread '{0}' #{1}", Thread.CurrentThread.Name, Thread.CurrentThread.ManagedThreadId, o.GetType().Name);
 		    
 			// TODO: might have to be made thread-safe
-			byte[] packet = NetUtils.Serialize(o);
-			byte[] packetWithHeader = new byte[packet.Length + 4];
-			BitConverter.GetBytes(packet.Length).CopyTo(packetWithHeader, 0);
-			packet.CopyTo(packetWithHeader, 4);
-			stream.Write(packetWithHeader, 0, packetWithHeader.Length);
-			stream.Flush();
+			try
+			{
+    			byte[] packet = NetUtils.Serialize(o);
+    			byte[] packetWithHeader = new byte[packet.Length + 4];
+    			BitConverter.GetBytes(packet.Length).CopyTo(packetWithHeader, 0);
+    			packet.CopyTo(packetWithHeader, 4);
+    			stream.Write(packetWithHeader, 0, packetWithHeader.Length);
+    			stream.Flush();
+			}
+			catch(Exception e)
+			{
+			    Console.WriteLine("ERROR!!");
+			    throw e;
+			}
 		}		
 		
 		public virtual void Close()
 		{
+		    System.Console.WriteLine("Closing stream.");
 			stream.Close();
 			running = false;
 		}

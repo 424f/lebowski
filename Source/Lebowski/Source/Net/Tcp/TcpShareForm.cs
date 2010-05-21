@@ -12,7 +12,8 @@ namespace Lebowski.Net.Tcp
 		
 		public TcpShareForm()
 		{
-			InitializeComponent();		
+			InitializeComponent();	
+			portText.Text = "1234";
 		}
 		
 		void ShareButtonClick(object sender, EventArgs e)

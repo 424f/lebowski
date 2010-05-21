@@ -14,6 +14,8 @@ namespace Lebowski.Net.Tcp
 		public TcpParticipateForm()
 		{
 			InitializeComponent();
+			portText.Text = "1234";
+			addressText.Text = "localhost";
 		}
 		
 		void ParticipateClick(object sender, EventArgs e)

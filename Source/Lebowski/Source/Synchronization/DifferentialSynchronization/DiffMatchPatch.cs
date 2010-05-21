@@ -1704,7 +1704,7 @@ namespace DiffMatchPatch
                         {
                             throw new ArgumentException("Delta length (" + pointer
                                 + ") larger than source text length (" + text1.Length
-                                + ").", e);
+                                + ") (attempted: \"" + text1 + "\".Substring(" + pointer + "," + n + ")", e);
                         }
                         if (token[0] == '=')
                         {

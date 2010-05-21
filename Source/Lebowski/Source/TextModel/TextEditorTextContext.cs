@@ -101,7 +101,7 @@ namespace Lebowski.TextModel
 		
 		public override void Invoke(Action d) 
 		{
-			TextBox.BeginInvoke(d);
+			TextBox.Invoke(d);
 		}
 		
 	}
