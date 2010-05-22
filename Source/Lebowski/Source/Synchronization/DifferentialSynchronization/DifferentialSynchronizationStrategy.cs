@@ -22,7 +22,8 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
         public string StackTrace;
         
         public void Store()
-        {		        
+        {	
+            #if DIFF_SYNC_DEBUG
             StackTrace = Environment.StackTrace;
             
 	        var now = DateTime.Now;
@@ -32,6 +33,7 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
 	        BinaryFormatter f = new BinaryFormatter();
 	        f.Serialize(stream, this);
 	        stream.Close();            
+	        #endif
         }
     }
     
