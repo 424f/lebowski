@@ -75,16 +75,16 @@ namespace TwinEditor.UI
 		    switch(State)
 		    {
 		        case SessionState.Disconnected:
-		    		this.ChangeStatus("Disconnected", false, false);
+		    		this.ChangeStatus(TranslationUtil.GetString(ApplicationUtil.LanguageResources, "StatusDisconnected"), false, false);
 		            break;
 		        case SessionState.Connecting:
-		            this.ChangeStatus("Connecting...", true, false);
+		            this.ChangeStatus(TranslationUtil.GetString(ApplicationUtil.LanguageResources, "StatusConnecting"), true, false);
 		            break;
 		        case SessionState.Connected:
-		           	this.ChangeStatus("Connected", false, false);
+		           	this.ChangeStatus(TranslationUtil.GetString(ApplicationUtil.LanguageResources, "StatusConnected"), false, false);
 		            break;
 		        case SessionState.AwaitingConnection:
-		            this.ChangeStatus("Awaiting...", true, true);
+		            this.ChangeStatus(TranslationUtil.GetString(ApplicationUtil.LanguageResources, "StatusAwaiting"), true, true);
 		            break;
 		    }
 		    

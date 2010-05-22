@@ -198,4 +198,22 @@
   <data name="_MessageBoxOnCloseCaption" xml:space="preserve">
     <value>Speichern</value>
   </data>
+  <data name="StatusConnected" xml:space="preserve">
+    <value>Verbunden</value>
+  </data>
+  <data name="StatusDisconnected" xml:space="preserve">
+    <value>Nicht verbunden</value>
+  </data>
+  <data name="StatusAwaiting" xml:space="preserve">
+    <value>Warten...</value>
+  </data>
+  <data name="StatusConnecting" xml:space="preserve">
+    <value>Verbinden...</value>
+  </data>
+  <data name="_MessageBoxUnsupportedFileType" xml:space="preserve">
+    <value>Es tut uns Leid. Folgende Datei wird von Lebowski zurzeit nicht unterstützt</value>
+  </data>
+  <data name="_MessageBoxUnsupportedFileTypeCaption" xml:space="preserve">
+    <value>Datei konnte nicht geöffnet werden</value>
+  </data>
 </root>

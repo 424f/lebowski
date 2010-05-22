@@ -117,12 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Connected" xml:space="preserve">
-    <value>connected</value>
-  </data>
-  <data name="Disconnected" xml:space="preserve">
-    <value>disconnected</value>
-  </data>
   <data name="New" xml:space="preserve">
     <value>New</value>
   </data>
@@ -197,5 +191,23 @@
   </data>
   <data name="_MessageBoxOnCloseCaption" xml:space="preserve">
     <value>Save</value>
+  </data>
+  <data name="StatusDisconnected" xml:space="preserve">
+    <value>Disconnected</value>
+  </data>
+  <data name="StatusAwaiting" xml:space="preserve">
+    <value>Awaiting...</value>
+  </data>
+  <data name="StatusConnecting" xml:space="preserve">
+    <value>Connecting...</value>
+  </data>
+  <data name="StatusConnected" xml:space="preserve">
+    <value>Connected</value>
+  </data>
+  <data name="_MeaageBoxUnsupportedFileType" xml:space="preserve">
+    <value>We're sorry, but Lebowski does not currently support the file</value>
+  </data>
+  <data name="_MeaageBoxUnsupportedFileTypeCaption" xml:space="preserve">
+    <value>Could not open file</value>
   </data>
 </root>

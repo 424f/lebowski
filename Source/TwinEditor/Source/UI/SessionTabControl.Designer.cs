@@ -30,7 +30,8 @@ namespace TwinEditor.UI
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SessionTabControl));
-			this.TabControl = new System.Windows.Forms.TabControl();
+			this.TabControl = new CloseableTabControl(1);
+			TabControl.TabClosed += delegate (object sender, TabClosedEventArgs e) { TabControl.TabPages.RemoveAt(e.TabIndex); };
 			this.tabPage3 = new System.Windows.Forms.TabPage();
 			this.SourceCode = new ICSharpCode.TextEditor.TextEditorControl();
 			this.connectionStopWaitingButton = new System.Windows.Forms.Button();
@@ -161,7 +162,7 @@ namespace TwinEditor.UI
 		private System.Windows.Forms.Button connectionStopWaitingButton;
 		private System.Windows.Forms.PictureBox connectionStatusPicture;
 		private System.Windows.Forms.Label connectionStatusLabel;
-		public System.Windows.Forms.TabControl TabControl;
+		public CloseableTabControl TabControl;
 		private System.Windows.Forms.TextBox ChatText;
 		private System.Windows.Forms.TextBox ChatHistory;
 		public ICSharpCode.TextEditor.TextEditorControl SourceCode;
