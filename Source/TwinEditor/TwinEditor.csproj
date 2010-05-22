@@ -107,6 +107,7 @@
     <Compile Include="Source\ApplicationUtil.cs" />
     <Compile Include="Source\CloseableTabControl.cs" />
     <Compile Include="Source\Controller.cs" />
+    <Compile Include="Source\FileTypes\ExecutionResult.cs" />
     <Compile Include="Source\FileTypes\PythonInterpreter.cs" />
     <Compile Include="Source\Messaging\ChatMessage.cs" />
     <Compile Include="Source\Messaging\ExecutionResultMessage.cs" />

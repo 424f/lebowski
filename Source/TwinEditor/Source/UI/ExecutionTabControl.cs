@@ -6,15 +6,22 @@ using System.Windows.Forms;
 namespace TwinEditor.UI
 {
 	public partial class ExecutionTabControl : UserControl
-	{
-		public void SetStandardOutput(string text)
-		{
-			StandardOutput.Text = text;
-		}
-		
-		public ExecutionTabControl()
+	{		
+	    private ExecutionResult executionResult;
+	    
+		public ExecutionTabControl(ExecutionResult executionResult)
 		{
 			InitializeComponent();
+			
+			this.executionResult = executionResult;
+			
+			executionResult.ExecutionChanged += delegate(object sender, ExecutionChangedEventArgs e)
+			{
+			    StandardOutput.Invoke((Action) delegate
+                {
+	    		    StandardOutput.Text += e.StandardOut;
+			    });
+			};
 		}
 		
 		void ExecutionTabControlLoad(object sender, EventArgs e)

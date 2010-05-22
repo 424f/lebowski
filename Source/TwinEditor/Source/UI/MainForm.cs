@@ -359,18 +359,19 @@ namespace TwinEditor.UI
 		
 		void RunToolStripMenuItemItemClick(object sender, EventArgs e) {
 			SessionTabControl tabControl = tabControls[MainTab.SelectedIndex];		
-			StringWriter writer = new StringWriter();
-			tabControl.FileType.Execute(tabControl.SourceCode.Text, writer);
+			
+			ExecutionResult result = new ExecutionResult();
 			
 			// Create new executions tab
 			tabControl.IncrementNumExections();
 			TabPage newPage = new TabPage(string.Format("Execution #{0}", tabControl.NumExecutions));
-			ExecutionTabControl execution = new ExecutionTabControl();
-			execution.SetStandardOutput(writer.GetStringBuilder().ToString());
+			ExecutionTabControl execution = new ExecutionTabControl(result);
 			newPage.Controls.Add(execution);
 			execution.Dock = System.Windows.Forms.DockStyle.Fill;
 			tabControl.TabControl.TabPages.Add(newPage);
 			tabControl.TabControl.SelectedTab = newPage;
+			
+			tabControl.FileType.Execute(tabControl.SourceCode.Text, result);
 			
 			// Add
 			//this.scriptToolStripMenuItem.DropDownItems.Add

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Drawing;
+using System.Threading;
 
 namespace TwinEditor.FileTypes
 {
@@ -53,13 +54,23 @@ namespace TwinEditor.FileTypes
 			get { return true; }
 		}		
 		
-		public void Execute(string content, TextWriter stdout)
+		public void Execute(string content, ExecutionResult result)
+		{
+		    ThreadStart ts = new ThreadStart((Action) delegate { DoExecute(content, result); });
+		    Thread t = new Thread(ts);
+		    t.Name = "Python execution thread";		    
+		    t.Start();
+		}		
+		
+		private void DoExecute(string content, ExecutionResult result)
 		{
 			var writer = new PythonStringWriter();
-			interpreter.ExecuteCode(content, writer);
-			string output = writer.GetContent().ToString();
-			output = output.Replace("\n", Environment.NewLine);
-			stdout.Write(output);
-		}		
+			writer.Write += delegate(object sender, WriteEventArgs e)
+			{
+			    result.OnExecutionChanged(new ExecutionChangedEventArgs(e.Text.Replace("\n", Environment.NewLine)));
+			};						
+			interpreter.ExecuteCode(content, writer);			
+			result.OnFinishedExecution(new FinishedExecutionEventArgs(0));
+		}
 	}
 }

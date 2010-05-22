@@ -41,6 +41,6 @@ namespace TwinEditor.FileTypes
 		void Compile(string content, TextWriter stdout);
 		
 		bool CanExecute { get; }
-		void Execute(string content, TextWriter stdout);
+		void Execute(string content, ExecutionResult result);
 	}
 }

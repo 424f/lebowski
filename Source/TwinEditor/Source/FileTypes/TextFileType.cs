@@ -46,7 +46,7 @@ namespace TwinEditor.FileTypes
 			get { return false; }
 		}				
 		
-		public void Execute(string content, TextWriter stdout)
+		public void Execute(string content, ExecutionResult stdout)
 		{
 			
 		}			

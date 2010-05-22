@@ -41,7 +41,10 @@ namespace TwinEditor
 			    object sys = runtime.GetSysModule();
 			    engine.Operations.SetMember(sys, "stdout", writer);
 			    engine.Operations.SetMember(sys, "stderr", writer);
-			    	o = compiled.Execute(scope);
+			    
+			    o = compiled.Execute(scope);
+			    
+			    // TODO: allow canceling operation
 		    } 
 		    catch (Exception e)
 		    {
@@ -53,16 +56,38 @@ namespace TwinEditor
 		}
 	}
 	
-	public interface PythonWriter
+	public sealed class WriteEventArgs : EventArgs
 	{
-		void write(string text);
+	    public string Text { get; private set; }
+	    
+	    public WriteEventArgs(string text)
+	    {
+	        Text = text;
+	    }
+	}
+	
+	public abstract class PythonWriter
+	{
+		public abstract void write(string text);
+	
+		public event EventHandler<WriteEventArgs> Write;
+		
+        protected virtual void OnWrite(WriteEventArgs e)
+        {
+            if (Write != null)
+            {
+                Write(this, e);
+            }
+        }
+		
 	}
 	
 	public class PythonStdoutWriter : PythonWriter
 	{
-		public void write(string text)
+		public override void write(string text)
 		{
 			Console.Write(text);
+			OnWrite(new WriteEventArgs(text));
 		}
 	}
 	
@@ -70,9 +95,10 @@ namespace TwinEditor
 	{
 		private StringWriter writer = new StringWriter();
 		
-		public void write(string text)
+		public override void write(string text)
 		{
 			writer.Write(text);
+			OnWrite(new WriteEventArgs(text));
 		}
 		
 		public string GetContent()
