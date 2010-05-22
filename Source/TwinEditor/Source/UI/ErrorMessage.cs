@@ -3,7 +3,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace TwinEditor
+namespace TwinEditor.UI
 {
     /// <summary>
     /// Form that shows an error message with optional additional information

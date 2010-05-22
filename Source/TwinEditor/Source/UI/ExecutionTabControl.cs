@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace TwinEditor
+namespace TwinEditor.UI
 {
 	public partial class ExecutionTabControl : UserControl
 	{

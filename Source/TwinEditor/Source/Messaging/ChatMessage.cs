@@ -6,6 +6,7 @@ namespace TwinEditor.Messaging
     /// Sent when the user has entered a chat message to be broadcast
     /// to the other users
     /// </summary>
+    [Serializable]
     public sealed class ChatMessage
     {
         public string UserName { get; private set; }

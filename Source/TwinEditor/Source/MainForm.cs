@@ -10,6 +10,8 @@ using Lebowski;
 using Lebowski.Synchronization.DifferentialSynchronization;
 using Lebowski.Net;
 using TwinEditor.FileTypes;
+using TwinEditor.UI;
+
 using log4net;
 
 namespace TwinEditor

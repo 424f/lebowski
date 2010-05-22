@@ -1,12 +1,4 @@
-﻿/*
- * Created by SharpDevelop.
- * User: bo
- * Date: 01.05.2010
- * Time: 00:30
- * 
- * To change this template use Tools | Options | Coding | Edit Standard Headers.
- */
-namespace TwinEditor
+﻿namespace TwinEditor.UI
 {
 	partial class ExecutionTabControl
 	{

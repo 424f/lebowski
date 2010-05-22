@@ -10,7 +10,7 @@ using TwinEditor.FileTypes;
 using TwinEditor.Messaging;
 using log4net;
 
-namespace TwinEditor
+namespace TwinEditor.UI
 {
 	public partial class SessionTabControl : UserControl, ISessionContext
 	{	
