@@ -118,6 +118,9 @@
     <Compile Include="Source\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Source\Messaging\ChatMessage.cs" />
+    <Compile Include="Source\Messaging\ExecutionResultMessage.cs" />
+    <Compile Include="Source\Messaging\ExecutionStartedMessage.cs" />
     <Compile Include="Source\Program.cs" />
     <Compile Include="Source\PythonInterpreter.cs" />
     <Compile Include="Source\SessionTabControl.cs" />
@@ -160,6 +163,7 @@
       <Name>Lebowski</Name>
     </ProjectReference>
     <Folder Include="Source\" />
+    <Folder Include="Source\Messaging" />
     <Folder Include="Source\UI\" />
   </ItemGroup>
 </Project>

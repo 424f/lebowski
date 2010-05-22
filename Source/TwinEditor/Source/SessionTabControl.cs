@@ -7,6 +7,7 @@ using Lebowski.TextModel;
 using Lebowski.Net;
 using Lebowski.Synchronization.DifferentialSynchronization;
 using TwinEditor.UI.FileTypes;
+using TwinEditor.Messaging;
 using log4net;
 
 namespace TwinEditor
@@ -133,11 +134,7 @@ namespace TwinEditor
 			
 			ChatText.Invoke((Action)delegate { ChatText.Enabled = true; });
 			
-			// When we receive a chat message, display it in the text field
-            ApplicationConnection.Received += delegate(object sender, ReceivedEventArgs e) {
-				string s = (string)e.Message;
-				ChatText.Invoke((Action)delegate { AddChatMessage(s); });
-			};		    
+            ApplicationConnection.Received += ApplicationConnectionReceived;
 			this.SetState(SessionState.Connected);
 		}
 		
@@ -185,15 +182,15 @@ namespace TwinEditor
 		{
             if(ChatText.Text.Length == 0)
 				return;
-            string message = Environment.UserName + ": " + ChatText.Text;
+            ChatMessage message = new ChatMessage(Environment.UserName, ChatText.Text);
 			ApplicationConnection.Send(message);
 			AddChatMessage(message);
 			ChatText.Text = "";		    
 		}
 		
-		private void AddChatMessage(string text)
+		private void AddChatMessage(ChatMessage msg)
 		{
-		    ChatHistory.AppendText(text + Environment.NewLine);
+		    ChatHistory.AppendText(msg.UserName + ": " + msg.Message + Environment.NewLine);
 		}
 		
 		void ChatTextTextChanged(object sender, EventArgs e)
@@ -214,6 +211,18 @@ namespace TwinEditor
 		void ConnectionStopWaitingButtonClick(object sender, EventArgs e)
 		{
 			// TODO: if elegantly possible for all protocols, consider implementing this.
+		}
+		
+		private void ApplicationConnectionReceived(object sender, ReceivedEventArgs e)
+		{
+		    if(e.Message is ChatMessage)
+		    {
+    			ChatText.Invoke((Action)delegate { AddChatMessage((ChatMessage)e.Message); });
+		    }
+		    else
+		    {
+		        Logger.WarnFormat("Received unsupported message on application connection: {0}", e.Message.GetType().Name);
+		    }
 		}
 	}
 	
