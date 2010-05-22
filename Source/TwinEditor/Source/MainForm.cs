@@ -9,7 +9,7 @@ using System.Reflection;
 using Lebowski;
 using Lebowski.Synchronization.DifferentialSynchronization;
 using Lebowski.Net;
-using TwinEditor.UI.FileTypes;
+using TwinEditor.FileTypes;
 using log4net;
 
 namespace TwinEditor

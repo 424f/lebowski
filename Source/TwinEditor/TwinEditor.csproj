@@ -132,9 +132,9 @@
     <Compile Include="Source\UI\ErrorMessage.Designer.cs">
       <DependentUpon>ErrorMessage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Source\UI\FileTypes\IFileType.cs" />
-    <Compile Include="Source\UI\FileTypes\PythonFileType.cs" />
-    <Compile Include="Source\UI\FileTypes\TextFileType.cs" />
+    <Compile Include="Source\FileTypes\IFileType.cs" />
+    <Compile Include="Source\FileTypes\PythonFileType.cs" />
+    <Compile Include="Source\FileTypes\TextFileType.cs" />
     <Compile Include="Test\PythonInterpreterTest.cs" />
     <Compile Include="Test\UITester.cs" />
     <EmbeddedResource Include="LanguageResources.de.resx" />

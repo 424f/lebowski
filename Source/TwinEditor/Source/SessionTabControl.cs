@@ -6,7 +6,7 @@ using Lebowski;
 using Lebowski.TextModel;
 using Lebowski.Net;
 using Lebowski.Synchronization.DifferentialSynchronization;
-using TwinEditor.UI.FileTypes;
+using TwinEditor.FileTypes;
 using TwinEditor.Messaging;
 using log4net;
 

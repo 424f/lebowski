@@ -2,7 +2,7 @@
 using System.IO;
 using System.Drawing;
 
-namespace TwinEditor.UI.FileTypes
+namespace TwinEditor.FileTypes
 {
 	public class TextFileType : IFileType
 	{
