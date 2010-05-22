@@ -26,15 +26,46 @@
         <Directory Id="TARGETDIR" Name="SourceDir">
             <Directory Id="ProgramFilesFolder" Name="PFiles">
                 <Directory Id="INSTALLDIR" Name="Lebowski">
-                    <Component Id="MainExecutable" Guid="319228ec-e300-45aa-8da4-e5ba52c1f9b9">
-                        <File Id="Lebowski.dll" DiskId="1" Name="Lebowski.dll" Source="D:\Dev\lebowski\Source\TwinEditor\bin\Debug\Lebowski.dll" KeyPath="yes" />
-                    </Component>
+                    <Directory Id="LocalizedDe" Name="de" />
                 </Directory>
             </Directory>
          </Directory>
-    
+        
+        <Component Id="MainExecutable" Directory="INSTALLDIR" Guid="319228ec-e300-45aa-8da4-e5ba52c1f9b9">
+            <File Id="ICSharpCode.TextEditor.dll" Name="ICSharpCode.TextEditor.dll" Source="../TwinEditor/bin/Debug\ICSharpCode.TextEditor.dll" />
+            <File Id="Interop.SKYPE4COMLib.dll" Name="Interop.SKYPE4COMLib.dll" Source="../TwinEditor/bin/Debug\Interop.SKYPE4COMLib.dll" />
+            <File Id="IronPython.dll" Name="IronPython.dll" Source="../TwinEditor/bin/Debug\IronPython.dll" />
+            <File Id="IronPython.Modules.dll" Name="IronPython.Modules.dll" Source="../TwinEditor/bin/Debug\IronPython.Modules.dll" />
+            <File Id="Lebowski.dll" Name="Lebowski.dll" Source="../TwinEditor/bin/Debug\Lebowski.dll" />
+            <File Id="Lebowski.pdb" Name="Lebowski.pdb" Source="../TwinEditor/bin/Debug\Lebowski.pdb" />
+            <File Id="Lidgren.Network.dll" Name="Lidgren.Network.dll" Source="../TwinEditor/bin/Debug\Lidgren.Network.dll" />
+            <File Id="log4net.dll" Name="log4net.dll" Source="../TwinEditor/bin/Debug\log4net.dll" />
+            <File Id="Microsoft.Dynamic.dll" Name="Microsoft.Dynamic.dll" Source="../TwinEditor/bin/Debug\Microsoft.Dynamic.dll" />
+            <File Id="Microsoft.Scripting.Core.dll" Name="Microsoft.Scripting.Core.dll" Source="../TwinEditor/bin/Debug\Microsoft.Scripting.Core.dll" />
+            <File Id="Microsoft.Scripting.Debugging.dll" Name="Microsoft.Scripting.Debugging.dll" Source="../TwinEditor/bin/Debug\Microsoft.Scripting.Debugging.dll" />
+            <File Id="Microsoft.Scripting.dll" Name="Microsoft.Scripting.dll" Source="../TwinEditor/bin/Debug\Microsoft.Scripting.dll" />
+            <File Id="Microsoft.Scripting.ExtensionAttribute.dll" Name="Microsoft.Scripting.ExtensionAttribute.dll" Source="../TwinEditor/bin/Debug\Microsoft.Scripting.ExtensionAttribute.dll" />
+            <File Id="nunit.framework.dll" Name="nunit.framework.dll" Source="../TwinEditor/bin/Debug\nunit.framework.dll" />
+            <File Id="TwinEditor.exe" Name="TwinEditor.exe" Source="../TwinEditor/bin/Debug\TwinEditor.exe" />
+            <File Id="TwinEditor.exe.config" Name="TwinEditor.exe.config" Source="../TwinEditor/bin/Debug\TwinEditor.exe.config" />
+            <File Id="TwinEditor.pdb" Name="TwinEditor.pdb" Source="../TwinEditor/bin/Debug\TwinEditor.pdb" />
+        </Component>       
+        
+        <Component Id="LocalizedDe" Directory="LocalizedDe" Guid="A5B6C91A-65A1-11DF-9C5A-07C9DFD72085">
+            <File Id="TwinEditor.resources.dll" Name="TwinEditor.resources.dll" Source="../TwinEditor/bin/Debug\de\TwinEditor.resources.dll" />
+        </Component>
+        
+        <!-- Register Skype4COM -->
+        <Component Id="Skype4COM" Directory="INSTALLDIR" Guid="781837c9-13fa-4a21-903c-bc56a06f83d2">
+            <File Id="Skype4COM.dll" KeyPath="yes" Source="../..\Libs\Skype4COM.dll" SelfRegCost="1" />
+        </Component>
+
+        <!-- Main feature -->
         <Feature Id="Complete" Level="1">
             <ComponentRef Id="MainExecutable" />
+            <ComponentRef Id="LocalizedDe" />
+            <ComponentRef Id="Skype4COM" />
         </Feature>
+   
     </Product>
 </Wix>
