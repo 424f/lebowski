@@ -1,5 +1,5 @@
 ﻿
-namespace TwinEditor
+namespace TwinEditor.UI
 {
 	partial class MainForm
 	{

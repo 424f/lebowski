@@ -12,6 +12,8 @@ using Lebowski.Net.Lidgren;
 using Lebowski.TextModel;
 using Lebowski.Synchronization.DifferentialSynchronization;
 
+using TwinEditor.UI;
+
 namespace TwinEditor
 {
 	internal sealed class Program
@@ -71,7 +73,6 @@ namespace TwinEditor
 		        Console.WriteLine("Data' = {0}", context);
 		        Console.WriteLine("Shadow' = {0}", shadow);				
 		    }
-		    Console.ReadKey();
 		    
 			log4net.Config.BasicConfigurator.Configure();
 			Program prog = new Program();

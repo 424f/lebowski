@@ -14,7 +14,7 @@ using TwinEditor.UI;
 
 using log4net;
 
-namespace TwinEditor
+namespace TwinEditor.UI
 {
 	public partial class MainForm : Form
 	{
@@ -76,11 +76,12 @@ namespace TwinEditor
 		
 		public MainForm(Controller controller)
 		{			
-			this.controller = controller;
 			//
 			// The InitializeComponent() call is required for Windows Forms designer support.
 			//
 			InitializeComponent();
+			
+			this.controller = controller;
 
 			Logger.Info("MainForm component initialized.");
 			//SourceCode.SetHighlighting("C#");
