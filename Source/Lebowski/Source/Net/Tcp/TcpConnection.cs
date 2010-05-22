@@ -80,21 +80,23 @@ namespace Lebowski.Net.Tcp
 		{
 		    Console.WriteLine("Sending packet {2} on stream from thread '{0}' #{1}", Thread.CurrentThread.Name, Thread.CurrentThread.ManagedThreadId, o.GetType().Name);
 		    
-			// TODO: might have to be made thread-safe
-			try
-			{
-    			byte[] packet = NetUtils.Serialize(o);
-    			byte[] packetWithHeader = new byte[packet.Length + 4];
-    			BitConverter.GetBytes(packet.Length).CopyTo(packetWithHeader, 0);
-    			packet.CopyTo(packetWithHeader, 4);
-    			stream.Write(packetWithHeader, 0, packetWithHeader.Length);
-    			stream.Flush();
-			}
-			catch(Exception e)
-			{
-			    Console.WriteLine("ERROR!!");
-			    throw e;
-			}
+		    lock(this)
+		    {
+    			try
+    			{
+        			byte[] packet = NetUtils.Serialize(o);
+        			byte[] packetWithHeader = new byte[packet.Length + 4];
+        			BitConverter.GetBytes(packet.Length).CopyTo(packetWithHeader, 0);
+        			packet.CopyTo(packetWithHeader, 4);
+        			stream.Write(packetWithHeader, 0, packetWithHeader.Length);
+        			stream.Flush();
+    			}
+    			catch(Exception e)
+    			{
+    			    Console.WriteLine("ERROR!!");
+    			    throw e;
+    			}
+		    }
 		}		
 		
 		public virtual void Close()

@@ -25,6 +25,11 @@ namespace TwinEditor
 		private static void Main(string[] args)
 		{
 		    // Debug
+		    if(!Directory.Exists("Debug"))
+		    {
+		        Directory.CreateDirectory("Debug");
+		    }
+		    
 		    var di = new DirectoryInfo(".");
 		    foreach(FileInfo fi in di.GetFiles())
 		    {

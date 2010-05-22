@@ -1,0 +1,40 @@
+﻿<?xml version="1.0"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Product
+        Id="*"
+        Name="Lebowski"
+        Language="1033"
+        Version="1.0.0.0"
+        UpgradeCode="9D8E3D88-8F87-43EC-B5A4-35562BF7ABE7"
+        Manufacturer="github.com/424f/lebowski"
+    >
+        <Package
+            Description="Installs the Lebowski collaborative text editor"
+            Comments="Comments"
+            InstallerVersion="200"
+            Compressed="yes"
+        />
+
+        <Property Id="WIXUI_INSTALLDIR">INSTALLDIR</Property>
+        <UIRef Id="WixUI_InstallDir" />
+        
+        <Media Id="1" Cabinet="product.cab" EmbedCab="yes" />
+
+        <WixVariable Id="WixUILicenseRtf" Value="License.rtf" />
+        
+           
+        <Directory Id="TARGETDIR" Name="SourceDir">
+            <Directory Id="ProgramFilesFolder" Name="PFiles">
+                <Directory Id="INSTALLDIR" Name="Lebowski">
+                    <Component Id="MainExecutable" Guid="319228ec-e300-45aa-8da4-e5ba52c1f9b9">
+                        <File Id="Lebowski.dll" DiskId="1" Name="Lebowski.dll" Source="D:\Dev\lebowski\Source\TwinEditor\bin\Debug\Lebowski.dll" KeyPath="yes" />
+                    </Component>
+                </Directory>
+            </Directory>
+         </Directory>
+    
+        <Feature Id="Complete" Level="1">
+            <ComponentRef Id="MainExecutable" />
+        </Feature>
+    </Product>
+</Wix>
