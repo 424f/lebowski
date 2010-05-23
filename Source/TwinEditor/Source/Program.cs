@@ -30,6 +30,20 @@ namespace TwinEditor
 		        Directory.CreateDirectory("Debug");
 		    }
 		    
+		    DiffMatchPatch.diff_match_patch DiffMatchPatch = new DiffMatchPatch.diff_match_patch();
+		    string text1, shadow1, shadow2;
+		    text1 = "foo\r\nfoo";
+		    shadow1 = "foo\r\nfoo\r\n";
+		    shadow2 = "";
+		    var diff = DiffMatchPatch.diff_main(text1, shadow1);
+		    var delta_ = DiffMatchPatch.diff_toDelta(diff);
+		    
+		    var patch1 = DiffMatchPatch.patch_make(shadow1, diff);
+		    shadow1 = (string)DiffMatchPatch.patch_apply(patch1, shadow1)[0];
+		    
+		    shadow2 = (string)DiffMatchPatch.patch_apply(patch1, shadow2)[0];
+		    
+		    
 		    var di = new DirectoryInfo(".");
 		    foreach(FileInfo fi in di.GetFiles())
 		    {
@@ -52,13 +66,12 @@ namespace TwinEditor
 		        string context = step.Data;
 		        string delta = step.Diff;
 		        
-		        Console.WriteLine("Data = {0}", context);
-		        Console.WriteLine("Shadow = {0}", shadow);
+		        Console.WriteLine("Data [{1}] = {0}", context, context.Length);
+		        Console.WriteLine("Shadow [{1}] = {0}", shadow, shadow.Length);
 		        Console.WriteLine("Delta = {0}", delta);
 		        
 		        // Try to perform step
                 // Apply diff to shadow
-                DiffMatchPatch.diff_match_patch DiffMatchPatch = new DiffMatchPatch.diff_match_patch();
     			var diffs = DiffMatchPatch.diff_fromDelta(shadow, delta);
     			var shadowPatch = DiffMatchPatch.patch_make(shadow, diffs);
     			shadow = (string)DiffMatchPatch.patch_apply(shadowPatch, shadow)[0];

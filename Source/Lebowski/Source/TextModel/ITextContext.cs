@@ -4,6 +4,8 @@ namespace Lebowski.TextModel
 {
 	public interface ITextContext
 	{
+		void Refresh();
+		
 		string Data { get; set; }
 		
 		/// <summary>

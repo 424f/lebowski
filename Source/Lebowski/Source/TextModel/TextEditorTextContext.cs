@@ -49,7 +49,6 @@ namespace Lebowski.TextModel
 			{
 				TextBox.TextChanged -= TextBoxChanged;
 				TextBox.Text = value;
-				TextBox.Refresh();
 				TextBox.TextChanged += TextBoxChanged;
 			}
 		}
@@ -104,5 +103,9 @@ namespace Lebowski.TextModel
 			TextBox.Invoke(d);
 		}
 		
+		public override void Refresh()
+		{
+			TextBox.Refresh();
+		}
 	}
 }

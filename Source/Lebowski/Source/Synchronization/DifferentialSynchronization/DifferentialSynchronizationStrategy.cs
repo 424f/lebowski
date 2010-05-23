@@ -23,7 +23,7 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
         
         public void Store()
         {	
-            #if DIFF_SYNC_DEBUG
+            //#if DIFF_SYNC_DEBUG
             StackTrace = Environment.StackTrace;
             
 	        var now = DateTime.Now;
@@ -33,7 +33,7 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
 	        BinaryFormatter f = new BinaryFormatter();
 	        f.Serialize(stream, this);
 	        stream.Close();            
-	        #endif
+	        //#endif
         }
     }
     
@@ -198,30 +198,30 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
     		                       
         			// Apply diff to shadow
         			var diffs = DiffMatchPatch.diff_fromDelta(Shadow.Data, delta);
-        			var shadowPatch = DiffMatchPatch.patch_make(Shadow.Data, diffs);
-        			Shadow.Data = (string)DiffMatchPatch.patch_apply(shadowPatch, Shadow.Data)[0];
+        			var patches = DiffMatchPatch.patch_make(Shadow.Data, diffs);
+        			Shadow.Data = (string)DiffMatchPatch.patch_apply(patches, Shadow.Data)[0];
         			
         			/* For the real context, we have to perform each operation by hand,
         			so the context can do things like moving around the selection area */
-        			var textPatch = DiffMatchPatch.patch_make(Context.Data, diffs);
-        			foreach(Patch patch in textPatch)
+        			foreach(Patch p in patches)
         			{
-        				System.Console.WriteLine(patch);
+        				System.Console.WriteLine(p);
         			}			                   
     			                   
     			    Console.WriteLine("--");
     			    Console.WriteLine("Selection was: {0} {1} = '{2}'", Context.SelectionStart, Context.SelectionEnd, Context.SelectedText);
+    			    Console.WriteLine("Caret was: {0}", Context.CaretPosition);
     
     			    bool hadSelection = Context.HasSelection;
     				int start = Context.SelectionStart;
     				int end = Context.SelectionEnd;
     				int caret = Context.CaretPosition;
-    	
-    				Context.Data = (string)DiffMatchPatch.patch_apply(textPatch, Context.Data)[0];			
+    				
+    				// TODO: check whether patches we're applied at all
     				
     				// We restore the offset locations using absolute referencing
     				// See: http://neil.fraser.name/writing/cursor/
-    				foreach(Patch patch in textPatch)
+    				foreach(Patch patch in patches)
     				{
     					Console.WriteLine("Patch = {0} ({1}, {2}, {3}, {4})", patch, patch.start1, patch.start2, patch.length1, patch.length2);
     					int index = patch.start1;
@@ -271,6 +271,7 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
     				}
     				start = Math.Max(0, start);
     				caret = Math.Max(0, caret);
+    				Context.Data = (string)DiffMatchPatch.patch_apply(patches, Context.Data)[0];			
     				if(end < start)
     				{
     					end = start;				
@@ -281,7 +282,9 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
     				}
     				Context.CaretPosition = caret;
     				Console.WriteLine("Selection is: {0} {1}", start, end);
+    				Console.WriteLine("Caret is: {0}", caret);
     				Console.WriteLine("Was {0} now {1}", old, Context.Data);
+    				Context.Refresh();
     			});
     		}
 		}
@@ -297,8 +300,8 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
 			if(TokenState == TokenState.HavingToken)
 			{
 				System.Console.WriteLine("{0} wants to Flush", SiteId);
+				SendPatches();
 				TokenState = TokenState.WaitingForToken;
-				Connection.Send(new DiffMessage(""));
 				System.Console.WriteLine("{0} flushing token", SiteId);
 			}
 		}

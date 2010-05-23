@@ -316,6 +316,7 @@ namespace Lebowski.Net.Skype
 						if(sharingInvitation.InvitedUser != partner)
 						{
 							Logger.Error(string.Format("{0} accepted {1} intended for {2}", partner, sharingInvitation, sharingInvitation.InvitedUser));
+							return;
 						}
 						
 						SkypeConnection connection = invitationChannels[accept.InvitationId];

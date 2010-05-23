@@ -46,12 +46,10 @@ namespace TwinEditor.UI
 	
 		public SessionTabControl()
 		{
+			InitializeComponent();
+			
 			this.OnDisk = false;
 			this.FileModified = false;
-			//
-			// The InitializeComponent() call is required for Windows Forms designer support.
-			//
-			InitializeComponent();
 			ChatText.Enabled = false;
 			
 			// Create a text context for the source code editor
@@ -221,7 +219,7 @@ namespace TwinEditor.UI
 		    }
 		    else if(e.Message is ExecutionResultMessage)
 		    {		    		
-		    	TabControl.Invoke((Action) delegate 
+		    	ChatText.Invoke((Action) delegate 
 				{		    	              
 			    	ExecutionResultMessage erm = (ExecutionResultMessage)e.Message;
 			    	

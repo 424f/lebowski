@@ -42,5 +42,10 @@ namespace Lebowski.TextModel
 		{
 			d();
 		}
+		
+		public override void Refresh()
+		{
+			
+		}
 	}
 }

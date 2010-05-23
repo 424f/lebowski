@@ -73,5 +73,10 @@ namespace Lebowski.TextModel
 			TextBox.Invoke(d);
 		}
 		
+		public override void Refresh()
+		{
+			TextBox.Refresh();
+		}
+		
 	}
 }
