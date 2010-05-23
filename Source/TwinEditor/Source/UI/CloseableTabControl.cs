@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 using System.Drawing;
 
-namespace TwinEditor
+namespace TwinEditor.UI
 {
 	/// <summary>
 	/// Description of CloseabletabControl.

@@ -95,11 +95,11 @@ namespace TwinEditor.UI
 			if (this.connectionStatusLabel.InvokeRequired)
 		    		{
 			            this.connectionStatusLabel.Invoke((Action) delegate
-		    			                                  {
-		    			                                  	this.connectionStatusLabel.Text = status;
-		    			                                  	this.connectionStatusPicture.Visible = spinner;
-		            										//this.connectionStopWaitingButton.Visible = cancellable;
-		    			                                  });
+						{
+							this.connectionStatusLabel.Text = status;
+							this.connectionStatusPicture.Visible = spinner;
+							//this.connectionStopWaitingButton.Visible = cancellable;
+						});
 		            }
 		            else
 		            {
@@ -218,6 +218,23 @@ namespace TwinEditor.UI
 		    if(e.Message is ChatMessage)
 		    {
     			ChatText.Invoke((Action)delegate { AddChatMessage((ChatMessage)e.Message); });
+		    }
+		    else if(e.Message is ExecutionResultMessage)
+		    {		    		
+		    	TabControl.Invoke((Action) delegate 
+				{		    	              
+			    	ExecutionResultMessage erm = (ExecutionResultMessage)e.Message;
+			    	
+			    	ExecutionResult result = new ExecutionResult();
+			    		
+			    	TabPage newPage = new TabPage(string.Format("Remote execution"));
+			    	TabControl.TabPages.Add(newPage);
+			    	
+					ExecutionTabControl execution = new ExecutionTabControl(result);
+					
+					result.OnExecutionChanged(new ExecutionChangedEventArgs(erm.StandardOut));
+					result.OnFinishedExecution(new FinishedExecutionEventArgs(0));
+				});
 		    }
 		    else
 		    {

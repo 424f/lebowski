@@ -74,11 +74,8 @@ namespace TwinEditor.UI
 			}
 		}
 		
-		public MainForm(Controller controller)
+		public MainForm(ApplicationContext applicationContext, Controller controller)
 		{			
-			//
-			// The InitializeComponent() call is required for Windows Forms designer support.
-			//
 			InitializeComponent();
 			
 			this.controller = controller;
@@ -122,11 +119,14 @@ namespace TwinEditor.UI
 			protocols = ExtensionUtil.FindTypesImplementing(typeof(ICommunicationProtocol))
 				.Select((t) => t.GetConstructor(new Type[]{}).Invoke(new object[]{}))
 				.Cast<ICommunicationProtocol>()
-				.Where((p) => p.Enabled)
 				.ToArray();
 			foreach(ICommunicationProtocol protocol in protocols)
 			{
 				ICommunicationProtocol currentProtocol = protocol;
+				
+				// After initializing, if the protocol is not enabled, we discard it
+				if(!protocol.Enabled)
+					continue;
 				
 				// Add menu item to share session
 				if(protocol.CanShare)
@@ -194,12 +194,12 @@ namespace TwinEditor.UI
 			tab.FileName = filename;
 			// Add callback for StateChanged in order to disable share menu item, when already shared
 			tab.StateChanged += delegate(object sender, StateChangedEventArgs e)
+			{
+				if (e.State != SessionState.Disconnected)
 				{
-					if (e.State != SessionState.Disconnected)
-					{
-						this.shareToolStripMenuItem.Enabled = false;
-					}
-				};
+					this.shareToolStripMenuItem.Enabled = false;
+				}
+			};
 			tabPage.Controls.Add(tab);
 			tabControls.Add(tab);
 			tabPages.Add(tabPage);
@@ -274,7 +274,8 @@ namespace TwinEditor.UI
 		}
 		
 		// checks whether the tab is already on disk, and if yes calls 'Save' else calls 'SaveWithDialog'.
-		void SaveRequest(SessionTabControl tabControl) {
+		void SaveRequest(SessionTabControl tabControl)
+		{
 			if(!tabControl.OnDisk)
 			{
 				SaveWithDialog(tabControl);
@@ -286,7 +287,8 @@ namespace TwinEditor.UI
 		}
 		
 		// opens saveFileDialog
-		void SaveWithDialog(SessionTabControl tabControl) {
+		void SaveWithDialog(SessionTabControl tabControl)
+		{
 			saveFileDialog.RestoreDirectory = true;
 			saveFileDialog.FileName = System.IO.Path.GetFileName(tabControl.FileName);
 			saveFileDialog.Filter = string.Format("{0}|{1}", tabControl.FileType.Name, tabControl.FileType.FileNamePattern);
@@ -372,6 +374,15 @@ namespace TwinEditor.UI
 			tabControl.TabControl.SelectedTab = newPage;
 			
 			tabControl.FileType.Execute(tabControl.SourceCode.Text, result);
+			
+			// When execution is finished, propagate result to other users
+			result.FinishedExecution += delegate(object o, FinishedExecutionEventArgs fe)
+			{
+				if(tabControl.State == SessionState.Connected)
+				{
+					tabControl.ApplicationConnection.Send(new Messaging.ExecutionResultMessage());
+				}
+			};
 			
 			// Add
 			//this.scriptToolStripMenuItem.DropDownItems.Add

@@ -3,7 +3,7 @@
 namespace TwinEditor.Messaging
 {
     /// <summary>
-    /// Sent when the user has entered a chat message to be broadcast
+    /// Occurs when the user has entered a chat message to be broadcast
     /// to the other users
     /// </summary>
     [Serializable]

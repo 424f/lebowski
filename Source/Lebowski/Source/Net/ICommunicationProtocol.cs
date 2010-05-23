@@ -46,6 +46,11 @@ namespace Lebowski.Net
 		/// </summary>
 		event EventHandler<JoinSessionEventArgs> JoinSession;
 		
+		/// <summary>
+		/// Indicates whether this protocol should be displayed to the user. This might be used
+		/// to disable unstable protocols in release mode or to hide a protocol when the needed
+		/// requirements are not met by the system.
+		/// </summary>
 		bool Enabled { get; }
 	}
 	

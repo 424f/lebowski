@@ -79,9 +79,28 @@ namespace TwinEditor
 		        Console.WriteLine("Shadow' = {0}", shadow);				
 		    }
 		    
-			log4net.Config.BasicConfigurator.Configure();
-			Program prog = new Program();
-			prog.Run();
+		    #if (!DEBUG)
+		    try
+		    #endif
+		    {
+				log4net.Config.BasicConfigurator.Configure();
+				Program prog = new Program();
+				prog.Run();
+		    }
+		    #if (!DEBUG)
+		    /* In the release build, we hope that no unhandled exceptions occur, but if they do,
+		    we would like the user the option to report a bug */		    
+		    catch(Exception e)
+		    {
+		    	UI.ErrorMessage errorMessage = new UI.ErrorMessage("Application failure", "We're so sorry, but it appears that an unrecoverable error occured :(", e);
+		    	errorMessage.ShowReportButton = true;
+		    	errorMessage.Report += delegate
+		    	{
+		    		// TODO: send per e-mail or post on getsatisfaction
+		    	};
+		    	errorMessage.ShowDialog();	
+		    }
+		    #endif
 		}
 		
 		private void SetupConfiguration()
@@ -115,7 +134,7 @@ namespace TwinEditor
 			SetupConfiguration();
 			
 			// Display main form
-			MainForm form = new MainForm(new Controller());
+			MainForm form = new MainForm(new ApplicationContext(), new Controller());
 			form.Show();
 
 			Application.Run();			

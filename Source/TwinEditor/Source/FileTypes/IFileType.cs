@@ -38,9 +38,9 @@ namespace TwinEditor.FileTypes
 		Image Icon { get; }
 		
 		bool CanCompile { get; }
-		void Compile(string content, TextWriter stdout);
+		void Compile(string source, TextWriter stdout);
 		
 		bool CanExecute { get; }
-		void Execute(string content, ExecutionResult result);
+		void Execute(string source, ExecutionResult result);
 	}
 }

@@ -21,8 +21,5 @@ namespace TwinEditor
 		public void ExecutePython(string statement) {
 			py.ExecuteCode(statement);
 		}
-		
-		
-		
 	}
 }
