@@ -24,6 +24,7 @@ namespace TwinEditor.UI
 		protected ICommunicationProtocol[] protocols;
 		List<SessionTabControl> tabControls = new List<SessionTabControl>();
 		List<TabPage> tabPages = new List<TabPage>();
+		protected List<ToolStripMenuItem> chooseFileTypeMenuItems = new List<ToolStripMenuItem>();
 		Controller controller;
 		
 		/// <summary>
@@ -44,6 +45,12 @@ namespace TwinEditor.UI
 		    cutToolStripMenuItem.Enabled = fileOpen;
 		    deleteToolStripMenuItem.Enabled = fileOpen;
 		    
+		    foreach(ToolStripMenuItem item in chooseFileTypeMenuItems)
+		    {
+		    	item.Enabled = fileOpen;
+		    	item.Checked = item.Tag == tabControls[MainTab.SelectedIndex].FileType;
+		    }
+		    
 			if(MainTab.TabPages.Count == 0)
 			{
 				scriptToolStripMenuItem.Enabled = false;			
@@ -52,12 +59,6 @@ namespace TwinEditor.UI
 				saveAsToolStripMenuItem.Enabled = false;
 				saveAllToolStripMenuItem.Enabled = false;
 				printToolStripMenuItem.Enabled = false;
-				if(MainTab.SelectedTab != null) {
-					if(((SessionTabControl) MainTab.SelectedTab.Controls[0]).State != SessionState.Disconnected)
-					{
-						shareToolStripMenuItem.Enabled = false;
-					}
-				}
 			}
 			else
 			{
@@ -113,7 +114,23 @@ namespace TwinEditor.UI
 					newFilter = "|" + newFilter;
 				}
 				openFileDialog.Filter += newFilter;
+				
+				// Add file type as choice in 'Edit' menu
+				var chooseMenuItem = new ToolStripMenuItem(fileType.Name);
+				var editItems = editToolStripMenuItem.DropDown.Items;
+				chooseMenuItem.Tag = fileType;
+				chooseMenuItem.Enabled = false;
+				editItems.Insert(editItems.Count-1, chooseMenuItem);
+				chooseMenuItem.Click += delegate
+				{
+					tabControls[MainTab.SelectedIndex].FileType = (IFileType)chooseMenuItem.Tag;
+					UpdateMenuItems();
+				};
+				chooseFileTypeMenuItems.Add(chooseMenuItem);
 			}
+			
+			// Add a separator after the file type choices
+			editToolStripMenuItem.DropDown.Items.Insert(editToolStripMenuItem.DropDown.Items.Count-1, new ToolStripSeparator());
 			
 			// Supported communication protocols
 			protocols = ExtensionUtil.FindTypesImplementing(typeof(ICommunicationProtocol))
