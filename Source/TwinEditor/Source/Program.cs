@@ -24,7 +24,7 @@ namespace TwinEditor
 		[STAThread]
 		private static void Main(string[] args)
 		{
-		    // Debug
+		    /*// Debug
 		    if(!Directory.Exists("Debug"))
 		    {
 		        Directory.CreateDirectory("Debug");
@@ -76,8 +76,8 @@ namespace TwinEditor
     			var shadowPatch = DiffMatchPatch.patch_make(shadow, diffs);
     			shadow = (string)DiffMatchPatch.patch_apply(shadowPatch, shadow)[0];
     			
-    			/* For the real context, we have to perform each operation by hand,
-    			so the context can do things like moving around the selection area */
+    			// For the real context, we have to perform each operation by hand,
+    			//so the context can do things like moving around the selection area
     			var textPatch = DiffMatchPatch.patch_make(context, diffs);
     			foreach(var patch in textPatch)
     			{
@@ -90,7 +90,7 @@ namespace TwinEditor
 		        }
 		        Console.WriteLine("Data' = {0}", context);
 		        Console.WriteLine("Shadow' = {0}", shadow);				
-		    }
+		    }*/
 		    
 		    #if (!DEBUG)
 		    try

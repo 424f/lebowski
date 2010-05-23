@@ -21,8 +21,10 @@ namespace TwinEditor
 		
 		private void InitializePythonEngine()
 		{
-            engine = Python.CreateEngine();
+			engine = Python.CreateEngine();
+
             scope = engine.CreateScope();
+            
             runtime = engine.Runtime;
 		}
 		
@@ -79,6 +81,8 @@ namespace TwinEditor
                 Write(this, e);
             }
         }
+        
+        public int softspace { get; set; }
 		
 	}
 	
