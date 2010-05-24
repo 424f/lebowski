@@ -1,6 +1,6 @@
 ﻿namespace TwinEditor.UI
 {
-	partial class ExecutionTabControl
+	partial class ExecutionViewForm
 	{
 		/// <summary>
 		/// Designer variable used to keep track of non-visual components.

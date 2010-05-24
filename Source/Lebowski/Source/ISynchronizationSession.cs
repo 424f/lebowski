@@ -6,18 +6,18 @@ namespace Lebowski
 {
 	public interface ISynchronizationSession
 	{
-	    SessionState State { get; }
+	    SessionStates State { get; }
 	    DifferentialSynchronizationStrategy SynchronizationStrategy { get; }
 		TextModel.ITextContext Context { get; }
 		
-		void StartSession(
+		/*void StartSession(
 			DifferentialSynchronizationStrategy strategy,
 			IConnection applicationConnection
 		);
 		
 		void AwaitingSession();
 		
-		void CloseSession();
+		void CloseSession();*/
 		
         string FileName { get; set; }
 			

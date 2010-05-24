@@ -109,10 +109,11 @@
     <Compile Include="Source\Controller.cs" />
     <Compile Include="Source\FileTypes\ExecutionResult.cs" />
     <Compile Include="Source\FileTypes\PythonInterpreter.cs" />
-    <Compile Include="Source\ISession.cs" />
+    <Compile Include="Source\ISessionView.cs" />
     <Compile Include="Source\Messaging\ChatMessage.cs" />
     <Compile Include="Source\Messaging\ExecutionResultMessage.cs" />
     <Compile Include="Source\Program.cs" />
+    <Compile Include="Source\SessionContext.cs" />
     <Compile Include="Source\TranslationUtil.cs" />
     <Compile Include="Source\UI\AboutDialog.cs" />
     <Compile Include="Source\UI\AboutDialog.Designer.cs">
@@ -126,18 +127,18 @@
     <Compile Include="Source\FileTypes\IFileType.cs" />
     <Compile Include="Source\FileTypes\PythonFileType.cs" />
     <Compile Include="Source\FileTypes\TextFileType.cs" />
-    <Compile Include="Source\UI\ExecutionTabControl.cs" />
-    <Compile Include="Source\UI\ExecutionTabControl.Designer.cs">
-      <DependentUpon>ExecutionTabControl.cs</DependentUpon>
+    <Compile Include="Source\UI\ExecutionViewForm.cs" />
+    <Compile Include="Source\UI\ExecutionViewForm.Designer.cs">
+      <DependentUpon>ExecutionViewForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Source\UI\IApplicationView.cs" />
-    <Compile Include="Source\UI\MainForm.cs" />
-    <Compile Include="Source\UI\MainForm.Designer.cs">
-      <DependentUpon>MainForm.cs</DependentUpon>
+    <Compile Include="Source\UI\ApplicationViewForm.cs" />
+    <Compile Include="Source\UI\ApplicationViewForm.Designer.cs">
+      <DependentUpon>ApplicationViewForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Source\UI\SessionTabControl.cs" />
-    <Compile Include="Source\UI\SessionTabControl.Designer.cs">
-      <DependentUpon>SessionTabControl.cs</DependentUpon>
+    <Compile Include="Source\UI\SessionViewForm.cs" />
+    <Compile Include="Source\UI\SessionViewForm.Designer.cs">
+      <DependentUpon>SessionViewForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Test\PythonInterpreterTest.cs" />
     <Compile Include="Test\UITester.cs" />
@@ -150,14 +151,14 @@
     <EmbeddedResource Include="Source\UI\ErrorMessage.resx">
       <DependentUpon>ErrorMessage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Source\UI\ExecutionTabControl.resx">
-      <DependentUpon>ExecutionTabControl.cs</DependentUpon>
+    <EmbeddedResource Include="Source\UI\ExecutionViewForm.resx">
+      <DependentUpon>ExecutionViewForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Source\UI\MainForm.resx">
-      <DependentUpon>MainForm.Designer.cs</DependentUpon>
+      <DependentUpon>ApplicationViewForm.Designer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Source\UI\SessionTabControl.resx">
-      <DependentUpon>SessionTabControl.cs</DependentUpon>
+    <EmbeddedResource Include="Source\UI\SessionViewForm.resx">
+      <DependentUpon>SessionViewForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
   </ItemGroup>
@@ -168,6 +169,7 @@
     </ProjectReference>
     <Folder Include="Source\" />
     <Folder Include="Source\Messaging" />
+    <Folder Include="Source\Synchronization" />
     <Folder Include="Source\Presentation" />
     <Folder Include="Source\UI\" />
   </ItemGroup>

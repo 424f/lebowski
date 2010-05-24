@@ -1,7 +1,7 @@
 ﻿
 namespace TwinEditor.UI
 {
-	partial class SessionTabControl
+	partial class SessionViewForm
 	{
 		/// <summary>
 		/// Designer variable used to keep track of non-visual components.
@@ -29,7 +29,7 @@ namespace TwinEditor.UI
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SessionTabControl));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SessionViewForm));
 			this.TabControl = new CloseableTabControl(1);
 			TabControl.TabClosed += delegate (object sender, TabClosedEventArgs e) { TabControl.TabPages.RemoveAt(e.TabIndex); };
 			this.tabPage3 = new System.Windows.Forms.TabPage();

@@ -107,7 +107,7 @@ namespace TwinEditor.UI
     					var menuItem = new ToolStripMenuItem(protocol.Name);
     					menuItem.Click += delegate 
     					{
-    					    OnShareSession(new ShareSessionEventArgs(tabControls[MainTab.SelectedIndex], currentProtocol));
+    					    OnShareSession(new ShareSessionEventArgs(tabControls[MainTab.SelectedIndex].SessionContext, currentProtocol));
     					};
     					shareToolStripMenuItem.DropDown.Items.Add(menuItem);
     				}
@@ -127,7 +127,7 @@ namespace TwinEditor.UI
 		}
 		private ICommunicationProtocol[] communicationProtocols;
 		
-		List<SessionTabControl> tabControls = new List<SessionTabControl>();
+		List<SessionViewForm> tabControls = new List<SessionViewForm>();
 		List<TabPage> tabPages = new List<TabPage>();
 		protected List<ToolStripMenuItem> chooseFileTypeMenuItems = new List<ToolStripMenuItem>();
 		Controller controller;
@@ -176,7 +176,7 @@ namespace TwinEditor.UI
 				var tab = tabControls[MainTab.SelectedIndex];
 				compileToolStripMenuItem.Enabled = tab.FileType.CanCompile;
 				runToolStripMenuItem.Enabled = tab.FileType.CanExecute;		
-				shareToolStripMenuItem.Enabled = tab.State == SessionState.Disconnected;
+				shareToolStripMenuItem.Enabled = tab.SessionContext.State == SessionStates.Disconnected;
 			}
 		}
 		
@@ -202,26 +202,26 @@ namespace TwinEditor.UI
 		    item.Text = ApplicationUtil.LanguageResources.GetString(id);
 		}
 		
-		public ISession CreateNewSession(IFileType fileType)
+		public ISessionView CreateNewSession(IFileType fileType)
 		{
 		    return CreateNewTab(fileType);
 		}
 	
-		public SessionTabControl CreateNewTab(IFileType fileType)
+		public SessionViewForm CreateNewTab(IFileType fileType)
 		{
 			Logger.Info(string.Format("Creating new tab of file type {0}", fileType.Name));
 			
 			// Create a new tab and add a FileTabControl to it
 			string filename = "New " + controller.GetNextFileNumber() + fileType.FileExtension;
 			TabPage tabPage = new TabPage(filename);
-			SessionTabControl tab = new SessionTabControl(tabPage);
+			SessionViewForm tab = new SessionViewForm(this, tabPage);
 			tab.Dock = DockStyle.Fill;
 			tab.FileType = fileType;
 			tab.FileName = filename;
 			// Add callback for StateChanged in order to disable share menu item, when already shared
 			tab.StateChanged += delegate(object sender, StateChangedEventArgs e)
 			{
-				if (e.State != SessionState.Disconnected)
+				if (e.State != SessionStates.Disconnected)
 				{
 					this.shareToolStripMenuItem.Enabled = false;
 				}
@@ -280,18 +280,18 @@ namespace TwinEditor.UI
 		
 		void SaveToolStripMenuItemClick(object sender, EventArgs e)
 		{	
-			SessionTabControl tabControl = tabControls[MainTab.SelectedIndex];
+			SessionViewForm tabControl = tabControls[MainTab.SelectedIndex];
 			SaveRequest(tabControl);
 		}
 		
 		void SaveAsToolStripMenuItemClick(object sender, EventArgs e)
 		{	
-			SessionTabControl tabControl = tabControls[MainTab.SelectedIndex];
+			SessionViewForm tabControl = tabControls[MainTab.SelectedIndex];
 			SaveWithDialog(tabControl);
 		}
 		
 		// checks whether the tab is already on disk, and if yes calls 'Save' else calls 'SaveWithDialog'.
-		void SaveRequest(SessionTabControl tabControl)
+		void SaveRequest(SessionViewForm tabControl)
 		{
 			if(!tabControl.OnDisk)
 			{
@@ -308,7 +308,7 @@ namespace TwinEditor.UI
 		}
 		
 		// opens saveFileDialog
-		void SaveWithDialog(SessionTabControl tabControl)
+		void SaveWithDialog(SessionViewForm tabControl)
 		{
 			saveFileDialog.RestoreDirectory = true;
 			saveFileDialog.FileName = System.IO.Path.GetFileName(tabControl.FileName);
@@ -329,7 +329,7 @@ namespace TwinEditor.UI
 		
 		void SaveAllToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			foreach(SessionTabControl tabControl in tabControls)
+			foreach(SessionViewForm tabControl in tabControls)
 			{
 				SaveRequest(tabControl);
 			}
@@ -346,7 +346,7 @@ namespace TwinEditor.UI
 		}
 		
 		void CloseTab(int index) {
-			SessionTabControl tabControl = tabControls[index];
+			SessionViewForm tabControl = tabControls[index];
 			// check if the file has been modified since last save
 			if (tabControl.FileModified)
 			{	
@@ -365,14 +365,14 @@ namespace TwinEditor.UI
 		}
 		
 		void RunToolStripMenuItemItemClick(object sender, EventArgs e) {
-			SessionTabControl tabControl = tabControls[MainTab.SelectedIndex];		
+			SessionViewForm tabControl = tabControls[MainTab.SelectedIndex];		
 			
 			ExecutionResult result = new ExecutionResult();
 			
 			// Create new executions tab
 			tabControl.IncrementNumExections();
 			TabPage newPage = new TabPage(string.Format("Execution #{0}", tabControl.NumExecutions));
-			ExecutionTabControl execution = new ExecutionTabControl(result);
+			ExecutionViewForm execution = new ExecutionViewForm(result);
 			newPage.Controls.Add(execution);
 			execution.Dock = System.Windows.Forms.DockStyle.Fill;
 			tabControl.TabControl.TabPages.Add(newPage);
@@ -383,9 +383,9 @@ namespace TwinEditor.UI
 			// When execution is finished, propagate result to other users
 			result.FinishedExecution += delegate(object o, FinishedExecutionEventArgs fe)
 			{
-				if(tabControl.State == SessionState.Connected)
+				if(tabControl.SessionContext.State == SessionStates.Connected)
 				{
-					tabControl.ApplicationConnection.Send(new Messaging.ExecutionResultMessage());
+					tabControl.SessionContext.ApplicationConnection.Send(new Messaging.ExecutionResultMessage());
 				}
 			};
 			

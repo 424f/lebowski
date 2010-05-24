@@ -5,11 +5,11 @@ using System.Windows.Forms;
 
 namespace TwinEditor.UI
 {
-	public partial class ExecutionTabControl : UserControl
+	public partial class ExecutionViewForm : UserControl
 	{		
 	    private ExecutionResult executionResult;
 	    
-		public ExecutionTabControl(ExecutionResult executionResult)
+		public ExecutionViewForm(ExecutionResult executionResult)
 		{
 			InitializeComponent();
 			

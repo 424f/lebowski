@@ -35,25 +35,14 @@ namespace TwinEditor
 				// Register to communication protocol events
 				protocol.HostSession += delegate(object sender, HostSessionEventArgs e)
 				{ 
-					MultichannelConnection mcc = new MultichannelConnection(e.Connection);
-					var syncConnection = mcc.CreateChannel();
-					var sync = new DifferentialSynchronizationStrategy(0, e.Session.Context, syncConnection);
-					sync.EstablishSession();
-
-					e.Session.StartSession(sync, mcc.CreateChannel());
-					
+				    SessionContext context = (SessionContext)e.Session;
+				    context.EstablishSharedSession(0, e.Connection);					
 				};
 				
 				protocol.JoinSession += delegate(object sender, JoinSessionEventArgs e)
 				{ 
-					// TODO: choose correct file type
-					ISession tab = view.CreateNewSession(fileTypes[0]);
-					
-					MultichannelConnection mcc = new MultichannelConnection(e.Connection);
-					var syncConnection = mcc.CreateChannel();
-					var sync = new DifferentialSynchronizationStrategy(1, tab.Context, syncConnection);
-					tab.StartSession(sync, mcc.CreateChannel());
-					
+				    ISessionView sessionView = view.CreateNewSession(fileTypes[0]);
+				    sessionView.SessionContext.EstablishSharedSession(1, e.Connection);
 				};	                
             }
             
@@ -67,13 +56,13 @@ namespace TwinEditor
             view.Open += delegate(object sender, OpenEventArgs e)
             {
                 // Create a new tab for the file
-    			ISession tab = view.CreateNewSession(e.FileType);
+    			ISessionView tab = view.CreateNewSession(e.FileType);
     			tab.FileName = e.FileName;
     			
     			// Put content into editor
     			// case when user cancelled dialog not handled yet
     			string content = File.ReadAllText(e.FileName);
-    			tab.Context.Data = content;
+    			tab.SessionContext.Context.Data = content;
             };
             
             view.Save += delegate(object sender, SaveEventArgs e)
@@ -82,7 +71,7 @@ namespace TwinEditor
     			{
     			    var tabControl = e.Session;
     			    e.Session.FileName = e.FileName;
-    				File.WriteAllText(tabControl.FileName, tabControl.Context.Data);
+    				File.WriteAllText(tabControl.FileName, tabControl.SessionContext.Context.Data);
     				Logger.Info(string.Format("{0} has been saved successfully", tabControl.FileName));
     			}
     			catch (Exception exc)

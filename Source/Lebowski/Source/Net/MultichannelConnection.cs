@@ -26,7 +26,16 @@ namespace Lebowski.Net
 		
 		void ConnectionReceived(object sender, ReceivedEventArgs e)
 		{						
-			MultichannelMessage msg = (MultichannelMessage)e.Message;
+		    MultichannelMessage msg;
+		    try
+		    {
+			    msg = (MultichannelMessage)e.Message;
+		    }
+		    catch(Exception exception)
+		    {
+		        Logger.ErrorFormat("Received invalid multichannel message: {0}", exception);
+		        return;
+		    }
 			
 			if(!channels.ContainsKey(msg.ChannelId))
 			{

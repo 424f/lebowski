@@ -12,13 +12,17 @@ using log4net;
 
 namespace TwinEditor.UI
 {
-	public partial class SessionTabControl : UserControl, ISession
+	public partial class SessionViewForm : UserControl, ISessionView
 	{	
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(MainForm));
+	    public SessionContext SessionContext
+	    {
+	        get;
+	        private set;
+	    }
+	    
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(SessionViewForm));
 		
 		public event EventHandler<StateChangedEventArgs> StateChanged;
-		
-		public SessionState State { get; private set; }
 		
 		public string FileName
 		{
@@ -44,7 +48,7 @@ namespace TwinEditor.UI
 			{
 				fileType = value;
 				// ICSharpCode.TextEditor.dll does include a seperate syntax highlight definition (.xshd) for python and text.
-				// However python-mode.xshd is identical to boo.xshd
+				// However, python-mode.xshd is identical to boo.xshd
 				SourceCode.SetHighlighting(fileType.Name);
 			}
 		}
@@ -55,22 +59,36 @@ namespace TwinEditor.UI
 		}
 		
 		public ITextContext Context { get; protected set; }
-		public IConnection ApplicationConnection { get; protected set; }
+		public MainForm MainForm { get; private set; }
+		
 		public DifferentialSynchronizationStrategy SynchronizationStrategy { get; protected set; }
 	
-		public SessionTabControl(TabPage tabPage)
+		public SessionViewForm(MainForm mainForm, TabPage tabPage)
 		{
 			InitializeComponent();
 			
+			this.MainForm = mainForm;
 			this.tabPage = tabPage;
 			this.OnDisk = false;
 			this.FileModified = false;
+			
 			ChatText.Enabled = false;
 			
 			// Create a text context for the source code editor
 			Context = new TextEditorTextContext(SourceCode);
 			
-			this.SetState(SessionState.Disconnected);
+			SessionContext = new SessionContext(Context);
+			SessionContext.StateChanged += delegate(object sender, EventArgs e)
+			{
+			    Context.Invoke((Action)delegate 
+                {
+                    SessionContextStateChanged(sender, e);
+                });
+			};
+			
+			SessionContext.ReceiveChatMessage += SessionContextReceiveChatMessage;
+			
+			this.SetState(SessionStates.Disconnected);
 		}
 		
 		public void Close()
@@ -78,28 +96,34 @@ namespace TwinEditor.UI
 			
 		}
 		
-		public void SetState(SessionState state)
+		public void UpdateGuiState()
 		{
-			if (State != state)
-			{
-				OnStateChanged(new StateChangedEventArgs(state));
-			}
-		    State = state;
-		    switch(State)
+            MainForm.UpdateGuiState();		    
+            ChatText.Enabled = SessionContext.State == SessionStates.Connected;
+		}
+		
+		public void SetState(SessionStates state)
+		{
+		    Logger.InfoFormat("State changed to {0}", state);
+		    
+			OnStateChanged(new StateChangedEventArgs(state));
+			
+		    switch(state)
 		    {
-		        case SessionState.Disconnected:
+		        case SessionStates.Disconnected:
 		    		this.ChangeStatus(TranslationUtil.GetString(ApplicationUtil.LanguageResources, "StatusDisconnected"), false, false);
 		            break;
-		        case SessionState.Connecting:
+		        case SessionStates.Connecting:
 		            this.ChangeStatus(TranslationUtil.GetString(ApplicationUtil.LanguageResources, "StatusConnecting"), true, false);
 		            break;
-		        case SessionState.Connected:
+		        case SessionStates.Connected:
 		           	this.ChangeStatus(TranslationUtil.GetString(ApplicationUtil.LanguageResources, "StatusConnected"), false, false);
 		            break;
-		        case SessionState.AwaitingConnection:
+		        case SessionStates.AwaitingConnection:
 		            this.ChangeStatus(TranslationUtil.GetString(ApplicationUtil.LanguageResources, "StatusAwaiting"), true, true);
 		            break;
 		    }
+		    UpdateGuiState();
 		    
 		}
 		
@@ -129,37 +153,6 @@ namespace TwinEditor.UI
 			{
 				StateChanged(this, e);
 			}
-		}
-		
-		public void StartSession(DifferentialSynchronizationStrategy strategy, IConnection applicationConnection)
-		{
-		    if(SynchronizationStrategy != null)
-		    {
-		        throw new InvalidOperationException("synchronization stategy has already been set.");
-		    }
-		    if(ApplicationConnection != null)
-		    {
-		        throw new InvalidOperationException("application connection has already been set.");
-		    }
-		    		    
-			SynchronizationStrategy = strategy;
-			ApplicationConnection = applicationConnection;
-			
-			ChatText.Invoke((Action)delegate { ChatText.Enabled = true; });
-			
-            ApplicationConnection.Received += ApplicationConnectionReceived;
-			this.SetState(SessionState.Connected);
-		}
-		
-		public void AwaitingSession()
-		{
-			this.SetState(SessionState.AwaitingConnection);
-		}
-		
-		public void CloseSession()
-		{
-			ChatText.Enabled = false;
-			this.SetState(SessionState.Disconnected);
 		}
 		
 		void ChatTextKeyDown(object sender, KeyEventArgs e)
@@ -196,9 +189,9 @@ namespace TwinEditor.UI
             if(ChatText.Text.Length == 0)
 				return;
             ChatMessage message = new ChatMessage(Environment.UserName, ChatText.Text);
-			ApplicationConnection.Send(message);
+            SessionContext.SendChatMessage(message);
 			AddChatMessage(message);
-			ChatText.Text = "";		    
+			ChatText.Text = "";		                
 		}
 		
 		private void AddChatMessage(ChatMessage msg)
@@ -226,33 +219,17 @@ namespace TwinEditor.UI
 			// TODO: if elegantly possible for all protocols, consider implementing this.
 		}
 		
-		private void ApplicationConnectionReceived(object sender, ReceivedEventArgs e)
+		public void SessionContextStateChanged(object o, EventArgs e)
 		{
-		    if(e.Message is ChatMessage)
+		    SetState(SessionContext.State);
+		}
+		
+		public void SessionContextReceiveChatMessage(object o, ReceiveChatMessageEventArgs e)
+		{
+		    Context.Invoke((Action)delegate
 		    {
-    			ChatText.Invoke((Action)delegate { AddChatMessage((ChatMessage)e.Message); });
-		    }
-		    else if(e.Message is ExecutionResultMessage)
-		    {		    		
-		    	ChatText.Invoke((Action) delegate 
-				{		    	              
-			    	ExecutionResultMessage erm = (ExecutionResultMessage)e.Message;
-			    	
-			    	ExecutionResult result = new ExecutionResult();
-			    		
-			    	TabPage newPage = new TabPage(string.Format("Remote execution"));
-			    	TabControl.TabPages.Add(newPage);
-			    	
-					ExecutionTabControl execution = new ExecutionTabControl(result);
-					
-					result.OnExecutionChanged(new ExecutionChangedEventArgs(erm.StandardOut));
-					result.OnFinishedExecution(new FinishedExecutionEventArgs(0));
-				});
-		    }
-		    else
-		    {
-		        Logger.WarnFormat("Received unsupported message on application connection: {0}", e.Message.GetType().Name);
-		    }
+		        AddChatMessage(e.ChatMessage);
+            });
 		}
 	}
 	
@@ -260,9 +237,9 @@ namespace TwinEditor.UI
 	{
 		//public IConnection Connection { get; private set; }
 		//public ISessionContext Session { get; private set; }
-		public SessionState State { get; private set; }
+		public SessionStates State { get; private set; }
 		
-		public StateChangedEventArgs(SessionState state)
+		public StateChangedEventArgs(SessionStates state)
 		{
 			State = state;
 		}

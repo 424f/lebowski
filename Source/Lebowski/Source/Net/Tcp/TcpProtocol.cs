@@ -19,14 +19,14 @@ namespace Lebowski.Net.Tcp
 			TcpShareForm form = new TcpShareForm();
 			form.Submit += delegate
 			{
-				session.AwaitingSession();
+				//session.AwaitingSession();
 				form.Enabled = false;
 				form.Invoke((Action) delegate
 				{
 					form.Dispose();
 				});
 				TcpServerConnection connection = new TcpServerConnection(form.Port);
-				session.AwaitingSession();
+				//session.AwaitingSession();
 				connection.ClientConnected += delegate
 				{
 					OnHostSession(new HostSessionEventArgs(session, connection));

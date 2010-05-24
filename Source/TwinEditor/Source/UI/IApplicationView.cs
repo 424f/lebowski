@@ -9,7 +9,7 @@ namespace TwinEditor.UI
     {
         IFileType[] FileTypes { get; set; }
         ICommunicationProtocol[] CommunicationProtocols { get; set; }
-        ISession CreateNewSession(IFileType fileType);
+        ISessionView CreateNewSession(IFileType fileType);
         
         void Show();
         
@@ -28,9 +28,9 @@ namespace TwinEditor.UI
     public sealed class ShareSessionEventArgs : EventArgs
     {
         public ICommunicationProtocol Protocol { get; private set; }
-        public ISession Session { get; private set; }
+        public SessionContext Session { get; private set; }
         
-        public ShareSessionEventArgs(ISession session, ICommunicationProtocol protocol)
+        public ShareSessionEventArgs(SessionContext session, ICommunicationProtocol protocol)
         {
             Protocol = protocol;
             Session = session;
@@ -51,10 +51,10 @@ namespace TwinEditor.UI
     
     public sealed class SaveEventArgs : EventArgs
     {
-        public ISession Session { get; private set; }
+        public ISessionView Session { get; private set; }
         public string FileName { get; private set; }
         
-        public SaveEventArgs(ISession session, string fileName)
+        public SaveEventArgs(ISessionView session, string fileName)
         {
             Session = session;
             FileName = fileName;
