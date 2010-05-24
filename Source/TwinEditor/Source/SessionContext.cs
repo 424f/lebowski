@@ -218,10 +218,7 @@ namespace TwinEditor
             session.State = SessionStates.Connecting;
             session.ApplicationConnection.Received += ApplicationConnectionReceived;
             
-            // If we are the client, we'll say hi to the client
-            session.ApplicationConnection.Send("HI");
-            Logger.Info("Sending 'HI'");
-            
+            // If we are the client, we'll say hi to the client  
             session.ApplicationConnection.Send("HI 0");
             Logger.Info("Sending 'HI'");
         }
