@@ -219,6 +219,11 @@ namespace TwinEditor
             session.ApplicationConnection.Received += ApplicationConnectionReceived;
             
             // If we are the client, we'll say hi to the client
+            if(session.SiteId == 1)
+            {
+                session.ApplicationConnection.Send("HI");
+                Logger.Info("Sending 'HI'");
+            }
             session.ApplicationConnection.Send("HI 0");
             Logger.Info("Sending 'HI'");
         }
