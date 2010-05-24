@@ -187,17 +187,24 @@ namespace Lebowski.Net.Skype
 		internal void Send(string user, int connectionId, object o)
 		{
 			var stream = streams[user];
-			
-			byte[] prefix = BitConverter.GetBytes(connectionId);
-			byte[] buffer = NetUtils.Serialize(o);
-			
-			byte[] both = new Byte[prefix.Length + buffer.Length];
-			prefix.CopyTo(both, 0);
-			buffer.CopyTo(both, prefix.Length);
-			
-			string base64buffer = Convert.ToBase64String(both);
-			
-			stream.Write(base64buffer);			
+			// TODO: hackish, is there a nicer way to invoke in the UI thread?
+			System.Windows.Forms.Form.ActiveForm.Invoke((Action)delegate 
+			{
+				lock(streams)
+				{
+				
+					byte[] prefix = BitConverter.GetBytes(connectionId);
+					byte[] buffer = NetUtils.Serialize(o);
+					
+					byte[] both = new Byte[prefix.Length + buffer.Length];
+					prefix.CopyTo(both, 0);
+					buffer.CopyTo(both, prefix.Length);
+					
+					string base64buffer = Convert.ToBase64String(both);
+					
+					stream.Write(base64buffer);			
+				}
+			});
 		}
 		
 		void OnHostSession(HostSessionEventArgs e)
