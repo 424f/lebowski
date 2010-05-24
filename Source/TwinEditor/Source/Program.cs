@@ -147,7 +147,7 @@ namespace TwinEditor
 			SetupConfiguration();
 			
 			// Display main form
-			IApplicationView applicationView = new MainForm(new Controller());
+			IApplicationView applicationView = new ApplicationViewForm();
 			
 			ApplicationPresenter presenter = new ApplicationPresenter(applicationView);
 			applicationView.Presenter = presenter;

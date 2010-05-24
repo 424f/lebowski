@@ -16,7 +16,7 @@ namespace TwinEditor.Test
 		[Test]
 		public void test1()
 		{
-			MainForm mainForm = new MainForm(new Controller());
+			ApplicationViewForm mainForm = new ApplicationViewForm();
 			mainForm.Show();
 			Assert.IsNotNull(mainForm);
 		}

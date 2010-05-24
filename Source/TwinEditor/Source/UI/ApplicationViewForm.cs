@@ -16,9 +16,9 @@ using log4net;
 
 namespace TwinEditor.UI
 {
-	public partial class MainForm : Form, IApplicationView
+	public partial class ApplicationViewForm : Form, IApplicationView
 	{
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(MainForm));
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(ApplicationViewForm));
 		
 		public event EventHandler<ShareSessionEventArgs> ShareSession;
 		public event EventHandler<OpenEventArgs> Open;
@@ -130,7 +130,11 @@ namespace TwinEditor.UI
 		List<SessionViewForm> tabControls = new List<SessionViewForm>();
 		List<TabPage> tabPages = new List<TabPage>();
 		protected List<ToolStripMenuItem> chooseFileTypeMenuItems = new List<ToolStripMenuItem>();
-		Controller controller;
+		
+		/// <summary>
+		/// The number that is assigned to next new file without name
+		/// </summary>
+		private int nextFileNumber = 1;
 		
 		/// <summary>
 		/// Updates GUI elements after the program state has changed
@@ -180,11 +184,9 @@ namespace TwinEditor.UI
 			}
 		}
 		
-		public MainForm(Controller controller)
+		public ApplicationViewForm()
 		{			
 			InitializeComponent();
-			
-			this.controller = controller;
 
 			Logger.Info("MainForm component initialized.");
 			//SourceCode.SetHighlighting("C#");
@@ -212,7 +214,7 @@ namespace TwinEditor.UI
 			Logger.Info(string.Format("Creating new tab of file type {0}", fileType.Name));
 			
 			// Create a new tab and add a FileTabControl to it
-			string filename = "New " + controller.GetNextFileNumber() + fileType.FileExtension;
+			string filename = "New " + nextFileNumber++ + fileType.FileExtension;
 			TabPage tabPage = new TabPage(filename);
 			SessionViewForm tab = new SessionViewForm(this, tabPage);
 			tab.Dock = DockStyle.Fill;

@@ -4,9 +4,6 @@ using System.Drawing;
 
 namespace TwinEditor.UI
 {
-	/// <summary>
-	/// Description of CloseabletabControl.
-	/// </summary>
 	public class CloseableTabControl : TabControl
 	{
 		public event EventHandler<TabClosedEventArgs> TabClosed;

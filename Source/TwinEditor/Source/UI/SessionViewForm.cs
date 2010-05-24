@@ -59,15 +59,15 @@ namespace TwinEditor.UI
 		}
 		
 		public ITextContext Context { get; protected set; }
-		public MainForm MainForm { get; private set; }
+		public ApplicationViewForm ApplicationViewForm { get; private set; }
 		
 		public DifferentialSynchronizationStrategy SynchronizationStrategy { get; protected set; }
 	
-		public SessionViewForm(MainForm mainForm, TabPage tabPage)
+		public SessionViewForm(ApplicationViewForm applicationViewForm, TabPage tabPage)
 		{
 			InitializeComponent();
 			
-			this.MainForm = mainForm;
+			this.ApplicationViewForm = applicationViewForm;
 			this.tabPage = tabPage;
 			this.OnDisk = false;
 			this.FileModified = false;
@@ -98,7 +98,7 @@ namespace TwinEditor.UI
 		
 		public void UpdateGuiState()
 		{
-            MainForm.UpdateGuiState();		    
+            ApplicationViewForm.UpdateGuiState();		    
             ChatText.Enabled = SessionContext.State == SessionStates.Connected;
 		}
 		

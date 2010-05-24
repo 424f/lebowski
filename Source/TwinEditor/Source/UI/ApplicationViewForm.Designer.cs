@@ -1,7 +1,7 @@
 ﻿
 namespace TwinEditor.UI
 {
-	partial class MainForm
+	partial class ApplicationViewForm
 	{
 		/// <summary>
 		/// Designer variable used to keep track of non-visual components.
@@ -29,7 +29,7 @@ namespace TwinEditor.UI
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ApplicationViewForm));
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
