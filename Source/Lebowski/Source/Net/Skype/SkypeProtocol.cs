@@ -90,6 +90,7 @@ namespace Lebowski.Net.Skype
 			if(!streams.ContainsKey(user))
 			{
 				Application.Connect(user, true);
+				
 			}
 
 			while(!streams.ContainsKey(user))
@@ -188,7 +189,8 @@ namespace Lebowski.Net.Skype
 		{
 			var stream = streams[user];
 			// TODO: hackish, is there a nicer way to invoke in the UI thread?
-			System.Windows.Forms.Form.ActiveForm.Invoke((Action)delegate 
+			//System.Windows.Threading
+			System.Threading.SynchronizationContext.Current.Send(delegate 
 			{
 				lock(streams)
 				{
@@ -204,7 +206,7 @@ namespace Lebowski.Net.Skype
 					
 					stream.Write(base64buffer);			
 				}
-			});
+			}, null);
 		}
 		
 		void OnHostSession(HostSessionEventArgs e)
