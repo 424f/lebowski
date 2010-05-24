@@ -132,6 +132,7 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
 		
 		public void EstablishSession()
 		{
+		    return;
 		    lock(this)
 		    {
     		    if(isSessionEstablished)

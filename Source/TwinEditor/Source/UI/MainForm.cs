@@ -20,7 +20,6 @@ namespace TwinEditor.UI
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(MainForm));
 		
-		private IFileType[] fileTypes;
 		public IFileType[] FileTypes
 		{
 		    get
@@ -68,11 +67,60 @@ namespace TwinEditor.UI
     			
     			// Add a separator after the file type choices
     			editToolStripMenuItem.DropDown.Items.Insert(editToolStripMenuItem.DropDown.Items.Count-1, new ToolStripSeparator());		    		        
+		    }   
+		}
+		private IFileType[] fileTypes;
+		
+		
+		public ICommunicationProtocol[] CommunicationProtocols
+		{
+		    get
+		    {
+		        return communicationProtocols;
 		    }
 		    
+		    set
+		    {
+		        if(communicationProtocols != null)
+		        {
+		            throw new NotImplementedException("Reseting of communication protocols currently not supported.");
+		        }
+		        communicationProtocols = value;
+
+    			foreach(ICommunicationProtocol protocol in communicationProtocols)
+    			{
+    				ICommunicationProtocol currentProtocol = protocol;
+    				
+    				// After initializing, if the protocol is not enabled, we discard it
+    				if(!protocol.Enabled)
+    					continue;
+    				
+    				// Add menu item to share session
+    				if(protocol.CanShare)
+    				{
+    					var menuItem = new ToolStripMenuItem(protocol.Name);
+    					menuItem.Click += delegate 
+    					{  
+    						currentProtocol.Share(tabControls[MainTab.SelectedIndex]);
+    					};
+    					shareToolStripMenuItem.DropDown.Items.Add(menuItem);
+    				}
+    				
+    				// Add menu item to join session
+    				if(protocol.CanParticipate)
+    				{
+    					var menuItem = new ToolStripMenuItem(protocol.Name);
+    					menuItem.Click += delegate 
+    					{  
+    						currentProtocol.Participate();
+    					};
+    					participateToolStripMenuItem.DropDown.Items.Add(menuItem);
+    				}			
+    			}     
+		    }
 		}
+		private ICommunicationProtocol[] communicationProtocols;
 		
-		protected ICommunicationProtocol[] protocols;
 		List<SessionTabControl> tabControls = new List<SessionTabControl>();
 		List<TabPage> tabPages = new List<TabPage>();
 		protected List<ToolStripMenuItem> chooseFileTypeMenuItems = new List<ToolStripMenuItem>();
@@ -141,71 +189,16 @@ namespace TwinEditor.UI
 
 			// Translate the menu
 			TranslationUtil.TranslateMenuStrip(menuStrip1, ApplicationUtil.LanguageResources);
-			
-			// Supported communication protocols
-			protocols = ExtensionUtil.FindTypesImplementing(typeof(ICommunicationProtocol))
-				.Select((t) => t.GetConstructor(new Type[]{}).Invoke(new object[]{}))
-				.Cast<ICommunicationProtocol>()
-				.ToArray();
-			foreach(ICommunicationProtocol protocol in protocols)
-			{
-				ICommunicationProtocol currentProtocol = protocol;
-				
-				// After initializing, if the protocol is not enabled, we discard it
-				if(!protocol.Enabled)
-					continue;
-				
-				// Add menu item to share session
-				if(protocol.CanShare)
-				{
-					var menuItem = new ToolStripMenuItem(protocol.Name);
-					menuItem.Click += delegate 
-					{  
-						currentProtocol.Share(tabControls[MainTab.SelectedIndex]);
-					};
-					shareToolStripMenuItem.DropDown.Items.Add(menuItem);
-				}
-				
-				// Add menu item to join session
-				if(protocol.CanParticipate)
-				{
-					var menuItem = new ToolStripMenuItem(protocol.Name);
-					menuItem.Click += delegate 
-					{  
-						currentProtocol.Participate();
-					};
-					participateToolStripMenuItem.DropDown.Items.Add(menuItem);
-				}
-				
-				// Register to communication protocol events
-				currentProtocol.HostSession += delegate(object sender, HostSessionEventArgs e)
-				{ 
-					MultichannelConnection mcc = new MultichannelConnection(e.Connection);
-					var syncConnection = mcc.CreateChannel();
-					var sync = new DifferentialSynchronizationStrategy(0, e.Session.Context, syncConnection);
-					sync.EstablishSession();
-
-					e.Session.StartSession(sync, mcc.CreateChannel());
-					
-				};
-				
-				currentProtocol.JoinSession += delegate(object sender, JoinSessionEventArgs e)
-				{ 
-					// TODO: choose correct file type
-					SessionTabControl tab = CreateNewTab(fileTypes[0]);
-					
-					MultichannelConnection mcc = new MultichannelConnection(e.Connection);
-					var syncConnection = mcc.CreateChannel();
-					var sync = new DifferentialSynchronizationStrategy(1, tab.Context, syncConnection);
-					tab.StartSession(sync, mcc.CreateChannel());
-					
-				};				
-			}
 		}
 		
 		private void Translate(ToolStripMenuItem item, string id)
 		{
 		    item.Text = ApplicationUtil.LanguageResources.GetString(id);
+		}
+		
+		public ISessionContext CreateNewSession(IFileType fileType)
+		{
+		    return CreateNewTab(fileType);
 		}
 	
 		public SessionTabControl CreateNewTab(IFileType fileType)
