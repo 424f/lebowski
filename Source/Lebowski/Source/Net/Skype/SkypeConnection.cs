@@ -68,15 +68,16 @@ namespace Lebowski.Net.Skype
 		    bool running = true;
 		    while(running)
 		    {
+		        ReceivedEventArgs e;
 		        lock(receiveQueue)
 		        {
 		            while(receiveQueue.Count == 0)
 		            {
 		                Monitor.Wait(receiveQueue);
 		            }
-		            ReceivedEventArgs e = receiveQueue.Dequeue();
-		            OnReceived(e);
-		        }
+		            e = receiveQueue.Dequeue();
+		        }   
+		        OnReceived(e);
 		    }
 		}
 		
