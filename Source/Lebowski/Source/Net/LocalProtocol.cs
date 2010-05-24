@@ -20,6 +20,8 @@ namespace Lebowski.Net
 		private Thread dispatcherThread;
 		private Queue<ReceivedEventArgs> eventQueue;
 		
+		public object Tag { get; set; }
+		
 		public event EventHandler<ReceivedEventArgs> Received;
 		
 		private int ReceiveDelay = 0;

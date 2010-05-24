@@ -4,17 +4,18 @@ using System;
 namespace TwinEditor.Messaging
 {
     /// <summary>
-    /// Sent when a shared program's execution yields additional results
-    /// (e.g. compilation error, stdout, completed execution)
+    /// Sent when a shared program's execution finishes
     /// </summary>
     [Serializable]
     public sealed class ExecutionResultMessage
     {
         public string StandardOut { get; private set; }
-        public bool Finished { get; private set; }
+        public int ReturnCode { get; private set; }
         
-        public ExecutionResultMessage()
+        public ExecutionResultMessage(int returnCode, string standardOut)
         {
+            StandardOut = standardOut;
+            ReturnCode = returnCode;
         }
     }
 }

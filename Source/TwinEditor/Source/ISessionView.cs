@@ -11,7 +11,6 @@ namespace TwinEditor
     public interface ISessionView
     {
         string FileName { get; set; }
-        IFileType FileType { get; set; }
         SessionContext SessionContext { get; }
     }
 }

@@ -71,6 +71,8 @@ namespace Lebowski.Net
 		
 		private MultichannelConnection tunnel;
 		
+		public object Tag { get; set; }
+		
 		public TunneledConnection(MultichannelConnection tunnel)
 		{
 			this.tunnel = tunnel;

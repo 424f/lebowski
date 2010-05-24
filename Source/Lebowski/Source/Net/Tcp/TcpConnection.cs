@@ -19,10 +19,11 @@ namespace Lebowski.Net.Tcp
 		/// Occurs when the connection has been closed 
 		/// </summary>
 		public event EventHandler<EventArgs> ConnectionClosed;
-		
 		public event EventHandler<ReceivedEventArgs> Received;	
 		protected NetworkStream stream;
 		private bool running = true;
+		
+		public object Tag { get; set; }
 		
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(TcpConnection));
 		

@@ -65,12 +65,14 @@ namespace TwinEditor.FileTypes
 		private void DoExecute(string content, ExecutionResult result)
 		{
 			var writer = new PythonStringWriter();
+			string standardOut = "";
 			writer.Write += delegate(object sender, WriteEventArgs e)
 			{
+			    standardOut += e.Text;
 			    result.OnExecutionChanged(new ExecutionChangedEventArgs(e.Text.Replace("\n", Environment.NewLine)));
 			};						
 			interpreter.ExecuteCode(content, writer);			
-			result.OnFinishedExecution(new FinishedExecutionEventArgs(0));
+			result.OnFinishedExecution(new FinishedExecutionEventArgs(0, standardOut));
 		}
 	}
 }

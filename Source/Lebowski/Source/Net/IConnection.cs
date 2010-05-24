@@ -8,6 +8,11 @@ namespace Lebowski.Net
 		void Send(object o);
 		
 		event EventHandler<ReceivedEventArgs> Received;
+		
+		/// <summary>
+		/// Can be used to associate additional data with this connection
+		/// </summary>
+		object Tag { get; set; }
 	}
 	
 	public class ReceivedEventArgs : EventArgs

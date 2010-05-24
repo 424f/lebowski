@@ -63,7 +63,7 @@ namespace TwinEditor.UI
     				editItems.Insert(editItems.Count-1, chooseMenuItem);
     				chooseMenuItem.Click += delegate
     				{
-    					tabControls[MainTab.SelectedIndex].FileType = (IFileType)chooseMenuItem.Tag;
+    					tabControls[MainTab.SelectedIndex].SessionContext.FileType = (IFileType)chooseMenuItem.Tag;
     					UpdateMenuItems();
     				};
     				chooseFileTypeMenuItems.Add(chooseMenuItem);
@@ -157,7 +157,7 @@ namespace TwinEditor.UI
 		    foreach(ToolStripMenuItem item in chooseFileTypeMenuItems)
 		    {
 		    	item.Enabled = fileOpen;
-		    	item.Checked = MainTab.SelectedIndex != -1 && item.Tag == tabControls[MainTab.SelectedIndex].FileType;
+		    	item.Checked = MainTab.SelectedIndex != -1 && item.Tag == tabControls[MainTab.SelectedIndex].SessionContext.FileType;
 		    }
 		    
 			if(MainTab.TabPages.Count == 0)
@@ -178,8 +178,8 @@ namespace TwinEditor.UI
 				scriptToolStripMenuItem.Enabled = true;
 				printToolStripMenuItem.Enabled = true;
 				var tab = tabControls[MainTab.SelectedIndex];
-				compileToolStripMenuItem.Enabled = tab.FileType.CanCompile;
-				runToolStripMenuItem.Enabled = tab.FileType.CanExecute;		
+				compileToolStripMenuItem.Enabled = tab.SessionContext.FileType.CanCompile;
+				runToolStripMenuItem.Enabled = tab.SessionContext.FileType.CanExecute;		
 				shareToolStripMenuItem.Enabled = tab.SessionContext.State == SessionStates.Disconnected;
 			}
 		}
@@ -217,8 +217,13 @@ namespace TwinEditor.UI
 			string filename = "New " + nextFileNumber++ + fileType.FileExtension;
 			TabPage tabPage = new TabPage(filename);
 			SessionViewForm tab = new SessionViewForm(this, tabPage);
+			tabPage.Controls.Add(tab);
+			tabControls.Add(tab);
+			tabPages.Add(tabPage);
+	        MainTab.TabPages.Add(tabPage);
+	        
 			tab.Dock = DockStyle.Fill;
-			tab.FileType = fileType;
+			tab.SessionContext.FileType = fileType;
 			tab.FileName = filename;
 			// Add callback for StateChanged in order to disable share menu item, when already shared
 			tab.StateChanged += delegate(object sender, StateChangedEventArgs e)
@@ -228,10 +233,6 @@ namespace TwinEditor.UI
 					this.shareToolStripMenuItem.Enabled = false;
 				}
 			};
-			tabPage.Controls.Add(tab);
-			tabControls.Add(tab);
-			tabPages.Add(tabPage);
-			MainTab.TabPages.Add(tabPage);
 			MainTab.SelectedTab = tabPage;
 			UpdateMenuItems();
 			return tab;
@@ -314,7 +315,7 @@ namespace TwinEditor.UI
 		{
 			saveFileDialog.RestoreDirectory = true;
 			saveFileDialog.FileName = System.IO.Path.GetFileName(tabControl.FileName);
-			saveFileDialog.Filter = string.Format("{0}|{1}", tabControl.FileType.Name, tabControl.FileType.FileNamePattern);
+			saveFileDialog.Filter = string.Format("{0}|{1}", tabControl.SessionContext.FileType.Name, tabControl.SessionContext.FileType.FileNamePattern);
 			DialogResult result = saveFileDialog.ShowDialog();
 			if(result == DialogResult.OK)
 			{
@@ -367,32 +368,9 @@ namespace TwinEditor.UI
 		}
 		
 		void RunToolStripMenuItemItemClick(object sender, EventArgs e) {
-			SessionViewForm tabControl = tabControls[MainTab.SelectedIndex];		
+			SessionViewForm sessionView = tabControls[MainTab.SelectedIndex];		
+			sessionView.SessionContext.Execute();
 			
-			ExecutionResult result = new ExecutionResult();
-			
-			// Create new executions tab
-			tabControl.IncrementNumExections();
-			TabPage newPage = new TabPage(string.Format("Execution #{0}", tabControl.NumExecutions));
-			ExecutionViewForm execution = new ExecutionViewForm(result);
-			newPage.Controls.Add(execution);
-			execution.Dock = System.Windows.Forms.DockStyle.Fill;
-			tabControl.TabControl.TabPages.Add(newPage);
-			tabControl.TabControl.SelectedTab = newPage;
-			
-			tabControl.FileType.Execute(tabControl.SourceCode.Text, result);
-			
-			// When execution is finished, propagate result to other users
-			result.FinishedExecution += delegate(object o, FinishedExecutionEventArgs fe)
-			{
-				if(tabControl.SessionContext.State == SessionStates.Connected)
-				{
-					tabControl.SessionContext.ApplicationConnection.Send(new Messaging.ExecutionResultMessage());
-				}
-			};
-			
-			// Add
-			//this.scriptToolStripMenuItem.DropDownItems.Add
 		}
 		
 		#region OnFoo event methods

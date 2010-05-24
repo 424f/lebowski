@@ -10,6 +10,8 @@ namespace Lebowski.Net.Skype
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(SkypeProtocol));
 		
+		public object Tag { get; set; }
+		
 		public event EventHandler<ReceivedEventArgs> Received;
 
 		private string remote;

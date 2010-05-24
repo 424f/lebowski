@@ -21,6 +21,8 @@ namespace Lebowski.Net.Lidgren
 		
 		public event EventHandler<ReceivedEventArgs> Received;	
 		
+		public object Tag { get; set; }
+		
 		protected virtual void OnReceived(ReceivedEventArgs e)
 		{
 			if (Received != null) {

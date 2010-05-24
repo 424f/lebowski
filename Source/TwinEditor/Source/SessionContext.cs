@@ -5,6 +5,7 @@ using Lebowski.Net;
 using Lebowski.TextModel;
 using TwinEditor;
 using TwinEditor.Messaging;
+using TwinEditor.FileTypes;
 using log4net;
 
 namespace TwinEditor
@@ -15,6 +16,8 @@ namespace TwinEditor
         
         public event EventHandler StateChanged;
         public event EventHandler<ReceiveChatMessageEventArgs> ReceiveChatMessage;
+        public event EventHandler FileTypeChanged;
+        public event EventHandler<StartedExecutionEventArgs> StartedExecution;
         
         SessionState currentState;
         
@@ -36,6 +39,17 @@ namespace TwinEditor
 	    public DifferentialSynchronizationStrategy SynchronizationStrategy { get; set; }
 		public ITextContext Context { get; set; }
 		
+		public IFileType FileType
+		{
+		    get { return fileType; }
+		    set 
+		    {
+		        fileType = value;
+		        OnFileTypeChanged(new EventArgs());
+		    }
+		}
+		private IFileType fileType;
+		
 		public IConnection ApplicationConnection { get; private set; }
 		public IConnection SynchronizationConnection { get; private set; }
 		public int SiteId { get; private set; }
@@ -56,6 +70,12 @@ namespace TwinEditor
 		    ActivateState(new BootstrappingState(this));
 		    
 		    ApplicationConnection.Received += ApplicationConnectionReceived;
+		    
+		    // TODO: this has to be altered when support for multiple sites is added
+		    int otherSiteId = siteId == 0 ? 1 : 0;
+		    // We store the the connection's site id per connection
+		    ApplicationConnection.Tag = otherSiteId;
+		    SynchronizationConnection.Tag = otherSiteId;
 		}
 		
 		public void Close()
@@ -90,26 +110,38 @@ namespace TwinEditor
 		    }
 		    else if(e.Message is ExecutionResultMessage)
 		    {		    		
-		    	/*ChatText.Invoke((Action) delegate 
-				{		    	              
-			    	ExecutionResultMessage erm = (ExecutionResultMessage)e.Message;
-			    	
-			    	ExecutionResult result = new ExecutionResult();
-			    		
-			    	TabPage newPage = new TabPage(string.Format("Remote execution"));
-			    	TabControl.TabPages.Add(newPage);
-			    	
-					ExecutionTabControl execution = new ExecutionTabControl(result);
-					
-					result.OnExecutionChanged(new ExecutionChangedEventArgs(erm.StandardOut));
-					result.OnFinishedExecution(new FinishedExecutionEventArgs(0));
-				});*/
+		    	ExecutionResultMessage erm = (ExecutionResultMessage)e.Message;
+		    	
+		    	ExecutionResult result = new ExecutionResult();
+		    	
+		    	OnStartedExecution(new StartedExecutionEventArgs((int)ApplicationConnection.Tag, result));
+		    	
+				result.OnExecutionChanged(new ExecutionChangedEventArgs(erm.StandardOut));
+				result.OnFinishedExecution(new FinishedExecutionEventArgs(0, erm.StandardOut));
 		    }
 		    else
 		    {
 		        Logger.WarnFormat("Received unsupported message on application connection: {0}", e.Message.GetType().Name);
 		    }
 		}        
+        
+        public void Execute()
+        {
+			ExecutionResult result = new ExecutionResult();
+			
+			OnStartedExecution(new StartedExecutionEventArgs(SiteId, result));
+			
+			FileType.Execute(Context.Data, result);
+			
+			// When execution is finished, propagate result to other users
+			result.FinishedExecution += delegate(object o, FinishedExecutionEventArgs fe)
+			{
+				if(State == SessionStates.Connected)
+				{
+				    ApplicationConnection.Send(new Messaging.ExecutionResultMessage(fe.ReturnCode, fe.StandardOut));
+				}
+			};     
+        }
         
         protected virtual void OnStateChanged(EventArgs e)
         {
@@ -124,6 +156,22 @@ namespace TwinEditor
             if(ReceiveChatMessage != null)
             {
                 ReceiveChatMessage(this, e);
+            }
+        }
+        
+        protected virtual void OnFileTypeChanged(EventArgs e)
+        {
+            if(FileTypeChanged != null)
+            {
+                FileTypeChanged(this, e);
+            }
+        }
+        
+        protected virtual void OnStartedExecution(StartedExecutionEventArgs e)
+        {
+            if(StartedExecution != null)
+            {
+                StartedExecution(this, e);
             }
         }
         
@@ -225,6 +273,24 @@ namespace TwinEditor
         public ReceiveChatMessageEventArgs(ChatMessage chatMessage)
         {
             ChatMessage = chatMessage;
+        }
+    }
+    
+    public sealed class StartedExecutionEventArgs : EventArgs
+    {
+        /// <summary>
+        /// The result object dispatches events about this execution
+        /// </summary>
+        public ExecutionResult ExecutionResult { get; private set; }
+        /// <summary>
+        /// The id of the site where this execution originated
+        /// </summary>
+        public int SiteId { get; private set; }
+        
+        public StartedExecutionEventArgs(int siteId, ExecutionResult executionResult)
+        {
+            ExecutionResult = executionResult;
+            SiteId = siteId;
         }
     }
 }

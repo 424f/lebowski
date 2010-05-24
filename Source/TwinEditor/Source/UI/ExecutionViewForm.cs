@@ -7,6 +7,24 @@ namespace TwinEditor.UI
 {
 	public partial class ExecutionViewForm : UserControl
 	{		
+	    public ExecutionResult ExecutionResult
+	    {
+	        get
+	        {
+	            return executionResult;    
+	        }
+	        
+	        set
+	        {
+	            StandardOutput.Invoke((Action)delegate { StandardOutput.Text = ""; });
+	            if(executionResult != null)
+	            {
+	                executionResult.ExecutionChanged -= ExecutionResultChanged;
+	            }
+	            value.ExecutionChanged += ExecutionResultChanged;
+	            executionResult = value;
+	        }
+	    }
 	    private ExecutionResult executionResult;
 	    
 		public ExecutionViewForm(ExecutionResult executionResult)
@@ -15,18 +33,20 @@ namespace TwinEditor.UI
 			
 			this.executionResult = executionResult;
 			
-			executionResult.ExecutionChanged += delegate(object sender, ExecutionChangedEventArgs e)
-			{
-			    StandardOutput.Invoke((Action) delegate
-                {
-	    		    StandardOutput.Text += e.StandardOut;
-			    });
-			};
+			executionResult.ExecutionChanged += ExecutionResultChanged;
 		}
 		
 		void ExecutionTabControlLoad(object sender, EventArgs e)
 		{
 			
+		}
+		
+		public void ExecutionResultChanged(object o, ExecutionChangedEventArgs e)
+		{
+		    StandardOutput.Invoke((Action) delegate
+            {
+    		    StandardOutput.Text += e.StandardOut;
+		    });
 		}
 	}
 }

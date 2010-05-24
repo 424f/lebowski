@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Collections.Generic;
 using Lebowski;
 using Lebowski.TextModel;
 using Lebowski.Net;
@@ -14,16 +15,19 @@ namespace TwinEditor.UI
 {
 	public partial class SessionViewForm : UserControl, ISessionView
 	{	
-	    public SessionContext SessionContext
-	    {
-	        get;
-	        private set;
-	    }
+	    private static readonly ILog Logger = LogManager.GetLogger(typeof(SessionViewForm));
 	    
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(SessionViewForm));
+	    #region Context
+	    public SessionContext SessionContext { get; private set; }
+        public ApplicationViewForm ApplicationViewForm { get; private set; }	    
+        private TabPage tabPage;
+	    #endregion
 		
+	    #region Events
 		public event EventHandler<StateChangedEventArgs> StateChanged;
+		#endregion
 		
+		#region File management members
 		public string FileName
 		{
 		    get { return fileName; }
@@ -37,31 +41,15 @@ namespace TwinEditor.UI
 	
 		public bool OnDisk { get; set; }
 		public bool FileModified { get; set; }
+		#endregion
 		
-		private TabPage tabPage;
+        #region Execution
+        // Stores the exeucution view form for each user (identified by site id)
+        private Dictionary<int, ExecutionViewForm> executionViewForms = new Dictionary<int, ExecutionViewForm>();
+        private int numExecutions = 0;
+        #endregion
 		
-		private IFileType fileType;
-		public IFileType FileType
-		{
-			get { return fileType; }
-			set
-			{
-				fileType = value;
-				// ICSharpCode.TextEditor.dll does include a seperate syntax highlight definition (.xshd) for python and text.
-				// However, python-mode.xshd is identical to boo.xshd
-				SourceCode.SetHighlighting(fileType.Name);
-			}
-		}
-		public int NumExecutions { get; protected set; }
-		public void IncrementNumExections()
-		{
-			NumExecutions += 1;
-		}
-		
-		public ITextContext Context { get; protected set; }
-		public ApplicationViewForm ApplicationViewForm { get; private set; }
-		
-		public DifferentialSynchronizationStrategy SynchronizationStrategy { get; protected set; }
+		public ITextContext Context { get; protected set; }		
 	
 		public SessionViewForm(ApplicationViewForm applicationViewForm, TabPage tabPage)
 		{
@@ -85,6 +73,44 @@ namespace TwinEditor.UI
                     SessionContextStateChanged(sender, e);
                 });
 			};
+			
+			SessionContext.FileTypeChanged += delegate
+			{
+			    Context.Invoke((Action)delegate
+                {
+                    SourceCode.SetHighlighting(SessionContext.FileType.Name);
+                });
+			};
+			
+			SessionContext.StartedExecution +=
+			    delegate(object sender, StartedExecutionEventArgs e)
+			    {  
+			        Context.Invoke((Action)
+                        delegate
+                        {
+                            if(!executionViewForms.ContainsKey(e.SiteId))
+                            {
+                                string tabTitle = string.Format("Execution (Site {0})", e.SiteId);
+                                if(e.SiteId == SessionContext.SiteId)
+                                {
+                                    tabTitle = "Execution (Me)";
+                                }
+                                
+                                TabPage newPage = new TabPage(tabTitle);
+                                ExecutionViewForm executionView = new ExecutionViewForm(e.ExecutionResult);
+                                newPage.Controls.Add(executionView);
+                                executionViewForms[e.SiteId] = executionView;
+                                executionView.Dock = DockStyle.Fill;
+                                TabControl.TabPages.Add(newPage);
+                                TabControl.SelectedTab = newPage;
+                            }
+                            else
+                            {
+                                executionViewForms[e.SiteId].ExecutionResult = e.ExecutionResult;
+                            }
+                        }
+                    );
+			    };
 			
 			SessionContext.ReceiveChatMessage += SessionContextReceiveChatMessage;
 			
