@@ -11,32 +11,6 @@ using DiffMatchPatch;
 
 namespace Lebowski.Synchronization.DifferentialSynchronization
 {		
-    [Serializable]
-    public sealed class SynchronizationStep
-    {
-        public int Site;
-        public bool Sent;
-        public string Diff;
-        public string Data;
-        public string Shadow;
-        public string StackTrace;
-        
-        public void Store()
-        {	
-            //#if DIFF_SYNC_DEBUG
-            StackTrace = Environment.StackTrace;
-            
-	        var now = DateTime.Now;
-	        string name = now.Hour.ToString().PadLeft(2, '0') + "." + now.Minute.ToString().PadLeft(2, '0') + "." + now.Second.ToString().PadLeft(2, '0') + "." + now.Millisecond.ToString().PadLeft(3, '0') + "." + Guid.NewGuid().ToString() + "."  + ".dat";
-	        Console.WriteLine(name);
-	        Stream stream = File.Open(name, FileMode.Create);
-	        BinaryFormatter f = new BinaryFormatter();
-	        f.Serialize(stream, this);
-	        stream.Close();            
-	        //#endif
-        }
-    }
-    
     /// <summary>
     /// This class provides an implementation of the Differential Synchronization
     /// synchronization algorithm by Neil Fraser. It is based around sending patches 
@@ -153,26 +127,14 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
 		{
 		    Debug.Assert(TokenState == TokenState.HavingToken);
 		    
-			// Create patch local
+			// Create diff locally
 			var localDiffs = DiffMatchPatch.diff_main(Shadow.Data, Context.Data);
-
-	        // Store this step for debugging
-	        SynchronizationStep debugInfo = new SynchronizationStep();
-	        debugInfo.Site = SiteId;
-	        debugInfo.Data = Context.Data;
-	        
-	        debugInfo.Shadow = Shadow.Data;
-	        debugInfo.Sent = true;
-	        				
 			
 			// Apply patch to shadow
 			var patch = DiffMatchPatch.patch_make(Shadow.Data, localDiffs);
 			Shadow.Data = (string)DiffMatchPatch.patch_apply(patch, Shadow.Data)[0];
 			    
-			var delta = DiffMatchPatch.diff_toDelta(localDiffs);
-			
-			debugInfo.Diff = delta;
-			debugInfo.Store();		
+			var delta = DiffMatchPatch.diff_toDelta(localDiffs);	
 			
 			Connection.Send(new DiffMessage(delta));
 		}
@@ -183,17 +145,6 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
 		    lock(this)
 		    {
     			Context.Invoke((Action)delegate {
-    		        // Store this step for debugging
-    		        SynchronizationStep debugInfo = new SynchronizationStep();
-    		        debugInfo.Site = SiteId;
-    		        debugInfo.Data = Context.Data;
-    		        debugInfo.Diff = delta;
-    		        debugInfo.Shadow = Shadow.Data;
-    		        debugInfo.Sent = false;
-    		        debugInfo.Store();
-    		        
-                                       
-    		                       
                     string old = Context.Data;		                       
     		                       
         			// Apply diff to shadow

@@ -236,6 +236,8 @@ namespace TwinEditor.UI
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
 			this.toolStripMenuItem1.Size = new System.Drawing.Size(170, 22);
 			this.toolStripMenuItem1.Text = "Settings";
+			this.toolStripMenuItem1.Click += new System.EventHandler(SettingsToolStripMenuItemClick);
+			
 			// 
 			// scriptToolStripMenuItem
 			// 

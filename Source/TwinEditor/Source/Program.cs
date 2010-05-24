@@ -118,22 +118,18 @@ namespace TwinEditor
 		
 		private void SetupConfiguration()
 		{		    
-			// Set up configuration if necessary
-			var c = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-		    
-			// Retrieve username from system if none has been set explicitly
-			string userName = c.AppSettings.Settings["UserName"] != null ? c.AppSettings.Settings["UserName"].Value : null;
+		    var appSettings = Configuration.ApplicationSettings.Default;
+
+		    // Retrieve username from system if none has been set explicitly
+			string userName = appSettings.UserName;
 			if(userName == null || userName == "")
 			{
 			    userName = Environment.UserName;
 			}
-			c.AppSettings.Settings["UserName"].Value = userName;
-				
-			// Save configuration and refresh
-			c.Save(ConfigurationSaveMode.Modified);
-			ConfigurationManager.RefreshSection("appSettings");
-			
-			System.Console.WriteLine("Welcome, {0}", c.AppSettings.Settings["UserName"].Value);
+			appSettings.UserName = userName;
+			appSettings.Save();
+
+			System.Console.WriteLine("Welcome, {0}", userName);
 		}
 		
 		private void Run()
@@ -149,8 +145,8 @@ namespace TwinEditor
 			// Display main form
 			IApplicationView applicationView = new ApplicationViewForm();
 			
-			ApplicationPresenter presenter = new ApplicationPresenter(applicationView);
-			applicationView.Presenter = presenter;
+			ApplicationContext presenter = new ApplicationContext(applicationView);
+			applicationView.ApplicationContext = presenter;
 			applicationView.Show();
 
 			Application.Run();			

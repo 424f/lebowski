@@ -214,7 +214,7 @@ namespace TwinEditor.UI
 		{
             if(ChatText.Text.Length == 0)
 				return;
-            ChatMessage message = new ChatMessage(Environment.UserName, ChatText.Text);
+            ChatMessage message = new ChatMessage(Configuration.ApplicationSettings.Default.UserName, ChatText.Text);
             SessionContext.SendChatMessage(message);
 			AddChatMessage(message);
 			ChatText.Text = "";		                

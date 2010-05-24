@@ -10,27 +10,31 @@ using log4net;
 
 namespace TwinEditor
 {
-	public class ApplicationPresenter
+	public class ApplicationContext
 	{
-        private static readonly ILog Logger = LogManager.GetLogger(typeof(ApplicationPresenter));	    
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(ApplicationContext));	    
 	    
-		public ApplicationPresenter(IApplicationView view)
+        public IFileType[] FileTypes { get; private set; }
+        
+        public ICommunicationProtocol[] CommunicationProtocols { get; private set; }
+        
+		public ApplicationContext(IApplicationView view)
 		{
             // Provide view with file types
-			var fileTypes = ExtensionUtil.FindTypesImplementing(typeof(IFileType))
+			FileTypes = ExtensionUtil.FindTypesImplementing(typeof(IFileType))
 				.Select((t) => t.GetConstructor(new Type[]{}).Invoke(new object[]{}))
 				.Cast<IFileType>()
 				.ToArray();
-            view.FileTypes = fileTypes;
+            view.FileTypes = FileTypes;
             
             // Load available protocols and subscribe to events
-            var protocols = ExtensionUtil.FindTypesImplementing(typeof(ICommunicationProtocol))
+            CommunicationProtocols = ExtensionUtil.FindTypesImplementing(typeof(ICommunicationProtocol))
     				.Select((t) => t.GetConstructor(new Type[]{}).Invoke(new object[]{}))
     				.Cast<ICommunicationProtocol>()
     				.ToArray();            
-            view.CommunicationProtocols = protocols;
+            view.CommunicationProtocols = CommunicationProtocols;
             
-            foreach(ICommunicationProtocol protocol in protocols)
+            foreach(ICommunicationProtocol protocol in CommunicationProtocols)
             {
 				// Register to communication protocol events
 				protocol.HostSession += delegate(object sender, HostSessionEventArgs e)
@@ -41,7 +45,8 @@ namespace TwinEditor
 				
 				protocol.JoinSession += delegate(object sender, JoinSessionEventArgs e)
 				{ 
-				    ISessionView sessionView = view.CreateNewSession(fileTypes[0]);
+				    // TODO: choose correct file type
+				    ISessionView sessionView = view.CreateNewSession(FileTypes[0]);
 				    sessionView.SessionContext.EstablishSharedSession(1, e.Connection);
 				};	                
             }

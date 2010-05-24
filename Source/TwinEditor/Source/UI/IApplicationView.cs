@@ -13,14 +13,13 @@ namespace TwinEditor.UI
         
         void Show();
         
-        ApplicationPresenter Presenter { get; set; }
+        ApplicationContext ApplicationContext { get; set; }
         
-        event EventHandler<ShareSessionEventArgs> ShareSession;
-        
-        #region File handling
+        #region Events
         
         event EventHandler<SaveEventArgs> Save;
         event EventHandler<OpenEventArgs> Open;
+        event EventHandler<ShareSessionEventArgs> ShareSession;
         
         #endregion
     }

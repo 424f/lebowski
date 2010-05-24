@@ -104,8 +104,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Source\ApplicationPresenter.cs" />
+    <Compile Include="Source\ApplicationContext.cs" />
     <Compile Include="Source\ApplicationUtil.cs" />
+    <Compile Include="Source\Configuration\ApplicationSettings.cs" />
     <Compile Include="Source\FileTypes\ExecutionResult.cs" />
     <Compile Include="Source\FileTypes\PythonInterpreter.cs" />
     <Compile Include="Source\ISessionView.cs" />
@@ -139,6 +140,10 @@
     <Compile Include="Source\UI\SessionViewForm.Designer.cs">
       <DependentUpon>SessionViewForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Source\UI\Settings\SettingsDialog.cs" />
+    <Compile Include="Source\UI\Settings\SettingsDialog.Designer.cs">
+      <DependentUpon>SettingsDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Test\PythonInterpreterTest.cs" />
     <Compile Include="Test\UITester.cs" />
     <EmbeddedResource Include="LanguageResources.de.resx" />
@@ -159,6 +164,9 @@
     <EmbeddedResource Include="Source\UI\SessionViewForm.resx">
       <DependentUpon>SessionViewForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Source\UI\Settings\SettingsDialog.resx">
+      <DependentUpon>SettingsDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
@@ -168,8 +176,10 @@
     </ProjectReference>
     <Folder Include="Source\" />
     <Folder Include="Source\Messaging" />
+    <Folder Include="Source\Configuration" />
     <Folder Include="Source\Synchronization" />
     <Folder Include="Source\Presentation" />
     <Folder Include="Source\UI\" />
+    <Folder Include="Source\UI\Settings" />
   </ItemGroup>
 </Project>

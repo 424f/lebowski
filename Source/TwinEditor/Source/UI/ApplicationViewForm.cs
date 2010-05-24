@@ -24,6 +24,8 @@ namespace TwinEditor.UI
 		public event EventHandler<OpenEventArgs> Open;
 		public event EventHandler<SaveEventArgs> Save;
 		
+		private Settings.SettingsDialog SettingsDialog;
+		
 		public IFileType[] FileTypes
 		{
 		    get
@@ -76,7 +78,7 @@ namespace TwinEditor.UI
 		private IFileType[] fileTypes;
 		
 		
-		public ApplicationPresenter Presenter { get; set; }
+		public ApplicationContext ApplicationContext { get; set; }
 		
 		public ICommunicationProtocol[] CommunicationProtocols
 		{
@@ -197,6 +199,9 @@ namespace TwinEditor.UI
 
 			// Translate the menu
 			TranslationUtil.TranslateMenuStrip(menuStrip1, ApplicationUtil.LanguageResources);
+			
+			// Configure settings dialog
+			SettingsDialog = new Settings.SettingsDialog(ApplicationContext);
 		}
 		
 		private void Translate(ToolStripMenuItem item, string id)
@@ -367,10 +372,16 @@ namespace TwinEditor.UI
 			
 		}
 		
-		void RunToolStripMenuItemItemClick(object sender, EventArgs e) {
+		void RunToolStripMenuItemItemClick(object sender, EventArgs e)
+		{
 			SessionViewForm sessionView = tabControls[MainTab.SelectedIndex];		
 			sessionView.SessionContext.Execute();
 			
+		}
+		
+		void SettingsToolStripMenuItemClick(object sender, EventArgs e)
+		{
+		    SettingsDialog.ShowDialog();
 		}
 		
 		#region OnFoo event methods
