@@ -9,6 +9,21 @@ using log4net;
 
 namespace Lebowski.Net.Skype
 {
+    /// <summary>
+    /// This provides a wrapper around the AP2AP Skype4COM API that allows us
+    /// to send arbitrary objects to other skype users, even
+    /// when behind a firewall. There currently are a few shortcomings:
+    ///     - no proper handling of case when a user is logged into Skype
+    ///       multiple times
+    ///     - Objects are being serialized and then encoded to base64, as skype
+    ///       does not allow '\0' in the data stream. This could be addressed
+    ///       by using a more efficient encoding. Also, it might be worth
+    ///       to look into ProtocolBuffers instead of using serialization.
+    ///     - Skype does seem to produce weird call stacks, as calling a skype
+    ///       API method can trigger a Skype event being triggered before that 
+    ///       original call returns. We addressed this by introducing a separate
+    ///       dispatch thread.
+    /// </summary>
 	sealed public class SkypeProtocol : ICommunicationProtocol
 	{
 		public event EventHandler<HostSessionEventArgs> HostSession;
@@ -32,7 +47,7 @@ namespace Lebowski.Net.Skype
 		/// <summary>
 		/// We keep only one stream per user, even if we're sharing multiple documents
 		/// or in multiple directions. To enable this, we prepend the connection id for
-		/// every packet that is sent over a stream. The connectionId 0 is reserver for 
+		/// every packet that is sent over a stream. The connectionId 0 is reserved for 
 		/// application-wide messages (e.g. invitations)
 		/// </summary>
 		Dictionary<string, ApplicationStream> streams = new Dictionary<string, ApplicationStream>();
@@ -358,7 +373,7 @@ namespace Lebowski.Net.Skype
 				}
 				else
 				{
-					connections[pStreams[1].PartnerHandle][connectionId].OnReceived(new ReceivedEventArgs(message));
+					connections[pStreams[1].PartnerHandle][connectionId].ReceiveMessage(new ReceivedEventArgs(message));
 				}
 			}
 			catch(Exception e)
