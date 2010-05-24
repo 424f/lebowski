@@ -44,6 +44,8 @@ namespace Lebowski.Net.Skype
 		
 		public bool Enabled { get; private set;	}		
 		
+		private SynchronizationContext synchronizationContext;
+		
 		/// <summary>
 		/// We keep only one stream per user, even if we're sharing multiple documents
 		/// or in multiple directions. To enable this, we prepend the connection id for
@@ -140,6 +142,8 @@ namespace Lebowski.Net.Skype
 			if(isInitialized)
 				return;
 			
+			synchronizationContext = System.Threading.SynchronizationContext.Current;
+			
 			Application = API.get_Application(ApplicationName);
 			Application.Create();	
 			
@@ -188,9 +192,8 @@ namespace Lebowski.Net.Skype
 		internal void Send(string user, int connectionId, object o)
 		{
 			var stream = streams[user];
-			// TODO: hackish, is there a nicer way to invoke in the UI thread?
-			//System.Windows.Threading
-			System.Threading.SynchronizationContext.Current.Send(delegate 
+			
+			synchronizationContext.Send(delegate 
 			{
 				lock(streams)
 				{
