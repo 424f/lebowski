@@ -384,6 +384,11 @@ namespace TwinEditor.UI
 		    SettingsDialog.ShowDialog();
 		}
 		
+		void GuideToolStripMenuItemClick(object sender, EventArgs a)
+		{
+		    System.Diagnostics.Process.Start("http://wiki.github.com/424f/lebowski/manual");
+		}
+		
 		#region OnFoo event methods
         protected virtual void OnShareSession(ShareSessionEventArgs e)
         {

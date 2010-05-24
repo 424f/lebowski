@@ -23,7 +23,7 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
     /// 
     /// [1] http://neil.fraser.name/writing/sync/
     /// </summary>
-	public sealed class DifferentialSynchronizationStrategy
+    public sealed class DifferentialSynchronizationStrategy : ISynchronizationStrategy
 	{
 	    // TODO: remove debug member
 		static int activeThreads = 0;
@@ -71,6 +71,7 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
 		/// </summary>
 		public bool TokenRequestSent { get; private set; }
 		
+		// We use diff-match-patch for (you guessed it) diffing, matching and patching
 		private diff_match_patch DiffMatchPatch = new diff_match_patch();
 		
 		/// <summary>

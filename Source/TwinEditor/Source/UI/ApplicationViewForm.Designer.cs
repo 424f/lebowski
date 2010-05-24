@@ -280,6 +280,7 @@ namespace TwinEditor.UI
 			this.guideToolStripMenuItem.Name = "guideToolStripMenuItem";
 			this.guideToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
 			this.guideToolStripMenuItem.Text = "Guide";
+			this.guideToolStripMenuItem.Click += new System.EventHandler(this.GuideToolStripMenuItemClick);
 			// 
 			// aboutToolStripMenuItem
 			// 
