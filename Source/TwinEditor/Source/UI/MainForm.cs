@@ -22,6 +22,7 @@ namespace TwinEditor.UI
 		
 		public event EventHandler<ShareSessionEventArgs> ShareSession;
 		public event EventHandler<OpenEventArgs> Open;
+		public event EventHandler<SaveEventArgs> Save;
 		
 		public IFileType[] FileTypes
 		{
@@ -152,7 +153,7 @@ namespace TwinEditor.UI
 		    foreach(ToolStripMenuItem item in chooseFileTypeMenuItems)
 		    {
 		    	item.Enabled = fileOpen;
-		    	item.Checked = item.Tag == tabControls[MainTab.SelectedIndex].FileType;
+		    	item.Checked = MainTab.SelectedIndex != -1 && item.Tag == tabControls[MainTab.SelectedIndex].FileType;
 		    }
 		    
 			if(MainTab.TabPages.Count == 0)
@@ -298,7 +299,11 @@ namespace TwinEditor.UI
 			}
 			else
 			{
-				Save(tabControl);
+			    OnSave(new SaveEventArgs(tabControl, tabControl.FileName));
+                tabControl.OnDisk = true;
+				tabControl.FileModified = false;    				
+				UpdateMenuItems();
+				
 			}
 		}
 		
@@ -312,29 +317,13 @@ namespace TwinEditor.UI
 			if(result == DialogResult.OK)
 			{
 				tabControl.FileName = saveFileDialog.FileName;
-				Save(tabControl);
+				OnSave(new SaveEventArgs(tabControl, tabControl.FileName));
+                tabControl.OnDisk = true;
+				tabControl.FileModified = false;  				
 			}
 			else
 			{
 				Logger.Info(string.Format("User cancelled saving action {0}", saveFileDialog.FileName));
-			}
-		}
-		
-		// saves file
-		void Save(SessionTabControl tabControl)
-		{			
-			try
-			{
-				File.WriteAllText(tabControl.FileName, tabControl.SourceCode.Text);
-				Logger.Info(string.Format("{0} has been saved successfully", tabControl.FileName));
-				((TabPage)tabControl.Parent).Text = System.IO.Path.GetFileName(tabControl.FileName);
-				tabControl.OnDisk = true;
-				tabControl.FileModified = false;
-				UpdateMenuItems();
-			}
-			catch (Exception e)
-			{
-				Logger.Error(string.Format("{0} could not be saved due to {1}", saveFileDialog.FileName, e.Message));
 			}
 		}
 		
@@ -418,6 +407,14 @@ namespace TwinEditor.UI
             if (Open != null)
             {
                 Open(this, e);
+            }
+        }
+        
+        protected virtual void OnSave(SaveEventArgs e)
+        {
+            if (Save != null)
+            {
+                Save(this, e);
             }
         }
         #endregion

@@ -6,11 +6,14 @@ using Lebowski.Net;
 using Lebowski.Synchronization.DifferentialSynchronization;
 using TwinEditor.UI;
 using TwinEditor.FileTypes;
+using log4net;
 
 namespace TwinEditor
 {
 	public class ApplicationPresenter
 	{
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(ApplicationPresenter));	    
+	    
 		public ApplicationPresenter(IApplicationView view)
 		{
             // Provide view with file types
@@ -71,6 +74,21 @@ namespace TwinEditor
     			// case when user cancelled dialog not handled yet
     			string content = File.ReadAllText(e.FileName);
     			tab.Context.Data = content;
+            };
+            
+            view.Save += delegate(object sender, SaveEventArgs e)
+            {
+    			try
+    			{
+    			    var tabControl = e.Session;
+    			    e.Session.FileName = e.FileName;
+    				File.WriteAllText(tabControl.FileName, tabControl.Context.Data);
+    				Logger.Info(string.Format("{0} has been saved successfully", tabControl.FileName));
+    			}
+    			catch (Exception exc)
+    			{
+    				Logger.Error(string.Format("{0} could not be saved due to {1}", e.FileName, exc.Message));
+    			}
             };
 		}
 	}

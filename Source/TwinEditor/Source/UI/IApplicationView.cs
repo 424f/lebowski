@@ -19,7 +19,7 @@ namespace TwinEditor.UI
         
         #region File handling
         
-        //event EventHandler<SaveEventArgs> Save;
+        event EventHandler<SaveEventArgs> Save;
         event EventHandler<OpenEventArgs> Open;
         
         #endregion
@@ -47,7 +47,17 @@ namespace TwinEditor.UI
             FileName = fileName;
             FileType = fileType;    
         }
-            
-            
     }
+    
+    public sealed class SaveEventArgs : EventArgs
+    {
+        public ISession Session { get; private set; }
+        public string FileName { get; private set; }
+        
+        public SaveEventArgs(ISession session, string fileName)
+        {
+            Session = session;
+            FileName = fileName;
+        }
+    }    
 }
