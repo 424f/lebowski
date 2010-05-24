@@ -30,7 +30,7 @@ namespace TwinEditor.UI
 		private void InitializeComponent()
 		{
 			this.label1 = new System.Windows.Forms.Label();
-			this.label2 = new System.Windows.Forms.Label();
+			this.urlLabel = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -43,13 +43,16 @@ namespace TwinEditor.UI
 			this.label1.TabIndex = 0;
 			this.label1.Text = "Lebowski";
 			// 
-			// label2
+			// urlLabel
 			// 
-			this.label2.Location = new System.Drawing.Point(16, 53);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(449, 23);
-			this.label2.TabIndex = 1;
-			this.label2.Text = "github.com/424f/lebowski";
+			this.urlLabel.Cursor = System.Windows.Forms.Cursors.Hand;
+			this.urlLabel.ForeColor = System.Drawing.Color.MediumBlue;
+			this.urlLabel.Location = new System.Drawing.Point(16, 53);
+			this.urlLabel.Name = "urlLabel";
+			this.urlLabel.Size = new System.Drawing.Size(449, 23);
+			this.urlLabel.TabIndex = 1;
+			this.urlLabel.Text = "http://github.com/424f/lebowski";
+			this.urlLabel.Click += new System.EventHandler(this.UrlLabelClick);
 			// 
 			// AboutDialog
 			// 
@@ -57,7 +60,7 @@ namespace TwinEditor.UI
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.White;
 			this.ClientSize = new System.Drawing.Size(474, 83);
-			this.Controls.Add(this.label2);
+			this.Controls.Add(this.urlLabel);
 			this.Controls.Add(this.label1);
 			this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
@@ -65,7 +68,7 @@ namespace TwinEditor.UI
 			this.ShowInTaskbar = false;
 			this.ResumeLayout(false);
 		}
-		private System.Windows.Forms.Label label2;
+		private System.Windows.Forms.Label urlLabel;
 		private System.Windows.Forms.Label label1;
 	}
 }
