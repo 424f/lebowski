@@ -224,6 +224,11 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
     				start = Math.Max(0, start);
     				caret = Math.Max(0, caret);
     				Context.Data = (string)DiffMatchPatch.patch_apply(patches, Context.Data)[0];			
+    				
+    				end = Math.Min(Context.Data.Length, end);
+    				start = Math.Min(Context.Data.Length, start);
+    				caret = Math.Min(Context.Data.Length, caret);
+    				
     				if(end < start)
     				{
     					end = start;				
@@ -267,16 +272,6 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
     			Console.WriteLine("Thread {0}: {1}", System.Threading.Thread.CurrentThread.ManagedThreadId, e.Message.GetType().Name);
     			Console.ResetColor();
     			
-    			// TODO: remove multithreading debug code
-    			
-    			lock(this.GetType())
-    			{
-    				activeThreads += 1;
-    				if(activeThreads > 1)
-    				{
-    					Console.Error.Write("Multiple threads active!!!");
-    				}
-    			}
     			System.Console.WriteLine("{0} received: {1}", SiteId, e.Message);
     			lock(this)
     			{
@@ -311,11 +306,7 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
     				{
     					throw new Exception(String.Format("Encountered unknown message type '{0}'", e.Message.GetType().Name));
     				}
-    			}
-    			lock(this.GetType())
-    			{
-    				activeThreads -= 1;
-    			}				    
+    			}		    
 		    });
 		}
 		
