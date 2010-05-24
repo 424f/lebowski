@@ -209,6 +209,8 @@ namespace TwinEditor
     {
         public BootstrappingState(SessionContext session) : base(session) {}
         
+        bool receivedHandshake = false;
+        
         public override void Register()
         {
             Logger.Info("Registering BootstrappingState");
@@ -219,7 +221,7 @@ namespace TwinEditor
             // If we are the client, we'll say hi to the client
             if(session.SiteId == 1)
             {
-                session.ApplicationConnection.Send("HI");
+                session.ApplicationConnection.Send("HI 0");
                 Logger.Info("Sending 'HI'");
             }
         }
@@ -233,20 +235,16 @@ namespace TwinEditor
         {
             var sync = new DifferentialSynchronizationStrategy(session.SiteId, session.Context, session.SynchronizationConnection);
             
-            if(session.SiteId == 1)
+            if((string)e.Message == "HI 0")
             {
-                if((string)e.Message != "HI BACK")
-                    throw new Exception("Unexpected message");
+                session.ApplicationConnection.Send("HI 1");
+                session.ActivateState(new SynchronizationState(session, sync));
+            } 
+            else if((string)e.Message == "HI 1")
+            {
                 session.ActivateState(new SynchronizationState(session, sync));
             }
-            else if(session.SiteId == 0)
-            {
-                if((string)e.Message != "HI")
-                    throw new Exception(string.Format("Unexpected message: '{0}', should be 'HI'", e.Message));
-                session.ActivateState(new SynchronizationState(session, sync));
-                Logger.Info("Sending 'HI BACK'");
-                session.ApplicationConnection.Send("HI BACK");
-            }
+            
         }
     }
     

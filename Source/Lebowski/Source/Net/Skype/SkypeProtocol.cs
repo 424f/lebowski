@@ -340,12 +340,12 @@ namespace Lebowski.Net.Skype
 						invitations.Remove(accept.InvitationId);
 						invitationChannels.Remove(accept.InvitationId);
 						invitationSessions.Remove(accept.InvitationId);
-						
-						MessageBox.Show("Invitation was accepted");
 			
 						// We have to use a multichannel connection
 						connection.OutgoingChannel = accept.Channel;
 						OnHostSession(new HostSessionEventArgs(session, connection));
+						
+						MessageBox.Show("Invitation was accepted");
 					}
 					
 					// Another user has rejected a sharing invitation
