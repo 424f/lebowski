@@ -1,13 +1,13 @@
 High priority
 =============
-[   ] Implement GUI for connecting
-[   ] Implement Skype AP2AP connection method
-[   ] File handling
+[ X ] Implement GUI for connecting
+[ X ] Implement Skype AP2AP connection method
+[ X ] File handling
 
 Medium priority
 ===============
 [   ] More robust socket implementation
-[   ] Code execution
+[ X ] Code execution
 
 Low priority
 ============

@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using Lebowski.Net;
+using log4net;
 
 namespace Lebowski.Net.Tcp
 {
@@ -21,25 +22,14 @@ namespace Lebowski.Net.Tcp
 		
 		public event EventHandler<ReceivedEventArgs> Received;	
 		protected NetworkStream stream;
-		static int activeConnections = 0;
 		private bool running = true;
+		
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(TcpConnection));
 		
 		protected virtual void OnReceived(ReceivedEventArgs e)
 		{
-			lock(this.GetType())
-			{
-				activeConnections += 1;
-				if(activeConnections > 1)
-				{
-					Console.Error.WriteLine("Multiple active connections!!");
-				}
-			}
 			if (Received != null) {
 				Received(this, e);
-			}
-			lock(this.GetType())
-			{
-				activeConnections -= 1;
 			}
 		}		
 		
@@ -60,14 +50,14 @@ namespace Lebowski.Net.Tcp
 					}
 					catch(Exception e)
 					{
-					    System.Console.WriteLine("Encountered error while dispatching message: {0}", e);
+					    Logger.ErrorFormat("Encountered error while dispatching message: {0}", e);
 					}
+					// TODO: handle disconnection
 				}	
 			}
 			catch(Exception e)
 			{
-				// TODO: log
-				System.Console.WriteLine("**ERROR** {0}", e.ToString());
+				Logger.ErrorFormat("An error occurred in the receiver thread, closing connection: {0}", e.ToString());
 			}
 			finally
 			{
@@ -78,7 +68,7 @@ namespace Lebowski.Net.Tcp
 		
 		public void Send(object o)
 		{
-		    Console.WriteLine("Sending packet {2} on stream from thread '{0}' #{1}", Thread.CurrentThread.Name, Thread.CurrentThread.ManagedThreadId, o.GetType().Name);
+		    Logger.InfoFormat("Sending packet {2} on stream from thread '{0}' #{1}", Thread.CurrentThread.Name, Thread.CurrentThread.ManagedThreadId, o.GetType().Name);
 		    
 		    lock(this)
 		    {
@@ -93,7 +83,7 @@ namespace Lebowski.Net.Tcp
     			}
     			catch(Exception e)
     			{
-    			    Console.WriteLine("ERROR!!");
+    			    Logger.ErrorFormat("An error occurred during Send: {0}", e);
     			    throw e;
     			}
 		    }
@@ -101,7 +91,7 @@ namespace Lebowski.Net.Tcp
 		
 		public virtual void Close()
 		{
-		    System.Console.WriteLine("Closing stream.");
+		    Logger.InfoFormat("Closing stream: {0}", stream);
 			stream.Close();
 			running = false;
 		}
@@ -127,7 +117,6 @@ namespace Lebowski.Net.Tcp
 			tcpListener = new TcpListener(IPAddress.Any, port);
 			
 			// Create networking thread
-//			RunAsyncNetworkingThread();
 			ThreadStart threadStart = new ThreadStart(RunNetworkingThread);
 			Thread thread = new Thread(threadStart);
 			thread.Name = "TcpServerConnection Thread";

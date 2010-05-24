@@ -22,6 +22,7 @@ namespace TwinEditor
 		private void InitializePythonEngine()
 		{
 			engine = Python.CreateEngine();
+			
 
             scope = engine.CreateScope();
             

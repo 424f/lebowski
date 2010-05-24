@@ -16,11 +16,62 @@ using log4net;
 
 namespace TwinEditor.UI
 {
-	public partial class MainForm : Form
+	public partial class MainForm : Form, IApplicationView
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(MainForm));
 		
-		protected IFileType[] fileTypes;
+		private IFileType[] fileTypes;
+		public IFileType[] FileTypes
+		{
+		    get
+		    {
+		        return fileTypes;
+		    }
+		    set
+		    {
+		        if(FileTypes != null)
+		            throw new NotImplementedException("Reseting file types is currently not supported.");
+		        fileTypes = value;
+		        
+                openFileDialog.Filter = "";
+    			foreach(IFileType fileType in fileTypes)
+    			{
+    				var menuItem = new ToolStripMenuItem(fileType.Name + " (" + fileType.FileNamePattern + ")");
+    				IFileType currentFileType = fileType;
+    				menuItem.Click += delegate
+    				{
+    					CreateNewTab(currentFileType);
+    				};
+    				newToolStripMenuItem.DropDown.Items.Add(menuItem);
+    				
+    				// Add file type to open file dialog
+    				string newFilter = string.Format("{0}|{1}", fileType.Name, fileType.FileNamePattern);
+    				if(openFileDialog.Filter.Length > 0)
+    				{
+    					newFilter = "|" + newFilter;
+    				}
+    				openFileDialog.Filter += newFilter;
+    				
+    				// Add file type as choice in 'Edit' menu
+    				var chooseMenuItem = new ToolStripMenuItem(fileType.Name);
+    				var editItems = editToolStripMenuItem.DropDown.Items;
+    				chooseMenuItem.Tag = fileType;
+    				chooseMenuItem.Enabled = false;
+    				editItems.Insert(editItems.Count-1, chooseMenuItem);
+    				chooseMenuItem.Click += delegate
+    				{
+    					tabControls[MainTab.SelectedIndex].FileType = (IFileType)chooseMenuItem.Tag;
+    					UpdateMenuItems();
+    				};
+    				chooseFileTypeMenuItems.Add(chooseMenuItem);
+    			}
+    			
+    			// Add a separator after the file type choices
+    			editToolStripMenuItem.DropDown.Items.Insert(editToolStripMenuItem.DropDown.Items.Count-1, new ToolStripSeparator());		    		        
+		    }
+		    
+		}
+		
 		protected ICommunicationProtocol[] protocols;
 		List<SessionTabControl> tabControls = new List<SessionTabControl>();
 		List<TabPage> tabPages = new List<TabPage>();
@@ -75,7 +126,7 @@ namespace TwinEditor.UI
 			}
 		}
 		
-		public MainForm(ApplicationContext applicationContext, Controller controller)
+		public MainForm(Controller controller)
 		{			
 			InitializeComponent();
 			
@@ -90,47 +141,6 @@ namespace TwinEditor.UI
 
 			// Translate the menu
 			TranslationUtil.TranslateMenuStrip(menuStrip1, ApplicationUtil.LanguageResources);
-			
-			// Supported file types
-			openFileDialog.Filter = "";
-			fileTypes = ExtensionUtil.FindTypesImplementing(typeof(IFileType))
-				.Select((t) => t.GetConstructor(new Type[]{}).Invoke(new object[]{}))
-				.Cast<IFileType>()
-				.ToArray();
-			foreach(IFileType fileType in fileTypes)
-			{
-				var menuItem = new ToolStripMenuItem(fileType.Name + " (" + fileType.FileNamePattern + ")");
-				IFileType currentFileType = fileType;
-				menuItem.Click += delegate
-				{
-					CreateNewTab(currentFileType);
-				};
-				newToolStripMenuItem.DropDown.Items.Add(menuItem);
-				
-				// Add file type to open file dialog
-				string newFilter = string.Format("{0}|{1}", fileType.Name, fileType.FileNamePattern);
-				if(openFileDialog.Filter.Length > 0)
-				{
-					newFilter = "|" + newFilter;
-				}
-				openFileDialog.Filter += newFilter;
-				
-				// Add file type as choice in 'Edit' menu
-				var chooseMenuItem = new ToolStripMenuItem(fileType.Name);
-				var editItems = editToolStripMenuItem.DropDown.Items;
-				chooseMenuItem.Tag = fileType;
-				chooseMenuItem.Enabled = false;
-				editItems.Insert(editItems.Count-1, chooseMenuItem);
-				chooseMenuItem.Click += delegate
-				{
-					tabControls[MainTab.SelectedIndex].FileType = (IFileType)chooseMenuItem.Tag;
-					UpdateMenuItems();
-				};
-				chooseFileTypeMenuItems.Add(chooseMenuItem);
-			}
-			
-			// Add a separator after the file type choices
-			editToolStripMenuItem.DropDown.Items.Insert(editToolStripMenuItem.DropDown.Items.Count-1, new ToolStripSeparator());
 			
 			// Supported communication protocols
 			protocols = ExtensionUtil.FindTypesImplementing(typeof(ICommunicationProtocol))
