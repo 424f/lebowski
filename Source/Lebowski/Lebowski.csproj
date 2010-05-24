@@ -107,7 +107,7 @@
     <Compile Include="Source\Net\Tcp\TcpShareForm.Designer.cs">
       <DependentUpon>TcpShareForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Source\ISessionContext.cs" />
+    <Compile Include="Source\ISynchronizationSession.cs" />
     <Compile Include="Source\SessionState.cs" />
     <Compile Include="Source\StateVector.cs" />
     <Compile Include="Source\Synchronization\DifferentialSynchronization\DifferentialSynchronizationStrategy.cs" />

@@ -12,16 +12,30 @@ using log4net;
 
 namespace TwinEditor.UI
 {
-	public partial class SessionTabControl : UserControl, ISessionContext
+	public partial class SessionTabControl : UserControl, ISession
 	{	
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(MainForm));
 		
 		public event EventHandler<StateChangedEventArgs> StateChanged;
 		
 		public SessionState State { get; private set; }
-		public string FileName { get; set; }
+		
+		public string FileName
+		{
+		    get { return fileName; }
+		    set
+		    {
+		        fileName = value;
+		        tabPage.Text = fileName;
+		    }
+	    }
+		private string fileName;
+	
 		public bool OnDisk { get; set; }
 		public bool FileModified { get; set; }
+		
+		private TabPage tabPage;
+		
 		private IFileType fileType;
 		public IFileType FileType
 		{
@@ -44,10 +58,11 @@ namespace TwinEditor.UI
 		public IConnection ApplicationConnection { get; protected set; }
 		public DifferentialSynchronizationStrategy SynchronizationStrategy { get; protected set; }
 	
-		public SessionTabControl()
+		public SessionTabControl(TabPage tabPage)
 		{
 			InitializeComponent();
 			
+			this.tabPage = tabPage;
 			this.OnDisk = false;
 			this.FileModified = false;
 			ChatText.Enabled = false;
@@ -91,20 +106,20 @@ namespace TwinEditor.UI
 		private void ChangeStatus(String status, bool spinner, bool cancellable)
 		{
 			if (this.connectionStatusLabel.InvokeRequired)
-		    		{
-			            this.connectionStatusLabel.Invoke((Action) delegate
-						{
-							this.connectionStatusLabel.Text = status;
-							this.connectionStatusPicture.Visible = spinner;
-							//this.connectionStopWaitingButton.Visible = cancellable;
-						});
-		            }
-		            else
-		            {
-                      	this.connectionStatusLabel.Text = status;
-                      	this.connectionStatusPicture.Visible = spinner;
-						//this.connectionStopWaitingButton.Visible = cancellable;		            	
-		            }
+    		{
+	            this.connectionStatusLabel.Invoke((Action) delegate
+				{
+					this.connectionStatusLabel.Text = status;
+					this.connectionStatusPicture.Visible = spinner;
+					//this.connectionStopWaitingButton.Visible = cancellable;
+				});
+            }
+            else
+            {
+              	this.connectionStatusLabel.Text = status;
+              	this.connectionStatusPicture.Visible = spinner;
+				//this.connectionStopWaitingButton.Visible = cancellable;		            	
+            }
 		}
 		
 		

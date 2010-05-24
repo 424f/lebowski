@@ -20,6 +20,9 @@ namespace TwinEditor.UI
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(MainForm));
 		
+		public event EventHandler<ShareSessionEventArgs> ShareSession;
+		public event EventHandler<OpenEventArgs> Open;
+		
 		public IFileType[] FileTypes
 		{
 		    get
@@ -72,6 +75,8 @@ namespace TwinEditor.UI
 		private IFileType[] fileTypes;
 		
 		
+		public ApplicationPresenter Presenter { get; set; }
+		
 		public ICommunicationProtocol[] CommunicationProtocols
 		{
 		    get
@@ -100,8 +105,8 @@ namespace TwinEditor.UI
     				{
     					var menuItem = new ToolStripMenuItem(protocol.Name);
     					menuItem.Click += delegate 
-    					{  
-    						currentProtocol.Share(tabControls[MainTab.SelectedIndex]);
+    					{
+    					    OnShareSession(new ShareSessionEventArgs(tabControls[MainTab.SelectedIndex], currentProtocol));
     					};
     					shareToolStripMenuItem.DropDown.Items.Add(menuItem);
     				}
@@ -196,7 +201,7 @@ namespace TwinEditor.UI
 		    item.Text = ApplicationUtil.LanguageResources.GetString(id);
 		}
 		
-		public ISessionContext CreateNewSession(IFileType fileType)
+		public ISession CreateNewSession(IFileType fileType)
 		{
 		    return CreateNewTab(fileType);
 		}
@@ -208,7 +213,7 @@ namespace TwinEditor.UI
 			// Create a new tab and add a FileTabControl to it
 			string filename = "New " + controller.GetNextFileNumber() + fileType.FileExtension;
 			TabPage tabPage = new TabPage(filename);
-			SessionTabControl tab = new SessionTabControl();
+			SessionTabControl tab = new SessionTabControl(tabPage);
 			tab.Dock = DockStyle.Fill;
 			tab.FileType = fileType;
 			tab.FileName = filename;
@@ -245,7 +250,7 @@ namespace TwinEditor.UI
 			}
 			
 			// No appropriate file type has been found
-			// Does never happen as we already filter file types in the openFileDialog
+			// Should never happen as we already filter file types in the openFileDialog
 			if(type == null)
 			{
 				MessageBox.Show(
@@ -255,16 +260,7 @@ namespace TwinEditor.UI
 				return;
 			}
 			
-			// Create a new tab for the file
-			SessionTabControl tab = CreateNewTab(type);
-			tab.FileName = openFileDialog.FileName;
-			tab.FileType = type;
-			
-			// Put content into editor
-			// case when user cancelled dialog not handled yet
-			string content = File.ReadAllText(openFileDialog.FileName);
-			tab.SourceCode.Text = content;
-			tabPages.Last().Text = openFileDialog.FileName;
+			OnOpen(new OpenEventArgs(openFileDialog.FileName, type));
 			
 			UpdateMenuItems();
 		}
@@ -407,5 +403,24 @@ namespace TwinEditor.UI
 			// Add
 			//this.scriptToolStripMenuItem.DropDownItems.Add
 		}
+		
+		#region OnFoo event methods
+        protected virtual void OnShareSession(ShareSessionEventArgs e)
+        {
+            if(ShareSession != null)
+            {
+                ShareSession(this, e);
+            }
+        }
+        
+        protected virtual void OnOpen(OpenEventArgs e)
+        {
+            if (Open != null)
+            {
+                Open(this, e);
+            }
+        }
+        #endregion
+		
 	}
 }

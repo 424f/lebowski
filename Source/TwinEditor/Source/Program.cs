@@ -148,9 +148,10 @@ namespace TwinEditor
 			
 			// Display main form
 			IApplicationView applicationView = new MainForm(new Controller());
-			applicationView.Show();
 			
 			ApplicationPresenter presenter = new ApplicationPresenter(applicationView);
+			applicationView.Presenter = presenter;
+			applicationView.Show();
 
 			Application.Run();			
 		}		

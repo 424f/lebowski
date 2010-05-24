@@ -41,7 +41,7 @@ namespace Lebowski.Net.Skype
 		
 		Dictionary<int, SharingInvitationMessage> invitations = new Dictionary<int, SharingInvitationMessage>();
 		Dictionary<int, SkypeConnection> invitationChannels = new Dictionary<int, SkypeConnection>();
-		Dictionary<int, ISessionContext> invitationSessions = new Dictionary<int, ISessionContext>();
+		Dictionary<int, ISynchronizationSession> invitationSessions = new Dictionary<int, ISynchronizationSession>();
 		
 		int numInvitations = 0;
 		
@@ -137,7 +137,7 @@ namespace Lebowski.Net.Skype
 
 		}
 		
-		public void Share(ISessionContext session)
+		public void Share(ISynchronizationSession session)
 		{
 			UpdateFriends();
 			SkypeShareForm form = new SkypeShareForm(this);
@@ -320,7 +320,7 @@ namespace Lebowski.Net.Skype
 						}
 						
 						SkypeConnection connection = invitationChannels[accept.InvitationId];
-						ISessionContext session = invitationSessions[accept.InvitationId];
+						ISynchronizationSession session = invitationSessions[accept.InvitationId];
 						
 						invitations.Remove(accept.InvitationId);
 						invitationChannels.Remove(accept.InvitationId);

@@ -19,7 +19,7 @@ namespace Lebowski.Net.Lidgren
 			get { return true; }
 		}
 		
-		public void Share(ISessionContext session)
+		public void Share(ISynchronizationSession session)
 		{
 			throw new NotImplementedException();
 		}

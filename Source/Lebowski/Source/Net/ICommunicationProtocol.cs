@@ -14,7 +14,7 @@ namespace Lebowski.Net
 	    /// Shares an existing single-user session using this protocol
 	    /// </summary>
 	    /// <param name="session"></param>
-		void Share(ISessionContext session);
+		void Share(ISynchronizationSession session);
 		
 		/// <summary>
 		/// Participates in an existing session, usually by first displaying
@@ -57,9 +57,9 @@ namespace Lebowski.Net
 	public sealed class HostSessionEventArgs : EventArgs
 	{
 		public IConnection Connection { get; private set; }
-		public ISessionContext Session { get; private set; }
+		public ISynchronizationSession Session { get; private set; }
 		
-		public HostSessionEventArgs(ISessionContext session, IConnection connection)
+		public HostSessionEventArgs(ISynchronizationSession session, IConnection connection)
 		{
 			Session = session;
 			Connection = connection;

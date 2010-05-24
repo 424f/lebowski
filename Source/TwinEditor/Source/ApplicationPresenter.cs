@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using Lebowski;
 using Lebowski.Net;
@@ -43,7 +44,7 @@ namespace TwinEditor
 				protocol.JoinSession += delegate(object sender, JoinSessionEventArgs e)
 				{ 
 					// TODO: choose correct file type
-					ISessionContext tab = view.CreateNewSession(fileTypes[0]);
+					ISession tab = view.CreateNewSession(fileTypes[0]);
 					
 					MultichannelConnection mcc = new MultichannelConnection(e.Connection);
 					var syncConnection = mcc.CreateChannel();
@@ -52,6 +53,25 @@ namespace TwinEditor
 					
 				};	                
             }
+            
+            // Protocol: sharing
+            view.ShareSession += delegate(object sender, ShareSessionEventArgs e)
+            {
+                e.Protocol.Share(e.Session);
+            };
+            
+            // File handling
+            view.Open += delegate(object sender, OpenEventArgs e)
+            {
+                // Create a new tab for the file
+    			ISession tab = view.CreateNewSession(e.FileType);
+    			tab.FileName = e.FileName;
+    			
+    			// Put content into editor
+    			// case when user cancelled dialog not handled yet
+    			string content = File.ReadAllText(e.FileName);
+    			tab.Context.Data = content;
+            };
 		}
 	}
 }

@@ -14,7 +14,7 @@ namespace Lebowski.Net.Tcp
 			get { return "TCP"; }
 		}
 		
-		public void Share(ISessionContext session)
+		public void Share(ISynchronizationSession session)
 		{
 			TcpShareForm form = new TcpShareForm();
 			form.Submit += delegate

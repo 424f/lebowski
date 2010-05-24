@@ -4,12 +4,11 @@ using Lebowski.Net;
 
 namespace Lebowski
 {
-	public interface ISessionContext
+	public interface ISynchronizationSession
 	{
 	    SessionState State { get; }
 	    DifferentialSynchronizationStrategy SynchronizationStrategy { get; }
 		TextModel.ITextContext Context { get; }
-		string FileName { get; }
 		
 		void StartSession(
 			DifferentialSynchronizationStrategy strategy,
@@ -19,6 +18,8 @@ namespace Lebowski
 		void AwaitingSession();
 		
 		void CloseSession();
+		
+        string FileName { get; set; }
 			
 	}
 }
