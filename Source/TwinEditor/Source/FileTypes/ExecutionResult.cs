@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace TwinEditor
+﻿namespace TwinEditor
 {
+    using System;
+    
     public class FinishedExecutionEventArgs : EventArgs
     {
         public string StandardOut { get; private set; }

@@ -1,13 +1,13 @@
-﻿using System;
-using System.IO;
-using IronPython;
-using IronPython.Hosting;
-using IronPython.Runtime;
-using Microsoft.Scripting;
-using Microsoft.Scripting.Hosting;
-
-namespace TwinEditor
+﻿namespace TwinEditor
 {
+    using System;
+    using System.IO;
+    using IronPython;
+    using IronPython.Hosting;
+    using IronPython.Runtime;
+    using Microsoft.Scripting;
+    using Microsoft.Scripting.Hosting;    
+    
     public class PythonInterpreter
     {
         private ScriptEngine engine = null;

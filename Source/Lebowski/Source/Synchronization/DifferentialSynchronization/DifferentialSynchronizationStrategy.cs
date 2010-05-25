@@ -1,16 +1,16 @@
-﻿using System;
-using System.IO;
-using System.Timers;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Diagnostics;
-using Lebowski.TextModel;
-using Lebowski.Net;
-using DiffMatchPatch;
-
-namespace Lebowski.Synchronization.DifferentialSynchronization
+﻿namespace Lebowski.Synchronization.DifferentialSynchronization
 {        
+    using System;
+    using System.IO;
+    using System.Timers;
+    using System.Collections.Generic;
+    using System.Runtime.Serialization;
+    using System.Runtime.Serialization.Formatters.Binary;
+    using System.Diagnostics;
+    using Lebowski.TextModel;
+    using Lebowski.Net;
+    using DiffMatchPatch;    
+    
     /// <summary>
     /// This class provides an implementation of the Differential Synchronization
     /// synchronization algorithm by Neil Fraser. It is based around sending patches 
@@ -134,10 +134,10 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
                 
             var delta = DiffMatchPatch.diff_toDelta(localDiffs);    
             
-            Connection.Send(new DiffMessage(delta));
+            Connection.Send(new DiffMessage(delta, Context.SelectionStart, Context.SelectionEnd));
         }
         
-        private void ApplyPatches(string delta)
+        private void ApplyPatches(DiffMessage diffMessage)
         {            
             Debug.Assert(TokenState == TokenState.WaitingForToken);
             lock(this)
@@ -146,7 +146,7 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
                     string old = Context.Data;                               
                                    
                     // Apply diff to shadow
-                    var diffs = DiffMatchPatch.diff_fromDelta(Shadow.Data, delta);
+                    var diffs = DiffMatchPatch.diff_fromDelta(Shadow.Data, diffMessage.Delta);
                     var patches = DiffMatchPatch.patch_make(Shadow.Data, diffs);
                     Shadow.Data = (string)DiffMatchPatch.patch_apply(patches, Shadow.Data)[0];
                     
@@ -238,6 +238,11 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
                     //Console.WriteLine("Selection is: {0} {1}", start, end);
                     //Console.WriteLine("Caret is: {0}", caret);
                     //Console.WriteLine("Was {0} now {1}", old, Context.Data);
+                    
+                    // Display remote selection
+                    // TODO: when adding support for multiple users, we need to actually provide a real identifier
+                    Context.SetRemoteSelection(0, diffMessage.SelectionStart, diffMessage.SelectionEnd);
+                    
                     Context.Refresh();
                 });
             }
@@ -275,7 +280,7 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
                         TokenRequestSent = false;
                         DiffMessage diffMessage = (DiffMessage)e.Message;
 
-                        ApplyPatches(diffMessage.Diff);
+                        ApplyPatches(diffMessage);
                         TokenState = TokenState.HavingToken;
                         
                         if (HasChanged)

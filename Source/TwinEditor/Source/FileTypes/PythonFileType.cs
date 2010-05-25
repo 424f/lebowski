@@ -1,10 +1,10 @@
-﻿using System;
-using System.IO;
-using System.Drawing;
-using System.Threading;
-
-namespace TwinEditor.FileTypes
+﻿namespace TwinEditor.FileTypes
 {
+    using System;
+    using System.IO;
+    using System.Drawing;
+    using System.Threading;
+    
     public class PythonFileType : IFileType
     {
         private PythonInterpreter interpreter;

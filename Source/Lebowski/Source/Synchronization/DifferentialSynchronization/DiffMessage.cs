@@ -6,9 +6,9 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
     internal sealed class DiffMessage
     {
         /// <summary>
-        /// The diff based on the common shadow
+        /// The delta for the diff, based on the common shadow
         /// </summary>
-        public string Diff { get; private set; }
+        public string Delta { get; private set; }
         
         /// <summary>
         /// The user's selection when this message was sent
@@ -16,21 +16,20 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
         public int SelectionStart { get; private set; }
         public int SelectionEnd { get; private set; }
         
-        public DiffMessage(string diff)
+        public DiffMessage(string delta)
         {
-            Diff = diff;
+            Delta = delta;
         }
 
-        public DiffMessage(string diff, int selectionStart, int selectionEnd)
+        public DiffMessage(string delta, int selectionStart, int selectionEnd) : this(delta)
         {
-            Diff = diff;
             SelectionStart = selectionStart;
             SelectionEnd = selectionEnd;
         }        
         
         public override string ToString()
         {
-            return String.Format("DiffMessage({0})", Diff);
+            return String.Format("DiffMessage({0})", Delta);
         }
     }
 }

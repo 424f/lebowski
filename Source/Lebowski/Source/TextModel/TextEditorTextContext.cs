@@ -1,12 +1,16 @@
-﻿using System;
-using ICSharpCode.TextEditor;
-
-// TODO: extract common functionality with TextBoxTextContext into common abstract superclass
+﻿// TODO: extract common functionality with TextBoxTextContext into common abstract superclass
 
 namespace Lebowski.TextModel
 {
+    using System;
+    using ICSharpCode.TextEditor;    
+    using ICSharpCode.TextEditor.Document;
+    
     public class TextEditorTextContext : AbstractTextContext
     {
+        // The marker used to highlight selection of the remote party
+        private TextMarker remoteMarker;
+        
         public override int SelectionStart
         {
             get
@@ -47,24 +51,36 @@ namespace Lebowski.TextModel
             get { return TextBox.Text; }
             set
             {
-                TextBox.TextChanged -= TextBoxChanged;
+                UnsubscribeFromTextBox();
                 TextBox.Text = value;
-                TextBox.TextChanged += TextBoxChanged;
+                SubscribeToTextBox();
             }
         }
         
         public override void Insert(object issuer, InsertOperation operation)
         {
-            TextBox.TextChanged -= TextBoxChanged;
+            UnsubscribeFromTextBox();
             TextBox.Text.Insert(operation.Position, operation.Text.ToString());
-            TextBox.TextChanged += TextBoxChanged;
+            SubscribeToTextBox();
         }
         
         public override void Delete(object issuer, DeleteOperation operation)
         {
-            TextBox.TextChanged -= TextBoxChanged;
+            UnsubscribeFromTextBox();
             TextBox.Text.Remove(operation.Position, 1);
+            SubscribeToTextBox();
+        }
+        
+        private void SubscribeToTextBox()
+        {
             TextBox.TextChanged += TextBoxChanged;
+            TextBox.ActiveTextAreaControl.SelectionManager.SelectionChanged += TextBoxChanged;
+        }        
+        
+        private void UnsubscribeFromTextBox()
+        {
+            TextBox.TextChanged -= TextBoxChanged;
+            TextBox.ActiveTextAreaControl.SelectionManager.SelectionChanged -= TextBoxChanged;
         }
         
         TextEditorControl TextBox;
@@ -72,7 +88,9 @@ namespace Lebowski.TextModel
         public TextEditorTextContext(TextEditorControl textBox)
         {
             TextBox = textBox;
-            TextBox.TextChanged += TextBoxChanged;
+            SubscribeToTextBox();
+            
+            remoteMarker = new TextMarker(0, 0, TextMarkerType.SolidBlock, System.Drawing.Color.Yellow);
             
             // TODO: implement insert / delete
         }
@@ -84,9 +102,11 @@ namespace Lebowski.TextModel
         
         public override void SetSelection(int start, int last)
         {    
+            UnsubscribeFromTextBox();
             TextLocation startLocation = TextBox.Document.OffsetToPosition(start);
             TextLocation lastLocation = TextBox.Document.OffsetToPosition(last);
             TextBox.ActiveTextAreaControl.SelectionManager.SetSelection(startLocation, lastLocation);
+            SubscribeToTextBox();
         }            
         
         public override bool HasSelection
@@ -106,6 +126,17 @@ namespace Lebowski.TextModel
         public override void Refresh()
         {
             TextBox.Refresh();
+        }
+        
+        public override void SetRemoteSelection(object siteIdentifier, int start, int end)
+        {
+            TextBox.Document.MarkerStrategy.RemoveMarker(remoteMarker);
+            remoteMarker.Offset = start;
+            remoteMarker.Length = end - start;
+            if(start != end)
+            {
+                TextBox.Document.MarkerStrategy.AddMarker(remoteMarker);
+            }
         }
     }
 }

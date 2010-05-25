@@ -31,6 +31,16 @@ namespace Lebowski.TextModel
         void SetSelection(int start, int last);
         
         /// <summary>
+        /// Sets the remote selection of the user identified by <value>siteIdentifier</value>.
+        /// Some text context implementations might support displaying those 
+        /// remote selections to achieve better interaction awareness.
+        /// </summary>
+        /// <param name="siteIdentifier">A identifier that uniquely describes the remote site in the current session</param>
+        /// <param name="start">Start of the selection</param>
+        /// <param name="end">End of the selection</param>
+        void SetRemoteSelection(object siteIdentifier, int start, int end);
+        
+        /// <summary>
         /// Invokes the given action in a thread that has read-write access
         /// to this context. If you are not operating on e.g. a UI control,
         /// you can just implement this method by calling the delegate directly.

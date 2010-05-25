@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace TwinEditor.Messaging
+﻿namespace TwinEditor.Messaging
 {
+    using System;    
+    
     /// <summary>
     /// Occurs when the user has entered a chat message to be broadcast
     /// to the other users

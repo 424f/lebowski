@@ -47,5 +47,10 @@ namespace Lebowski.TextModel
         {
             
         }
+        
+        public override void SetRemoteSelection(object siteIdentifier, int start, int end)
+        {
+            
+        }
     }
 }
