@@ -53,7 +53,7 @@ namespace Lebowski.Net
             {
                 return regex.IsMatch(ip, 0);
             }
-            catch (ArgumentNullException e)
+            catch (ArgumentNullException)
             {
                 return false;
             }

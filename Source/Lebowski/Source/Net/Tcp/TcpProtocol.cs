@@ -81,7 +81,7 @@ namespace Lebowski.Net.Tcp
 					TcpClientConnection connection = new TcpClientConnection(form.Address, form.Port);
 					OnJoinSession(new JoinSessionEventArgs(connection));
 				}
-				catch(ConnectionFailedException e)
+				catch(ConnectionFailedException)
 				{
 					System.Windows.Forms.MessageBox.Show("Could not connect to " + form.Address + ":" + form.Port);
 				}

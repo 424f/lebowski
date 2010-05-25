@@ -190,6 +190,8 @@ namespace Lebowski.Net.Tcp
 	
 	public class TcpClientConnection : TcpConnection
 	{			
+	    private static ILog Logger = LogManager.GetLogger(typeof(TcpConnection));
+	    
 		TcpClient client;
 		
 		public TcpClientConnection(string address, int port)
@@ -197,9 +199,30 @@ namespace Lebowski.Net.Tcp
 			try
 			{
 				client = new TcpClient();
-				IPHostEntry hostEntry = Dns.Resolve(address);
-				IPEndPoint endpoint = new IPEndPoint(hostEntry.AddressList[0], port);
-				client.Connect(endpoint);
+				IPHostEntry hostEntry = Dns.GetHostEntry(address);
+				// Try to connect on each endpoint
+				string attempted = "";
+				bool connected = false;
+				foreach(IPAddress ip in hostEntry.AddressList)
+				{
+                    try
+                    {				    
+    				    IPEndPoint endpoint = new IPEndPoint(ip, port);
+                        attempted += ip.ToString() + "\n";
+                        client.Connect(endpoint);
+                        connected = true;
+                        break;
+                    }
+                    catch(Exception e)
+                    {
+                        Logger.InfoFormat("Connecting to endpoint {0} failed: {1}", ip, e);
+                    }
+				}
+				
+				if(!connected)
+				{
+				    throw new Exception(string.Format("Could not connect to any of the following endpoints:\n{0}", attempted));
+				}
 			}
 			catch(Exception e)
 			{

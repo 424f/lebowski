@@ -69,22 +69,7 @@ namespace Lebowski.Net.Lidgren
 			Socket.SetMessageTypeEnabled(NetMessageType.ConnectionRejected, true);
 			Socket.SetMessageTypeEnabled(NetMessageType.DebugMessage, true);
 
-			// Wait for connection 
-			const int maxWaitTime = 3000;
 			Socket.Connect(address, port, new byte[] { 123, 123 } );
-			/*int timeWaited = 0;
-			while(Socket.Status == NetConnectionStatus.Connecting && timeWaited < maxWaitTime)
-			{
-				Thread.Sleep(250);
-				timeWaited += 250;
-			}
-			
-			// Are we connected now?
-			if(Socket.Status != NetConnectionStatus.Connected)
-			{
-				throw new ConnectionFailedException(String.Format("Connection with host {0}:{1} could not be established", address, port));
-			}*/
-			
 			
 			// Create networking thread
 			ThreadStart threadStart = new ThreadStart(RunNetworkingThread);
@@ -131,7 +116,7 @@ namespace Lebowski.Net.Lidgren
 	public sealed class ServerConnection : LidgrenConnection
 	{
 		NetServer Socket;
-		NetConnection Client;
+		//NetConnection Client;
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(LidgrenConnection));
 		
 		public ServerConnection()
