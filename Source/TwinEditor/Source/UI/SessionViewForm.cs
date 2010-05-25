@@ -62,6 +62,8 @@ namespace TwinEditor.UI
             
             ChatText.Enabled = false;
             
+            splitContainer.Panel2Collapsed = true;
+            
             // Create a text context for the source code editor
             Context = new TextEditorTextContext(SourceCode);
             
@@ -164,6 +166,18 @@ namespace TwinEditor.UI
                     this.ChangeStatus(TranslationUtil.GetString(ApplicationUtil.LanguageResources, "StatusAwaiting"), true, true);
                     break;
             }
+            
+            // If we're not disconnected, we have to uncollapse the right panel
+            if(state == SessionStates.Disconnected)
+            {
+                splitContainer.Panel2Collapsed = true;
+            }
+            else
+            {
+                splitContainer.Panel2MinSize = 0;
+                splitContainer.Panel2Collapsed = false;
+            }
+            
             UpdateGuiState();
             
         }
@@ -276,6 +290,11 @@ namespace TwinEditor.UI
         void SessionViewFormLoad(object sender, EventArgs e)
         {
             
+        }
+        
+        void Panel1Paint(object sender, PaintEventArgs e)
+        {
+        	
         }
     }
     

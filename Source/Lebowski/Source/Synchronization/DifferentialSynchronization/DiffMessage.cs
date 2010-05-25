@@ -2,6 +2,9 @@
 
 namespace Lebowski.Synchronization.DifferentialSynchronization
 {
+    /// <summary>
+    /// A message that is transmitted to get two <see cref="ITextContext">ITextContext</see>
+    /// </summary>
     [Serializable]
     internal sealed class DiffMessage
     {

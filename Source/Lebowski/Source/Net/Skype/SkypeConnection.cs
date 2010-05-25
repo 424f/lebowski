@@ -86,7 +86,10 @@ namespace Lebowski.Net.Skype
         public void Close()
         {
             dispatcherRunning = false;
-            Monitor.Pulse(receiveQueue);
+            lock(receiveQueue)
+            {
+                Monitor.Pulse(receiveQueue);
+            }
         }
         
     }
