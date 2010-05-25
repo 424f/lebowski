@@ -7,16 +7,16 @@ namespace TwinEditor.UI
     public class CloseableTabControl : TabControl
     {
         public event EventHandler<TabClosedEventArgs> TabClosed;
-        
+
         private ContextMenuStrip tabContextMenuStrip;
         private int ClickedTabIndex = -1;
         public int Shift { get; private set; } // tab index from which on the tabs can be closed
-        
+
         public CloseableTabControl() : this(0)
         {
-            
+
         }
-        
+
         public CloseableTabControl(int shift)
         {
             this.Shift = shift;
@@ -30,7 +30,7 @@ namespace TwinEditor.UI
                 OnTabClosed(new TabClosedEventArgs(this.ClickedTabIndex));
             }
         }
-        
+
         protected override void OnMouseClick(MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
@@ -50,13 +50,13 @@ namespace TwinEditor.UI
                         tabContextMenuStrip = new ContextMenuStrip();
                         // add close menu item and corredsponding event handler
                         tabContextMenuStrip.Items.Add(TranslationUtil.GetString(ApplicationUtil.LanguageResources, "Close"));
-                        tabContextMenuStrip.Items[0].Click += new EventHandler(CloseClicked);                        
+                        tabContextMenuStrip.Items[0].Click += new EventHandler(CloseClicked);
                         tabContextMenuStrip.Show(this.PointToScreen(p));
                     }
                 }
             }
         }
-        
+
         protected void OnTabClosed(TabClosedEventArgs e)
         {
             if (TabClosed != null)
@@ -65,7 +65,7 @@ namespace TwinEditor.UI
             }
         }
     }
-    
+
     public sealed class TabClosedEventArgs : EventArgs
     {
         public int TabIndex { get; private set; }
@@ -77,4 +77,3 @@ namespace TwinEditor.UI
 }
 
 
-    

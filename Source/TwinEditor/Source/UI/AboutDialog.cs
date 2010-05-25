@@ -9,9 +9,9 @@ namespace TwinEditor.UI
     {
         public AboutDialog()
         {
-            InitializeComponent();            
+            InitializeComponent();
         }
-        
+
         void UrlLabelClick(object sender, EventArgs e)
         {
             System.Diagnostics.Process.Start(urlLabel.Text);

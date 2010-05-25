@@ -7,7 +7,7 @@ namespace Lebowski.Net.Skype
         /// Designer variable used to keep track of non-visual components.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
-        
+
         /// <summary>
         /// Disposes resources used by the form.
         /// </summary>
@@ -21,7 +21,7 @@ namespace Lebowski.Net.Skype
             }
             base.Dispose(disposing);
         }
-        
+
         /// <summary>
         /// This method is required for Windows Forms designer support.
         /// Do not change the method contents inside the source code editor. The Forms designer might
@@ -35,9 +35,9 @@ namespace Lebowski.Net.Skype
             this.UsernameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.SuspendLayout();
-            // 
+            //
             // shareButton
-            // 
+            //
             this.shareButton.Location = new System.Drawing.Point(68, 227);
             this.shareButton.Name = "shareButton";
             this.shareButton.Size = new System.Drawing.Size(140, 23);
@@ -45,9 +45,9 @@ namespace Lebowski.Net.Skype
             this.shareButton.Text = "Share document";
             this.shareButton.UseVisualStyleBackColor = true;
             this.shareButton.Click += new System.EventHandler(this.ShareButtonClick);
-            // 
+            //
             // dataGridView
-            // 
+            //
             this.dataGridView.AllowUserToAddRows = false;
             this.dataGridView.AllowUserToDeleteRows = false;
             this.dataGridView.AllowUserToResizeColumns = false;
@@ -66,26 +66,26 @@ namespace Lebowski.Net.Skype
             this.dataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridView.Size = new System.Drawing.Size(259, 208);
             this.dataGridView.TabIndex = 1;
-            // 
+            //
             // IconColumn
-            // 
+            //
             this.IconColumn.FillWeight = 32F;
             this.IconColumn.HeaderText = "";
             this.IconColumn.Name = "IconColumn";
             this.IconColumn.ReadOnly = true;
             this.IconColumn.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.IconColumn.Width = 32;
-            // 
+            //
             // UsernameColumn
-            // 
+            //
             this.UsernameColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.UsernameColumn.HeaderText = "User";
             this.UsernameColumn.Name = "UsernameColumn";
             this.UsernameColumn.ReadOnly = true;
             this.UsernameColumn.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            // 
+            //
             // SkypeShareForm
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 262);

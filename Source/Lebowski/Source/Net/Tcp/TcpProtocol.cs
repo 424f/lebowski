@@ -1,6 +1,6 @@
 
 namespace Lebowski.Net.Tcp
-{    
+{
     using System;
     using Lebowski.Synchronization.DifferentialSynchronization;
     public class TcpProtocol : ICommunicationProtocol
@@ -8,12 +8,12 @@ namespace Lebowski.Net.Tcp
         public event EventHandler<HostSessionEventArgs> HostSession;
         public event EventHandler<JoinSessionEventArgs> JoinSession;
         public event EventHandler<EventArgs> Waiting;
-        
+
         public string Name
         {
             get { return "TCP"; }
         }
-        
+
         public void Share(ISynchronizationSession session)
         {
             TcpShareForm form = new TcpShareForm();
@@ -34,18 +34,18 @@ namespace Lebowski.Net.Tcp
                 };
             };
             form.ShowDialog();
-        }        
-        
+        }
+
         public bool CanShare
         {
             get { return true; }
         }
-        
+
         public bool CanParticipate
         {
             get { return true; }
-        }        
-        
+        }
+
         protected virtual void OnHostSession(HostSessionEventArgs e)
         {
             if (HostSession != null)
@@ -53,7 +53,7 @@ namespace Lebowski.Net.Tcp
                 HostSession(this, e);
             }
         }
-        
+
         protected virtual void OnJoinSession(JoinSessionEventArgs e)
         {
             if (JoinSession != null)
@@ -61,7 +61,7 @@ namespace Lebowski.Net.Tcp
                 JoinSession(this, e);
             }
         }
-        
+
         protected virtual void OnWaiting(EventArgs e)
         {
             if (Waiting != null)
@@ -69,11 +69,11 @@ namespace Lebowski.Net.Tcp
                 Waiting(this, e);
             }
         }
-    
+
         public void Participate()
         {
             TcpParticipateForm form = new TcpParticipateForm();
-            
+
             form.Submit += delegate
             {
                 try
@@ -94,13 +94,13 @@ namespace Lebowski.Net.Tcp
                     form.Close();
                 }
             };
-            
+
             form.ShowDialog();
         }
-        
+
         public bool Enabled
         {
             get { return true; }
-        }                
+        }
     }
 }

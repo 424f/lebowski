@@ -8,7 +8,7 @@ namespace TwinEditor.UI.Settings
     public partial class SettingsDialog : Form
     {
         private TwinEditor.ApplicationContext applicationContext;
-        
+
         public SettingsDialog(TwinEditor.ApplicationContext applicationContext)
         {
             InitializeComponent();
@@ -17,34 +17,34 @@ namespace TwinEditor.UI.Settings
 
             InitializeSettings();
         }
-        
+
         void InitializeSettings()
         {
-            var appSettings = Configuration.ApplicationSettings.Default;            
-            
+            var appSettings = Configuration.ApplicationSettings.Default;
+
             userName.Text = appSettings.UserName;
-            
+
             string s = "Lebowski.Synchronization.DifferentialSynchronization.DifferentialSynchronizationStrategy";
             synchronizationStrategy.Items.Add(s);
-            synchronizationStrategy.SelectedItem = s;            
+            synchronizationStrategy.SelectedItem = s;
         }
-        
+
         void ApplyButtonClick(object sender, EventArgs e)
         {
             if (!Validate())
             {
                 // TODO: invalid entries
             }
-            
+
             var appSettings = Configuration.ApplicationSettings.Default;
-            
+
             // General settings
             appSettings.UserName = userName.Text;
             appSettings.SynchronizationStrategy = synchronizationStrategy.Text;
-            
+
             appSettings.Save();
         }
-        
+
         void CancelButtonClick(object sender, EventArgs e)
         {
             Hide();

@@ -2,8 +2,8 @@ namespace Lebowski
 {
     using System;
     using System.Collections.Generic;
-    using System.Reflection;    
-    
+    using System.Reflection;
+
     /// <summary>
     /// Provides helper methods to allow an application to be extended
     /// </summary>
@@ -18,7 +18,7 @@ namespace Lebowski
         public static Type[] FindTypesImplementing(Type type)
         {
             List<Type> result = new List<Type>();
-            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies()) 
+            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
                 foreach (Type t in assembly.GetTypes())
                 {

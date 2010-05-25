@@ -9,7 +9,7 @@ namespace TwinEditor
     public static class TranslationUtil
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(TranslationUtil));
-        
+
         public static string GetString(ResourceManager resources, string id)
         {
             string result = resources.GetString(id);
@@ -20,7 +20,7 @@ namespace TwinEditor
             }
             return result;
         }
-        
+
         public static void TranslateMenuStrip(MenuStrip menuStrip, ResourceManager resources)
         {
             Queue<ToolStripMenuItem> menuItems = new Queue<ToolStripMenuItem>();
@@ -28,7 +28,7 @@ namespace TwinEditor
             {
                 menuItems.Enqueue(item);
             }
-            
+
             while (menuItems.Count != 0)
             {
                 ToolStripMenuItem item = menuItems.Dequeue();
@@ -40,7 +40,7 @@ namespace TwinEditor
                         menuItems.Enqueue((ToolStripMenuItem)child);
                     }
                 }
-            }                    
+            }
         }
     }
 }

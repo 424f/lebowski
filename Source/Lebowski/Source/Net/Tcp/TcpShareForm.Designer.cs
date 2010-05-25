@@ -3,7 +3,7 @@
  * User: bo
  * Date: 30.04.2010
  * Time: 15:18
- * 
+ *
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 namespace Lebowski.Net.Tcp
@@ -14,7 +14,7 @@ namespace Lebowski.Net.Tcp
         /// Designer variable used to keep track of non-visual components.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
-        
+
         /// <summary>
         /// Disposes resources used by the form.
         /// </summary>
@@ -28,7 +28,7 @@ namespace Lebowski.Net.Tcp
             }
             base.Dispose(disposing);
         }
-        
+
         /// <summary>
         /// This method is required for Windows Forms designer support.
         /// Do not change the method contents inside the source code editor. The Forms designer might
@@ -41,9 +41,9 @@ namespace Lebowski.Net.Tcp
             this.portText = new System.Windows.Forms.TextBox();
             this.shareButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            // 
+            //
             // label1
-            // 
+            //
             this.label1.Location = new System.Drawing.Point(13, 13);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(306, 66);
@@ -51,25 +51,25 @@ namespace Lebowski.Net.Tcp
             this.label1.Text = "To share a document via TCP, you must forward the port you select below in your f" +
             "irewall configuration. Otherwise, your partner will not be able to join your ses" +
             "sion.";
-            // 
+            //
             // label2
-            // 
+            //
             this.label2.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(13, 83);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(100, 23);
             this.label2.TabIndex = 1;
             this.label2.Text = "Port";
-            // 
+            //
             // portText
-            // 
+            //
             this.portText.Location = new System.Drawing.Point(13, 110);
             this.portText.Name = "portText";
             this.portText.Size = new System.Drawing.Size(306, 23);
             this.portText.TabIndex = 2;
-            // 
+            //
             // shareButton
-            // 
+            //
             this.shareButton.Location = new System.Drawing.Point(117, 152);
             this.shareButton.Name = "shareButton";
             this.shareButton.Size = new System.Drawing.Size(75, 23);
@@ -77,9 +77,9 @@ namespace Lebowski.Net.Tcp
             this.shareButton.Text = "Share";
             this.shareButton.UseVisualStyleBackColor = true;
             this.shareButton.Click += new System.EventHandler(this.ShareButtonClick);
-            // 
+            //
             // TcpShareForm
-            // 
+            //
             this.AcceptButton = this.shareButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;

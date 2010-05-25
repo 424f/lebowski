@@ -14,19 +14,19 @@ namespace TwinEditor.UI
     using TwinEditor.Messaging;
     using log4net;
     public partial class SessionViewForm : UserControl, ISessionView
-    {    
+    {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(SessionViewForm));
-        
+
         #region Context
         public SessionContext SessionContext { get; private set; }
-        public ApplicationViewForm ApplicationViewForm { get; private set; }        
+        public ApplicationViewForm ApplicationViewForm { get; private set; }
         private TabPage tabPage;
         #endregion
-        
+
         #region Events
         public event EventHandler<StateChangedEventArgs> StateChanged;
         #endregion
-        
+
         #region File management members
         public string FileName
         {
@@ -38,44 +38,44 @@ namespace TwinEditor.UI
             }
         }
         private string fileName;
-    
+
         public bool OnDisk { get; set; }
         public bool FileModified { get; set; }
         #endregion
-        
+
         #region Execution
         // Stores the exeucution view form for each user (identified by site id)
         private Dictionary<int, ExecutionViewForm> executionViewForms = new Dictionary<int, ExecutionViewForm>();
         private int numExecutions = 0;
         #endregion
-        
-        public ITextContext Context { get; protected set; }        
-    
+
+        public ITextContext Context { get; protected set; }
+
         public SessionViewForm(ApplicationViewForm applicationViewForm, TabPage tabPage)
         {
             InitializeComponent();
-            
+
             this.ApplicationViewForm = applicationViewForm;
             this.tabPage = tabPage;
             this.OnDisk = false;
             this.FileModified = false;
-            
+
             ChatText.Enabled = false;
-            
+
             splitContainer.Panel2Collapsed = true;
-            
+
             // Create a text context for the source code editor
             Context = new TextEditorTextContext(SourceCode);
-            
+
             SessionContext = new SessionContext(Context);
             SessionContext.StateChanged += delegate(object sender, EventArgs e)
             {
-                Context.Invoke((Action)delegate 
+                Context.Invoke((Action)delegate
                 {
                     SessionContextStateChanged(sender, e);
                 });
             };
-            
+
             SessionContext.FileTypeChanged += delegate
             {
                 Context.Invoke((Action)delegate
@@ -84,10 +84,10 @@ namespace TwinEditor.UI
                     tabPage.ImageKey = SessionContext.FileType.Name + "Image";
                 });
             };
-            
+
             SessionContext.StartedExecution +=
                 delegate(object sender, StartedExecutionEventArgs e)
-                {  
+                {
                     Context.Invoke((Action)
                         delegate
                         {
@@ -98,7 +98,7 @@ namespace TwinEditor.UI
                                 {
                                     tabTitle = "Execution (Me)";
                                 }
-                                
+
                                 TabPage newPage = new TabPage(tabTitle);
                                 ExecutionViewForm executionView = new ExecutionViewForm(e.ExecutionResult);
                                 newPage.Controls.Add(executionView);
@@ -116,7 +116,7 @@ namespace TwinEditor.UI
                         }
                     );
                 };
-            
+
             SessionContext.ReceiveChatMessage += SessionContextReceiveChatMessage;
 
             TabControl.TabClosed += delegate(object sender, TabClosedEventArgs e)
@@ -125,32 +125,32 @@ namespace TwinEditor.UI
                 executionViewForms.Remove(siteId);
                 TabControl.TabPages.RemoveAt(e.TabIndex);
             };
-            
+
             this.SetState(SessionStates.Disconnected);
-            
+
             // Load ImageList for tabs
             var rm = new System.Resources.ResourceManager("TwinEditor.Resources", System.Reflection.Assembly.GetExecutingAssembly());
-            
+
             ImageList imageList = new ImageList();
             imageList.Images.Add("TextImage", (System.Drawing.Image)rm.GetObject("TextImage"));
             imageList.Images.Add("ExecutionImage", (System.Drawing.Image)rm.GetObject("ExecutionImage"));
             TabControl.ImageList = imageList;
             tabPage3.ImageKey = "TextImage";
-                                 
+
         }
-        
+
         public void UpdateGuiState()
         {
-            ApplicationViewForm.UpdateGuiState();            
+            ApplicationViewForm.UpdateGuiState();
             ChatText.Enabled = SessionContext.State == SessionStates.Connected;
         }
-        
+
         public void SetState(SessionStates state)
         {
             Logger.InfoFormat("State changed to {0}", state);
-            
+
             OnStateChanged(new StateChangedEventArgs(state));
-            
+
             switch(state)
             {
                 case SessionStates.Disconnected:
@@ -166,7 +166,7 @@ namespace TwinEditor.UI
                     this.ChangeStatus(TranslationUtil.GetString(ApplicationUtil.LanguageResources, "StatusAwaiting"), true, true);
                     break;
             }
-            
+
             // If we're not disconnected, we have to uncollapse the right panel
             if(state == SessionStates.Disconnected)
             {
@@ -177,11 +177,11 @@ namespace TwinEditor.UI
                 splitContainer.Panel2MinSize = 0;
                 splitContainer.Panel2Collapsed = false;
             }
-            
+
             UpdateGuiState();
-            
+
         }
-        
+
         private void ChangeStatus(String status, bool spinner, bool cancellable)
         {
             if (this.connectionStatusLabel.InvokeRequired)
@@ -197,11 +197,11 @@ namespace TwinEditor.UI
             {
                   this.connectionStatusLabel.Text = status;
                   this.connectionStatusPicture.Visible = spinner;
-                //this.connectionStopWaitingButton.Visible = cancellable;                        
+                //this.connectionStopWaitingButton.Visible = cancellable;
             }
         }
-        
-        
+
+
         protected void OnStateChanged(StateChangedEventArgs e)
         {
             if (StateChanged != null)
@@ -209,16 +209,16 @@ namespace TwinEditor.UI
                 StateChanged(this, e);
             }
         }
-        
+
         void ChatTextKeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Return)
             {
                 e.Handled = true;
                 SendChatMessage();
-            }            
+            }
         }
-        
+
         void ChatTextKeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char) 13)
@@ -230,7 +230,7 @@ namespace TwinEditor.UI
                 base.OnKeyPress(e);
             }
         }
-        
+
         void ChatTextKeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Return)
@@ -238,7 +238,7 @@ namespace TwinEditor.UI
                 e.Handled = true;
             }
         }
-        
+
         private void SendChatMessage()
         {
             if (ChatText.Text.Length == 0)
@@ -246,39 +246,39 @@ namespace TwinEditor.UI
             ChatMessage message = new ChatMessage(Configuration.ApplicationSettings.Default.UserName, ChatText.Text);
             SessionContext.SendChatMessage(message);
             AddChatMessage(message);
-            ChatText.Text = "";                        
+            ChatText.Text = "";
         }
-        
+
         private void AddChatMessage(ChatMessage msg)
         {
             ChatHistory.AppendText(msg.UserName + ": " + msg.Message + Environment.NewLine);
         }
-        
+
         void ChatTextTextChanged(object sender, EventArgs e)
         {
-            
+
         }
-        
-        
+
+
         void SourceCodeTextChanged(object sender, System.EventArgs e)
         {
-            if (!FileModified) 
+            if (!FileModified)
             {
                 FileModified = true;
                 ((TabPage)this.Parent).Text += " *";
             }
         }
-            
+
         void ConnectionStopWaitingButtonClick(object sender, EventArgs e)
         {
             // TODO: if elegantly possible for all protocols, consider implementing this.
         }
-        
+
         public void SessionContextStateChanged(object o, EventArgs e)
         {
             SetState(SessionContext.State);
         }
-        
+
         public void SessionContextReceiveChatMessage(object o, ReceiveChatMessageEventArgs e)
         {
             Context.Invoke((Action)delegate
@@ -286,24 +286,24 @@ namespace TwinEditor.UI
                 AddChatMessage(e.ChatMessage);
             });
         }
-        
+
         void SessionViewFormLoad(object sender, EventArgs e)
         {
-            
+
         }
-        
+
         void Panel1Paint(object sender, PaintEventArgs e)
         {
-        	
+
         }
     }
-    
+
     public sealed class StateChangedEventArgs : EventArgs
     {
         //public IConnection Connection { get; private set; }
         //public ISessionContext Session { get; private set; }
         public SessionStates State { get; private set; }
-        
+
         public StateChangedEventArgs(SessionStates state)
         {
             State = state;

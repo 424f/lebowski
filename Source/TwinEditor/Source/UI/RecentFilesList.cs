@@ -11,16 +11,16 @@ namespace TwinEditor.UI
 	{
 		// TODO: shift to settings
 		private int bufferSize = 5;
-		
+
 		private List<string> recentFiles;
-		
+
 		public event EventHandler<RecentFilesChangedEventArgs> RecentFilesChanged;
-		
+
 		public RecentFilesList()
 		{
 			recentFiles = new List<string>();
 		}
-		
+
 		public int BufferSize
 		{
 			get
@@ -32,7 +32,7 @@ namespace TwinEditor.UI
 				bufferSize = Math.Max(value, 0);
 			}
 		}
-		
+
 		public void Add(string filename)
 		{
 			// remove file from list (if already in)
@@ -44,7 +44,7 @@ namespace TwinEditor.UI
 			recentFiles.Insert(0, filename);
 			OnRecentFilesChanged(new RecentFilesChangedEventArgs(recentFiles));
 		}
-		
+
 		protected virtual void OnRecentFilesChanged(RecentFilesChangedEventArgs e)
 		{
 			if (RecentFilesChanged != null)
@@ -53,11 +53,11 @@ namespace TwinEditor.UI
 			}
 		}
 	}
-	
+
 	public sealed class RecentFilesChangedEventArgs : EventArgs
     {
         public List<string> RecentFiles { get; private set; }
-        
+
         public RecentFilesChangedEventArgs(List<string> recentFiles)
         {
             RecentFiles = recentFiles;

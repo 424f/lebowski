@@ -7,15 +7,15 @@ namespace Lebowski.Net.Tcp
     public sealed partial class TcpShareForm : Form
     {
         public int Port { get; private set; }
-        
+
         public event EventHandler Submit;
-        
+
         public TcpShareForm()
         {
-            InitializeComponent();    
+            InitializeComponent();
             portText.Text = "1234";
         }
-        
+
         void ShareButtonClick(object sender, EventArgs e)
         {
             int port;
@@ -27,13 +27,13 @@ namespace Lebowski.Net.Tcp
             Port = port;
             OnSubmit(new EventArgs());
         }
-        
+
         void OnSubmit(EventArgs e)
         {
             if (Submit != null) {
                 Submit(this, e);
             }
         }
-        
+
     }
 }

@@ -6,7 +6,7 @@ namespace TwinEditor.UI
         /// Designer variable used to keep track of non-visual components.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
-        
+
         /// <summary>
         /// Disposes resources used by the control.
         /// </summary>
@@ -20,7 +20,7 @@ namespace TwinEditor.UI
             }
             base.Dispose(disposing);
         }
-        
+
         /// <summary>
         /// This method is required for Windows Forms designer support.
         /// Do not change the method contents inside the source code editor. The Forms designer might
@@ -30,9 +30,9 @@ namespace TwinEditor.UI
         {
             this.StandardOutput = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
-            // 
+            //
             // StandardOutput
-            // 
+            //
             this.StandardOutput.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.StandardOutput.Dock = System.Windows.Forms.DockStyle.Fill;
             this.StandardOutput.Location = new System.Drawing.Point(4, 4);
@@ -42,9 +42,9 @@ namespace TwinEditor.UI
             this.StandardOutput.TabIndex = 0;
             this.StandardOutput.ReadOnly = true;
             this.StandardOutput.Font = new System.Drawing.Font("Courier New", 10);
-            // 
+            //
             // ExecutionTabControl
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.StandardOutput);

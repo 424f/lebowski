@@ -8,22 +8,22 @@ namespace Lebowski.Net.Lidgren
         {
             get { return "UDP"; }
         }
-        
+
         public bool CanShare
         {
             get { return true; }
         }
-        
+
         public bool CanParticipate
         {
             get { return true; }
         }
-        
+
         public void Share(ISynchronizationSession session)
         {
             throw new NotImplementedException();
         }
-        
+
         public event EventHandler<HostSessionEventArgs> HostSession;
         public event EventHandler<JoinSessionEventArgs> JoinSession;
 
@@ -31,11 +31,11 @@ namespace Lebowski.Net.Lidgren
         {
             throw new NotImplementedException();
         }
-        
+
         public bool Enabled
         {
             get { return false; }
         }
-        
+
     }
 }

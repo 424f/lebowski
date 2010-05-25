@@ -7,7 +7,7 @@ namespace TwinEditor.UI
         /// Designer variable used to keep track of non-visual components.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
-        
+
         /// <summary>
         /// Disposes resources used by the form.
         /// </summary>
@@ -21,7 +21,7 @@ namespace TwinEditor.UI
             }
             base.Dispose(disposing);
         }
-        
+
         /// <summary>
         /// This method is required for Windows Forms designer support.
         /// Do not change the method contents inside the source code editor. The Forms designer might
@@ -44,9 +44,9 @@ namespace TwinEditor.UI
             ((System.ComponentModel.ISupportInitialize)(this.errorPicture)).BeginInit();
             this.ExceptionTab.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // tabControl
-            // 
+            //
             this.tabControl.Alignment = System.Windows.Forms.TabAlignment.Bottom;
             this.tabControl.Controls.Add(this.ErrorTab);
             this.tabControl.Controls.Add(this.ExceptionTab);
@@ -56,9 +56,9 @@ namespace TwinEditor.UI
             this.tabControl.SelectedIndex = 0;
             this.tabControl.Size = new System.Drawing.Size(483, 348);
             this.tabControl.TabIndex = 0;
-            // 
+            //
             // ErrorTab
-            // 
+            //
             this.ErrorTab.Controls.Add(this.messageLabel);
             this.ErrorTab.Controls.Add(this.reportButton);
             this.ErrorTab.Controls.Add(this.okButton);
@@ -71,17 +71,17 @@ namespace TwinEditor.UI
             this.ErrorTab.TabIndex = 0;
             this.ErrorTab.Text = "Error";
             this.ErrorTab.UseVisualStyleBackColor = true;
-            // 
+            //
             // messageLabel
-            // 
+            //
             this.messageLabel.Location = new System.Drawing.Point(8, 47);
             this.messageLabel.Name = "messageLabel";
             this.messageLabel.Size = new System.Drawing.Size(459, 236);
             this.messageLabel.TabIndex = 2;
             this.messageLabel.Text = "label2";
-            // 
+            //
             // reportButton
-            // 
+            //
             this.reportButton.Location = new System.Drawing.Point(271, 285);
             this.reportButton.Name = "reportButton";
             this.reportButton.Size = new System.Drawing.Size(95, 31);
@@ -89,9 +89,9 @@ namespace TwinEditor.UI
             this.reportButton.Text = "Report bug";
             this.reportButton.UseVisualStyleBackColor = true;
             this.reportButton.Click += new System.EventHandler(this.ReportButtonClick);
-            // 
+            //
             // okButton
-            // 
+            //
             this.okButton.Location = new System.Drawing.Point(372, 286);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(95, 31);
@@ -99,9 +99,9 @@ namespace TwinEditor.UI
             this.okButton.Text = "OK";
             this.okButton.UseVisualStyleBackColor = true;
             this.okButton.Click += new System.EventHandler(this.OkButtonClick);
-            // 
+            //
             // titleLabel
-            // 
+            //
             this.titleLabel.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.titleLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
             this.titleLabel.Location = new System.Drawing.Point(49, 10);
@@ -109,18 +109,18 @@ namespace TwinEditor.UI
             this.titleLabel.Size = new System.Drawing.Size(418, 33);
             this.titleLabel.TabIndex = 1;
             this.titleLabel.Text = "Error title";
-            // 
+            //
             // errorPicture
-            // 
+            //
             this.errorPicture.Image = ((System.Drawing.Image)(resources.GetObject("errorPicture.Image")));
             this.errorPicture.Location = new System.Drawing.Point(8, 8);
             this.errorPicture.Name = "errorPicture";
             this.errorPicture.Size = new System.Drawing.Size(34, 35);
             this.errorPicture.TabIndex = 0;
             this.errorPicture.TabStop = false;
-            // 
+            //
             // ExceptionTab
-            // 
+            //
             this.ExceptionTab.Controls.Add(this.exceptionText);
             this.ExceptionTab.Location = new System.Drawing.Point(4, 4);
             this.ExceptionTab.Name = "ExceptionTab";
@@ -129,9 +129,9 @@ namespace TwinEditor.UI
             this.ExceptionTab.TabIndex = 1;
             this.ExceptionTab.Text = "Exception";
             this.ExceptionTab.UseVisualStyleBackColor = true;
-            // 
+            //
             // exceptionText
-            // 
+            //
             this.exceptionText.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.exceptionText.Dock = System.Windows.Forms.DockStyle.Fill;
             this.exceptionText.Location = new System.Drawing.Point(3, 3);
@@ -139,9 +139,9 @@ namespace TwinEditor.UI
             this.exceptionText.Name = "exceptionText";
             this.exceptionText.Size = new System.Drawing.Size(469, 316);
             this.exceptionText.TabIndex = 0;
-            // 
+            //
             // ErrorMessage
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;

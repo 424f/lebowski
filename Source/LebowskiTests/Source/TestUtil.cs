@@ -7,10 +7,10 @@ namespace LebowskiTests
     {
         public AreEqualTimeoutException(string message) : base(message)
         {
-            
+
         }
     }
-    
+
     public static class TestUtil
     {
 
@@ -19,7 +19,7 @@ namespace LebowskiTests
         /// for a few milliseconds until cause yields an effect. WaitAreEqual waits for at most
         /// maxMilliseconds ms for expected to became equal to actual and otherwise throws a
         /// AreEqualTimeoutException.
-        /// </summary>                    
+        /// </summary>
         public static void WaitAreEqual<T>(T expected, Func<T> actualCallback, int maxMilliseconds)
         {
             int waited = 0;

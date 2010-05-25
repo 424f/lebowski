@@ -20,8 +20,8 @@ namespace TwinEditor.Test
             var writer = new PythonStringWriter();
             object val = interpreter.ExecuteCode("print 'test'", writer);
             Assert.AreEqual("test\n", writer.GetContent());
-        }        
-            
+        }
+
         [Test]
         public void testExecution2()
         {
@@ -35,7 +35,7 @@ for i in xrange(5):
             object val = interpreter.ExecuteCode(code, writer);
             Assert.AreEqual("1\n1\n2\n6\n24\n", writer.GetContent());
         }
-        
+
         [Test]
         public void testErrorHandling1()
         {

@@ -5,21 +5,21 @@ namespace Lebowski
     using Lebowski.Net.Skype;
 	internal sealed class Program
 	{
-		
+
 		[STAThread]
 		private static void Main(string[] args)
-		{			
+		{
 			SkypeProtocol protocol = new SkypeProtocol();
-			
+
 			Console.Write("Destination: ");
 			string user = Console.ReadLine();
-			if(user != "") 
+			if(user != "")
 			{
 				protocol.Connect(user);
 			}
-			
-			
-			
+
+
+
 			System.Windows.Forms.Application.Run();
 		}
 	}

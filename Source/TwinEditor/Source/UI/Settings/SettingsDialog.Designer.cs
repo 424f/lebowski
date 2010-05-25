@@ -7,7 +7,7 @@ namespace TwinEditor.UI.Settings
         /// Designer variable used to keep track of non-visual components.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
-        
+
         /// <summary>
         /// Disposes resources used by the form.
         /// </summary>
@@ -21,7 +21,7 @@ namespace TwinEditor.UI.Settings
             }
             base.Dispose(disposing);
         }
-        
+
         /// <summary>
         /// This method is required for Windows Forms designer support.
         /// Do not change the method contents inside the source code editor. The Forms designer might
@@ -41,11 +41,11 @@ namespace TwinEditor.UI.Settings
             this.TabControl.SuspendLayout();
             this.GeneralSettingsTab.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // TabControl
-            // 
-            this.TabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-                                    | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.TabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                                    | System.Windows.Forms.AnchorStyles.Left)
                                     | System.Windows.Forms.AnchorStyles.Right)));
             this.TabControl.Controls.Add(this.GeneralSettingsTab);
             this.TabControl.Controls.Add(this.tabPage2);
@@ -54,9 +54,9 @@ namespace TwinEditor.UI.Settings
             this.TabControl.SelectedIndex = 0;
             this.TabControl.Size = new System.Drawing.Size(675, 453);
             this.TabControl.TabIndex = 0;
-            // 
+            //
             // GeneralSettingsTab
-            // 
+            //
             this.GeneralSettingsTab.Controls.Add(this.synchronizationStrategy);
             this.GeneralSettingsTab.Controls.Add(this.userName);
             this.GeneralSettingsTab.Controls.Add(this.label2);
@@ -68,24 +68,24 @@ namespace TwinEditor.UI.Settings
             this.GeneralSettingsTab.TabIndex = 0;
             this.GeneralSettingsTab.Text = "General";
             this.GeneralSettingsTab.UseVisualStyleBackColor = true;
-            // 
+            //
             // synchronizationStrategy
-            // 
+            //
             this.synchronizationStrategy.FormattingEnabled = true;
             this.synchronizationStrategy.Location = new System.Drawing.Point(13, 99);
             this.synchronizationStrategy.Name = "synchronizationStrategy";
             this.synchronizationStrategy.Size = new System.Drawing.Size(242, 21);
             this.synchronizationStrategy.TabIndex = 3;
-            // 
+            //
             // userName
-            // 
+            //
             this.userName.Location = new System.Drawing.Point(13, 34);
             this.userName.Name = "userName";
             this.userName.Size = new System.Drawing.Size(172, 22);
             this.userName.TabIndex = 1;
-            // 
+            //
             // label2
-            // 
+            //
             this.label2.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.MediumBlue;
             this.label2.Location = new System.Drawing.Point(10, 73);
@@ -93,9 +93,9 @@ namespace TwinEditor.UI.Settings
             this.label2.Size = new System.Drawing.Size(296, 23);
             this.label2.TabIndex = 0;
             this.label2.Text = "Preferred synchronization strategy";
-            // 
+            //
             // label1
-            // 
+            //
             this.label1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.MediumBlue;
             this.label1.Location = new System.Drawing.Point(10, 7);
@@ -103,9 +103,9 @@ namespace TwinEditor.UI.Settings
             this.label1.Size = new System.Drawing.Size(245, 23);
             this.label1.TabIndex = 0;
             this.label1.Text = "User name";
-            // 
+            //
             // tabPage2
-            // 
+            //
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -113,9 +113,9 @@ namespace TwinEditor.UI.Settings
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
-            // 
+            //
             // applyButton
-            // 
+            //
             this.applyButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.applyButton.Location = new System.Drawing.Point(595, 456);
             this.applyButton.Name = "applyButton";
@@ -124,9 +124,9 @@ namespace TwinEditor.UI.Settings
             this.applyButton.Text = "Apply";
             this.applyButton.UseVisualStyleBackColor = true;
             this.applyButton.Click += new System.EventHandler(this.ApplyButtonClick);
-            // 
+            //
             // cancelButton
-            // 
+            //
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.Location = new System.Drawing.Point(514, 456);
             this.cancelButton.Name = "cancelButton";
@@ -135,9 +135,9 @@ namespace TwinEditor.UI.Settings
             this.cancelButton.Text = "Cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
             this.cancelButton.Click += new System.EventHandler(this.CancelButtonClick);
-            // 
+            //
             // SettingsDialog
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(674, 492);

@@ -10,14 +10,14 @@ namespace LebowskiTests
         public StringTextContextTest()
         {
         }
-        
+
         [Test]
         public void testInsertAndDelete()
         {
             /*ITextContext context = new StringTextContext();
             context.Insert("foo", 0);
             Assert.AreEqual("foo", context.Data);
-            
+
             context.Insert("o bar", 2);
             Assert.AreEqual("foo baro", context.Data);
             context.Insert("n", 8);

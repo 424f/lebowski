@@ -6,10 +6,10 @@ namespace Lebowski.Net.Skype
     sealed class DeclineSharingInvitationMessage
     {
         public int InvitationId { get; private set; }
-        
+
         public DeclineSharingInvitationMessage(int invitationId)
         {
             InvitationId = invitationId;
         }
-    }    
+    }
 }
