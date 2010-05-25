@@ -4,13 +4,12 @@ namespace Lebowski.TextModel
 {
     abstract public class TextOperation
     {        
-        public ITextOperationVisitor<TextOperation> Transformer { get; protected set; }
-        
-        
         public TextOperation()
         {
         }
 
+        public ITextOperationVisitor<TextOperation> Transformer { get; protected set; }
+        
         public TextOperation Transform(TextOperation other)
         {
             TextOperation textOperation = (TextOperation)other;

@@ -1,8 +1,8 @@
-﻿using System;
-using System.Configuration;
-
-namespace TwinEditor.Configuration
+﻿namespace TwinEditor.Configuration
 {
+    using System;
+    using System.Configuration;    
+    
     public class ApplicationSettings : ApplicationSettingsBase
     {
         private static ApplicationSettings defaultInstance = (ApplicationSettings)ApplicationSettingsBase.Synchronized(new ApplicationSettings());
