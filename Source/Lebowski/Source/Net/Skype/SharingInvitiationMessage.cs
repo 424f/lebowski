@@ -1,7 +1,7 @@
-﻿using System;
 
 namespace Lebowski.Net.Skype
 {
+    using System;
     [Serializable]
     sealed class SharingInvitationMessage
     {

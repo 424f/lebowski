@@ -1,9 +1,9 @@
-﻿using System;
-using System.Windows.Forms;
-using System.Collections.Generic;
 
 namespace TwinEditor.UI
 {
+    using System;
+    using System.Windows.Forms;
+    using System.Collections.Generic;
 	/// <summary>
 	/// Description of RecentFilesList.
 	/// </summary>

@@ -1,4 +1,4 @@
-﻿
+
 namespace Lebowski.Net.Skype
 {
     partial class SkypeShareForm

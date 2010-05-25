@@ -1,18 +1,18 @@
-﻿using System;
-using System.ComponentModel;
-using System.Drawing;
-using System.Windows.Forms;
-using System.Collections.Generic;
-using Lebowski;
-using Lebowski.TextModel;
-using Lebowski.Net;
-using Lebowski.Synchronization.DifferentialSynchronization;
-using TwinEditor.FileTypes;
-using TwinEditor.Messaging;
-using log4net;
 
 namespace TwinEditor.UI
 {
+    using System;
+    using System.ComponentModel;
+    using System.Drawing;
+    using System.Windows.Forms;
+    using System.Collections.Generic;
+    using Lebowski;
+    using Lebowski.TextModel;
+    using Lebowski.Net;
+    using Lebowski.Synchronization.DifferentialSynchronization;
+    using TwinEditor.FileTypes;
+    using TwinEditor.Messaging;
+    using log4net;
     public partial class SessionViewForm : UserControl, ISessionView
     {    
         private static readonly ILog Logger = LogManager.GetLogger(typeof(SessionViewForm));

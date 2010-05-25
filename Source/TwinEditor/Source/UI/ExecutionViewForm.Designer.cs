@@ -1,4 +1,4 @@
-﻿namespace TwinEditor.UI
+namespace TwinEditor.UI
 {
     partial class ExecutionViewForm
     {

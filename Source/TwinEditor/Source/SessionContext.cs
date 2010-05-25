@@ -1,4 +1,4 @@
-﻿namespace TwinEditor
+namespace TwinEditor
 {
     using System;
     using Lebowski;

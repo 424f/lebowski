@@ -1,4 +1,4 @@
-﻿
+
 namespace TwinEditor.UI.Settings
 {
     partial class SettingsDialog

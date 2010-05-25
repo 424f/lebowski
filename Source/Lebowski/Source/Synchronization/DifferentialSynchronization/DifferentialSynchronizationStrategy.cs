@@ -1,4 +1,4 @@
-﻿namespace Lebowski.Synchronization.DifferentialSynchronization
+namespace Lebowski.Synchronization.DifferentialSynchronization
 {        
     using System;
     using System.IO;

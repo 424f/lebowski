@@ -1,4 +1,4 @@
-﻿namespace TwinEditor.FileTypes
+namespace TwinEditor.FileTypes
 {
     using System;
     using System.IO;

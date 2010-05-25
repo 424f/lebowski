@@ -1,4 +1,4 @@
-﻿namespace TwinEditor.Configuration
+namespace TwinEditor.Configuration
 {
     using System;
     using System.Configuration; 

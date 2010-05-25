@@ -1,12 +1,12 @@
-﻿using System;
-using System.Net;
-using System.Net.Sockets;
-using System.Threading;
-using Lebowski.Net;
-using log4net;
 
 namespace Lebowski.Net.Tcp
 {
+    using System;
+    using System.Net;
+    using System.Net.Sockets;
+    using System.Threading;
+    using Lebowski.Net;
+    using log4net;
     public class ConnectionFailedException : Exception
     {
         public ConnectionFailedException(string message) : base(message) {}

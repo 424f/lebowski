@@ -1,4 +1,4 @@
-﻿namespace Lebowski.TextModel
+namespace Lebowski.TextModel
 {
     using System;
     using System.Windows.Forms;

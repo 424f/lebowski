@@ -1,4 +1,4 @@
-﻿namespace LebowskiTests.Synchronization
+namespace LebowskiTests.Synchronization
 {
     using System;
     using System.Threading;

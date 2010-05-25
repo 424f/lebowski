@@ -1,14 +1,14 @@
-﻿using System;
-using System.IO;
-using System.Threading;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
 using Lidgren.Network;
-using log4net;
-using Lebowski.Net;
 
 namespace Lebowski.Net.Lidgren
 {        
+    using System;
+    using System.IO;
+    using System.Threading;
+    using System.Runtime.Serialization;
+    using System.Runtime.Serialization.Formatters.Binary;
+    using log4net;
+    using Lebowski.Net;
     public sealed class ConnectionFailedException : Exception
     {
         public ConnectionFailedException(string message) : base(message) {}

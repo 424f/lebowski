@@ -1,4 +1,4 @@
-﻿namespace TwinEditor.Execution
+namespace TwinEditor.Execution
 {   
     using System;
     

@@ -1,9 +1,9 @@
-﻿using System;
-using Lebowski.TextModel;
-using NUnit.Framework;
 
 namespace LebowskiTests
 {
+    using System;
+    using Lebowski.TextModel;
+    using NUnit.Framework;
     [TestFixture]
     public class StringTextContextTest
     {

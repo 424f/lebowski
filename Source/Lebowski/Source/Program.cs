@@ -1,8 +1,8 @@
-﻿using System;
-using Lebowski.Net.Skype;
 
 namespace Lebowski
 {
+    using System;
+    using Lebowski.Net.Skype;
 	internal sealed class Program
 	{
 		

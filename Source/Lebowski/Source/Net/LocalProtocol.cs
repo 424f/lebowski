@@ -1,9 +1,9 @@
-﻿using System;
-using System.Threading;
-using System.Collections.Generic;
 
 namespace Lebowski.Net
 {
+    using System;
+    using System.Threading;
+    using System.Collections.Generic;
     public class LocalProtocol
     {
         public static void Connect(LocalConnection first, LocalConnection second)

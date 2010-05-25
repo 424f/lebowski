@@ -1,4 +1,4 @@
-﻿namespace TwinEditor.Messaging
+namespace TwinEditor.Messaging
 {
     using System;    
     

@@ -1,8 +1,8 @@
-﻿
-using System;
+
 
 namespace Lebowski.TextModel
 {
+    using System;
     public abstract class AbstractTextContext : ITextContext
     {
         public event EventHandler<InsertEventArgs> Inserted;

@@ -1,4 +1,4 @@
-﻿
+
 namespace TwinEditor.UI
 {
     partial class AboutDialog

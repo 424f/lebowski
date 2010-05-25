@@ -1,7 +1,7 @@
-﻿using System;
 
 namespace Lebowski.TextModel.Operations
 {
+    using System;
     public class InsertOperation : TextOperation
     {    
         public string Text { get; set; }

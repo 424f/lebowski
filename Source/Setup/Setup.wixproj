@@ -31,5 +31,9 @@
   </ItemGroup>
   <ItemGroup>
     <WixExtension Include="..\..\..\SharpDevelop\3.0\bin\Tools\Wix\WixUIExtension.dll" />
+    <ProjectReference Include="..\TwinEditor\TwinEditor.csproj">
+      <Project>{89548DEC-46B8-42FA-89BB-948B5C570762}</Project>
+      <Name>TwinEditor</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

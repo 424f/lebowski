@@ -1,4 +1,4 @@
-﻿namespace LebowskiTests
+namespace LebowskiTests
 {
     using System;
     using NUnit.Framework;

@@ -1,4 +1,4 @@
-﻿// TODO: extract common functionality with TextBoxTextContext into common abstract superclass
+// TODO: extract common functionality with TextBoxTextContext into common abstract superclass
 
 namespace Lebowski.TextModel
 {

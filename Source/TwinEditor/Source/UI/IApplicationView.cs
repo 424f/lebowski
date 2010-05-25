@@ -1,10 +1,10 @@
-﻿using System;
-using TwinEditor.FileTypes;
-using Lebowski;
-using Lebowski.Net;
 
 namespace TwinEditor.UI
 {
+    using System;
+    using TwinEditor.FileTypes;
+    using Lebowski;
+    using Lebowski.Net;
     public interface IApplicationView
     {
         IFileType[] FileTypes { get; set; }
