@@ -1,22 +1,22 @@
-﻿using System;
-using System.IO;
-using System.Windows.Forms;
-using System.Configuration;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
 
-using Lebowski;
-using Lebowski.Net;
-using Lebowski.Net.Tcp;
-using Lebowski.Net.Lidgren;
-using Lebowski.TextModel;
-using Lebowski.Synchronization.DifferentialSynchronization;
 
-using TwinEditor.UI;
 
 namespace TwinEditor
 {
+    using System;
+    using System.IO;
+    using System.Windows.Forms;
+    using System.Configuration;
+    using System.Collections.Generic;
+    using System.Runtime.Serialization;
+    using System.Runtime.Serialization.Formatters.Binary;
+    using Lebowski;
+    using Lebowski.Net;
+    using Lebowski.Net.Tcp;
+    using Lebowski.Net.Lidgren;
+    using Lebowski.TextModel;
+    using Lebowski.Synchronization.DifferentialSynchronization;
+    using TwinEditor.UI;
     internal sealed class Program
     {
         /// <summary>

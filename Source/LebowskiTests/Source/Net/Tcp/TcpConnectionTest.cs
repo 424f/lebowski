@@ -1,10 +1,10 @@
-﻿using System;
-using Lebowski.Net;
-using Lebowski.Net.Tcp;
-using NUnit.Framework;
 
 namespace LebowskiTests.Net.Tcp
 {
+    using System;
+    using Lebowski.Net;
+    using Lebowski.Net.Tcp;
+    using NUnit.Framework;
     [TestFixture]
     public class TcpConnectionTest
     {

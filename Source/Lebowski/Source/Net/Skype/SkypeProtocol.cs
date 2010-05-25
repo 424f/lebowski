@@ -1,14 +1,14 @@
-﻿using System;
-using System.Text;
-using System.Threading;
-using System.Collections.Generic;
-using SKYPE4COMLib;
-using System.Windows.Forms;
-using Lebowski.Net;
-using log4net;
 
 namespace Lebowski.Net.Skype
 {
+    using System;
+    using System.Text;
+    using System.Threading;
+    using System.Collections.Generic;
+    using SKYPE4COMLib;
+    using System.Windows.Forms;
+    using Lebowski.Net;
+    using log4net;
     /// <summary>
     /// This provides a wrapper around the AP2AP Skype4COM API that allows us
     /// to send arbitrary objects to other skype users, even

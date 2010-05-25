@@ -1,11 +1,11 @@
-﻿using System;
-using System.Windows.Forms;
-using System.Resources;
-using System.Collections.Generic;
-using log4net;
 
 namespace TwinEditor
 {
+    using System;
+    using System.Windows.Forms;
+    using System.Resources;
+    using System.Collections.Generic;
+    using log4net;
     public static class TranslationUtil
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(TranslationUtil));

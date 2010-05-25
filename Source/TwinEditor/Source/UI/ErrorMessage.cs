@@ -1,10 +1,10 @@
-﻿
-using System;
-using System.Drawing;
-using System.Windows.Forms;
+
 
 namespace TwinEditor.UI
 {
+    using System;
+    using System.Drawing;
+    using System.Windows.Forms;
     /// <summary>
     /// Form that shows an error message with optional additional information
     /// like the exception that caused the error

@@ -1,8 +1,9 @@
-﻿namespace TwinEditor.FileTypes
+namespace TwinEditor.FileTypes
 {
     using System;
     using System.IO;
     using System.Drawing;    
+    using TwinEditor.Execution;
     
     public interface IFileType
     {

@@ -1,9 +1,9 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
 
 namespace Lebowski
 {
+    using System;
+    using System.Linq;
+    using System.Collections.Generic;
     /// <summary>
     /// A state vector, as used in the dOPT algorithm
     /// </summary>

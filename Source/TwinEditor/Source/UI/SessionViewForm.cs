@@ -1,18 +1,18 @@
-﻿using System;
-using System.ComponentModel;
-using System.Drawing;
-using System.Windows.Forms;
-using System.Collections.Generic;
-using Lebowski;
-using Lebowski.TextModel;
-using Lebowski.Net;
-using Lebowski.Synchronization.DifferentialSynchronization;
-using TwinEditor.FileTypes;
-using TwinEditor.Messaging;
-using log4net;
 
 namespace TwinEditor.UI
 {
+    using System;
+    using System.ComponentModel;
+    using System.Drawing;
+    using System.Windows.Forms;
+    using System.Collections.Generic;
+    using Lebowski;
+    using Lebowski.TextModel;
+    using Lebowski.Net;
+    using Lebowski.Synchronization.DifferentialSynchronization;
+    using TwinEditor.FileTypes;
+    using TwinEditor.Messaging;
+    using log4net;
     public partial class SessionViewForm : UserControl, ISessionView
     {    
         private static readonly ILog Logger = LogManager.GetLogger(typeof(SessionViewForm));
@@ -61,6 +61,8 @@ namespace TwinEditor.UI
             this.FileModified = false;
             
             ChatText.Enabled = false;
+            
+            splitContainer.Panel2Collapsed = true;
             
             // Create a text context for the source code editor
             Context = new TextEditorTextContext(SourceCode);
@@ -164,6 +166,18 @@ namespace TwinEditor.UI
                     this.ChangeStatus(TranslationUtil.GetString(ApplicationUtil.LanguageResources, "StatusAwaiting"), true, true);
                     break;
             }
+            
+            // If we're not disconnected, we have to uncollapse the right panel
+            if(state == SessionStates.Disconnected)
+            {
+                splitContainer.Panel2Collapsed = true;
+            }
+            else
+            {
+                splitContainer.Panel2MinSize = 0;
+                splitContainer.Panel2Collapsed = false;
+            }
+            
             UpdateGuiState();
             
         }
@@ -276,6 +290,11 @@ namespace TwinEditor.UI
         void SessionViewFormLoad(object sender, EventArgs e)
         {
             
+        }
+        
+        void Panel1Paint(object sender, PaintEventArgs e)
+        {
+        	
         }
     }
     

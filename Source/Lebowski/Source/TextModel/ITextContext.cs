@@ -1,7 +1,8 @@
-﻿using System;
-
 namespace Lebowski.TextModel
 {
+    using System;
+    using Lebowski.TextModel.Operations;
+    
     public interface ITextContext
     {
         void Refresh();

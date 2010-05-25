@@ -1,13 +1,13 @@
-﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Threading;
-using SKYPE4COMLib;
-using Lebowski.Net;
-using log4net;
 
 namespace Lebowski.Net.Skype
 {
+    using System;
+    using System.Text;
+    using System.Collections.Generic;
+    using System.Threading;
+    using SKYPE4COMLib;
+    using Lebowski.Net;
+    using log4net;
     public sealed class SkypeConnection : IConnection
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(SkypeProtocol));
@@ -86,7 +86,10 @@ namespace Lebowski.Net.Skype
         public void Close()
         {
             dispatcherRunning = false;
-            Monitor.Pulse(receiveQueue);
+            lock(receiveQueue)
+            {
+                Monitor.Pulse(receiveQueue);
+            }
         }
         
     }

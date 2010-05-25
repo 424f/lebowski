@@ -1,9 +1,9 @@
-﻿using System;
-using System.Resources;
-using System.Reflection;
 
 namespace TwinEditor
 {
+    using System;
+    using System.Resources;
+    using System.Reflection;
     public static class ApplicationUtil
     {
         private static bool isInitialized = false;

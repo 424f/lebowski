@@ -1,15 +1,15 @@
-﻿
-using System;
-using System.Drawing;
-using System.Windows.Forms;
+
 
 namespace TwinEditor.UI.Settings
 {
+    using System;
+    using System.Drawing;
+    using System.Windows.Forms;
     public partial class SettingsDialog : Form
     {
-        private ApplicationContext applicationContext;
+        private TwinEditor.ApplicationContext applicationContext;
         
-        public SettingsDialog(ApplicationContext applicationContext)
+        public SettingsDialog(TwinEditor.ApplicationContext applicationContext)
         {
             InitializeComponent();
 

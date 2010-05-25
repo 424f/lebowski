@@ -1,16 +1,16 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Collections.Generic;
-using Lebowski;
-using Lebowski.Net;
-using Lebowski.Synchronization.DifferentialSynchronization;
-using TwinEditor.UI;
-using TwinEditor.FileTypes;
-using log4net;
-
+﻿using System.Collections.Generic;
 namespace TwinEditor
 {
+    using System;
+    using System.IO;
+    using System.Linq;
+    using Lebowski;
+    using Lebowski.Net;
+    using Lebowski.Synchronization.DifferentialSynchronization;
+    using TwinEditor.UI;
+    using TwinEditor.FileTypes;
+    using log4net;    
+    
     public class ApplicationContext
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(ApplicationContext));        

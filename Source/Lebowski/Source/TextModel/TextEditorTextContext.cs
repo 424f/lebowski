@@ -1,10 +1,11 @@
-﻿// TODO: extract common functionality with TextBoxTextContext into common abstract superclass
+// TODO: extract common functionality with TextBoxTextContext into common abstract superclass
 
 namespace Lebowski.TextModel
 {
     using System;
     using ICSharpCode.TextEditor;    
     using ICSharpCode.TextEditor.Document;
+    using Lebowski.TextModel.Operations;    
     
     public class TextEditorTextContext : AbstractTextContext
     {

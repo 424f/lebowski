@@ -1,7 +1,7 @@
-﻿using System;
 
 namespace Lebowski.Net.Lidgren
 {
+    using System;
     public class UdpProtocol : ICommunicationProtocol
     {
         public string Name

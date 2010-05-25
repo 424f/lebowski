@@ -1,4 +1,4 @@
-﻿namespace TwinEditor.UI
+namespace TwinEditor.UI
 {
     using System;
     using System.IO;

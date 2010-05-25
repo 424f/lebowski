@@ -1,9 +1,10 @@
-﻿using System;
-using System.IO;
-using System.Drawing;
-
 namespace TwinEditor.FileTypes
 {
+    using System;
+    using System.IO;
+    using System.Drawing;
+    using TwinEditor.Execution;    
+    
     public class TextFileType : IFileType
     {
         public string Name

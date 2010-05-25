@@ -1,8 +1,8 @@
-﻿using System;
-using System.Threading;
 
 namespace LebowskiTests
 {
+    using System;
+    using System.Threading;
     public class AreEqualTimeoutException : Exception
     {
         public AreEqualTimeoutException(string message) : base(message)

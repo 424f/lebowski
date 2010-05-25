@@ -1,8 +1,8 @@
-﻿
-using System;
+
 
 namespace Lebowski.Net
 {
+    using System;
     public interface ICommunicationProtocol
     {
         /// <summary>

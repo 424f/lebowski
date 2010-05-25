@@ -1,9 +1,9 @@
-﻿using System;
-using System.Windows.Forms;
-using System.Drawing;
 
 namespace TwinEditor.UI
 {
+    using System;
+    using System.Windows.Forms;
+    using System.Drawing;
     public class CloseableTabControl : TabControl
     {
         public event EventHandler<TabClosedEventArgs> TabClosed;

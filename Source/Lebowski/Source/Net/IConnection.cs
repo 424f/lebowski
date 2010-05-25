@@ -1,8 +1,8 @@
-﻿
-using System;
+
 
 namespace Lebowski.Net
 {
+    using System;
     public interface IConnection
     {
         void Send(object o);

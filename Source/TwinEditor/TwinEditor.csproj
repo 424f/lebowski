@@ -104,7 +104,9 @@
     <Compile Include="Source\ApplicationContext.cs" />
     <Compile Include="Source\ApplicationUtil.cs" />
     <Compile Include="Source\Configuration\ApplicationSettings.cs" />
-    <Compile Include="Source\FileTypes\ExecutionResult.cs" />
+    <Compile Include="Source\Execution\ExecutionChangedEventArgs.cs" />
+    <Compile Include="Source\Execution\ExecutionResult.cs" />
+    <Compile Include="Source\Execution\FinishedExecutionEventArgs.cs" />
     <Compile Include="Source\FileTypes\PythonInterpreter.cs" />
     <Compile Include="Source\ISessionView.cs" />
     <Compile Include="Source\Messaging\ChatMessage.cs" />
@@ -176,6 +178,7 @@
     <Folder Include="Source\" />
     <Folder Include="Source\Messaging" />
     <Folder Include="Source\Configuration" />
+    <Folder Include="Source\Execution" />
     <Folder Include="Source\Synchronization" />
     <Folder Include="Source\Presentation" />
     <Folder Include="Source\UI\" />

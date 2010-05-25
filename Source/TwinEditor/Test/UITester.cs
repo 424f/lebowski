@@ -1,9 +1,9 @@
-﻿using System;
-using NUnit.Framework;
-using TwinEditor.UI;
 
 namespace TwinEditor.Test
 {
+    using System;
+    using NUnit.Framework;
+    using TwinEditor.UI;
     /// <summary>
     /// Description of UITester.
     /// </summary>

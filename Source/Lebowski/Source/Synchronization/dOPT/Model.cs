@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using Lebowski.TextModel;
 
-using Lebowski;
 
 namespace Lebowski.Synchronization.dOPT
 {
+    using System;
+    using System.Collections.Generic;
+    using Lebowski;
+    using Lebowski.TextModel;
+    using Lebowski.TextModel.Operations;
     public class Request<OperationType>
     {
         public int SiteId { get; protected set; }

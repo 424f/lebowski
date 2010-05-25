@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Lebowski.TextModel
+namespace Lebowski.TextModel.Operations
 {
     public class DeleteOperation : TextOperation
     {
@@ -19,7 +17,7 @@ namespace Lebowski.TextModel
         
         public override string ToString()
         {
-            return String.Format("delete({0})", Position);
+            return string.Format("delete({0})", Position);
         }
     }
     

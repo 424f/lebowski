@@ -1,7 +1,7 @@
-﻿using System;
 
 namespace Lebowski
 {
+    using System;
     /// <summary>
     /// Describes the state of a collaborative editing session
     /// </summary>

@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright 2008 Google Inc. All Rights Reserved.
  * Author: fraser@google.com (Neil Fraser)
  * Author: anteru@developer.shelter13.net (Matthaeus G. Chajdas)
@@ -19,15 +19,15 @@
  * http://code.google.com/p/google-diff-match-patch/
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Web;
 
 namespace DiffMatchPatch
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Text.RegularExpressions;
+    using System.Web;
     internal static class CompatibilityExtensions
     {
         // JScript splice function

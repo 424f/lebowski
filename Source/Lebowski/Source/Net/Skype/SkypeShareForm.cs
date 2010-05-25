@@ -1,10 +1,10 @@
-﻿
-using System;
-using System.Drawing;
-using System.Windows.Forms;
+
 
 namespace Lebowski.Net.Skype
 {
+    using System;
+    using System.Drawing;
+    using System.Windows.Forms;
     public partial class SkypeShareForm : Form
     {
         public event EventHandler Submit;

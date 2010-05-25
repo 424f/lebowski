@@ -1,8 +1,8 @@
-﻿using System;
-using Lebowski.Synchronization.DifferentialSynchronization;
 
 namespace Lebowski.Net.Tcp
 {    
+    using System;
+    using Lebowski.Synchronization.DifferentialSynchronization;
     public class TcpProtocol : ICommunicationProtocol
     {
         public event EventHandler<HostSessionEventArgs> HostSession;

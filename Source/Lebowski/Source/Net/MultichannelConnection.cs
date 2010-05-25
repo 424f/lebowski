@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using log4net;
 
 namespace Lebowski.Net
 {
+    using System;
+    using System.Collections.Generic;
+    using log4net;
     /// <summary>
     /// Allows multiple separate connection to be tunneled
     /// through the same `IConnection`, by creating multiple channels.

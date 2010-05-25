@@ -1,9 +1,9 @@
-﻿using System;
-using System.Drawing;
-using System.Windows.Forms;
 
 namespace Lebowski.Net.Tcp
 {
+    using System;
+    using System.Drawing;
+    using System.Windows.Forms;
     public sealed partial class TcpShareForm : Form
     {
         public int Port { get; private set; }
