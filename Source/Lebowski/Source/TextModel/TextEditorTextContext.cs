@@ -91,7 +91,6 @@ namespace Lebowski.TextModel
             SubscribeToTextBox();
             
             remoteMarker = new TextMarker(0, 0, TextMarkerType.SolidBlock, System.Drawing.Color.Yellow);
-            TextBox.Document.MarkerStrategy.AddMarker(remoteMarker);
             
             // TODO: implement insert / delete
         }
@@ -134,7 +133,10 @@ namespace Lebowski.TextModel
             TextBox.Document.MarkerStrategy.RemoveMarker(remoteMarker);
             remoteMarker.Offset = start;
             remoteMarker.Length = end - start;
-            TextBox.Document.MarkerStrategy.AddMarker(remoteMarker);
+            if(start != end)
+            {
+                TextBox.Document.MarkerStrategy.AddMarker(remoteMarker);
+            }
         }
     }
 }
