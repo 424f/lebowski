@@ -1,7 +1,8 @@
 ﻿namespace TwinEditor.Configuration
 {
     using System;
-    using System.Configuration;    
+    using System.Configuration; 
+    using System.Collections.Generic;
     using System.Collections.Generic;
     
     public class ApplicationSettings : ApplicationSettingsBase
@@ -33,6 +34,15 @@
         {
             get { return (string)this["SynchronizationStrategy"]; }
             set { this["SynchronizationStrategy"] = value; }
+        }
+        
+        //[ApplicationScopedSettingAttribute]
+        [UserScopedSettingAttribute]
+        [DefaultSettingValue(null)]
+        public List<string> RecentFileList
+        {
+            get { return (List<string>)this["RecentFileList"]; }
+            set { this["RecentFileList"] = value; }
         }
         #endregion
     }

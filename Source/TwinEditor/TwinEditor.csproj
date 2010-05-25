@@ -134,6 +134,7 @@
     <Compile Include="Source\UI\ApplicationViewForm.Designer.cs">
       <DependentUpon>ApplicationViewForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Source\UI\RecentFilesList.cs" />
     <Compile Include="Source\UI\SessionViewForm.cs" />
     <Compile Include="Source\UI\SessionViewForm.Designer.cs">
       <DependentUpon>SessionViewForm.cs</DependentUpon>

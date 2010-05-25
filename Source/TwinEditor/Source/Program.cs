@@ -2,6 +2,7 @@
 using System.IO;
 using System.Windows.Forms;
 using System.Configuration;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
@@ -129,10 +130,9 @@ namespace TwinEditor
             
             appSettings.UserName = userName;
             appSettings.Save();
-
             System.Console.WriteLine("Welcome, {0}", userName);
         }
-        
+     
         private void Run()
         {
             // initialize application utilities (e.g. language resources)
@@ -140,14 +140,19 @@ namespace TwinEditor
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);                
             
-            // TODO: Set back to ConfigurationUserLevel.PerUserRoamingAndLocal (causes an Exception on my machine as AppSettings cannot be written to?)
             SetupConfiguration();
             
             // Display main form
             IApplicationView applicationView = new ApplicationViewForm();
-            
             ApplicationContext presenter = new ApplicationContext(applicationView);
             applicationView.ApplicationContext = presenter;
+            
+            // Restore recent files if any
+            var appSettings = Configuration.ApplicationSettings.Default;
+            List<string> recentFiles = appSettings.RecentFileList;
+            if (recentFiles != null) {
+            	((ApplicationViewForm) applicationView).UpdateRecentFiles(recentFiles);
+            }
             applicationView.Show();
 
             Application.Run();            
