@@ -24,6 +24,9 @@
         
            
         <Directory Id="TARGETDIR" Name="SourceDir">
+            <Directory Id="ProgramMenuFolder" Name="PMenu">
+                <Directory Id="ProgramMenuDir" Name="Lebowski" />
+            </Directory>
             <Directory Id="ProgramFilesFolder" Name="PFiles">
                 <Directory Id="INSTALLDIR" Name="Lebowski">
                     <Directory Id="LocalizedDe" Name="de" />
@@ -46,13 +49,51 @@
             <File Id="Microsoft.Scripting.dll" Name="Microsoft.Scripting.dll" Source="../TwinEditor/bin/Debug\Microsoft.Scripting.dll" />
             <File Id="Microsoft.Scripting.ExtensionAttribute.dll" Name="Microsoft.Scripting.ExtensionAttribute.dll" Source="../TwinEditor/bin/Debug\Microsoft.Scripting.ExtensionAttribute.dll" />
             <File Id="nunit.framework.dll" Name="nunit.framework.dll" Source="../TwinEditor/bin/Debug\nunit.framework.dll" />
-            <File Id="TwinEditor.exe" Name="TwinEditor.exe" Source="../TwinEditor/bin/Debug\TwinEditor.exe" />
+            <File Id="TwinEditor.exe" Name="TwinEditor.exe" Source="../TwinEditor/bin/Debug\TwinEditor.exe" />            
             <File Id="TwinEditor.exe.config" Name="TwinEditor.exe.config" Source="../TwinEditor/bin/Debug\TwinEditor.exe.config" />
             <File Id="TwinEditor.pdb" Name="TwinEditor.pdb" Source="../TwinEditor/bin/Debug\TwinEditor.pdb" />
+               
         </Component>       
         
         <Component Id="LocalizedDe" Directory="LocalizedDe" Guid="A5B6C91A-65A1-11DF-9C5A-07C9DFD72085">
             <File Id="TwinEditor.resources.dll" Name="TwinEditor.resources.dll" Source="../TwinEditor/bin/Debug\de\TwinEditor.resources.dll" />
+        </Component>
+        
+        <!-- Uninstall shortcut -->
+        <Component
+            Id="UninstallShortcut"
+            Guid="85654BA6-67D5-11DF-A588-0F7DDFD72085"
+            Directory="ProgramMenuDir">
+            
+         <Shortcut
+            
+                Id="TwinEditorShortcut"
+                Directory="ProgramMenuDir"
+                Name="Lebowski"
+                WorkingDirectory="INSTALLDIR"
+                Icon="TwinEditor.exe"
+                Target="[INSTALLDIR]TwinEditor.exe">
+                
+                <Icon
+                    Id="TwinEditor.exe"
+                    SourceFile="../../Resources/ApplicationIcon/lebowski.ico" />
+            
+            </Shortcut>                     
+            
+            <RegistryKey Root="HKCU"
+                         Key="Software\Lebowski\Uninstall">
+                <RegistryValue Value="Lebowski" Type="string" KeyPath="yes" />
+            </RegistryKey>
+            
+            <Shortcut
+                Id="UninstallProduct"
+                Name="Uninstall"
+                Target="[System64Folder]msiexec.exe"
+                Arguments="/x [ProductCode]"
+                Directory="ProgramMenuDir" />
+               
+            <RemoveFolder Id="RemoveShortcutFolder" On="uninstall"/>
+            
         </Component>
         
         <!-- Register Skype4COM -->
@@ -65,6 +106,7 @@
             <ComponentRef Id="MainExecutable" />
             <ComponentRef Id="LocalizedDe" />
             <ComponentRef Id="Skype4COM" />
+            <ComponentRef Id="UninstallShortcut" />
         </Feature>
    
     </Product>
