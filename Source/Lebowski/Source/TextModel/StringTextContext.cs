@@ -1,7 +1,8 @@
-﻿using System;
-
-namespace Lebowski.TextModel
+﻿namespace Lebowski.TextModel
 {
+    using System;
+    using Lebowski.TextModel.Operations;
+    
     public class StringTextContext : AbstractTextContext
     {
         public override string Data { get; set; }

@@ -1,15 +1,14 @@
-﻿using System;
-using System.Threading;
-using Lebowski;
-using Lebowski.TextModel;
-using Lebowski.Net;
-using Lebowski.Synchronization.DifferentialSynchronization;
-using NUnit.Framework;
-
-using LebowskiTests;
-
-namespace LebowskiTests.Synchronization
+﻿namespace LebowskiTests.Synchronization
 {
+    using System;
+    using System.Threading;
+    using Lebowski;
+    using Lebowski.TextModel;
+    using Lebowski.TextModel.Operations;
+    using Lebowski.Net;
+    using Lebowski.Synchronization.DifferentialSynchronization;
+    using NUnit.Framework;
+    
     [TestFixture]
     public class DifferentialSynchronizationTest
     {

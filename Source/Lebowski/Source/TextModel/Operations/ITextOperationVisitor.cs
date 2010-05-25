@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Lebowski.TextModel
+﻿namespace Lebowski.TextModel.Operations
 {
     public interface ITextOperationVisitor<ReturnType>
     {

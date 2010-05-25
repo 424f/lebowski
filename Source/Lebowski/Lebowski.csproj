@@ -125,14 +125,14 @@
     <Compile Include="Source\Synchronization\dOPT\Model.cs" />
     <Compile Include="Source\Synchronization\ISynchronizationStrategy.cs" />
     <Compile Include="Source\TextModel\AbstractTextContext.cs" />
-    <Compile Include="Source\TextModel\DeleteOperation.cs" />
-    <Compile Include="Source\TextModel\InsertOperation.cs" />
     <Compile Include="Source\TextModel\ITextContext.cs" />
-    <Compile Include="Source\TextModel\ITextOperationVisitor.cs" />
+    <Compile Include="Source\TextModel\Operations\DeleteOperation.cs" />
+    <Compile Include="Source\TextModel\Operations\InsertOperation.cs" />
+    <Compile Include="Source\TextModel\Operations\ITextOperationVisitor.cs" />
+    <Compile Include="Source\TextModel\Operations\TextOperation.cs" />
     <Compile Include="Source\TextModel\StringTextContext.cs" />
     <Compile Include="Source\TextModel\TextBoxTextContext.cs" />
     <Compile Include="Source\TextModel\TextEditorTextContext.cs" />
-    <Compile Include="Source\TextModel\TextOperation.cs" />
     <EmbeddedResource Include="Source\Net\Skype\SkypeShareForm.resx">
       <DependentUpon>SkypeShareForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -160,5 +160,6 @@
     <Folder Include="Source\Synchronization\" />
     <Folder Include="Source\Synchronization\" />
     <Folder Include="Source\" />
+    <Folder Include="Source\TextModel\Operations" />
   </ItemGroup>
 </Project>

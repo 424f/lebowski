@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Lebowski.TextModel
+namespace Lebowski.TextModel.Operations
 {
     public class InsertOperation : TextOperation
     {    

@@ -8,8 +8,16 @@ using System.Text.RegularExpressions;
 
 namespace Lebowski.Net
 {
+    /// <summary>
+    /// Provides helper methods for networking
+    /// </summary>
     public static class NetUtils
     {
+        /// <summary>
+        /// Serializes an object to a byte array
+        /// </summary>
+        /// <param name="o">object to serialize</param>
+        /// <returns>Bytes representing the serialized object</returns>
         public static byte[] Serialize(object o)
         {
             MemoryStream ms = new MemoryStream();

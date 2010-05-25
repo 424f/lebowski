@@ -1,11 +1,12 @@
-﻿using System;
-using NUnit.Framework;
-using Lebowski.Synchronization.dOPT;
-using Lebowski.TextModel;
-using ModelType = Lebowski.Synchronization.dOPT.Model<Lebowski.TextModel.TextOperation, Lebowski.TextModel.ITextContext>;
-
-namespace LebowskiTests
+﻿namespace LebowskiTests
 {
+    using System;
+    using NUnit.Framework;
+    using Lebowski.Synchronization.dOPT;
+    using Lebowski.TextModel;
+    using Lebowski.TextModel.Operations;
+    using ModelType = Lebowski.Synchronization.dOPT.Model<Lebowski.TextModel.Operations.TextOperation, Lebowski.TextModel.ITextContext>;    
+    
     /// <summary>
     /// Tests the dOPT implementation using text operaitons. Note that some tests
     /// expectedly fail, as dOPT cannot guarantee convergence in all cases.

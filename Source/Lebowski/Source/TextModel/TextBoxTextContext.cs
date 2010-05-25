@@ -1,8 +1,9 @@
-﻿using System;
-using System.Windows.Forms;
-
-namespace Lebowski.TextModel
+﻿namespace Lebowski.TextModel
 {
+    using System;
+    using System.Windows.Forms;
+    using Lebowski.TextModel.Operations;    
+    
     public class TextBoxTextContext : AbstractTextContext
     {        
         public override int SelectionStart

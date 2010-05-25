@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Lebowski.TextModel;
 
 using Lebowski;
+using Lebowski.TextModel;
+using Lebowski.TextModel.Operations;
 
 namespace Lebowski.Synchronization.dOPT
 {
