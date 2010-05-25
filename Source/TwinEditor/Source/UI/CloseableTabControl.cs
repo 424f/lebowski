@@ -12,15 +12,14 @@ namespace TwinEditor.UI
 		private int ClickedTabIndex = -1;
 		public int Shift { get; private set; } // tab index from which on the tabs can be closed
 		
+		public CloseableTabControl() : this(0)
+		{
+		    
+		}
+		
 		public CloseableTabControl(int shift)
 		{
 			this.Shift = shift;
-  			// create new contextMenuStrip
-            tabContextMenuStrip = new ContextMenuStrip();
-            // add close menu item and corredsponding event handler
-            tabContextMenuStrip.Items.Add(TranslationUtil.GetString(ApplicationUtil.LanguageResources, "Close"));
-            tabContextMenuStrip.Items[0].Click += new EventHandler(CloseClicked);
-            // TODO: Execution results sharing can be triggered here
         }
 
         private void CloseClicked(object sender, EventArgs e)
@@ -48,6 +47,10 @@ namespace TwinEditor.UI
                     {
                         this.ClickedTabIndex = i;
                         // show contextMenuStrip
+                        tabContextMenuStrip = new ContextMenuStrip();
+                        // add close menu item and corredsponding event handler
+                        tabContextMenuStrip.Items.Add(TranslationUtil.GetString(ApplicationUtil.LanguageResources, "Close"));
+                        tabContextMenuStrip.Items[0].Click += new EventHandler(CloseClicked);                        
                         tabContextMenuStrip.Show(this.PointToScreen(p));
                     }
                 }

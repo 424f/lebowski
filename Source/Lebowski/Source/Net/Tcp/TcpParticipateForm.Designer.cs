@@ -97,6 +97,7 @@ namespace Lebowski.Net.Tcp
 			// 
 			// TcpParticipateForm
 			// 
+			this.AcceptButton = this.submitButton;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(331, 170);
@@ -110,6 +111,7 @@ namespace Lebowski.Net.Tcp
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.Name = "TcpParticipateForm";
 			this.Text = "Participate";
+			this.Load += new System.EventHandler(this.TcpParticipateFormLoad);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 		}

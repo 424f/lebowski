@@ -56,8 +56,8 @@ namespace TwinEditor.UI
 			this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.guideToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.MainTab = new CloseableTabControl(0);
-			this.MainTab.TabClosed += ( delegate (object sender, TabClosedEventArgs e) { CloseTab(e.TabIndex); });
+			this.MainTab = new TwinEditor.UI.CloseableTabControl();
+			this.MainTab.TabClosed += ( delegate (object sender, TabClosedEventArgs e) { CloseTab(e.TabIndex); });			
 			this.tabPage1 = new System.Windows.Forms.TabPage();
 			this.tabPage2 = new System.Windows.Forms.TabPage();
 			this.openFileDialog = new System.Windows.Forms.OpenFileDialog();

@@ -118,6 +118,19 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="connectionStopWaitingButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAZdEVYdFNvZnR3YXJlAEFkb2JlIEltYWdlUmVhZHlxyWU8AAABfklEQVQ4T6WTvUtCURjG37/A
+        uHEN+pKCrE2Qys1RuIPg4NAiShK4ioPuBbXUUEtBQV+UEEFLUDQ0RdMJGoKC1mhoaY2G3p7n5j1pXSeH
+        H8f3fT7OuYOiqtILPYV5sV9wLCJNcCLiAcOT82GLMI2ZvwUMGW00lCfw2gp87aNatVpHQctovup1fchm
+        9bNWU+wMYAkxb+Wyr70UCoH2+4J9PAd4ezC+Vyp6nUrpa7GonMljLufv7jIZf0cvM/YTOECQHQjbMDzn
+        83qRSOhtOq1XyaTuRqPajMWUGj30hhbAIFswbMJ4Ho/rgeP4HLmuckeNnn8Fy1iugDWwDtMGzGe49RTh
+        AO6o0UMvM/YTgoLVH4O5RDAMavR0K6BgbhAO4Nxl53W8YBHPAeYe4QDOS7iNhGnM2E+IYZiDsYbQE0p4
+        ch7DnoRpzNgC/B4Bk9MiCyWEZ0TmMU+AUTAMxmdFStTowTzFTHtBBAsXDIIhMAD6QR+g5oBoS6eH3ogt
+        6OXv/A3GmqgBLc71sgAAAABJRU5ErkJggg==
+</value>
+  </data>
   <data name="connectionStatusPicture.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpD

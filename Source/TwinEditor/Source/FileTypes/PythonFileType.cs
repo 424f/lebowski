@@ -36,7 +36,11 @@ namespace TwinEditor.FileTypes
 		
 		public Image Icon
 		{
-			get { return Image.FromFile("../../../../Resources/Icons/python.png"); }
+			get
+			{
+                var rm = new System.Resources.ResourceManager("TwinEditor.Resources", System.Reflection.Assembly.GetExecutingAssembly());
+                return (System.Drawing.Image)rm.GetObject("PythonImage");
+			}
 		}
 		
 		public bool CanCompile

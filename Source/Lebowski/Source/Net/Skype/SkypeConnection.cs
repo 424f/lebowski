@@ -22,6 +22,8 @@ namespace Lebowski.Net.Skype
 		
 		private SkypeProtocol protocol;
 		
+		private bool dispatcherRunning;
+		
 		private Queue<ReceivedEventArgs> receiveQueue = new Queue<ReceivedEventArgs>();
 		
 		public SkypeConnection(SkypeProtocol protocol, string remote, int incomingChannel)
@@ -65,13 +67,13 @@ namespace Lebowski.Net.Skype
 		
 		private void RunDispatcherThread()
 		{
-		    bool running = true;
-		    while(running)
+		    dispatcherRunning = true;
+		    while(dispatcherRunning)
 		    {
 		        ReceivedEventArgs e;
 		        lock(receiveQueue)
 		        {
-		            while(receiveQueue.Count == 0)
+		            while(receiveQueue.Count == 0 && dispatcherRunning)
 		            {
 		                Monitor.Wait(receiveQueue);
 		            }
@@ -79,6 +81,12 @@ namespace Lebowski.Net.Skype
 		        }   
 		        OnReceived(e);
 		    }
+		}
+		
+		public void Close()
+		{
+            dispatcherRunning = false;
+            Monitor.Pulse(receiveQueue);
 		}
 		
 	}

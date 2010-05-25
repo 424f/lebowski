@@ -42,6 +42,11 @@ namespace Lebowski.Net.Lidgren
 		}
 		
 		public abstract void Send(object o);
+		
+		public void Close()
+		{
+		    throw new NotImplementedException();
+		}		
 	}
 	
 	public sealed class ClientConnection : LidgrenConnection
@@ -184,8 +189,7 @@ namespace Lebowski.Net.Lidgren
 			NetBuffer buffer = Socket.CreateBuffer();
 			SerializeToBuffer(o, buffer);
 			Socket.SendToAll(buffer, NetChannel.ReliableInOrder1);
-		}
-		
+		}		
 	}
 	
 }

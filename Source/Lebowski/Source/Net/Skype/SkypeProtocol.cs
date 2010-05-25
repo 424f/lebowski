@@ -165,6 +165,8 @@ namespace Lebowski.Net.Skype
 			{  
 				EstablishConnection(form.SelectedUser);
 				
+				// TODO: connect in separate thread
+				
 				// Create channel for this session
 				SkypeConnection connection = Connect(form.SelectedUser);
 				
@@ -174,6 +176,10 @@ namespace Lebowski.Net.Skype
 				invitationChannels[invitationMessage.InvitationId] = connection;
 				invitationSessions[invitationMessage.InvitationId] = session;
 				Send(form.SelectedUser, ApplicationConnectionId, invitationMessage);
+				
+                session.State = SessionStates.AwaitingConnection;
+				
+				form.Close();
 			};
 			form.ShowDialog();
 		}

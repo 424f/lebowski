@@ -25,9 +25,6 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
     /// </summary>
     public sealed class DifferentialSynchronizationStrategy : ISynchronizationStrategy
 	{
-	    // TODO: remove debug member
-		static int activeThreads = 0;
-		
 		// Constant used to give a unique identifier to the server site
 		private const int ServerId = 0;
 		
@@ -160,9 +157,9 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
         				System.Console.WriteLine(p);
         			}			                   
     			                   
-    			    Console.WriteLine("--");
-    			    Console.WriteLine("Selection was: {0} {1} = '{2}'", Context.SelectionStart, Context.SelectionEnd, Context.SelectedText);
-    			    Console.WriteLine("Caret was: {0}", Context.CaretPosition);
+    			    //Console.WriteLine("--");
+    			    //Console.WriteLine("Selection was: {0} {1} = '{2}'", Context.SelectionStart, Context.SelectionEnd, Context.SelectedText);
+    			    //Console.WriteLine("Caret was: {0}", Context.CaretPosition);
     
     			    bool hadSelection = Context.HasSelection;
     				int start = Context.SelectionStart;
@@ -175,12 +172,12 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
     				// See: http://neil.fraser.name/writing/cursor/
     				foreach(Patch patch in patches)
     				{
-    					Console.WriteLine("Patch = {0} ({1}, {2}, {3}, {4})", patch, patch.start1, patch.start2, patch.length1, patch.length2);
+    					//Console.WriteLine("Patch = {0} ({1}, {2}, {3}, {4})", patch, patch.start1, patch.start2, patch.length1, patch.length2);
     					int index = patch.start1;
-    					Console.WriteLine("index {0}, start {1}, end {2}, caret {3}", index, start, end, caret);
+    					//Console.WriteLine("index {0}, start {1}, end {2}, caret {3}", index, start, end, caret);
     					foreach(Diff diff in patch.diffs)
     					{
-    						Console.WriteLine("Diff {0}", diff.ToString());
+    						//Console.WriteLine("Diff {0}", diff.ToString());
     						switch(diff.operation)
     						{
     							case Operation.DELETE:
@@ -218,7 +215,7 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
     								index += diff.text.Length;
     								break;
     						}
-    						Console.WriteLine("index {0}, start {1}, end {2}, caret {3}", index, start, end, caret);
+    						//Console.WriteLine("index {0}, start {1}, end {2}, caret {3}", index, start, end, caret);
     					}
     				}
     				start = Math.Max(0, start);
@@ -238,9 +235,9 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
     					Context.SetSelection(start, end);		
     				}
     				Context.CaretPosition = caret;
-    				Console.WriteLine("Selection is: {0} {1}", start, end);
-    				Console.WriteLine("Caret is: {0}", caret);
-    				Console.WriteLine("Was {0} now {1}", old, Context.Data);
+    				//Console.WriteLine("Selection is: {0} {1}", start, end);
+    				//Console.WriteLine("Caret is: {0}", caret);
+    				//Console.WriteLine("Was {0} now {1}", old, Context.Data);
     				Context.Refresh();
     			});
     		}
@@ -253,13 +250,10 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
 		/// </summary>
 		private void FlushToken()
 		{
-			System.Console.WriteLine("{0} FlushTimer State: {1}", SiteId, TokenState);
 			if(TokenState == TokenState.HavingToken)
 			{
-				System.Console.WriteLine("{0} wants to Flush", SiteId);
 				SendPatches();
 				TokenState = TokenState.WaitingForToken;
-				System.Console.WriteLine("{0} flushing token", SiteId);
 			}
 		}
 		
@@ -269,10 +263,10 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
     		    isSessionEstablished = true;
     		    
                 Console.BackgroundColor = ConsoleColor.DarkRed;
-    			Console.WriteLine("Thread {0}: {1}", System.Threading.Thread.CurrentThread.ManagedThreadId, e.Message.GetType().Name);
+    			//Console.WriteLine("Thread {0}: {1}", System.Threading.Thread.CurrentThread.ManagedThreadId, e.Message.GetType().Name);
     			Console.ResetColor();
     			
-    			System.Console.WriteLine("{0} received: {1}", SiteId, e.Message);
+    			//System.Console.WriteLine("{0} received: {1}", SiteId, e.Message);
     			lock(this)
     			{
     				if(e.Message is DiffMessage)
@@ -333,6 +327,12 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
 				TokenRequestSent = true;
 				HasChanged = true;
 			}
+		}
+		
+		public void Close()
+		{
+		    Context.Changed -= ContextChanged;
+		    Connection.Received -= ConnectionReceived;
 		}
 	}
 }

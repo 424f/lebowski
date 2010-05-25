@@ -62,7 +62,6 @@ namespace Lebowski.Net.Tcp
 			}
 			finally
 			{
-				OnConnectionClosed(new EventArgs());
 				Close();
 			}
 		}
@@ -92,9 +91,17 @@ namespace Lebowski.Net.Tcp
 		
 		public virtual void Close()
 		{
+		    
 		    Logger.InfoFormat("Closing stream: {0}", stream);
-			stream.Close();
-			running = false;
+		    try
+		    {
+		        stream.Close();
+		    }
+		    finally
+		    {
+    			running = false;
+    			OnConnectionClosed(new EventArgs());
+		    }
 		}
 		
 		protected virtual void OnConnectionClosed(EventArgs e)
@@ -178,6 +185,7 @@ namespace Lebowski.Net.Tcp
 				ClientDisconnected(this, e);
 			}
 		}
+
 	}
 	
 	public class TcpClientConnection : TcpConnection

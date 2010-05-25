@@ -30,8 +30,7 @@ namespace TwinEditor.UI
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SessionViewForm));
-			this.TabControl = new CloseableTabControl(1);
-			TabControl.TabClosed += delegate (object sender, TabClosedEventArgs e) { TabControl.TabPages.RemoveAt(e.TabIndex); };
+			this.TabControl = new TwinEditor.UI.CloseableTabControl();
 			this.tabPage3 = new System.Windows.Forms.TabPage();
 			this.SourceCode = new ICSharpCode.TextEditor.TextEditorControl();
 			this.connectionStopWaitingButton = new System.Windows.Forms.Button();
@@ -83,15 +82,15 @@ namespace TwinEditor.UI
 			// connectionStopWaitingButton
 			// 
 			this.connectionStopWaitingButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.connectionStopWaitingButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.connectionStopWaitingButton.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.connectionStopWaitingButton.Image = ((System.Drawing.Image)(resources.GetObject("connectionStopWaitingButton.Image")));
 			this.connectionStopWaitingButton.Location = new System.Drawing.Point(658, 577);
 			this.connectionStopWaitingButton.Name = "connectionStopWaitingButton";
 			this.connectionStopWaitingButton.Size = new System.Drawing.Size(20, 20);
 			this.connectionStopWaitingButton.TabIndex = 12;
-			this.connectionStopWaitingButton.Text = "x";
 			this.connectionStopWaitingButton.UseVisualStyleBackColor = true;
-			this.connectionStopWaitingButton.Click += new System.EventHandler(this.ConnectionStopWaitingButtonClick);
 			this.connectionStopWaitingButton.Visible = false;
+			this.connectionStopWaitingButton.Click += new System.EventHandler(this.ConnectionStopWaitingButtonClick);
 			// 
 			// ChatHistory
 			// 
@@ -128,7 +127,7 @@ namespace TwinEditor.UI
 			this.connectionStatusLabel.Size = new System.Drawing.Size(108, 24);
 			this.connectionStatusLabel.TabIndex = 10;
 			this.connectionStatusLabel.Text = "Disconnected";
-			this.connectionStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.connectionStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// connectionStatusPicture
 			// 
@@ -141,7 +140,7 @@ namespace TwinEditor.UI
 			this.connectionStatusPicture.TabIndex = 11;
 			this.connectionStatusPicture.TabStop = false;
 			// 
-			// SessionTabControl
+			// SessionViewForm
 			// 
 			this.Controls.Add(this.connectionStopWaitingButton);
 			this.Controls.Add(this.connectionStatusPicture);
@@ -150,8 +149,9 @@ namespace TwinEditor.UI
 			this.Controls.Add(this.ChatHistory);
 			this.Controls.Add(this.ChatText);
 			this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.Name = "SessionTabControl";
+			this.Name = "SessionViewForm";
 			this.Size = new System.Drawing.Size(682, 598);
+			this.Load += new System.EventHandler(this.SessionViewFormLoad);
 			this.TabControl.ResumeLayout(false);
 			this.tabPage3.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.connectionStatusPicture)).EndInit();

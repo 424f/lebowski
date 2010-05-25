@@ -63,6 +63,11 @@ namespace Lebowski.Net
 			channelIds[channel] = channelId;
 			return channel;
 		}
+		
+		public void Close()
+		{
+		    Connection.Close();
+		}
 	}
 	
 	class TunneledConnection : IConnection
@@ -88,6 +93,11 @@ namespace Lebowski.Net
 			if (Received != null) {
 				Received(this, e);
 			}
+		}
+		
+		public void Close()
+		{
+		    this.tunnel.Close();
 		}
 	}
 	

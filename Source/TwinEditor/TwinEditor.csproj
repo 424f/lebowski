@@ -111,6 +111,7 @@
     <Compile Include="Source\FileTypes\PythonInterpreter.cs" />
     <Compile Include="Source\ISessionView.cs" />
     <Compile Include="Source\Messaging\ChatMessage.cs" />
+    <Compile Include="Source\Messaging\CloseSessionMessage.cs" />
     <Compile Include="Source\Messaging\ExecutionResultMessage.cs" />
     <Compile Include="Source\Program.cs" />
     <Compile Include="Source\SessionContext.cs" />

@@ -81,6 +81,11 @@ namespace Lebowski.Net
 			}
 		}
 		
+		public void Close()
+		{
+
+		}
+		
 		/// <summary>
 		/// Makes sure that all packets currently enqueued are dispatched,
 		/// before the method returns. This is handy for writing tests, as

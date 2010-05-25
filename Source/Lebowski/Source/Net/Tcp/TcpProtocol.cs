@@ -21,6 +21,7 @@ namespace Lebowski.Net.Tcp
 			{
 				//session.AwaitingSession();
 				form.Enabled = false;
+				session.State = SessionStates.AwaitingConnection;
 				form.Invoke((Action) delegate
 				{
 					form.Dispose();

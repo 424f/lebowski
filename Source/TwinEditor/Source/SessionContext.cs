@@ -80,7 +80,17 @@ namespace TwinEditor
 		
 		public void Close()
 		{
-		    
+		    if(State != SessionStates.Disconnected)
+		    {
+		        try
+		        {
+		            ApplicationConnection.Send(new CloseSessionMessage());
+		        }
+		        catch(Exception e)
+		        {
+		            Logger.WarnFormat("When trying to send CloseSessionMessage, an exception occurred: {0}", e);
+		        }
+		    }
 		}
 		
         public string FileName { get; set; }        
@@ -143,6 +153,20 @@ namespace TwinEditor
 			};     
         }
         
+        public void Reset()
+        {
+            ActivateState(new SessionState(this));
+            SynchronizationStrategy.Close();
+            ApplicationConnection.Close();
+            SynchronizationConnection.Close();
+            
+            SynchronizationConnection = null;
+            ApplicationConnection = null;
+            SynchronizationStrategy = null;      
+            
+            State = SessionStates.Disconnected;
+        }
+        
         protected virtual void OnStateChanged(EventArgs e)
         {
             if(StateChanged != null)
@@ -177,7 +201,7 @@ namespace TwinEditor
         
     }
     
-    public abstract class SessionState
+    public class SessionState
     {
         protected static readonly ILog Logger = LogManager.GetLogger(typeof(SessionState));
         protected SessionContext session;
@@ -193,6 +217,11 @@ namespace TwinEditor
         }
         
         public virtual void Unregister()
+        {
+            
+        }
+        
+        protected virtual void ApplicationConnectionReceived(object sender, ReceivedEventArgs e)
         {
             
         }
@@ -228,18 +257,18 @@ namespace TwinEditor
             session.ApplicationConnection.Received -= ApplicationConnectionReceived;
         }
         
-        private void ApplicationConnectionReceived(object sender, ReceivedEventArgs e)
+        protected override void ApplicationConnectionReceived(object sender, ReceivedEventArgs e)
         {
-            var sync = new DifferentialSynchronizationStrategy(session.SiteId, session.Context, session.SynchronizationConnection);
+            session.SynchronizationStrategy = new DifferentialSynchronizationStrategy(session.SiteId, session.Context, session.SynchronizationConnection);
             
             if((string)e.Message == "HI 0")
             {
                 session.ApplicationConnection.Send("HI 1");
-                session.ActivateState(new SynchronizationState(session, sync));
+                session.ActivateState(new SynchronizationState(session));
             } 
             else if((string)e.Message == "HI 1")
             {
-                session.ActivateState(new SynchronizationState(session, sync));
+                session.ActivateState(new SynchronizationState(session));
             }
             
         }
@@ -247,17 +276,33 @@ namespace TwinEditor
     
     public class SynchronizationState : SessionState
     {
-        private DifferentialSynchronizationStrategy sync;
-        
-        public SynchronizationState(SessionContext session, DifferentialSynchronizationStrategy sync) : base(session)
+        public SynchronizationState(SessionContext session) : base(session)
         {
-            this.sync = sync;
+
         }
         
         public override void Register()
         {
             Logger.Info("Registering SynchronizationState");            
             session.State = SessionStates.Connected;
+            session.ApplicationConnection.Received += ApplicationConnectionReceived;
+        }
+        
+        public override void Unregister()
+        {
+            session.ApplicationConnection.Received -= ApplicationConnectionReceived;            
+        }
+        
+        protected override void ApplicationConnectionReceived(object sender, ReceivedEventArgs e)
+        {
+            if(e.Message is CloseSessionMessage)
+            {                
+                session.Reset();
+            }
+            else
+            {
+                base.ApplicationConnectionReceived(sender, e);
+            }
         }
     }
     

@@ -79,6 +79,7 @@ namespace TwinEditor.UI
 			    Context.Invoke((Action)delegate
                 {
                     SourceCode.SetHighlighting(SessionContext.FileType.Name);
+                    tabPage.ImageKey = SessionContext.FileType.Name + "Image";
                 });
 			};
 			
@@ -102,6 +103,8 @@ namespace TwinEditor.UI
                                 executionViewForms[e.SiteId] = executionView;
                                 executionView.Dock = DockStyle.Fill;
                                 TabControl.TabPages.Add(newPage);
+                                newPage.Tag = e.SiteId;
+                                newPage.ImageKey = "ExecutionImage";
                                 TabControl.SelectedTab = newPage;
                             }
                             else
@@ -113,13 +116,25 @@ namespace TwinEditor.UI
 			    };
 			
 			SessionContext.ReceiveChatMessage += SessionContextReceiveChatMessage;
+
+			TabControl.TabClosed += delegate(object sender, TabClosedEventArgs e)
+			{
+			    int siteId = (int)TabControl.TabPages[e.TabIndex].Tag;
+			    executionViewForms.Remove(siteId);
+			    TabControl.TabPages.RemoveAt(e.TabIndex);
+			};
 			
 			this.SetState(SessionStates.Disconnected);
-		}
-		
-		public void Close()
-		{
 			
+			// Load ImageList for tabs
+			var rm = new System.Resources.ResourceManager("TwinEditor.Resources", System.Reflection.Assembly.GetExecutingAssembly());
+			
+			ImageList imageList = new ImageList();
+			imageList.Images.Add("TextImage", (System.Drawing.Image)rm.GetObject("TextImage"));
+			imageList.Images.Add("ExecutionImage", (System.Drawing.Image)rm.GetObject("ExecutionImage"));
+			TabControl.ImageList = imageList;
+			tabPage3.ImageKey = "TextImage";
+			                     
 		}
 		
 		public void UpdateGuiState()
@@ -256,6 +271,11 @@ namespace TwinEditor.UI
 		    {
 		        AddChatMessage(e.ChatMessage);
             });
+		}
+		
+		void SessionViewFormLoad(object sender, EventArgs e)
+		{
+			
 		}
 	}
 	

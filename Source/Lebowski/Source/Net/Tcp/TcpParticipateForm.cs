@@ -41,5 +41,10 @@ namespace Lebowski.Net.Tcp
 			}
 		}
 		
+		
+		void TcpParticipateFormLoad(object sender, EventArgs e)
+		{
+			
+		}
 	}
 }

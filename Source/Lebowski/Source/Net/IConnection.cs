@@ -6,6 +6,7 @@ namespace Lebowski.Net
 	public interface IConnection
 	{
 		void Send(object o);
+		void Close();
 		
 		event EventHandler<ReceivedEventArgs> Received;
 		

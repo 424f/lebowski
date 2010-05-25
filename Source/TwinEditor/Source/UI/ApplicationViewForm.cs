@@ -73,6 +73,22 @@ namespace TwinEditor.UI
     			
     			// Add a separator after the file type choices
     			editToolStripMenuItem.DropDown.Items.Insert(editToolStripMenuItem.DropDown.Items.Count-1, new ToolStripSeparator());		    		        
+    			
+                // Load icons for tab control for different file types
+    			ImageList imageList = new ImageList();
+    			foreach(IFileType fileType in FileTypes)
+    			{
+        			try
+        			{
+        			    imageList.Images.Add(fileType.Name + "Image", fileType.Icon);
+        			        
+        			}
+        			catch(Exception e)
+        			{
+        			    Logger.WarnFormat("Could not load image for type {0}: {1}", fileType.Name, e);
+        			}
+    			}
+    			MainTab.ImageList = imageList;    			
 		    }   
 		}
 		private IFileType[] fileTypes;
@@ -354,17 +370,17 @@ namespace TwinEditor.UI
 		}
 		
 		void CloseTab(int index) {
-			SessionViewForm tabControl = tabControls[index];
+			SessionViewForm sessionView = tabControls[index];
 			// check if the file has been modified since last save
-			if (tabControl.FileModified)
+			if(sessionView.FileModified)
 			{	
-				if (MessageBox.Show(TranslationUtil.GetString(ApplicationUtil.LanguageResources, "_MessageBoxOnCloseMessage"), TranslationUtil.GetString(ApplicationUtil.LanguageResources, "_MessageBoxOnCloseCaption"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+				if(MessageBox.Show(TranslationUtil.GetString(ApplicationUtil.LanguageResources, "_MessageBoxOnCloseMessage"), TranslationUtil.GetString(ApplicationUtil.LanguageResources, "_MessageBoxOnCloseCaption"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
 				{
-					SaveRequest(tabControl);
+					SaveRequest(sessionView);
 				}
 			}
-			tabControl.Close();
-			Logger.Info(string.Format("{0} has been closed", tabControl.FileName));
+			sessionView.SessionContext.Close();
+			Logger.Info(string.Format("{0} has been closed", sessionView.FileName));
 			tabControls.RemoveAt(index);
 			tabPages.RemoveAt(index);
 			MainTab.TabPages.RemoveAt(index);
