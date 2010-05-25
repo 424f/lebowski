@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 
 namespace TwinEditor.UI
 {
@@ -11,6 +12,7 @@ namespace TwinEditor.UI
         ICommunicationProtocol[] CommunicationProtocols { get; set; }
         ISessionView CreateNewSession(IFileType fileType);
 
+        void UpdateRecentFiles(List<String> recentFiles);
         void Show();
 
         ApplicationContext ApplicationContext { get; set; }
@@ -19,6 +21,7 @@ namespace TwinEditor.UI
 
         event EventHandler<SaveEventArgs> Save;
         event EventHandler<OpenEventArgs> Open;
+        event EventHandler<CloseEventArgs> Close;
         event EventHandler<ShareSessionEventArgs> ShareSession;
 
         #endregion
@@ -48,6 +51,16 @@ namespace TwinEditor.UI
         }
     }
 
+    public sealed class CloseEventArgs : EventArgs
+    {
+        public string FileName { get; private set; }
+        
+        public CloseEventArgs(string fileName)
+        {
+            FileName = fileName;   
+        }
+    }
+    
     public sealed class SaveEventArgs : EventArgs
     {
         public ISessionView Session { get; private set; }

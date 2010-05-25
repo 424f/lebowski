@@ -12,5 +12,8 @@ namespace TwinEditor
     {
         string FileName { get; set; }
         SessionContext SessionContext { get; }
+        
+        bool OnDisk { get; set; }
+        bool FileModified { get; set; }
     }
 }
