@@ -126,6 +126,7 @@ namespace TwinEditor
             {
                 userName = Environment.UserName;
             }
+            
             appSettings.UserName = userName;
             appSettings.Save();
 

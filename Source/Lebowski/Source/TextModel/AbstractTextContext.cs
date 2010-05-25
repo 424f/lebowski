@@ -49,5 +49,6 @@ namespace Lebowski.TextModel
         public abstract void SetSelection(int start, int last);
         public abstract void Invoke(Action action);
         public abstract void Refresh();
+        public abstract void SetRemoteSelection(object siteIdentifier, int start, int end);
     }
 }

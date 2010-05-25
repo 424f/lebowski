@@ -1,8 +1,7 @@
-﻿
-using System;
-
-namespace TwinEditor.Messaging
+﻿namespace TwinEditor.Messaging
 {
+    using System;
+    
     /// <summary>
     /// Sent when a shared program's execution finishes
     /// </summary>

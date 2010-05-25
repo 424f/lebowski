@@ -1,21 +1,21 @@
-﻿using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using System.Drawing;
-using System.Windows.Forms;
-using System.Resources;
-using System.Reflection;
-using Lebowski;
-using Lebowski.Synchronization.DifferentialSynchronization;
-using Lebowski.Net;
-using TwinEditor.FileTypes;
-using TwinEditor.UI;
-
-using log4net;
-
-namespace TwinEditor.UI
+﻿namespace TwinEditor.UI
 {
+    using System;
+    using System.IO;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Drawing;
+    using System.Windows.Forms;
+    using System.Resources;
+    using System.Reflection;
+    using Lebowski;
+    using Lebowski.Synchronization.DifferentialSynchronization;
+    using Lebowski.Net;
+    using TwinEditor.FileTypes;
+    using TwinEditor.UI;
+    
+    using log4net;    
+    
     public partial class ApplicationViewForm : Form, IApplicationView
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(ApplicationViewForm));
@@ -83,7 +83,7 @@ namespace TwinEditor.UI
                         imageList.Images.Add(fileType.Name + "Image", fileType.Icon);
                             
                     }
-                    catch(Exception e)
+                    catch (Exception e)
                     {
                         Logger.WarnFormat("Could not load image for type {0}: {1}", fileType.Name, e);
                     }
@@ -94,7 +94,7 @@ namespace TwinEditor.UI
         private IFileType[] fileTypes;
         
         
-        public ApplicationContext ApplicationContext { get; set; }
+        public TwinEditor.ApplicationContext ApplicationContext { get; set; }
         
         public ICommunicationProtocol[] CommunicationProtocols
         {

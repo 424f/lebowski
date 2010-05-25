@@ -2,6 +2,7 @@
 {
     using System;
     using System.Configuration;    
+    using System.Collections.Generic;
     
     public class ApplicationSettings : ApplicationSettingsBase
     {

@@ -78,5 +78,11 @@ namespace Lebowski.TextModel
             TextBox.Refresh();
         }
         
+        public override void SetRemoteSelection(object siteIdentifier, int start, int end)
+        {
+            /* Pure WinForms TextBox doesn't give us an easy way to display 
+            additional selections */
+        }
+        
     }
 }
