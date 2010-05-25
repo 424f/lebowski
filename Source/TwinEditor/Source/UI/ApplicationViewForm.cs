@@ -11,6 +11,7 @@ using Lebowski.Synchronization.DifferentialSynchronization;
 using Lebowski.Net;
 using TwinEditor.FileTypes;
 using TwinEditor.UI;
+using TwinEditor.Configuration;
 
 using log4net;
 
@@ -25,6 +26,9 @@ namespace TwinEditor.UI
         public event EventHandler<SaveEventArgs> Save;
         
         private Settings.SettingsDialog SettingsDialog;
+        private RecentFilesList recentFileList;
+        
+        ApplicationSettings appSettings = Configuration.ApplicationSettings.Default;
         
         public IFileType[] FileTypes
         {
@@ -153,6 +157,7 @@ namespace TwinEditor.UI
         /// The number that is assigned to next new file without name
         /// </summary>
         private int nextFileNumber = 1;
+        // TODO: Track currently open files in order not to open twice,Controller.cs 
         
         /// <summary>
         /// Updates GUI elements after the program state has changed
@@ -202,6 +207,32 @@ namespace TwinEditor.UI
             }
         }
         
+        public void UpdateRecentFiles(List<string> recentFiles)
+        {
+        	menuStrip1.Invoke((Action) delegate
+        	                  {
+						      	recentFilesToolStripMenuItem.DropDownItems.Clear();
+								foreach (string filename in recentFiles)
+								{
+									IFileType type = null;
+						            foreach (IFileType fileType in fileTypes)
+						            {
+						                fileType.FileNameMatches(filename);
+						                type = fileType;
+						            }
+									ToolStripMenuItem item = new ToolStripMenuItem(filename);
+									if (type != null)
+									{
+										item.Click += delegate { Open(this, new OpenEventArgs(filename, type)); };
+									}
+									recentFilesToolStripMenuItem.DropDownItems.Add(item);
+								}
+        	                  }
+			);
+        	appSettings.RecentFileList = recentFiles;
+        	appSettings.Save();
+        }
+        
         public ApplicationViewForm()
         {            
             InitializeComponent();
@@ -218,6 +249,16 @@ namespace TwinEditor.UI
             
             // Configure settings dialog
             SettingsDialog = new Settings.SettingsDialog(ApplicationContext);
+            
+            // Get default settings
+            var appSettings = Configuration.ApplicationSettings.Default;
+            
+            // Initialize recent files
+            recentFileList = new RecentFilesList();
+            recentFileList.RecentFilesChanged += delegate(object sender, RecentFilesChangedEventArgs e) 
+            {
+            	UpdateRecentFiles(e.RecentFiles);
+            };
         }
         
         private void Translate(ToolStripMenuItem item, string id)
@@ -323,6 +364,7 @@ namespace TwinEditor.UI
             }
             else
             {
+            	recentFileList.Add(tabControl.FileName);
                 OnSave(new SaveEventArgs(tabControl, tabControl.FileName));
                 tabControl.OnDisk = true;
                 tabControl.FileModified = false;                    
@@ -341,6 +383,8 @@ namespace TwinEditor.UI
             if (result == DialogResult.OK)
             {
                 tabControl.FileName = saveFileDialog.FileName;
+                recentFileList.Add(tabControl.FileName);
+                
                 OnSave(new SaveEventArgs(tabControl, tabControl.FileName));
                 tabControl.OnDisk = true;
                 tabControl.FileModified = false;                  
