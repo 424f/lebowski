@@ -1,8 +1,11 @@
-
-
 namespace Lebowski.Net
 {
     using System;
+    
+    /// <summary>
+    /// Provides functionality to share a session or participate in an existing
+    /// session and describes the exact capabilities that the protocol supports.
+    /// </summary>
     public interface ICommunicationProtocol
     {
         /// <summary>
@@ -37,12 +40,12 @@ namespace Lebowski.Net
         bool CanParticipate { get; }
 
         /// <summary>
-        /// Fired when a session has been hosted using this protocol
+        /// Occurs when a session has been hosted using this protocol
         /// </summary>
         event EventHandler<HostSessionEventArgs> HostSession;
 
         /// <summary>
-        /// Fired when a session is joined using this protocol
+        /// Occurs when a session is joined using this protocol
         /// </summary>
         event EventHandler<JoinSessionEventArgs> JoinSession;
 
@@ -53,27 +56,4 @@ namespace Lebowski.Net
         /// </summary>
         bool Enabled { get; }
     }
-
-    public sealed class HostSessionEventArgs : EventArgs
-    {
-        public IConnection Connection { get; private set; }
-        public ISynchronizationSession Session { get; private set; }
-
-        public HostSessionEventArgs(ISynchronizationSession session, IConnection connection)
-        {
-            Session = session;
-            Connection = connection;
-        }
-    }
-
-    public sealed class JoinSessionEventArgs : EventArgs
-    {
-        public IConnection Connection { get; private set; }
-
-        public JoinSessionEventArgs(IConnection connection)
-        {
-            Connection = connection;
-        }
-    }
-
 }

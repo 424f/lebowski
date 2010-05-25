@@ -88,13 +88,18 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Source\ExtensionUtil.cs" />
+    <Compile Include="Source\Net\AbstractConnection.cs" />
+    <Compile Include="Source\Net\HostSessionEventArgs.cs" />
     <Compile Include="Source\Net\ICommunicationProtocol.cs" />
     <Compile Include="Source\Net\IConnection.cs" />
+    <Compile Include="Source\Net\JoinSessionEventArgs.cs" />
     <Compile Include="Source\Net\Lidgren\UdpConnection.cs" />
     <Compile Include="Source\Net\Lidgren\UdpProtocol.cs" />
-    <Compile Include="Source\Net\LocalProtocol.cs" />
+    <Compile Include="Source\Net\Local\LocalConnection.cs" />
+    <Compile Include="Source\Net\Local\LocalProtocol.cs" />
     <Compile Include="Source\Net\MultichannelConnection.cs" />
     <Compile Include="Source\Net\NetUtils.cs" />
+    <Compile Include="Source\Net\ReceivedEventArgs.cs" />
     <Compile Include="Source\Net\Skype\AcceptSharingInvitiationMessage.cs" />
     <Compile Include="Source\Net\Skype\DeclineSharingInvitiationMessage.cs" />
     <Compile Include="Source\Net\Skype\SharingInvitiationMessage.cs" />
@@ -157,6 +162,7 @@
     <Folder Include="Source\Net\" />
     <Folder Include="Source\Net\" />
     <Folder Include="Source\" />
+    <Folder Include="Source\Net\Local" />
     <Folder Include="Source\Synchronization\" />
     <Folder Include="Source\Synchronization\" />
     <Folder Include="Source\" />

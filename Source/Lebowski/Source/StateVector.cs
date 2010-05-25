@@ -23,7 +23,21 @@ namespace Lebowski
                 values.Add(0);
             }
         }
+        
+        /// <summary>
+        /// Gets the number of dimensions that this state vector has.
+        /// </summary>
+        public int Size
+        {
+            get { return values.Count; }
+        }
 
+        /// <summary>
+        /// Compares this StateVector with another instance. Note that this relation
+        /// is <i>not</i> symmetric.
+        /// </summary>
+        /// <param name="other">The StateVector struct to compare with.</param>
+        /// <returns></returns>
         public int CompareTo(StateVector other)
         {
             if (Enumerable.SequenceEqual(values, other.values))
@@ -39,6 +53,12 @@ namespace Lebowski
             return -1;
         }
 
+        /// <summary>
+        /// Retrieves the
+        /// <param name="index">the number of the dimension to access.
+        /// Requires: 0 &lt;= index &lt; Size
+        /// </param>
+        /// </summary>
         public int this[int index]
         {
             get { return values[index]; }
@@ -49,6 +69,10 @@ namespace Lebowski
             }
         }
 
+        /// <summary>
+        /// Converts the multidimensional value of this instance to its equivalent string representation.
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return "[" + string.Join(" ", values.Select(i => i.ToString()).ToArray()) + "]";

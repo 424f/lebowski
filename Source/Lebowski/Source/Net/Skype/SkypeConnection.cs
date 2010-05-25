@@ -8,13 +8,9 @@ namespace Lebowski.Net.Skype
     using SKYPE4COMLib;
     using Lebowski.Net;
     using log4net;
-    public sealed class SkypeConnection : IConnection
+    public sealed class SkypeConnection : AbstractConnection
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(SkypeProtocol));
-
-        public object Tag { get; set; }
-
-        public event EventHandler<ReceivedEventArgs> Received;
 
         private string remote;
         public int IncomingChannel { get; private set; }
@@ -39,7 +35,7 @@ namespace Lebowski.Net.Skype
             thread.Start();
         }
 
-        public void Send(object o)
+        public override void Send(object o)
         {
             if (OutgoingChannel == -1)
             {
@@ -55,13 +51,6 @@ namespace Lebowski.Net.Skype
             {
                 receiveQueue.Enqueue(e);
                 Monitor.PulseAll(receiveQueue);
-            }
-        }
-
-        private void OnReceived(ReceivedEventArgs e)
-        {
-            if (Received != null) {
-                Received(this, e);
             }
         }
 
@@ -83,7 +72,7 @@ namespace Lebowski.Net.Skype
             }
         }
 
-        public void Close()
+        public override void Close()
         {
             dispatcherRunning = false;
             lock(receiveQueue)

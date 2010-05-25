@@ -14,22 +14,10 @@ namespace Lebowski.Net.Lidgren
         public ConnectionFailedException(string message) : base(message) {}
     }
 
-    public abstract class LidgrenConnection : IConnection
+    public abstract class LidgrenConnection : AbstractConnection
     {
         public const string AppName = "LEBOWSKI";
         public const int Port = 12345;
-
-        public event EventHandler<ReceivedEventArgs> Received;
-
-        public object Tag { get; set; }
-
-        protected virtual void OnReceived(ReceivedEventArgs e)
-        {
-            if (Received != null) {
-                Received(this, e);
-            }
-        }
-
 
         protected void SerializeToBuffer(object o, NetBuffer buffer)
         {
@@ -41,9 +29,9 @@ namespace Lebowski.Net.Lidgren
             return NetUtils.Deserialize(buffer.ReadBytes(buffer.LengthBytes));
         }
 
-        public abstract void Send(object o);
+        public override abstract void Send(object o);
 
-        public void Close()
+        public override void Close()
         {
             throw new NotImplementedException();
         }

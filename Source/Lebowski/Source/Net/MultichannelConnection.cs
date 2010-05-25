@@ -70,34 +70,28 @@ namespace Lebowski.Net
         }
     }
 
-    class TunneledConnection : IConnection
+    class TunneledConnection : AbstractConnection
     {
-        public event EventHandler<ReceivedEventArgs> Received;
-
         private MultichannelConnection tunnel;
-
-        public object Tag { get; set; }
 
         public TunneledConnection(MultichannelConnection tunnel)
         {
             this.tunnel = tunnel;
         }
 
-        public void Send(object o)
+        public override void Send(object o)
         {
             tunnel.Send(this, o);
         }
 
-        public void OnReceived(ReceivedEventArgs e)
-        {
-            if (Received != null) {
-                Received(this, e);
-            }
-        }
-
-        public void Close()
+        public override void Close()
         {
             this.tunnel.Close();
+        }
+        
+        internal new void OnReceived(ReceivedEventArgs e)
+        {
+            base.OnReceived(e);
         }
     }
 

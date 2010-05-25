@@ -139,6 +139,10 @@ namespace TwinEditor.UI
 
         }
 
+        /// <summary>
+        /// Ensures that changes in the state of this session are properly
+        /// represented in the user interface.
+        /// </summary>
         public void UpdateGuiState()
         {
             ApplicationViewForm.UpdateGuiState();

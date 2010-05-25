@@ -7,6 +7,7 @@ namespace Lebowski.Net.Tcp
     using System.Threading;
     using Lebowski.Net;
     using log4net;
+    
     public class ConnectionFailedException : Exception
     {
         public ConnectionFailedException(string message) : base(message) {}
