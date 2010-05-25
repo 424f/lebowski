@@ -36,63 +36,63 @@ namespace TwinEditor
         }
         private SessionStates state;
         
-	    public DifferentialSynchronizationStrategy SynchronizationStrategy { get; set; }
-		public ITextContext Context { get; set; }
-		
-		public IFileType FileType
-		{
-		    get { return fileType; }
-		    set 
-		    {
-		        fileType = value;
-		        OnFileTypeChanged(new EventArgs());
-		    }
-		}
-		private IFileType fileType;
-		
-		public IConnection ApplicationConnection { get; private set; }
-		public IConnection SynchronizationConnection { get; private set; }
-		public int SiteId { get; private set; }
-		
-		public SessionContext(ITextContext context)
-		{            
+        public DifferentialSynchronizationStrategy SynchronizationStrategy { get; set; }
+        public ITextContext Context { get; set; }
+        
+        public IFileType FileType
+        {
+            get { return fileType; }
+            set 
+            {
+                fileType = value;
+                OnFileTypeChanged(new EventArgs());
+            }
+        }
+        private IFileType fileType;
+        
+        public IConnection ApplicationConnection { get; private set; }
+        public IConnection SynchronizationConnection { get; private set; }
+        public int SiteId { get; private set; }
+        
+        public SessionContext(ITextContext context)
+        {            
             Context = context;
-		}
-		
-		public void EstablishSharedSession(int siteId, IConnection connection)
-		{
-		    MultichannelConnection mcc = new MultichannelConnection(connection);
+        }
+        
+        public void EstablishSharedSession(int siteId, IConnection connection)
+        {
+            MultichannelConnection mcc = new MultichannelConnection(connection);
             SynchronizationConnection = mcc.CreateChannel();
             ApplicationConnection = mcc.CreateChannel();
             
             State = SessionStates.Disconnected;
             SiteId = siteId;
-		    ActivateState(new BootstrappingState(this));
-		    
-		    ApplicationConnection.Received += ApplicationConnectionReceived;
-		    
-		    // TODO: this has to be altered when support for multiple sites is added
-		    int otherSiteId = siteId == 0 ? 1 : 0;
-		    // We store the the connection's site id per connection
-		    ApplicationConnection.Tag = otherSiteId;
-		    SynchronizationConnection.Tag = otherSiteId;
-		}
-		
-		public void Close()
-		{
-		    if(State != SessionStates.Disconnected)
-		    {
-		        try
-		        {
-		            ApplicationConnection.Send(new CloseSessionMessage());
-		        }
-		        catch(Exception e)
-		        {
-		            Logger.WarnFormat("When trying to send CloseSessionMessage, an exception occurred: {0}", e);
-		        }
-		    }
-		}
-		
+            ActivateState(new BootstrappingState(this));
+            
+            ApplicationConnection.Received += ApplicationConnectionReceived;
+            
+            // TODO: this has to be altered when support for multiple sites is added
+            int otherSiteId = siteId == 0 ? 1 : 0;
+            // We store the the connection's site id per connection
+            ApplicationConnection.Tag = otherSiteId;
+            SynchronizationConnection.Tag = otherSiteId;
+        }
+        
+        public void Close()
+        {
+            if(State != SessionStates.Disconnected)
+            {
+                try
+                {
+                    ApplicationConnection.Send(new CloseSessionMessage());
+                }
+                catch(Exception e)
+                {
+                    Logger.WarnFormat("When trying to send CloseSessionMessage, an exception occurred: {0}", e);
+                }
+            }
+        }
+        
         public string FileName { get; set; }        
         
         public void ActivateState(SessionState state)
@@ -109,48 +109,48 @@ namespace TwinEditor
         
         public void SendChatMessage(ChatMessage message)
         {
-			ApplicationConnection.Send(message);            
+            ApplicationConnection.Send(message);            
         }
         
         private void ApplicationConnectionReceived(object sender, ReceivedEventArgs e)
-		{
-		    if(e.Message is ChatMessage)
-		    {
-		        OnReceiveChatMessage(new ReceiveChatMessageEventArgs((ChatMessage)e.Message));
-		    }
-		    else if(e.Message is ExecutionResultMessage)
-		    {		    		
-		    	ExecutionResultMessage erm = (ExecutionResultMessage)e.Message;
-		    	
-		    	ExecutionResult result = new ExecutionResult();
-		    	
-		    	OnStartedExecution(new StartedExecutionEventArgs((int)ApplicationConnection.Tag, result));
-		    	
-				result.OnExecutionChanged(new ExecutionChangedEventArgs(erm.StandardOut));
-				result.OnFinishedExecution(new FinishedExecutionEventArgs(0, erm.StandardOut));
-		    }
-		    else
-		    {
-		        Logger.WarnFormat("Received unsupported message on application connection: {0}", e.Message.GetType().Name);
-		    }
-		}        
+        {
+            if(e.Message is ChatMessage)
+            {
+                OnReceiveChatMessage(new ReceiveChatMessageEventArgs((ChatMessage)e.Message));
+            }
+            else if(e.Message is ExecutionResultMessage)
+            {                    
+                ExecutionResultMessage erm = (ExecutionResultMessage)e.Message;
+                
+                ExecutionResult result = new ExecutionResult();
+                
+                OnStartedExecution(new StartedExecutionEventArgs((int)ApplicationConnection.Tag, result));
+                
+                result.OnExecutionChanged(new ExecutionChangedEventArgs(erm.StandardOut));
+                result.OnFinishedExecution(new FinishedExecutionEventArgs(0, erm.StandardOut));
+            }
+            else
+            {
+                Logger.WarnFormat("Received unsupported message on application connection: {0}", e.Message.GetType().Name);
+            }
+        }        
         
         public void Execute()
         {
-			ExecutionResult result = new ExecutionResult();
-			
-			OnStartedExecution(new StartedExecutionEventArgs(SiteId, result));
-			
-			FileType.Execute(Context.Data, result);
-			
-			// When execution is finished, propagate result to other users
-			result.FinishedExecution += delegate(object o, FinishedExecutionEventArgs fe)
-			{
-				if(State == SessionStates.Connected)
-				{
-				    ApplicationConnection.Send(new Messaging.ExecutionResultMessage(fe.ReturnCode, fe.StandardOut));
-				}
-			};     
+            ExecutionResult result = new ExecutionResult();
+            
+            OnStartedExecution(new StartedExecutionEventArgs(SiteId, result));
+            
+            FileType.Execute(Context.Data, result);
+            
+            // When execution is finished, propagate result to other users
+            result.FinishedExecution += delegate(object o, FinishedExecutionEventArgs fe)
+            {
+                if(State == SessionStates.Connected)
+                {
+                    ApplicationConnection.Send(new Messaging.ExecutionResultMessage(fe.ReturnCode, fe.StandardOut));
+                }
+            };     
         }
         
         public void Reset()

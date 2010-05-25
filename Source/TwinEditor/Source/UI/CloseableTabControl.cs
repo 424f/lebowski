@@ -4,27 +4,27 @@ using System.Drawing;
 
 namespace TwinEditor.UI
 {
-	public class CloseableTabControl : TabControl
-	{
-		public event EventHandler<TabClosedEventArgs> TabClosed;
-		
-		private ContextMenuStrip tabContextMenuStrip;
-		private int ClickedTabIndex = -1;
-		public int Shift { get; private set; } // tab index from which on the tabs can be closed
-		
-		public CloseableTabControl() : this(0)
-		{
-		    
-		}
-		
-		public CloseableTabControl(int shift)
-		{
-			this.Shift = shift;
+    public class CloseableTabControl : TabControl
+    {
+        public event EventHandler<TabClosedEventArgs> TabClosed;
+        
+        private ContextMenuStrip tabContextMenuStrip;
+        private int ClickedTabIndex = -1;
+        public int Shift { get; private set; } // tab index from which on the tabs can be closed
+        
+        public CloseableTabControl() : this(0)
+        {
+            
+        }
+        
+        public CloseableTabControl(int shift)
+        {
+            this.Shift = shift;
         }
 
         private void CloseClicked(object sender, EventArgs e)
         {
-        	// Source tab (0) should not be closed
+            // Source tab (0) should not be closed
             if (this.ClickedTabIndex >= 0)
             {
                 OnTabClosed(new TabClosedEventArgs(this.ClickedTabIndex));
@@ -59,22 +59,22 @@ namespace TwinEditor.UI
         
         protected void OnTabClosed(TabClosedEventArgs e)
         {
-        	if (TabClosed != null)
-        	{
-        		TabClosed(this, e);
-        	}
+            if (TabClosed != null)
+            {
+                TabClosed(this, e);
+            }
         }
-	}
-	
-	public sealed class TabClosedEventArgs : EventArgs
-	{
-		public int TabIndex { get; private set; }
-		public TabClosedEventArgs(int index)
-		{
-			TabIndex = index;
-		}
-	}
+    }
+    
+    public sealed class TabClosedEventArgs : EventArgs
+    {
+        public int TabIndex { get; private set; }
+        public TabClosedEventArgs(int index)
+        {
+            TabIndex = index;
+        }
+    }
 }
 
 
-	
+    

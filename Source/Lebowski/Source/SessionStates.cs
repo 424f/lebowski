@@ -2,14 +2,14 @@
 
 namespace Lebowski
 {
-	/// <summary>
-	/// Describes the state of a collaborative editing session
-	/// </summary>
+    /// <summary>
+    /// Describes the state of a collaborative editing session
+    /// </summary>
     public enum SessionStates
     {
-    	/// <summary>
-    	/// The session is currently not being shared
-    	/// </summary>
+        /// <summary>
+        /// The session is currently not being shared
+        /// </summary>
         Disconnected,
         
         /// <summary>

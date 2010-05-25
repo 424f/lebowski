@@ -38,11 +38,11 @@ namespace TwinEditor.UI.Settings
             
             var appSettings = Configuration.ApplicationSettings.Default;
             
-        	// General settings
-        	appSettings.UserName = userName.Text;
-        	appSettings.SynchronizationStrategy = synchronizationStrategy.Text;
-        	
-        	appSettings.Save();
+            // General settings
+            appSettings.UserName = userName.Text;
+            appSettings.SynchronizationStrategy = synchronizationStrategy.Text;
+            
+            appSettings.Save();
         }
         
         void CancelButtonClick(object sender, EventArgs e)

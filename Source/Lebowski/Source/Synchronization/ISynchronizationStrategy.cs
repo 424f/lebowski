@@ -2,8 +2,8 @@
 
 namespace Lebowski.Synchronization
 {
-	public interface ISynchronizationStrategy
-	{
-				
-	}
+    public interface ISynchronizationStrategy
+    {
+                
+    }
 }

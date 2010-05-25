@@ -11,14 +11,14 @@ namespace TwinEditor.UI
     /// </summary>
     public partial class ErrorMessage : Form
     {
-    	public event EventHandler<EventArgs> Report;
-    	
-    	public bool ShowReportButton
-    	{
-    		get { return reportButton.Visible; }
-    		set { reportButton.Visible = true; }
-    	}
-    	
+        public event EventHandler<EventArgs> Report;
+        
+        public bool ShowReportButton
+        {
+            get { return reportButton.Visible; }
+            set { reportButton.Visible = true; }
+        }
+        
         public static void Show(string title, string message, Exception e)
         {
             ErrorMessage form = new ErrorMessage(title, message, e);
@@ -36,26 +36,26 @@ namespace TwinEditor.UI
         
         void ErrorMessageLoad(object sender, EventArgs e)
         {
-        	
+            
         }
         
         void OkButtonClick(object sender, EventArgs e)
         {
-        	Close();
+            Close();
         }
         
         void ReportButtonClick(object sender, EventArgs e)
         {
-        	OnReport(new EventArgs());
-        	Close();
+            OnReport(new EventArgs());
+            Close();
         }        
         
-		protected virtual void OnReport(EventArgs e)
-		{
-			if(Report != null)
-			{
-				Report(this, e);
-			}
-		}
+        protected virtual void OnReport(EventArgs e)
+        {
+            if(Report != null)
+            {
+                Report(this, e);
+            }
+        }
     }
 }

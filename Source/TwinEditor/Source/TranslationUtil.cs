@@ -23,24 +23,24 @@ namespace TwinEditor
         
         public static void TranslateMenuStrip(MenuStrip menuStrip, ResourceManager resources)
         {
-			Queue<ToolStripMenuItem> menuItems = new Queue<ToolStripMenuItem>();
-			foreach(ToolStripMenuItem item in menuStrip.Items)
-			{
-			    menuItems.Enqueue(item);
-			}
-			
-			while(menuItems.Count != 0)
-			{
-			    ToolStripMenuItem item = menuItems.Dequeue();
-			    item.Text = GetString(resources, item.Text);
-			    foreach(object child in item.DropDown.Items)
-			    {
-			        if(child is ToolStripMenuItem)
-			        {
-			            menuItems.Enqueue((ToolStripMenuItem)child);
-			        }
-			    }
-			}		            
+            Queue<ToolStripMenuItem> menuItems = new Queue<ToolStripMenuItem>();
+            foreach(ToolStripMenuItem item in menuStrip.Items)
+            {
+                menuItems.Enqueue(item);
+            }
+            
+            while(menuItems.Count != 0)
+            {
+                ToolStripMenuItem item = menuItems.Dequeue();
+                item.Text = GetString(resources, item.Text);
+                foreach(object child in item.DropDown.Items)
+                {
+                    if(child is ToolStripMenuItem)
+                    {
+                        menuItems.Enqueue((ToolStripMenuItem)child);
+                    }
+                }
+            }                    
         }
     }
 }
