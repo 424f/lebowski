@@ -24,9 +24,9 @@ namespace LebowskiTests
         {
             int waited = 0;
             const int waitInterval = 10;
-            while(waited <= maxMilliseconds)
+            while (waited <= maxMilliseconds)
             {
-                if(expected.Equals(actualCallback.Invoke()))
+                if (expected.Equals(actualCallback.Invoke()))
                 {
                     return;
                 }

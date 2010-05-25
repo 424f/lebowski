@@ -20,7 +20,7 @@ namespace TwinEditor
         
         public static void Initialize()
         {
-            if(isInitialized)
+            if (isInitialized)
                 return;
             
             LanguageResources = new ResourceManager("TwinEditor.LanguageResources", Assembly.GetExecutingAssembly());

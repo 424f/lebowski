@@ -34,7 +34,7 @@ namespace Lebowski.TextModel
         
         public TextOperation VisitInsertOperation(InsertOperation other)
         {
-            if(Operation.Position < other.Position)
+            if (Operation.Position < other.Position)
             {
                 return Operation;
             }
@@ -46,11 +46,11 @@ namespace Lebowski.TextModel
         
         public TextOperation VisitDeleteOperation(DeleteOperation other)
         {
-            if(Operation.Position < other.Position)
+            if (Operation.Position < other.Position)
             {
                 return Operation;
             }
-            else if(Operation.Position > other.Position)
+            else if (Operation.Position > other.Position)
             {
                 return new DeleteOperation(Operation.Position-1);
             }

@@ -17,7 +17,7 @@ namespace TwinEditor.UI
             set
             {
                 StandardOutput.Invoke((Action)delegate { StandardOutput.Text = ""; });
-                if(executionResult != null)
+                if (executionResult != null)
                 {
                     executionResult.ExecutionChanged -= ExecutionResultChanged;
                 }

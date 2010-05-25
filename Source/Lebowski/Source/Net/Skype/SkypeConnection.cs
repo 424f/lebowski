@@ -41,7 +41,7 @@ namespace Lebowski.Net.Skype
         
         public void Send(object o)
         {
-            if(OutgoingChannel == -1)
+            if (OutgoingChannel == -1)
             {
                 throw new InvalidOperationException("You have to define an outgoing channel before sending messages.");
             }
@@ -68,12 +68,12 @@ namespace Lebowski.Net.Skype
         private void RunDispatcherThread()
         {
             dispatcherRunning = true;
-            while(dispatcherRunning)
+            while (dispatcherRunning)
             {
                 ReceivedEventArgs e;
                 lock(receiveQueue)
                 {
-                    while(receiveQueue.Count == 0 && dispatcherRunning)
+                    while (receiveQueue.Count == 0 && dispatcherRunning)
                     {
                         Monitor.Wait(receiveQueue);
                     }

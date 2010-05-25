@@ -39,7 +39,7 @@ namespace Lebowski.Net.Tcp
             running = true;
             try
             {
-                while(running)
+                while (running)
                 {
                     // First, read the packet length
                     int packetLength = BitConverter.ToInt32(NetUtils.ReadBytes(stream, 4), 0);
@@ -203,7 +203,7 @@ namespace Lebowski.Net.Tcp
                 // Try to connect on each endpoint
                 string attempted = "";
                 bool connected = false;
-                foreach(IPAddress ip in hostEntry.AddressList)
+                foreach (IPAddress ip in hostEntry.AddressList)
                 {
                     try
                     {                    
@@ -219,7 +219,7 @@ namespace Lebowski.Net.Tcp
                     }
                 }
                 
-                if(!connected)
+                if (!connected)
                 {
                     throw new Exception(string.Format("Could not connect to any of the following endpoints:\n{0}", attempted));
                 }

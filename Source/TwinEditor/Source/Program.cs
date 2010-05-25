@@ -25,7 +25,7 @@ namespace TwinEditor
         private static void Main(string[] args)
         {
             /*// Debug
-            if(!Directory.Exists("Debug"))
+            if (!Directory.Exists("Debug"))
             {
                 Directory.CreateDirectory("Debug");
             }
@@ -45,16 +45,16 @@ namespace TwinEditor
             
             
             var di = new DirectoryInfo(".");
-            foreach(FileInfo fi in di.GetFiles())
+            foreach (FileInfo fi in di.GetFiles())
             {
-                if(!fi.Name.EndsWith(".dat"))
+                if (!fi.Name.EndsWith(".dat"))
                     continue;
                 Stream stream = File.OpenRead(fi.Name);
                 BinaryFormatter bf = new BinaryFormatter();
                 SynchronizationStep step = (SynchronizationStep)bf.Deserialize(stream);
                 stream.Close();
                 
-                if(step.Sent)
+                if (step.Sent)
                     Console.ForegroundColor = ConsoleColor.Green;
                 else
                     Console.ForegroundColor = ConsoleColor.Yellow;
@@ -79,12 +79,12 @@ namespace TwinEditor
                 // For the real context, we have to perform each operation by hand,
                 //so the context can do things like moving around the selection area
                 var textPatch = DiffMatchPatch.patch_make(context, diffs);
-                foreach(var patch in textPatch)
+                foreach (var patch in textPatch)
                 {
                     System.Console.WriteLine(patch);
                 }                               
                 
-                if(step.Sent == false)
+                if (step.Sent == false)
                 {        
                     context = (string)DiffMatchPatch.patch_apply(textPatch, context)[0];                        
                 }
@@ -122,7 +122,7 @@ namespace TwinEditor
 
             // Retrieve username from system if none has been set explicitly
             string userName = appSettings.UserName;
-            if(userName == null || userName == "")
+            if (userName == null || userName == "")
             {
                 userName = Environment.UserName;
             }

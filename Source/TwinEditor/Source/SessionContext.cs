@@ -26,7 +26,7 @@ namespace TwinEditor
             get { return state; }
             set
             {
-                if(state != value)
+                if (state != value)
                 {
                     state = value;
                     OnStateChanged(new EventArgs());
@@ -80,7 +80,7 @@ namespace TwinEditor
         
         public void Close()
         {
-            if(State != SessionStates.Disconnected)
+            if (State != SessionStates.Disconnected)
             {
                 try
                 {
@@ -97,7 +97,7 @@ namespace TwinEditor
         
         public void ActivateState(SessionState state)
         {
-            if(currentState != null)
+            if (currentState != null)
             {
                 currentState.Unregister();
             }
@@ -114,11 +114,11 @@ namespace TwinEditor
         
         private void ApplicationConnectionReceived(object sender, ReceivedEventArgs e)
         {
-            if(e.Message is ChatMessage)
+            if (e.Message is ChatMessage)
             {
                 OnReceiveChatMessage(new ReceiveChatMessageEventArgs((ChatMessage)e.Message));
             }
-            else if(e.Message is ExecutionResultMessage)
+            else if (e.Message is ExecutionResultMessage)
             {                    
                 ExecutionResultMessage erm = (ExecutionResultMessage)e.Message;
                 
@@ -146,7 +146,7 @@ namespace TwinEditor
             // When execution is finished, propagate result to other users
             result.FinishedExecution += delegate(object o, FinishedExecutionEventArgs fe)
             {
-                if(State == SessionStates.Connected)
+                if (State == SessionStates.Connected)
                 {
                     ApplicationConnection.Send(new Messaging.ExecutionResultMessage(fe.ReturnCode, fe.StandardOut));
                 }
@@ -169,7 +169,7 @@ namespace TwinEditor
         
         protected virtual void OnStateChanged(EventArgs e)
         {
-            if(StateChanged != null)
+            if (StateChanged != null)
             {
                 StateChanged(this, e);
             }
@@ -177,7 +177,7 @@ namespace TwinEditor
         
         protected virtual void OnReceiveChatMessage(ReceiveChatMessageEventArgs e)
         {
-            if(ReceiveChatMessage != null)
+            if (ReceiveChatMessage != null)
             {
                 ReceiveChatMessage(this, e);
             }
@@ -185,7 +185,7 @@ namespace TwinEditor
         
         protected virtual void OnFileTypeChanged(EventArgs e)
         {
-            if(FileTypeChanged != null)
+            if (FileTypeChanged != null)
             {
                 FileTypeChanged(this, e);
             }
@@ -193,7 +193,7 @@ namespace TwinEditor
         
         protected virtual void OnStartedExecution(StartedExecutionEventArgs e)
         {
-            if(StartedExecution != null)
+            if (StartedExecution != null)
             {
                 StartedExecution(this, e);
             }
@@ -261,12 +261,12 @@ namespace TwinEditor
         {
             session.SynchronizationStrategy = new DifferentialSynchronizationStrategy(session.SiteId, session.Context, session.SynchronizationConnection);
             
-            if((string)e.Message == "HI 0")
+            if ((string)e.Message == "HI 0")
             {
                 session.ApplicationConnection.Send("HI 1");
                 session.ActivateState(new SynchronizationState(session));
             } 
-            else if((string)e.Message == "HI 1")
+            else if ((string)e.Message == "HI 1")
             {
                 session.ActivateState(new SynchronizationState(session));
             }
@@ -295,7 +295,7 @@ namespace TwinEditor
         
         protected override void ApplicationConnectionReceived(object sender, ReceivedEventArgs e)
         {
-            if(e.Message is CloseSessionMessage)
+            if (e.Message is CloseSessionMessage)
             {                
                 session.Reset();
             }

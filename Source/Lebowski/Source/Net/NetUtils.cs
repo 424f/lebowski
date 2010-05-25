@@ -38,7 +38,7 @@ namespace Lebowski.Net
         {
             byte[] buffer = new byte[numBytes];
             int bytesRead = 0;
-            while(bytesRead < numBytes)
+            while (bytesRead < numBytes)
             {
                 bytesRead += stream.Read(buffer, bytesRead, numBytes-bytesRead);
             }

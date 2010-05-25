@@ -34,7 +34,7 @@ namespace TwinEditor
                     .ToArray();            
             view.CommunicationProtocols = CommunicationProtocols;
             
-            foreach(ICommunicationProtocol protocol in CommunicationProtocols)
+            foreach (ICommunicationProtocol protocol in CommunicationProtocols)
             {
                 // Register to communication protocol events
                 protocol.HostSession += delegate(object sender, HostSessionEventArgs e)

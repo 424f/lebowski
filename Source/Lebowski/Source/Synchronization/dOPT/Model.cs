@@ -78,14 +78,14 @@ namespace Lebowski.Synchronization.dOPT
         public void ExecuteRequests()
         {
             List<Request<OperationType>> removeList = new List<Request<OperationType>>();
-            foreach(Request<OperationType> req in Requests)
+            foreach (Request<OperationType> req in Requests)
             {
                 int j = req.SiteId;
                 StateVector sj = req.State;
                 OperationType oj = req.Operation;
                 int pj = req.Priority;
                 
-                if(sj > State)
+                if (sj > State)
                 {
                     Write(String.Format("Skip as {0} > {1}", sj, State));
                     continue;
@@ -94,11 +94,11 @@ namespace Lebowski.Synchronization.dOPT
                 removeList.Add(req);
                 Write(String.Format("Original: {0}", oj));
                 
-                if(sj < State)
+                if (sj < State)
                 {
                     // Find last log entry that fulfills condition
                     int pos = Log.Count-1;
-                    while(pos >= 0 && Log[pos].State > sj)
+                    while (pos >= 0 && Log[pos].State > sj)
                     {
                         pos -= 1;
                     }
@@ -111,11 +111,11 @@ namespace Lebowski.Synchronization.dOPT
                         OperationType ok = reqK.Operation;
                         int pk = reqK.Priority;                        
                         
-                        if(sj[k] <= sk[k])
+                        if (sj[k] <= sk[k])
                         {
                             // TODO: priority
                             oj = (OperationType)oj.Transform(ok);
-                            if(oj == null)
+                            if (oj == null)
                             {
                                 break;
                             }
@@ -125,7 +125,7 @@ namespace Lebowski.Synchronization.dOPT
                 
                 Write(String.Format("Perform {0}", oj));
                 
-                if(oj != null)
+                if (oj != null)
                 {
                     // TODO: oj.Apply(Context);
                     throw new NotImplementedException();
@@ -137,7 +137,7 @@ namespace Lebowski.Synchronization.dOPT
                 
             }
             
-            foreach(Request<OperationType> req in removeList)
+            foreach (Request<OperationType> req in removeList)
             {
                 Requests.Remove(req);
             }
@@ -151,9 +151,9 @@ namespace Lebowski.Synchronization.dOPT
         
         public void DeliverBroadcasts(Model<OperationType, ContextType>[] others)
         {
-            foreach(Request<OperationType> req in Broadcasts)
+            foreach (Request<OperationType> req in Broadcasts)
             {
-                foreach(var other in others)
+                foreach (var other in others)
                 {
                     other.Receive(req);
                 }

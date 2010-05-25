@@ -107,7 +107,7 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
             return;
             lock(this)
             {
-                if(isSessionEstablished)
+                if (isSessionEstablished)
                 {
                     throw new InvalidOperationException("EstablishSession must not be called after a session has been established previously");
                 }
@@ -152,7 +152,7 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
                     
                     /* For the real context, we have to perform each operation by hand,
                     so the context can do things like moving around the selection area */
-                    foreach(Patch p in patches)
+                    foreach (Patch p in patches)
                     {
                         System.Console.WriteLine(p);
                     }                               
@@ -170,26 +170,26 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
                     
                     // We restore the offset locations using absolute referencing
                     // See: http://neil.fraser.name/writing/cursor/
-                    foreach(Patch patch in patches)
+                    foreach (Patch patch in patches)
                     {
                         //Console.WriteLine("Patch = {0} ({1}, {2}, {3}, {4})", patch, patch.start1, patch.start2, patch.length1, patch.length2);
                         int index = patch.start1;
                         //Console.WriteLine("index {0}, start {1}, end {2}, caret {3}", index, start, end, caret);
-                        foreach(Diff diff in patch.diffs)
+                        foreach (Diff diff in patch.diffs)
                         {
                             //Console.WriteLine("Diff {0}", diff.ToString());
                             switch(diff.operation)
                             {
                                 case Operation.DELETE:
-                                    if(start > index) 
+                                    if (start > index) 
                                     {
                                         start -= diff.text.Length;
                                     }
-                                    if(end > index) 
+                                    if (end > index) 
                                     {
                                         end -= diff.text.Length;
                                     }                            
-                                    if(caret >= index) 
+                                    if (caret >= index) 
                                     {
                                         caret -= diff.text.Length;
                                     }                                
@@ -200,15 +200,15 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
                                     break;
                                     
                                 case Operation.INSERT:
-                                    if(start >= index) 
+                                    if (start >= index) 
                                     {
                                         start += diff.text.Length;
                                     }
-                                    if(end > index) 
+                                    if (end > index) 
                                     {
                                         end += diff.text.Length;
                                     }        
-                                    if(caret >= index) 
+                                    if (caret >= index) 
                                     {
                                         caret += diff.text.Length;
                                     }                                
@@ -226,11 +226,11 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
                     start = Math.Min(Context.Data.Length, start);
                     caret = Math.Min(Context.Data.Length, caret);
                     
-                    if(end < start)
+                    if (end < start)
                     {
                         end = start;                
                     }
-                    if(hadSelection)
+                    if (hadSelection)
                     {
                         Context.SetSelection(start, end);        
                     }
@@ -250,7 +250,7 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
         /// </summary>
         private void FlushToken()
         {
-            if(TokenState == TokenState.HavingToken)
+            if (TokenState == TokenState.HavingToken)
             {
                 SendPatches();
                 TokenState = TokenState.WaitingForToken;
@@ -269,7 +269,7 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
                 //System.Console.WriteLine("{0} received: {1}", SiteId, e.Message);
                 lock(this)
                 {
-                    if(e.Message is DiffMessage)
+                    if (e.Message is DiffMessage)
                     {
                         Debug.Assert(TokenState == TokenState.WaitingForToken);
                         TokenRequestSent = false;
@@ -278,16 +278,16 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
                         ApplyPatches(diffMessage.Diff);
                         TokenState = TokenState.HavingToken;
                         
-                        if(HasChanged)
+                        if (HasChanged)
                         {
                             HasChanged = false;
                             SendPatches();
                             TokenState = TokenState.WaitingForToken;    
                         }
                     }
-                    else if(e.Message is TokenRequestMessage)
+                    else if (e.Message is TokenRequestMessage)
                     {
-                        if(TokenState == TokenState.HavingToken)
+                        if (TokenState == TokenState.HavingToken)
                         {
                             //TokenRequestMessage message = (TokenRequestMessage)e.Message;
                             //FlushToken();
@@ -308,10 +308,10 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
         {
             System.Console.WriteLine("{0}'s context changed by {1}", SiteId, e.Issuer);
 
-            if(e.Issuer == this)
+            if (e.Issuer == this)
                 return;
             // If we currently have the token, we can just send this single change...
-            if(TokenState == TokenState.HavingToken)
+            if (TokenState == TokenState.HavingToken)
             {
                 HasChanged = false;                    
                 SendPatches();
@@ -320,7 +320,7 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
             // .. otherwise we first have to request it.
             else
             {
-                if(!TokenRequestSent)
+                if (!TokenRequestSent)
                 {
                     Connection.Send(new TokenRequestMessage());
                 }

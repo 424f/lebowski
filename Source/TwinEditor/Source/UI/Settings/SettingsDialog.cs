@@ -31,7 +31,7 @@ namespace TwinEditor.UI.Settings
         
         void ApplyButtonClick(object sender, EventArgs e)
         {
-            if(!Validate())
+            if (!Validate())
             {
                 // TODO: invalid entries
             }

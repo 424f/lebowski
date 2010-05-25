@@ -37,7 +37,7 @@ namespace Lebowski.Net
                 return;
             }
             
-            if(!channels.ContainsKey(msg.ChannelId))
+            if (!channels.ContainsKey(msg.ChannelId))
             {
                 Logger.Error(String.Format("Received message of type {0} on unknown channel {1} -- Will be ignored", msg.Message.GetType(), msg.ChannelId));
                 return;

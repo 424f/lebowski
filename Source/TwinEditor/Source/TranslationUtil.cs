@@ -13,7 +13,7 @@ namespace TwinEditor
         public static string GetString(ResourceManager resources, string id)
         {
             string result = resources.GetString(id);
-            if(result == null)
+            if (result == null)
             {
                 result = "{" + id + "}";
                 Logger.Warn("No translation found for " + id + ".");
@@ -24,18 +24,18 @@ namespace TwinEditor
         public static void TranslateMenuStrip(MenuStrip menuStrip, ResourceManager resources)
         {
             Queue<ToolStripMenuItem> menuItems = new Queue<ToolStripMenuItem>();
-            foreach(ToolStripMenuItem item in menuStrip.Items)
+            foreach (ToolStripMenuItem item in menuStrip.Items)
             {
                 menuItems.Enqueue(item);
             }
             
-            while(menuItems.Count != 0)
+            while (menuItems.Count != 0)
             {
                 ToolStripMenuItem item = menuItems.Dequeue();
                 item.Text = GetString(resources, item.Text);
-                foreach(object child in item.DropDown.Items)
+                foreach (object child in item.DropDown.Items)
                 {
-                    if(child is ToolStripMenuItem)
+                    if (child is ToolStripMenuItem)
                     {
                         menuItems.Enqueue((ToolStripMenuItem)child);
                     }

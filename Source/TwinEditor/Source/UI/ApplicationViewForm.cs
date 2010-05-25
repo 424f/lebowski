@@ -34,12 +34,12 @@ namespace TwinEditor.UI
             }
             set
             {
-                if(FileTypes != null)
+                if (FileTypes != null)
                     throw new NotImplementedException("Reseting file types is currently not supported.");
                 fileTypes = value;
                 
                 openFileDialog.Filter = "";
-                foreach(IFileType fileType in fileTypes)
+                foreach (IFileType fileType in fileTypes)
                 {
                     var menuItem = new ToolStripMenuItem(fileType.Name + " (" + fileType.FileNamePattern + ")");
                     IFileType currentFileType = fileType;
@@ -51,7 +51,7 @@ namespace TwinEditor.UI
                     
                     // Add file type to open file dialog
                     string newFilter = string.Format("{0}|{1}", fileType.Name, fileType.FileNamePattern);
-                    if(openFileDialog.Filter.Length > 0)
+                    if (openFileDialog.Filter.Length > 0)
                     {
                         newFilter = "|" + newFilter;
                     }
@@ -76,7 +76,7 @@ namespace TwinEditor.UI
                 
                 // Load icons for tab control for different file types
                 ImageList imageList = new ImageList();
-                foreach(IFileType fileType in FileTypes)
+                foreach (IFileType fileType in FileTypes)
                 {
                     try
                     {
@@ -105,22 +105,22 @@ namespace TwinEditor.UI
             
             set
             {
-                if(communicationProtocols != null)
+                if (communicationProtocols != null)
                 {
                     throw new NotImplementedException("Reseting of communication protocols currently not supported.");
                 }
                 communicationProtocols = value;
 
-                foreach(ICommunicationProtocol protocol in communicationProtocols)
+                foreach (ICommunicationProtocol protocol in communicationProtocols)
                 {
                     ICommunicationProtocol currentProtocol = protocol;
                     
                     // After initializing, if the protocol is not enabled, we discard it
-                    if(!protocol.Enabled)
+                    if (!protocol.Enabled)
                         continue;
                     
                     // Add menu item to share session
-                    if(protocol.CanShare)
+                    if (protocol.CanShare)
                     {
                         var menuItem = new ToolStripMenuItem(protocol.Name);
                         menuItem.Click += delegate 
@@ -131,7 +131,7 @@ namespace TwinEditor.UI
                     }
                     
                     // Add menu item to join session
-                    if(protocol.CanParticipate)
+                    if (protocol.CanParticipate)
                     {
                         var menuItem = new ToolStripMenuItem(protocol.Name);
                         menuItem.Click += delegate 
@@ -172,13 +172,13 @@ namespace TwinEditor.UI
             cutToolStripMenuItem.Enabled = fileOpen;
             deleteToolStripMenuItem.Enabled = fileOpen;
             
-            foreach(ToolStripMenuItem item in chooseFileTypeMenuItems)
+            foreach (ToolStripMenuItem item in chooseFileTypeMenuItems)
             {
                 item.Enabled = fileOpen;
                 item.Checked = MainTab.SelectedIndex != -1 && item.Tag == tabControls[MainTab.SelectedIndex].SessionContext.FileType;
             }
             
-            if(MainTab.TabPages.Count == 0)
+            if (MainTab.TabPages.Count == 0)
             {
                 scriptToolStripMenuItem.Enabled = false;            
                 closeToolStripMenuItem.Enabled = false;
@@ -263,12 +263,12 @@ namespace TwinEditor.UI
         {
             openFileDialog.RestoreDirectory = true;
             DialogResult result = openFileDialog.ShowDialog();
-            if(result != DialogResult.OK)
+            if (result != DialogResult.OK)
                 return;
             
             // Create tab and initialize
             IFileType type = null;
-            foreach(IFileType fileType in fileTypes)
+            foreach (IFileType fileType in fileTypes)
             {
                 fileType.FileNameMatches(openFileDialog.FileName);
                 type = fileType;
@@ -276,7 +276,7 @@ namespace TwinEditor.UI
             
             // No appropriate file type has been found
             // Should never happen as we already filter file types in the openFileDialog
-            if(type == null)
+            if (type == null)
             {
                 MessageBox.Show(
                     string.Format((TranslationUtil.GetString(ApplicationUtil.LanguageResources, "_MessageBoxUnsupportedFileType") + " '{0}'"), openFileDialog.FileName),
@@ -317,7 +317,7 @@ namespace TwinEditor.UI
         // checks whether the tab is already on disk, and if yes calls 'Save' else calls 'SaveWithDialog'.
         void SaveRequest(SessionViewForm tabControl)
         {
-            if(!tabControl.OnDisk)
+            if (!tabControl.OnDisk)
             {
                 SaveWithDialog(tabControl);
             }
@@ -338,7 +338,7 @@ namespace TwinEditor.UI
             saveFileDialog.FileName = System.IO.Path.GetFileName(tabControl.FileName);
             saveFileDialog.Filter = string.Format("{0}|{1}", tabControl.SessionContext.FileType.Name, tabControl.SessionContext.FileType.FileNamePattern);
             DialogResult result = saveFileDialog.ShowDialog();
-            if(result == DialogResult.OK)
+            if (result == DialogResult.OK)
             {
                 tabControl.FileName = saveFileDialog.FileName;
                 OnSave(new SaveEventArgs(tabControl, tabControl.FileName));
@@ -353,7 +353,7 @@ namespace TwinEditor.UI
         
         void SaveAllToolStripMenuItemClick(object sender, EventArgs e)
         {
-            foreach(SessionViewForm tabControl in tabControls)
+            foreach (SessionViewForm tabControl in tabControls)
             {
                 SaveRequest(tabControl);
             }
@@ -372,9 +372,9 @@ namespace TwinEditor.UI
         void CloseTab(int index) {
             SessionViewForm sessionView = tabControls[index];
             // check if the file has been modified since last save
-            if(sessionView.FileModified)
+            if (sessionView.FileModified)
             {    
-                if(MessageBox.Show(TranslationUtil.GetString(ApplicationUtil.LanguageResources, "_MessageBoxOnCloseMessage"), TranslationUtil.GetString(ApplicationUtil.LanguageResources, "_MessageBoxOnCloseCaption"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                if (MessageBox.Show(TranslationUtil.GetString(ApplicationUtil.LanguageResources, "_MessageBoxOnCloseMessage"), TranslationUtil.GetString(ApplicationUtil.LanguageResources, "_MessageBoxOnCloseCaption"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     SaveRequest(sessionView);
                 }
@@ -408,7 +408,7 @@ namespace TwinEditor.UI
         #region OnFoo event methods
         protected virtual void OnShareSession(ShareSessionEventArgs e)
         {
-            if(ShareSession != null)
+            if (ShareSession != null)
             {
                 ShareSession(this, e);
             }

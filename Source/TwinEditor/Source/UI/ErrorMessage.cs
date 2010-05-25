@@ -52,7 +52,7 @@ namespace TwinEditor.UI
         
         protected virtual void OnReport(EventArgs e)
         {
-            if(Report != null)
+            if (Report != null)
             {
                 Report(this, e);
             }

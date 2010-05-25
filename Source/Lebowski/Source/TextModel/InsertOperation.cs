@@ -52,24 +52,24 @@ def insert_insert(oi, oj, pi, pj):
         
         public TextOperation VisitInsertOperation(InsertOperation other)
         {
-            if(Operation.Position < other.Position)
+            if (Operation.Position < other.Position)
             {
                 return Operation;
             }
-            else if(Operation.Position > other.Position)
+            else if (Operation.Position > other.Position)
             {
                 return new InsertOperation(Operation.Text, Operation.Position+1);
             }
             else
             {
-                if(Operation.Text == other.Text)
+                if (Operation.Text == other.Text)
                 {
                     return null;
                 }
                 else
                 {
                     /* TODO:
-                    if(Operation.Priority > other.Priority)
+                    if (Operation.Priority > other.Priority)
                     {
                         return new InsertOperation(Operation.Character, Operation.Position+1);
                     }
@@ -85,7 +85,7 @@ def insert_insert(oi, oj, pi, pj):
         
         public TextOperation VisitDeleteOperation(DeleteOperation other)
         {
-            if(Operation.Position < other.Position) 
+            if (Operation.Position < other.Position) 
             {
                 return new InsertOperation(Operation.Text, Operation.Position);
             }

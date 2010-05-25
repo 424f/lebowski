@@ -73,7 +73,7 @@ namespace Lebowski.Net.Skype
                 
                 API._ISkypeEvents_Event_AttachmentStatus += delegate(TAttachmentStatus status)
                 {
-                    if(status == TAttachmentStatus.apiAttachSuccess)
+                    if (status == TAttachmentStatus.apiAttachSuccess)
                     {
                         Initialize();
                     }
@@ -89,13 +89,13 @@ namespace Lebowski.Net.Skype
         public void EstablishConnection(string user)
         {
             // We might have to create a stream to this user
-            if(!streams.ContainsKey(user))
+            if (!streams.ContainsKey(user))
             {
                 Application.Connect(user, true);
                 
             }
 
-            while(!streams.ContainsKey(user))
+            while (!streams.ContainsKey(user))
             {
                 // TODO: is wait necessary? if yes, use Monitor
                 Thread.Sleep(100);
@@ -123,7 +123,7 @@ namespace Lebowski.Net.Skype
             for(int i = 1; i <= friends.Count; ++i)
             {
                 var friend = friends[i];
-                if(friend.OnlineStatus != TOnlineStatus.olsOffline)
+                if (friend.OnlineStatus != TOnlineStatus.olsOffline)
                 {
                     Console.WriteLine(friend.FullName + " / " + friend.Handle + " / " + friend.DisplayName + " / " + friend.OnlineStatus);
                 }
@@ -139,7 +139,7 @@ namespace Lebowski.Net.Skype
         
         private void Initialize()
         {
-            if(isInitialized)
+            if (isInitialized)
                 return;
             
             synchronizationContext = System.Threading.SynchronizationContext.Current;
@@ -239,7 +239,7 @@ namespace Lebowski.Net.Skype
         
         private void ApplicationStreams(SKYPE4COMLib.Application pApp, ApplicationStreamCollection pStreams)
         {
-            if(pApp.Name != Application.Name)
+            if (pApp.Name != Application.Name)
                 return;
             
             Console.Write("Application stream: ");
@@ -249,7 +249,7 @@ namespace Lebowski.Net.Skype
             }
             Console.WriteLine();
             
-            if(streams.ContainsKey(pStreams[1].PartnerHandle))
+            if (streams.ContainsKey(pStreams[1].PartnerHandle))
             {
                 Logger.Info(string.Format("New connection to {0} replaces old one.", pStreams[1].PartnerHandle));
             }
@@ -271,12 +271,12 @@ namespace Lebowski.Net.Skype
             Console.WriteLine();
             
             
-            if(pUsers.Count == 1)
+            if (pUsers.Count == 1)
             {
                 Console.WriteLine("Connecting...");
             }
             
-            if(pUsers.Count == 0)
+            if (pUsers.Count == 0)
             {
                 Console.WriteLine("Waiting for accept...");
             }
@@ -291,9 +291,9 @@ namespace Lebowski.Net.Skype
             }
             Console.WriteLine();
             
-            if(pStreams.Count == 0)
+            if (pStreams.Count == 0)
                 return;
-            if(pStreams[1].DataLength == 0)
+            if (pStreams[1].DataLength == 0)
                 return;
             string text = pStreams[1].Read();
             Console.WriteLine("RECV " + text);
@@ -311,17 +311,17 @@ namespace Lebowski.Net.Skype
                 
                 string partner = pStreams[1].PartnerHandle;
                 
-                if(connectionId == ApplicationConnectionId)
+                if (connectionId == ApplicationConnectionId)
                 {
                     // Received a sharing invitation:
                     // the user might now either accept or reject the invitation
                     // and we'll have to notify the host about his choice.
-                    if(message is SharingInvitationMessage)
+                    if (message is SharingInvitationMessage)
                     {
                         SharingInvitationMessage sharingInvitation = (SharingInvitationMessage)message;
                         text = string.Format("You received an invitation from {0} via Skype to share document {1}. Would you like to accept?", partner, sharingInvitation.DocumentName);
                         var result = MessageBox.Show(text, "Invitation", MessageBoxButtons.YesNo);
-                        if(result == DialogResult.Yes)
+                        if (result == DialogResult.Yes)
                         {
                             SkypeConnection connection = Connect(partner);
                             connection.OutgoingChannel = sharingInvitation.Channel;
@@ -336,17 +336,17 @@ namespace Lebowski.Net.Skype
                         }
                     }
                     // Another user has accepted a sharing invitation
-                    else if(message is AcceptSharingInvitationMessage)
+                    else if (message is AcceptSharingInvitationMessage)
                     {
                         AcceptSharingInvitationMessage accept = (AcceptSharingInvitationMessage)message;
-                        if(!invitations.ContainsKey(accept.InvitationId))
+                        if (!invitations.ContainsKey(accept.InvitationId))
                         {
                             Logger.Error(string.Format("Received {0} but no such invitation was sent.", message));
                             return;
                         }
                         
                         SharingInvitationMessage sharingInvitation = invitations[accept.InvitationId];
-                        if(sharingInvitation.InvitedUser != partner)
+                        if (sharingInvitation.InvitedUser != partner)
                         {
                             Logger.Error(string.Format("{0} accepted {1} intended for {2}", partner, sharingInvitation, sharingInvitation.InvitedUser));
                             return;
@@ -367,17 +367,17 @@ namespace Lebowski.Net.Skype
                     }
                     
                     // Another user has rejected a sharing invitation
-                    else if(message is DeclineSharingInvitationMessage)
+                    else if (message is DeclineSharingInvitationMessage)
                     {
                         DeclineSharingInvitationMessage decline = (DeclineSharingInvitationMessage)message;
-                        if(!invitations.ContainsKey(decline.InvitationId))
+                        if (!invitations.ContainsKey(decline.InvitationId))
                         {
                             Logger.Error(string.Format("Received {0} but no such invitation was sent.", message));
                             return;
                         }
                         
                         SharingInvitationMessage sharingInvitation = invitations[decline.InvitationId];
-                        if(sharingInvitation.InvitedUser != partner)
+                        if (sharingInvitation.InvitedUser != partner)
                         {
                             Logger.Error(string.Format("{0} rejected {1} intended for {2}", partner, sharingInvitation, sharingInvitation.InvitedUser));
                         }

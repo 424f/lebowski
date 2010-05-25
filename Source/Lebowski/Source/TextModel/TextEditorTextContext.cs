@@ -11,7 +11,7 @@ namespace Lebowski.TextModel
         {
             get
             { 
-                if(!TextBox.ActiveTextAreaControl.SelectionManager.HasSomethingSelected)
+                if (!TextBox.ActiveTextAreaControl.SelectionManager.HasSomethingSelected)
                     return 0;
                 return TextBox.ActiveTextAreaControl.SelectionManager.SelectionCollection[0].Offset;
             }
@@ -22,7 +22,7 @@ namespace Lebowski.TextModel
         {
             get
             {
-                if(!TextBox.ActiveTextAreaControl.SelectionManager.HasSomethingSelected)
+                if (!TextBox.ActiveTextAreaControl.SelectionManager.HasSomethingSelected)
                     return 0;                
                 return SelectionStart + TextBox.ActiveTextAreaControl.SelectionManager.SelectionCollection[0].Length;
             }

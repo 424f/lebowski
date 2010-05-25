@@ -25,7 +25,7 @@ namespace Lebowski.Net.Skype
             
             this.protocol = protocol;
             
-            foreach(string username in protocol.friends)
+            foreach (string username in protocol.friends)
             {
                 dataGridView.Rows.Add(new object[]{ null, username });
             }

@@ -57,18 +57,18 @@ namespace Lebowski.Net
         private void RunDispatcher()
         {
             bool running = true;
-            while(running)
+            while (running)
             {
                 ReceivedEventArgs e = null;
                 lock(eventQueue)
                 {
-                    while(eventQueue.Count == 0)
+                    while (eventQueue.Count == 0)
                     {
                         Monitor.Wait(eventQueue);
                     }
                     e = eventQueue.Dequeue();
                 }
-                if(ReceiveDelay > 0)
+                if (ReceiveDelay > 0)
                 {
                     Thread.Sleep(ReceiveDelay);
                 }
@@ -96,7 +96,7 @@ namespace Lebowski.Net
         {
             lock(eventQueue)
             {
-                while(eventQueue.Count > 0)
+                while (eventQueue.Count > 0)
                 {
                     Monitor.Wait(eventQueue);
                 }

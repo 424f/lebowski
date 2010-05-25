@@ -19,7 +19,7 @@ namespace Lebowski.Net.Tcp
         void ShareButtonClick(object sender, EventArgs e)
         {
             int port;
-            if(!int.TryParse(portText.Text, out port))
+            if (!int.TryParse(portText.Text, out port))
             {
                 MessageBox.Show("Invalid port number", "Please enter a valid port number.");
                 return;

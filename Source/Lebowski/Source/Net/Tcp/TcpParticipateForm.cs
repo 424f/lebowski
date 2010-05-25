@@ -22,7 +22,7 @@ namespace Lebowski.Net.Tcp
         {
             // Validate port
             int port;
-            if(!int.TryParse(portText.Text, out port))
+            if (!int.TryParse(portText.Text, out port))
             {
                 MessageBox.Show("Please enter a valid port number", "Invalid port");
                 return;

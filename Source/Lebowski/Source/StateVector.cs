@@ -26,13 +26,13 @@ namespace Lebowski
         
         public int CompareTo(StateVector other)
         {
-            if(Enumerable.SequenceEqual(values, other.values))
+            if (Enumerable.SequenceEqual(values, other.values))
             {
                 return 0;
             }
     
             List<int> thisValues = values;
-            if(Enumerable.Range(0, values.Count).Any(i => thisValues[i] > other.values[i]))
+            if (Enumerable.Range(0, values.Count).Any(i => thisValues[i] > other.values[i]))
             {
                 return 1;
             }
@@ -88,7 +88,7 @@ namespace Lebowski
         public override int GetHashCode()
         {
             int result = values.Count.GetHashCode();
-            foreach(int value in values)
+            foreach (int value in values)
             {
                 result ^= value.GetHashCode();
             }

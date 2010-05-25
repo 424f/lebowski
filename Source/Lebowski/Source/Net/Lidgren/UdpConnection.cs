@@ -81,10 +81,10 @@ namespace Lebowski.Net.Lidgren
         private void RunNetworkingThread()
         {            
             NetBuffer buffer = Socket.CreateBuffer();
-            while(Running)
+            while (Running)
             {
                 NetMessageType messageType;
-                while(Socket.ReadMessage(buffer, out messageType))
+                while (Socket.ReadMessage(buffer, out messageType))
                 {
                     switch(messageType)
                     {
@@ -141,12 +141,12 @@ namespace Lebowski.Net.Lidgren
             NetBuffer buffer = Socket.CreateBuffer();
             
             bool running = true;
-            while(running)
+            while (running)
             {
                 NetMessageType type;
                 NetConnection sender;
                 
-                while(Socket.ReadMessage(buffer, out type, out sender))
+                while (Socket.ReadMessage(buffer, out type, out sender))
                 {
                     switch(type)
                     {

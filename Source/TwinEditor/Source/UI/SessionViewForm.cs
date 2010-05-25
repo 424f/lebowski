@@ -89,10 +89,10 @@ namespace TwinEditor.UI
                     Context.Invoke((Action)
                         delegate
                         {
-                            if(!executionViewForms.ContainsKey(e.SiteId))
+                            if (!executionViewForms.ContainsKey(e.SiteId))
                             {
                                 string tabTitle = string.Format("Execution (Site {0})", e.SiteId);
-                                if(e.SiteId == SessionContext.SiteId)
+                                if (e.SiteId == SessionContext.SiteId)
                                 {
                                     tabTitle = "Execution (Me)";
                                 }
@@ -198,7 +198,7 @@ namespace TwinEditor.UI
         
         void ChatTextKeyDown(object sender, KeyEventArgs e)
         {
-            if(e.KeyCode == Keys.Return)
+            if (e.KeyCode == Keys.Return)
             {
                 e.Handled = true;
                 SendChatMessage();
@@ -207,7 +207,7 @@ namespace TwinEditor.UI
         
         void ChatTextKeyPress(object sender, KeyPressEventArgs e)
         {
-            if(e.KeyChar == (char) 13)
+            if (e.KeyChar == (char) 13)
             {
                 e.Handled = true;
             }
@@ -219,7 +219,7 @@ namespace TwinEditor.UI
         
         void ChatTextKeyUp(object sender, KeyEventArgs e)
         {
-            if(e.KeyCode == Keys.Return)
+            if (e.KeyCode == Keys.Return)
             {
                 e.Handled = true;
             }
@@ -227,7 +227,7 @@ namespace TwinEditor.UI
         
         private void SendChatMessage()
         {
-            if(ChatText.Text.Length == 0)
+            if (ChatText.Text.Length == 0)
                 return;
             ChatMessage message = new ChatMessage(Configuration.ApplicationSettings.Default.UserName, ChatText.Text);
             SessionContext.SendChatMessage(message);
@@ -248,7 +248,7 @@ namespace TwinEditor.UI
         
         void SourceCodeTextChanged(object sender, System.EventArgs e)
         {
-            if(!FileModified) 
+            if (!FileModified) 
             {
                 FileModified = true;
                 ((TabPage)this.Parent).Text += " *";
