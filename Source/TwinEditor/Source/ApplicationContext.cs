@@ -3,21 +3,39 @@ namespace TwinEditor
     using System;
     using System.IO;
     using System.Linq;
+    
     using Lebowski;
     using Lebowski.Net;
     using Lebowski.Synchronization.DifferentialSynchronization;
-    using TwinEditor.UI;
-    using TwinEditor.FileTypes;
-    using log4net;    
     
+    using log4net;  
+    
+    using TwinEditor.FileTypes;
+    using TwinEditor.UI;       
+    
+    /// <summary>
+    /// Contains behavior of the application. It is used with a IApplicationView that
+    /// subscribes to its events and displays data to the user.
+    /// </summary>
     public class ApplicationContext
     {
+        /// <summary>Provides loggin facilities.</summary>
         private static readonly ILog Logger = LogManager.GetLogger(typeof(ApplicationContext));        
         
+        /// <value>
+        /// The file types that are supported currently
+        /// </value>
         public IFileType[] FileTypes { get; private set; }
         
+        /// <value>
+        /// The communication protocols currently supported
+        /// </value>
         public ICommunicationProtocol[] CommunicationProtocols { get; private set; }
         
+        /// <summary>
+        /// Initializes a new instance of the ApplicationContext class.
+        /// </summary>
+        /// <param name="view">the view that we synchronize with</param>
         public ApplicationContext(IApplicationView view)
         {
             // Provide view with file types
