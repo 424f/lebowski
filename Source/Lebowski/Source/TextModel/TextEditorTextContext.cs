@@ -90,7 +90,7 @@ namespace Lebowski.TextModel
             TextBox = textBox;
             SubscribeToTextBox();
             
-            remoteMarker = new TextMarker(0, 0, TextMarkerType.SolidBlock, System.Drawing.Color.Blue);
+            remoteMarker = new TextMarker(0, 0, TextMarkerType.SolidBlock, System.Drawing.Color.Yellow);
             TextBox.Document.MarkerStrategy.AddMarker(remoteMarker);
             
             // TODO: implement insert / delete
@@ -131,8 +131,10 @@ namespace Lebowski.TextModel
         
         public override void SetRemoteSelection(object siteIdentifier, int start, int end)
         {
+            TextBox.Document.MarkerStrategy.RemoveMarker(remoteMarker);
             remoteMarker.Offset = start;
             remoteMarker.Length = end - start;
+            TextBox.Document.MarkerStrategy.AddMarker(remoteMarker);
         }
     }
 }
