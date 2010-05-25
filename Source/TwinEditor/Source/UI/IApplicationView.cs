@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using TwinEditor.FileTypes;
 using Lebowski;
 using Lebowski.Net;
@@ -11,6 +12,7 @@ namespace TwinEditor.UI
         ICommunicationProtocol[] CommunicationProtocols { get; set; }
         ISessionView CreateNewSession(IFileType fileType);
         
+        void UpdateRecentFiles(List<String> recentFiles);
         void Show();
         
         ApplicationContext ApplicationContext { get; set; }
@@ -19,6 +21,7 @@ namespace TwinEditor.UI
         
         event EventHandler<SaveEventArgs> Save;
         event EventHandler<OpenEventArgs> Open;
+        event EventHandler<CloseEventArgs> Close;
         event EventHandler<ShareSessionEventArgs> ShareSession;
         
         #endregion
@@ -45,6 +48,16 @@ namespace TwinEditor.UI
         {
             FileName = fileName;
             FileType = fileType;    
+        }
+    }
+    
+    public sealed class CloseEventArgs : EventArgs
+    {
+        public string FileName { get; private set; }
+        
+        public CloseEventArgs(string fileName)
+        {
+            FileName = fileName;   
         }
     }
     

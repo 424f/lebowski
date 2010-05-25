@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Collections.Generic;
 using Lebowski;
 using Lebowski.Net;
 using Lebowski.Synchronization.DifferentialSynchronization;
@@ -17,6 +18,9 @@ namespace TwinEditor
         public IFileType[] FileTypes { get; private set; }
         
         public ICommunicationProtocol[] CommunicationProtocols { get; private set; }
+        
+        private RecentFilesList recentFilesList;
+        private List<String> currentFileList;
         
         public ApplicationContext(IApplicationView view)
         {
@@ -60,14 +64,34 @@ namespace TwinEditor
             // File handling
             view.Open += delegate(object sender, OpenEventArgs e)
             {
-                // Create a new tab for the file
-                ISessionView tab = view.CreateNewSession(e.FileType);
-                tab.FileName = e.FileName;
-                
-                // Put content into editor
-                // case when user cancelled dialog not handled yet
-                string content = File.ReadAllText(e.FileName);
-                tab.SessionContext.Context.Data = content;
+            	int index = currentFileList.IndexOf(e.FileName);
+            	if (index >= 0)
+            	{
+            		Logger.Info(e.FileName + " already open");
+            	}
+            	else
+            	{
+            		currentFileList.Add(e.FileName);
+            		// Create a new tab for the file
+		            ISessionView tab = view.CreateNewSession(e.FileType);
+		            
+		            
+		            // Put content into editor
+		            string content = File.ReadAllText(e.FileName);
+		            tab.SessionContext.Context.Data = content;
+		            tab.OnDisk = true;
+		            tab.FileModified = false;
+		            tab.FileName = e.FileName;
+		            Logger.Info("Openend " + e.FileName);
+		            // update recent files
+		            recentFilesList.Add(e.FileName);
+            	}
+            };
+            
+            view.Close += delegate(object sender, CloseEventArgs e)
+            {
+            	Logger.Info("Closed " + e.FileName);
+            	currentFileList.Remove(e.FileName);
             };
             
             view.Save += delegate(object sender, SaveEventArgs e)
@@ -77,6 +101,8 @@ namespace TwinEditor
                     var tabControl = e.Session;
                     e.Session.FileName = e.FileName;
                     File.WriteAllText(tabControl.FileName, tabControl.SessionContext.Context.Data);
+                    // update recent files
+                    recentFilesList.Add(e.FileName);
                     Logger.Info(string.Format("{0} has been saved successfully", tabControl.FileName));
                 }
                 catch (Exception exc)
@@ -84,6 +110,29 @@ namespace TwinEditor
                     Logger.Error(string.Format("{0} could not be saved due to {1}", e.FileName, exc.Message));
                 }
             };
+            
+            // Restore or initialize recentFilesList
+            var appSettings = Configuration.ApplicationSettings.Default;
+
+           	List<string> recentFiles = appSettings.RecentFileList;
+            if (recentFiles != null)
+            {
+            	recentFilesList = new RecentFilesList(int.Parse(appSettings.RecentFileListSize), recentFiles);
+            	Logger.Info("Restored recent files list");
+            }
+            else
+            {
+            	recentFilesList = new RecentFilesList((int.Parse(appSettings.RecentFileListSize)));
+            	Logger.Info("No recent files found");
+            }
+            view.UpdateRecentFiles(recentFiles);
+            recentFilesList.RecentFilesChanged += delegate(object sender, RecentFilesChangedEventArgs e) 
+            {
+            	view.UpdateRecentFiles(e.RecentFiles);
+            };
+            
+            // Initialize currentFileList
+            currentFileList = new List<String>();
         }
     }
 }

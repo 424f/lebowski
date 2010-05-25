@@ -3,7 +3,6 @@
     using System;
     using System.Configuration; 
     using System.Collections.Generic;
-    using System.Collections.Generic;
     
     public class ApplicationSettings : ApplicationSettingsBase
     {
@@ -36,13 +35,20 @@
             set { this["SynchronizationStrategy"] = value; }
         }
         
-        //[ApplicationScopedSettingAttribute]
         [UserScopedSettingAttribute]
         [DefaultSettingValue(null)]
         public List<string> RecentFileList
         {
             get { return (List<string>)this["RecentFileList"]; }
             set { this["RecentFileList"] = value; }
+        }
+        
+        [UserScopedSettingAttribute]
+        [DefaultSettingValue("5")]
+        public string RecentFileListSize
+        {
+        	get { return (string)this["RecentFileListSize"]; }
+            set { this["RecentFileListSize"] = value; }
         }
         #endregion
     }

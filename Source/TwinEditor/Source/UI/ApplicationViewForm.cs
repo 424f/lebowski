@@ -22,10 +22,10 @@
         
         public event EventHandler<ShareSessionEventArgs> ShareSession;
         public event EventHandler<OpenEventArgs> Open;
+        public event EventHandler<CloseEventArgs> Close;
         public event EventHandler<SaveEventArgs> Save;
         
         private Settings.SettingsDialog SettingsDialog;
-        private RecentFilesList recentFileList;
         
         ApplicationSettings appSettings = Configuration.ApplicationSettings.Default;
         
@@ -147,7 +147,6 @@
             }
         }
         private ICommunicationProtocol[] communicationProtocols;
-        
         List<SessionViewForm> tabControls = new List<SessionViewForm>();
         List<TabPage> tabPages = new List<TabPage>();
         protected List<ToolStripMenuItem> chooseFileTypeMenuItems = new List<ToolStripMenuItem>();
@@ -208,28 +207,48 @@
         
         public void UpdateRecentFiles(List<string> recentFiles)
         {
-        	menuStrip1.Invoke((Action) delegate
-        	                  {
-						      	recentFilesToolStripMenuItem.DropDownItems.Clear();
-								foreach (string filename in recentFiles)
-								{
-									IFileType type = null;
-						            foreach (IFileType fileType in fileTypes)
-						            {
-						                fileType.FileNameMatches(filename);
-						                type = fileType;
-						            }
-									ToolStripMenuItem item = new ToolStripMenuItem(filename);
-									if (type != null)
+        	if (recentFiles != null)
+        	{
+        		recentFilesToolStripMenuItem.Enabled = true;
+	        	menuStrip1.Invoke((Action) delegate
+	        	                  {
+							      	recentFilesToolStripMenuItem.DropDownItems.Clear();
+							      	
+									foreach (string file in recentFiles)
 									{
-										item.Click += delegate { Open(this, new OpenEventArgs(filename, type)); };
-									}
-									recentFilesToolStripMenuItem.DropDownItems.Add(item);
-								}
-        	                  }
-			);
-        	appSettings.RecentFileList = recentFiles;
-        	appSettings.Save();
+										string filename = file; 
+										Logger.Debug("recent: " + filename);
+										IFileType type = null;
+										try
+							      		{
+								            foreach (IFileType fileType in fileTypes)
+								            {
+								            	if (fileType.FileNameMatches(filename))
+								                	type = fileType;
+								            }
+										}
+										catch (NullReferenceException e) {
+											Logger.Error("fileTypes have not been set for ApplicationViewForm");
+										}
+								           
+										ToolStripMenuItem item = new ToolStripMenuItem(filename);
+										if (type != null)
+										{
+											Logger.Debug("recent: " + filename + type);
+											item.Click += delegate { Open(this, new OpenEventArgs(filename, type)); };
+										}
+										recentFilesToolStripMenuItem.DropDownItems.Add(item);
+							      	}
+	        	                  }
+				);
+	        	appSettings.RecentFileList = recentFiles;
+	        	appSettings.Save();
+        	}
+        	else
+        	{
+        		recentFilesToolStripMenuItem.Enabled = false;
+        	}
+        	
         }
         
         public ApplicationViewForm()
@@ -251,13 +270,6 @@
             
             // Get default settings
             var appSettings = Configuration.ApplicationSettings.Default;
-            
-            // Initialize recent files
-            recentFileList = new RecentFilesList();
-            recentFileList.RecentFilesChanged += delegate(object sender, RecentFilesChangedEventArgs e) 
-            {
-            	UpdateRecentFiles(e.RecentFiles);
-            };
         }
         
         private void Translate(ToolStripMenuItem item, string id)
@@ -310,8 +322,8 @@
             IFileType type = null;
             foreach (IFileType fileType in fileTypes)
             {
-                fileType.FileNameMatches(openFileDialog.FileName);
-                type = fileType;
+            	if (fileType.FileNameMatches(openFileDialog.FileName))
+					type = fileType;
             }
             
             // No appropriate file type has been found
@@ -325,8 +337,7 @@
                 return;
             }
             
-            OnOpen(new OpenEventArgs(openFileDialog.FileName, type));
-            
+            OnOpen(new OpenEventArgs(openFileDialog.FileName, type));        
             UpdateMenuItems();
         }
         
@@ -363,7 +374,6 @@
             }
             else
             {
-            	recentFileList.Add(tabControl.FileName);
                 OnSave(new SaveEventArgs(tabControl, tabControl.FileName));
                 tabControl.OnDisk = true;
                 tabControl.FileModified = false;                    
@@ -382,8 +392,6 @@
             if (result == DialogResult.OK)
             {
                 tabControl.FileName = saveFileDialog.FileName;
-                recentFileList.Add(tabControl.FileName);
-                
                 OnSave(new SaveEventArgs(tabControl, tabControl.FileName));
                 tabControl.OnDisk = true;
                 tabControl.FileModified = false;                  
@@ -427,8 +435,8 @@
             tabControls.RemoveAt(index);
             tabPages.RemoveAt(index);
             MainTab.TabPages.RemoveAt(index);
+            OnClose(new CloseEventArgs(sessionView.FileName));
             UpdateMenuItems();
-            
         }
         
         void RunToolStripMenuItemItemClick(object sender, EventArgs e)
@@ -464,7 +472,15 @@
                 Open(this, e);
             }
         }
-        
+
+      	protected virtual void OnClose(CloseEventArgs e)
+        {
+            if (Close != null)
+            {
+                Close(this, e);
+            }
+        }
+     
         protected virtual void OnSave(SaveEventArgs e)
         {
             if (Save != null)

@@ -10,15 +10,22 @@ namespace TwinEditor.UI
 	public class RecentFilesList
 	{
 		// TODO: shift to settings
-		private int bufferSize = 5;
+		private int bufferSize;
 		
 		private List<string> recentFiles;
 		
 		public event EventHandler<RecentFilesChangedEventArgs> RecentFilesChanged;
 		
-		public RecentFilesList()
+		public RecentFilesList(int size)
 		{
 			recentFiles = new List<string>();
+			bufferSize = size;
+		}
+		
+		public RecentFilesList(int size, List<string> recentFiles)
+		{
+			this.recentFiles = recentFiles;
+			bufferSize = size;
 		}
 		
 		public int BufferSize

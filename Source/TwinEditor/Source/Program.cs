@@ -146,13 +146,7 @@ namespace TwinEditor
             IApplicationView applicationView = new ApplicationViewForm();
             ApplicationContext presenter = new ApplicationContext(applicationView);
             applicationView.ApplicationContext = presenter;
-            
-            // Restore recent files if any
-            var appSettings = Configuration.ApplicationSettings.Default;
-            List<string> recentFiles = appSettings.RecentFileList;
-            if (recentFiles != null) {
-            	((ApplicationViewForm) applicationView).UpdateRecentFiles(recentFiles);
-            }
+
             applicationView.Show();
 
             Application.Run();            
