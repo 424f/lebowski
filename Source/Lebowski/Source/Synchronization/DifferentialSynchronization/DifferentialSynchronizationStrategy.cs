@@ -89,7 +89,7 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
             DiffMatchPatch =  new diff_match_patch();
             Context = context;
             Connection = connection;
-            Shadow = new StringTextContext();
+            Shadow = new StringTextContext(context.Data);
             TokenRequestSent = false;
 
             HasChanged = false;

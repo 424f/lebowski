@@ -9,6 +9,7 @@ namespace TwinEditor.UI
     using System.Resources;
     using System.Reflection;
     using Lebowski;
+    using Lebowski.Synchronization;
     using Lebowski.Synchronization.DifferentialSynchronization;
     using Lebowski.Net;
     using TwinEditor.FileTypes;

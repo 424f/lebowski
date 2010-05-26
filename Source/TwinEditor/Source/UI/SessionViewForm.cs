@@ -7,6 +7,7 @@ namespace TwinEditor.UI
     using System.Windows.Forms;
     using System.Collections.Generic;
     using Lebowski;
+    using Lebowski.Synchronization;
     using Lebowski.TextModel;
     using Lebowski.Net;
     using Lebowski.Synchronization.DifferentialSynchronization;

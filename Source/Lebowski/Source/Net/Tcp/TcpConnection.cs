@@ -23,6 +23,12 @@ namespace Lebowski.Net.Tcp
 
         protected virtual void OnReceived(ReceivedEventArgs e)
         {
+            while(Received.GetInvocationList().Length == 0)
+            {
+                // TODO: solve this with a Reactive method
+                Thread.Sleep(100);
+            }
+            
             if (Received != null) {
                 Received(this, e);
             }

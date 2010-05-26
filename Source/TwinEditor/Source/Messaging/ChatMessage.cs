@@ -3,8 +3,7 @@ namespace TwinEditor.Messaging
     using System;
 
     /// <summary>
-    /// Occurs when the user has entered a chat message to be broadcast
-    /// to the other users
+    /// Sent when the a chat message is broadcast to other sites.
     /// </summary>
     [Serializable]
     public sealed class ChatMessage

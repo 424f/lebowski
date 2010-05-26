@@ -3,7 +3,7 @@ namespace TwinEditor.Messaging
     using System;
 
     /// <summary>
-    /// Sent when a shared program's execution finishes
+    /// Sent when a shared program's execution finishes.
     /// </summary>
     [Serializable]
     public sealed class ExecutionResultMessage
