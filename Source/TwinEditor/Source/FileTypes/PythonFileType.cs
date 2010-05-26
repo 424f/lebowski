@@ -73,7 +73,7 @@ namespace TwinEditor.FileTypes
             string standardOut = "";
             writer.Write += delegate(object sender, WriteEventArgs e)
             {
-                standardOut += e.Text;
+                standardOut += e.Text.Replace("\n", Environment.NewLine);
                 result.OnExecutionChanged(new ExecutionChangedEventArgs(e.Text.Replace("\n", Environment.NewLine)));
             };
             interpreter.ExecuteCode(content, writer);
