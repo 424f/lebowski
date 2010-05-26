@@ -2,10 +2,10 @@
 namespace Lebowski.TextModel.Operations
 {
     using System;
-    /// <summary>
+    /// <remarks>
     /// This class encapsulates a insert operation.
     /// A insert operation is defined by a text to insert and a position at which the text is to be inserted.
-    /// </summary>
+    /// </remarks>
     public class InsertOperation : TextOperation
     {
         /// <value>
