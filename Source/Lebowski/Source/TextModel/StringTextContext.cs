@@ -3,24 +3,41 @@ namespace Lebowski.TextModel
     using System;
     using Lebowski.TextModel.Operations;
 
+    /// <summary>
+    /// A text context that does not have any GUI representation, but just
+    /// applies operations to a string instead. This is usefull for performing
+    /// text operations on a shared context.
+    /// </summary>
     public class StringTextContext : AbstractTextContext
     {
-        public override string Data { get; set; }
-        public override int SelectionStart { get; protected set; }
-        public override int SelectionEnd { get; protected set; }
-
+        /// <summary>
+        /// Initializes a new instance of the StringTextContext class.
+        /// </summary>
         public StringTextContext()
         {
             Data = "";
-        }
-
-        public override void Insert(object issuer, InsertOperation operation)
+        }        
+        
+        /// <summary>
+        /// Stores the text associated with this context. Note that for 
+        /// the StringTextContext, we don't have a GUI element corresponding
+        /// to this data.
+        /// </summary>
+        public override string Data { get; set; }
+        
+        /// <inheritdoc/>
+        public override bool HasSelection
         {
-            Data = Data.Substring(0, operation.Position) + operation.Text + Data.Substring(operation.Position);
-            OnInserted(new InsertEventArgs(issuer, operation));
-            OnChanged(new ChangeEventArgs(issuer));
-        }
+            get { return true; }
+        }        
+        
+        /// <inheritdoc/>
+        public override int SelectionStart { get; protected set; }
+        
+        /// <inheritdoc/>
+        public override int SelectionEnd { get; protected set; }
 
+        /// <inheritdoc/>
         public override void Delete(object issuer, DeleteOperation operation)
         {
             Data = Data.Substring(0, operation.Position) + Data.Substring(operation.Position+1);
@@ -28,30 +45,37 @@ namespace Lebowski.TextModel
             OnChanged(new ChangeEventArgs(issuer));
         }
 
+        /// <inheritdoc/>
+        public override void Insert(object issuer, InsertOperation operation)
+        {
+            Data = Data.Substring(0, operation.Position) + operation.Text + Data.Substring(operation.Position);
+            OnInserted(new InsertEventArgs(issuer, operation));
+            OnChanged(new ChangeEventArgs(issuer));
+        }
+
+        /// <inheritdoc/>
+        public override void Invoke(Action d)
+        {
+            d();
+        }        
+        
+        /// <inheritdoc/>
+        public override void Refresh()
+        {
+
+        }        
+
+        /// <inheritdoc/>
+        public override void SetRemoteSelection(object siteIdentifier, int start, int end)
+        {
+
+        }        
+        
+        /// <inheritdoc/>
         public override void SetSelection(int start, int last)
         {
             SelectionStart = start;
             SelectionEnd = last;
-        }
-
-        public override bool HasSelection
-        {
-            get { return true; }
-        }
-
-        public override void Invoke(Action d)
-        {
-            d();
-        }
-
-        public override void Refresh()
-        {
-
-        }
-
-        public override void SetRemoteSelection(object siteIdentifier, int start, int end)
-        {
-
-        }
+        }        
     }
 }
