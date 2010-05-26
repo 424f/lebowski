@@ -89,6 +89,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Source\ExtensionUtil.cs" />
     <Compile Include="Source\Net\AbstractConnection.cs" />
+    <Compile Include="Source\Net\ConnectionFailedException.cs" />
     <Compile Include="Source\Net\HostSessionEventArgs.cs" />
     <Compile Include="Source\Net\ICommunicationProtocol.cs" />
     <Compile Include="Source\Net\IConnection.cs" />
@@ -109,12 +110,14 @@
     <Compile Include="Source\Net\Skype\SkypeShareForm.Designer.cs">
       <DependentUpon>SkypeShareForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Source\Net\Tcp\TcpClientConnection.cs" />
     <Compile Include="Source\Net\Tcp\TcpConnection.cs" />
     <Compile Include="Source\Net\Tcp\TcpParticipateForm.cs" />
     <Compile Include="Source\Net\Tcp\TcpParticipateForm.Designer.cs">
       <DependentUpon>TcpParticipateForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Source\Net\Tcp\TcpProtocol.cs" />
+    <Compile Include="Source\Net\Tcp\TcpServerConnection.cs" />
     <Compile Include="Source\Net\Tcp\TcpShareForm.cs" />
     <Compile Include="Source\Net\Tcp\TcpShareForm.Designer.cs">
       <DependentUpon>TcpShareForm.cs</DependentUpon>
