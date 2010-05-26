@@ -1,10 +1,10 @@
-
 namespace TwinEditor.UI
 {
     using System;
     using System.Windows.Forms;
     using System.Drawing;
-    public class CloseableTabControl : TabControl
+    
+    public class ClosableTabControl : TabControl
     {
         /// <summary>
         /// Occurs when the close context menu of a closeable tab has been clicked.
@@ -13,29 +13,33 @@ namespace TwinEditor.UI
 
         private ContextMenuStrip tabContextMenuStrip;
         private int ClickedTabIndex = -1;
-        public int Shift { get; private set; } // tab index from which on the tabs can be closed
 
         /// <summary>
         /// Default constructor
         /// Initializes a new instance of CloseableTabControl
         /// All tabs are closeable
         /// </summary>
-        public CloseableTabControl() : this(0)
+        public ClosableTabControl() : this(0)
         {
 
         }
 
         /// <summary>
         /// Constructor
-        /// Initializes a new instance of CloseableTabControl.
-        /// All tabs with an index succeding shift are closeable.
+        /// Initializes a new instance of CloseableTabControl whose first
+        /// closable tab has the specified index.
         /// </summary>
-        /// <param name="shift"></param>
-        public CloseableTabControl(int shift)
+        /// <param name="firstClosableTabIndex">See <see cref="FirstClosableTabIndex">FirstClosableTabIndex</see>.</param>
+        public ClosableTabControl(int firstClosableTabIndex)
         {
             this.Shift = shift;
         }
 
+        /// <summary>
+        /// Specifies which is the first tab that is closable.
+        /// </summary>
+        public int FirstClosableTabIndex { get; set; }         
+        
         /// <summary>
         /// Eventhadler delegate for handling the event when a click on the close context menu of a closeable tab is detected.
         /// </summary>
