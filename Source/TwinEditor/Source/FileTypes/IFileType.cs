@@ -38,9 +38,9 @@ namespace TwinEditor.FileTypes
         /// </summary>
         Image Icon { get; }
 
-        /// <value>
+        /// <summary>
         /// Indicates whether the file can be compiled.
-        /// </value>
+        /// </summary>
         bool CanCompile { get; }
         
         /// <summary>
