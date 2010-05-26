@@ -98,6 +98,11 @@ namespace Lebowski.Synchronization
         #endregion
 
         #region Equals and GetHashCode implementation
+        /// <summary>
+        /// Determines whether this instance is equal to another object.
+        /// </summary>
+        /// <param name="obj">The object to compare with the current StateVector.</param>
+        /// <returns>true if the specified object is equal to the current StateVector; otherwise, false.</returns>
         public override bool Equals(object obj)
         {
             if (obj is StateVector)

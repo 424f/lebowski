@@ -99,8 +99,6 @@ namespace LebowskiTests.Synchronization
             var server = new DifferentialSynchronizationStrategy(0, serverContext, serverConnection);
             var client = new DifferentialSynchronizationStrategy(1, clientContext, clientConnection);
 
-            server.EstablishSession();
-
             TestUtil.WaitAreEqual(testString, () => clientContext.Data, 250);
         }
     }

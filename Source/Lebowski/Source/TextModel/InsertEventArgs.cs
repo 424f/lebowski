@@ -25,7 +25,6 @@
         /// <summary>
         /// The object that issued this command.
         /// </summary>
-        [Obsolete]
         public object Issuer { get; protected set; }        
         
         /// <summary>

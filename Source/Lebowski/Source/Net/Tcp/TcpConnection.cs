@@ -7,6 +7,9 @@ namespace Lebowski.Net.Tcp
     using Lebowski.Net;
     using log4net;
 
+    /// <summary>
+    /// A connection using TCP with a fixed endpoint.
+    /// </summary>
     public abstract class TcpConnection : AbstractConnection
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(TcpConnection));        

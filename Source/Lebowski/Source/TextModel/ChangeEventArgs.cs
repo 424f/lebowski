@@ -16,8 +16,9 @@
             Issuer = issuer;
         }
 
-        // The object responsible for the change
-        [Obsolete]
+        /// <summary>
+        /// The object responsible for the change
+        /// </summary>
         public object Issuer { get; protected set; }        
     }
 }

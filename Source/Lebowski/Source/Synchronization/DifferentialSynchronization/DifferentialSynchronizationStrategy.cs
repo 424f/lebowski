@@ -102,25 +102,6 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
             isSessionEstablished = false;
         }
 
-        public void EstablishSession()
-        {
-            return;
-            lock(this)
-            {
-                if (isSessionEstablished)
-                {
-                    throw new InvalidOperationException("EstablishSession must not be called after a session has been established previously");
-                }
-
-                /* If we are the server, we first have to send the client an initial
-                patch based on his empty state */
-                TokenState = TokenState.WaitingForToken;
-                SendPatches();
-
-                isSessionEstablished = true;
-            }
-        }
-
         private void SendPatches()
         {
             Debug.Assert(TokenState == TokenState.HavingToken);
@@ -334,6 +315,7 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
             }
         }
 
+        /// <inheritdoc />
         public void Close()
         {
             Context.Changed -= ContextChanged;
