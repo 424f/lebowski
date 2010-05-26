@@ -75,9 +75,17 @@ namespace TwinEditor
             }
 
             // Protocol: sharing
-            view.ShareSession += delegate(object sender, ShareSessionEventArgs e)
+            view.ShareSession += delegate(object sender, ShareSessionEventArgs args)
             {
-                e.Protocol.Share(e.Session);
+                try
+                {
+                    args.Protocol.Share(args.Session);
+                } catch(Exception e)
+                {
+                    args.Session.Reset();
+                    Logger.WarnFormat("Could not share session with {0}:\n{1}", args.Protocol.Name, e);
+                    view.DisplayError("The session could not be shared.", e);
+                }
             };
 
             // File handling

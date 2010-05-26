@@ -13,11 +13,11 @@ namespace TwinEditor.UI
         IFileType[] FileTypes { get; set; }
         ICommunicationProtocol[] CommunicationProtocols { get; set; }
         ISessionView CreateNewSession(IFileType fileType);
-
+        ApplicationContext ApplicationContext { get; set; }
+        
         void UpdateRecentFiles(List<String> recentFiles);
         void Show();
-
-        ApplicationContext ApplicationContext { get; set; }
+        void DisplayError(string message, Exception exception);
 
         #region Events
 

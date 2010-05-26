@@ -21,15 +21,36 @@ namespace TwinEditor.UI
     public partial class ApplicationViewForm : Form, IApplicationView
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(ApplicationViewForm));
-
-        public event EventHandler<ShareSessionEventArgs> ShareSession;
-        public event EventHandler<OpenEventArgs> Open;
-        public event EventHandler<CloseEventArgs> Close;
-        public event EventHandler<SaveEventArgs> Save;
-
         private Settings.SettingsDialog SettingsDialog;
-
         ApplicationSettings appSettings = Configuration.ApplicationSettings.Default;
+        /// <summary>
+        /// The number that is assigned to next new file without name
+        /// </summary>
+        // TODO: Track currently open files in order not to open twice,Controller.cs
+        private int nextFileNumber = 1;
+        
+        public ApplicationViewForm()
+        {
+            InitializeComponent();
+
+            Logger.Info("MainForm component initialized.");
+            //SourceCode.SetHighlighting("C#");
+
+            // Clear tabs
+            MainTab.TabPages.Clear();
+            UpdateMenuItems();
+
+            // Translate the menu
+            TranslationUtil.TranslateMenuStrip(menuStrip1, ApplicationUtil.LanguageResources);
+
+            // Configure settings dialog
+            SettingsDialog = new Settings.SettingsDialog(ApplicationContext);
+
+            // Get default settings
+            var appSettings = Configuration.ApplicationSettings.Default;
+            
+            this.Closed += delegate { Application.Exit(); };
+        }        
 
         public IFileType[] FileTypes
         {
@@ -153,12 +174,12 @@ namespace TwinEditor.UI
         List<TabPage> tabPages = new List<TabPage>();
         protected List<ToolStripMenuItem> chooseFileTypeMenuItems = new List<ToolStripMenuItem>();
 
-        /// <summary>
-        /// The number that is assigned to next new file without name
-        /// </summary>
-        private int nextFileNumber = 1;
-        // TODO: Track currently open files in order not to open twice,Controller.cs
-
+        public void DisplayError(string message, System.Exception exception)
+        {
+            ErrorMessage errorMessage = new ErrorMessage("An error occurred", message, exception);
+            errorMessage.ShowDialog();
+        }
+        
         /// <summary>
         /// Updates GUI elements after the program state has changed
         /// </summary>
@@ -251,27 +272,6 @@ namespace TwinEditor.UI
         		recentFilesToolStripMenuItem.Enabled = false;
         	}
         	
-        }
-
-        public ApplicationViewForm()
-        {
-            InitializeComponent();
-
-            Logger.Info("MainForm component initialized.");
-            //SourceCode.SetHighlighting("C#");
-
-            // Clear tabs
-            MainTab.TabPages.Clear();
-            UpdateMenuItems();
-
-            // Translate the menu
-            TranslationUtil.TranslateMenuStrip(menuStrip1, ApplicationUtil.LanguageResources);
-
-            // Configure settings dialog
-            SettingsDialog = new Settings.SettingsDialog(ApplicationContext);
-
-            // Get default settings
-            var appSettings = Configuration.ApplicationSettings.Default;
         }
 
         private void Translate(ToolStripMenuItem item, string id)
@@ -492,5 +492,10 @@ namespace TwinEditor.UI
         }
         #endregion
 
+        public event EventHandler<ShareSessionEventArgs> ShareSession;
+        public event EventHandler<OpenEventArgs> Open;
+        public event EventHandler<CloseEventArgs> Close;
+        public event EventHandler<SaveEventArgs> Save;        
+        
     }
 }

@@ -133,13 +133,21 @@ namespace TwinEditor.Sharing
         public void Reset()
         {
             ActivateState(new SessionState(this));
-            SynchronizationStrategy.Close();
-            ApplicationConnection.Close();
-            SynchronizationConnection.Close();
-
-            SynchronizationConnection = null;
-            ApplicationConnection = null;
-            SynchronizationStrategy = null;
+            if(SynchronizationStrategy != null)
+            {
+                SynchronizationStrategy.Close();
+                SynchronizationStrategy = null;
+            }
+            if(ApplicationConnection != null)
+            {
+                ApplicationConnection.Close();
+                ApplicationConnection = null;                
+            }
+            if(SynchronizationConnection != null)
+            {
+                SynchronizationConnection.Close();
+                SynchronizationConnection = null;
+            }
 
             State = SessionStates.Disconnected;
         }
