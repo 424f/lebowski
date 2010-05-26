@@ -14,6 +14,7 @@ namespace TwinEditor.UI
     using TwinEditor.FileTypes;
     using TwinEditor.UI;
     using TwinEditor.Configuration;
+    using TwinEditor.Sharing;
     using log4net;
 
     public partial class ApplicationViewForm : Form, IApplicationView

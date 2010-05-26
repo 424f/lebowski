@@ -54,8 +54,8 @@
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Reference Include="DiffMatchPatchDebug">
-      <HintPath>..\..\Libs\DiffMatchPatchDebug.dll</HintPath>
+    <Reference Include="DiffMatchPatch">
+      <HintPath>..\..\Libs\DiffMatchPatch.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -127,7 +127,6 @@
       <DependentUpon>TcpShareForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Source\ISynchronizationSession.cs" />
-    <Compile Include="Source\SessionStates.cs" />
     <Compile Include="Source\StateVector.cs" />
     <Compile Include="Source\Synchronization\DifferentialSynchronization\DifferentialSynchronizationStrategy.cs" />
     <Compile Include="Source\Synchronization\DifferentialSynchronization\DiffMessage.cs" />
@@ -135,6 +134,7 @@
     <Compile Include="Source\Synchronization\DifferentialSynchronization\TokenState.cs" />
     <Compile Include="Source\Synchronization\dOPT\Model.cs" />
     <Compile Include="Source\Synchronization\ISynchronizationStrategy.cs" />
+    <Compile Include="Source\Synchronization\SessionStates.cs" />
     <Compile Include="Source\TextModel\AbstractTextContext.cs" />
     <Compile Include="Source\TextModel\ChangeEventArgs.cs" />
     <Compile Include="Source\TextModel\DeleteEventArgs.cs" />

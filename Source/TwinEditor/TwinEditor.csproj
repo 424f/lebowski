@@ -108,12 +108,17 @@
     <Compile Include="Source\Execution\ExecutionResult.cs" />
     <Compile Include="Source\Execution\FinishedExecutionEventArgs.cs" />
     <Compile Include="Source\FileTypes\PythonInterpreter.cs" />
-    <Compile Include="Source\ISessionView.cs" />
     <Compile Include="Source\Messaging\ChatMessage.cs" />
     <Compile Include="Source\Messaging\CloseSessionMessage.cs" />
     <Compile Include="Source\Messaging\ExecutionResultMessage.cs" />
     <Compile Include="Source\Program.cs" />
-    <Compile Include="Source\SessionContext.cs" />
+    <Compile Include="Source\Sharing\BootstrappingState.cs" />
+    <Compile Include="Source\Sharing\StartedExecutionEventArgs.cs" />
+    <Compile Include="Source\Sharing\ISessionView.cs" />
+    <Compile Include="Source\Sharing\ReceiveChatMessageEventArgs.cs" />
+    <Compile Include="Source\Sharing\SessionContext.cs" />
+    <Compile Include="Source\Sharing\SessionState.cs" />
+    <Compile Include="Source\Sharing\SynchronizationState.cs" />
     <Compile Include="Source\TranslationUtil.cs" />
     <Compile Include="Source\UI\AboutDialog.cs" />
     <Compile Include="Source\UI\AboutDialog.Designer.cs">
@@ -179,6 +184,7 @@
     <Folder Include="Source\Messaging" />
     <Folder Include="Source\Configuration" />
     <Folder Include="Source\Execution" />
+    <Folder Include="Source\Sharing" />
     <Folder Include="Source\Synchronization" />
     <Folder Include="Source\Presentation" />
     <Folder Include="Source\UI\" />

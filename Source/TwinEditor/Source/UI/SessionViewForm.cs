@@ -12,6 +12,7 @@ namespace TwinEditor.UI
     using Lebowski.Synchronization.DifferentialSynchronization;
     using TwinEditor.FileTypes;
     using TwinEditor.Messaging;
+    using TwinEditor.Sharing;
     using log4net;
     public partial class SessionViewForm : UserControl, ISessionView
     {

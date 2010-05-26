@@ -2,10 +2,12 @@ using System.Collections.Generic;
 
 namespace TwinEditor.UI
 {
-    using System;
-    using TwinEditor.FileTypes;
+    using System;    
     using Lebowski;
     using Lebowski.Net;
+    using TwinEditor.FileTypes;
+    using TwinEditor.Sharing;
+    
     public interface IApplicationView
     {
         IFileType[] FileTypes { get; set; }

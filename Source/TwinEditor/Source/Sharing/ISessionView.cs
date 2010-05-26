@@ -1,5 +1,4 @@
-
-namespace TwinEditor
+namespace TwinEditor.Sharing
 {
     using System;
     using Lebowski;
@@ -8,6 +7,7 @@ namespace TwinEditor
     using Lebowski.TextModel;
     using TwinEditor.FileTypes;
     using log4net;
+    
     public interface ISessionView
     {
         string FileName { get; set; }

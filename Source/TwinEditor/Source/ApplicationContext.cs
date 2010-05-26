@@ -13,6 +13,7 @@ namespace TwinEditor
 
     using TwinEditor.FileTypes;
     using TwinEditor.UI;
+    using TwinEditor.Sharing;
 
     /// <summary>
     /// Contains behavior of the application. It is used with a IApplicationView that
