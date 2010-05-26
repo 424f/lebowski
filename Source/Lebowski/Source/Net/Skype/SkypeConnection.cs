@@ -1,4 +1,3 @@
-
 namespace Lebowski.Net.Skype
 {
     using System;
@@ -8,20 +7,48 @@ namespace Lebowski.Net.Skype
     using SKYPE4COMLib;
     using Lebowski.Net;
     using log4net;
+    
+    /// <summary>
+    /// Represents a connection that uses the Skype AP2AP API.
+    /// 
+    /// <remarks>As we have only one stream per user, we route messages
+    /// through the parent SkypeProtocol. We use a different channel
+    /// for each SkypeConnection, which is represented by an integer (unique
+    /// on a per-user level).
+    /// </remarks>
+    /// </summary>
     public sealed class SkypeConnection : AbstractConnection
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(SkypeProtocol));
-
+        
+        /// <summary>
+        /// The username of the remote skype user.
+        /// </summary>
         private string remote;
-        public int IncomingChannel { get; private set; }
-        public int OutgoingChannel { get; set; }
-
+        
+        /// <summary>
+        /// The SkypeProtocol over which we will send messages.
+        /// </summary>
         private SkypeProtocol protocol;
-
+        
+        /// <summary>
+        /// Indicates whether the dispatcher thread should keep running.
+        /// </summary>
         private bool dispatcherRunning;
-
+        
+        /// <summary>
+        /// The message queue from which the dispatcher thread dispatches messages.
+        /// </summary>
         private Queue<ReceivedEventArgs> receiveQueue = new Queue<ReceivedEventArgs>();
 
+        /// <summary>
+        /// Initializes a new instance of the SkypeConnection class, given a 
+        /// Skype protocol, the name of a skype friend and the incoming channel
+        /// to be used.
+        /// </summary>
+        /// <param name="protocol"></param>
+        /// <param name="remote"></param>
+        /// <param name="incomingChannel"></param>
         public SkypeConnection(SkypeProtocol protocol, string remote, int incomingChannel)
         {
             this.IncomingChannel = incomingChannel;
@@ -35,18 +62,33 @@ namespace Lebowski.Net.Skype
             thread.Start();
         }
 
-        public override void Send(object o)
-        {
-            if (OutgoingChannel == -1)
-            {
-                throw new InvalidOperationException("You have to define an outgoing channel before sending messages.");
-            }
-            protocol.Send(remote, OutgoingChannel, o);
-        }
+        /// <summary>
+        /// Identifier of the channel within SkypeProtocol over which incoming
+        /// messages are received.
+        /// </summary>
+        public int IncomingChannel { get; private set; }
 
+        /// <summary>
+        /// Identifier of the channel within SkypeProtocol over which outgoing
+        /// messages are sent.
+        /// </summary>        
+        public int OutgoingChannel { get; internal set; }
+
+        /// <inheritdoc/>
+        public override void Close()
+        {
+            dispatcherRunning = false;
+            lock(receiveQueue)
+            {
+                Monitor.Pulse(receiveQueue);
+            }
+        }        
+        
         internal void ReceiveMessage(ReceivedEventArgs e)
         {
-            // To avoid strange skype behavior, we don't immediately dispatch
+            // To avoid strange skype behavior which result in hard to understand
+            // call stacks, we don't immediately dispatch, but use a dispatcher
+            // thread with its own stack frame.
             lock(receiveQueue)
             {
                 receiveQueue.Enqueue(e);
@@ -54,6 +96,10 @@ namespace Lebowski.Net.Skype
             }
         }
 
+        /// <summary>
+        /// Runs a dispatcher thread, which dispatches messages from the 
+        /// receiveQueue until the connection has been closed.
+        /// </summary>
         private void RunDispatcherThread()
         {
             dispatcherRunning = true;
@@ -70,16 +116,16 @@ namespace Lebowski.Net.Skype
                 }
                 OnReceived(e);
             }
-        }
-
-        public override void Close()
+        }        
+        
+        /// <inheritdoc/>
+        public override void Send(object o)
         {
-            dispatcherRunning = false;
-            lock(receiveQueue)
+            if (OutgoingChannel == -1)
             {
-                Monitor.Pulse(receiveQueue);
+                throw new InvalidOperationException("You have to define an outgoing channel before sending messages.");
             }
+            protocol.Send(remote, OutgoingChannel, o);
         }
-
     }
 }

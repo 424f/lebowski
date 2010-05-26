@@ -24,7 +24,6 @@
         /// <inheritdoc/>
         public object Tag { get; set; }
         
-        
         /// <summary>
         /// Raises the ConnectionClosed event
         /// </summary>
