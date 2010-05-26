@@ -99,7 +99,9 @@
     <Compile Include="Source\Net\JoinSessionEventArgs.cs" />
     <Compile Include="Source\Net\Local\LocalConnection.cs" />
     <Compile Include="Source\Net\Local\LocalProtocol.cs" />
-    <Compile Include="Source\Net\MultichannelConnection.cs" />
+    <Compile Include="Source\Net\Multichannel\MultichannelConnection.cs" />
+    <Compile Include="Source\Net\Multichannel\MultichannelMessage.cs" />
+    <Compile Include="Source\Net\Multichannel\TunneledConnection.cs" />
     <Compile Include="Source\Net\NetUtils.cs" />
     <Compile Include="Source\Net\ReceivedEventArgs.cs" />
     <Compile Include="Source\Net\Skype\AcceptSharingInvitiationMessage.cs" />
@@ -169,6 +171,7 @@
     <Folder Include="Source\Net\" />
     <Folder Include="Source\" />
     <Folder Include="Source\Net\Local" />
+    <Folder Include="Source\Net\Multichannel" />
     <Folder Include="Source\Synchronization\" />
     <Folder Include="Source\Synchronization\" />
     <Folder Include="Source\" />

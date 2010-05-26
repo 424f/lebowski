@@ -5,6 +5,7 @@ namespace TwinEditor.Sharing
     using Lebowski.Synchronization;
     using Lebowski.Synchronization.DifferentialSynchronization;
     using Lebowski.Net;
+    using Lebowski.Net.Multichannel;
     using Lebowski.TextModel;
     using TwinEditor;
     using TwinEditor.Messaging;

@@ -1,9 +1,9 @@
-
-namespace Lebowski.Net
+namespace Lebowski.Net.Multichannel
 {
     using System;
     using System.Collections.Generic;
     using log4net;
+    
     /// <summary>
     /// Allows multiple separate connection to be tunneled
     /// through the same `IConnection`, by creating multiple channels.
@@ -17,7 +17,46 @@ namespace Lebowski.Net
         private IConnection Connection;
         private Dictionary<int, TunneledConnection> channels;
         private Dictionary<TunneledConnection, int> channelIds;
+        
+        /// <summary>
+        /// Initializes a new instance of the MultichannelConnection class. It
+        /// takes a connection (which must not be used in any other context) and
+        /// adds another layer on top of it, allowing multiple logically separate
+        /// connections to be tunneled through it at the same time.
+        /// </summary>
+        /// <param name="connection"></param>
+        public MultichannelConnection(IConnection connection)
+        {
+            Connection = connection;
+            channels = new Dictionary<int, TunneledConnection>();
+            channelIds = new Dictionary<TunneledConnection, int>();
+            connection.Received += ConnectionReceived;
+        }        
 
+        /// <summary>
+        /// Creates a new channeled connection.
+        /// </summary>
+        /// <remarks>
+        /// As channels acquire their identifier automatically, CreateChannel()
+        /// must be called in the same sequence at all sites, as to ensure
+        /// that local channels correspond to the correct remote channels.
+        /// </remarks>
+        /// <returns>The channeled connection.</returns>
+        public IConnection CreateChannel()
+        {
+            int channelId = channels.Count;
+            var channel = new TunneledConnection(this);
+            channels[channelId] = channel;
+            channelIds[channel] = channelId;
+            return channel;
+        }
+
+        /// <inheritdoc/>
+        public void Close()
+        {
+            Connection.Close();
+        }        
+        
         internal void Send(TunneledConnection channel, object o)
         {
             int id = channelIds[channel];
@@ -45,66 +84,6 @@ namespace Lebowski.Net
 
             TunneledConnection channel = channels[msg.ChannelId];
             channel.OnReceived(new ReceivedEventArgs(msg.Message));
-        }
-
-        public MultichannelConnection(IConnection connection)
-        {
-            Connection = connection;
-            channels = new Dictionary<int, TunneledConnection>();
-            channelIds = new Dictionary<TunneledConnection, int>();
-            connection.Received += ConnectionReceived;
-        }
-
-        public IConnection CreateChannel()
-        {
-            int channelId = channels.Count;
-            var channel = new TunneledConnection(this);
-            channels[channelId] = channel;
-            channelIds[channel] = channelId;
-            return channel;
-        }
-
-        public void Close()
-        {
-            Connection.Close();
-        }
-    }
-
-    class TunneledConnection : AbstractConnection
-    {
-        private MultichannelConnection tunnel;
-
-        public TunneledConnection(MultichannelConnection tunnel)
-        {
-            this.tunnel = tunnel;
-        }
-
-        public override void Send(object o)
-        {
-            tunnel.Send(this, o);
-        }
-
-        public override void Close()
-        {
-            this.tunnel.Close();
-        }
-        
-        internal new void OnReceived(ReceivedEventArgs e)
-        {
-            base.OnReceived(e);
-        }
-    }
-
-    [Serializable]
-    class MultichannelMessage
-    {
-        public int ChannelId { get; private set; }
-        public object Message { get; private set; }
-
-        public MultichannelMessage(int channelId, object message)
-        {
-            ChannelId = channelId;
-            Message = message;
         }
     }
 }
