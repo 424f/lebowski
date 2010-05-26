@@ -190,8 +190,6 @@
     <Folder Include="Source\Configuration" />
     <Folder Include="Source\Execution" />
     <Folder Include="Source\Sharing" />
-    <Folder Include="Source\Synchronization" />
-    <Folder Include="Source\Presentation" />
     <Folder Include="Source\UI\" />
     <Folder Include="Source\UI\Settings" />
   </ItemGroup>
