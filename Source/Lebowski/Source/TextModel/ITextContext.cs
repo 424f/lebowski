@@ -3,10 +3,20 @@ namespace Lebowski.TextModel
     using System;
     using Lebowski.TextModel.Operations;
 
+    /// <summary>
+    /// A text context, that contains the state of a collaboratively shared
+    /// document.
+    /// </summary>
     public interface ITextContext
     {
+        /// <summary>
+        /// Gets or sets the position of the local caret within the document.
+        /// </summary>
         int CaretPosition { get; set; }
         
+        /// <summary>
+        /// The data (text) that makes up the document.
+        /// </summary>
         string Data { get; set; }
 
         /// <summary>
@@ -24,11 +34,36 @@ namespace Lebowski.TextModel
         /// </summary>
         bool HasSelection { get; }
 
+        /// <summary>
+        /// Gets the text currently selected.
+        /// </summary>
         string SelectedText { get; }
 
+        /// <summary>
+        /// Performs a deletion operation on the context.
+        /// </summary>
+        /// <param name="issuer">The object that calls Delete.</param>
+        /// <param name="operation">The DeleteOperation that should be executed.</param>
         void Delete(object issuer, DeleteOperation operation);
-        void Insert(object issuer, InsertOperation operation);        
+        
+        /// <summary>
+        /// Performs a insertion operation on the context.
+        /// </summary>
+        /// <param name="issuer">The object that calls Insert.</param>
+        /// <param name="operation">The InsertOperation that should be executed.</param>
+        void Insert(object issuer, InsertOperation operation); 
+        
+        /// <summary>
+        /// Refreshes the context, making sure that changes are correctly 
+        /// reflected in any UI associated with it.
+        /// </summary>
         void Refresh();
+        
+        /// <summary>
+        /// Sets the local selection.
+        /// </summary>
+        /// <param name="start">The index of the first character that should be selected.</param>
+        /// <param name="last">The index after the last character that should be selected.</param>
         void SetSelection(int start, int last);
 
         /// <summary>
@@ -48,8 +83,19 @@ namespace Lebowski.TextModel
         /// </summary>
         void Invoke(Action action);
 
-        event EventHandler<InsertEventArgs> Inserted;
-        event EventHandler<DeleteEventArgs> Deleted;
+        /// <summary>
+        /// Occurs when the context has been changed.
+        /// </summary>
         event EventHandler<ChangeEventArgs> Changed;
+        
+        /// <summary>
+        /// Occurs when an DeleteOperation has been performed.
+        /// </summary>
+        event EventHandler<DeleteEventArgs> Deleted;        
+        
+        /// <summary>
+        /// Occurs when an InsertOperation has been performed.
+        /// </summary>
+        event EventHandler<InsertEventArgs> Inserted;
     }
 }

@@ -44,6 +44,7 @@ namespace Lebowski.TextModel.Operations
             return visitor.VisitInsertOperation(this);
         }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             return String.Format("insert({0}, {1})", Text, Position);

@@ -6,7 +6,7 @@ namespace TwinEditor
     using System.Reflection;
     public static class ApplicationUtil
     {
-        private static bool isInitialized = false;
+        private static bool isInitialized;
 
         /// <summary>
         /// The language resources for the current language

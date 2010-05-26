@@ -11,6 +11,10 @@ namespace Lebowski.Synchronization
     /// </summary>
     public interface ISynchronizationStrategy
     {
-
+        /// <summary>
+        /// Removes the synchronization strategy from the associated context
+        /// and connection.
+        /// </summary>
+        void Close();
     }
 }

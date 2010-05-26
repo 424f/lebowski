@@ -7,18 +7,29 @@ namespace Lebowski.Net.Tcp
     using System.Threading;
     using log4net;
     
-    public class TcpClientConnection : TcpConnection
+    /// <summary>
+    /// A connection with a TCP server as the endpoint.
+    /// </summary>
+    public sealed class TcpClientConnection : TcpConnection
     {
         private static ILog Logger = LogManager.GetLogger(typeof(TcpConnection));
+        private TcpClient client;
 
-        TcpClient client;
-
+        /// <summary>
+        /// Initializes a new instance of the TcpClientConnection class, trying
+        /// to connect to a TCP server at the given port and address.
+        /// </summary>
+        /// <param name="address">The IP address or hostname of the server.</param>
+        /// <param name="port">The port the server is listening to.</param>
         public TcpClientConnection(string address, int port)
         {
             try
             {
                 client = new TcpClient();
+                
+                // Retrieve host host entry for address
                 IPHostEntry hostEntry = Dns.GetHostEntry(address);
+                
                 // Try to connect on each endpoint
                 string attempted = "";
                 bool connected = false;
@@ -55,7 +66,10 @@ namespace Lebowski.Net.Tcp
             thread.Start();
         }
 
-        protected void RunNetworkingThread()
+        /// <summary>
+        /// Runs the networking thread, dispatching received events to listeners.
+        /// </summary>
+        private void RunNetworkingThread()
         {
             stream = client.GetStream();
             RunReceiveThread();
