@@ -8,16 +8,21 @@
     using TwinEditor.Sharing;
     
     /// <summary>
-    /// Will bootstrap a session, including:
-    ///     - Initial synchronization of contents
-    ///     - Deciding which synchronization strategy to use
+    /// Will bootstrap a session. This currently does not do much besides
+    /// screaming "HI" at each other, but it might be used in the future to:
+    ///     - Make sure application versions are compatible
+    ///     - Agree on a synchronization strategy
+    ///     - Check password information
     /// </summary>
-    ///
-    // TODO: meaningful bootstrapping :)
     public class BootstrappingState : SessionState
     {
+        /// <summary>
+        /// Initializes a new instance of the BootstrappingState class.
+        /// </summary>
+        /// <param name="session">The session this instance will be operating on.</param>
         public BootstrappingState(SessionContext session) : base(session) {}
 
+        /// <inheritdoc/>
         public override void Register()
         {
             Logger.Info("Registering BootstrappingState");
@@ -30,11 +35,28 @@
             Logger.Info("Sending 'HI'");
         }
 
+        /// <inheritdoc/>
         public override void Unregister()
         {
             session.ApplicationConnection.Received -= ApplicationConnectionReceived;
         }
 
+        /// <inheritdoc/>
+        /// <remarks>
+        /// Handles the following events:
+        /// <list type="bullet">
+        ///     <item>
+        ///         <term>"HI 0"</term>
+        ///         <description>Initial handshake</description>
+        ///     </item>
+        /// 
+        ///     <item>
+        ///         <term>"HI 1"</term>
+        ///         <description>Second handshake. Afer receiving this, we will change to 
+        ///         the <see cref="InitializationState">Initializationtate</see>.</description>
+        ///     </item>       
+        /// </list>
+        /// </remarks>
         protected override void ApplicationConnectionReceived(object sender, ReceivedEventArgs e)
         {
             if ((string)e.Message == "HI 0")

@@ -5,13 +5,23 @@
     using TwinEditor.Messaging;
     using TwinEditor.Execution;
     
+    /// <summary>
+    /// This makes up the major part of a session: it provides synchronization
+    /// among multiple sites, using a ISynchronizationStrategy to achieve this
+    /// goal.
+    /// </summary>
     public class SynchronizationState : SessionState
     {
+        /// <summary>
+        /// Initializes a new instance of the SynchronizationState class.
+        /// </summary>
+        /// <param name="session">The session this instance is operating on.</param>
         public SynchronizationState(SessionContext session) : base(session)
         {
 
         }
 
+        /// <inheritdoc/>
         public override void Register()
         {
             Logger.Info("Registering SynchronizationState");
@@ -19,11 +29,17 @@
             session.ApplicationConnection.Received += ApplicationConnectionReceived;
         }
 
+        /// <inheritdoc/>
         public override void Unregister()
         {
             session.ApplicationConnection.Received -= ApplicationConnectionReceived;
         }
 
+        /// <inheritdoc/>
+        /// <remarks>
+        /// Handles the following event types: CloseSessionMessage, ChatMessage, 
+        /// ExecutionResultMessage.
+        /// </remarks>
         protected override void ApplicationConnectionReceived(object sender, ReceivedEventArgs e)
         {
             if (e.Message is CloseSessionMessage)

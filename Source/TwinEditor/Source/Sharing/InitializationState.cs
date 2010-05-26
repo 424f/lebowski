@@ -11,10 +11,15 @@
     /// </summary>
     public class InitializationState : SessionState
     {
+        /// <summary>
+        /// Initializes a new instance of the InitializationState class.
+        /// </summary>
+        /// <param name="session"></param>
         public InitializationState(SessionContext session) : base(session)
         {
         }
         
+        /// <inheritdoc />
         public override void Register()
         {
             // Server sends his state to client and then changes to SynchronizationState
@@ -26,12 +31,17 @@
             }
             session.ApplicationConnection.Received += ApplicationConnectionReceived;
         }
-        
+
+        /// <inheritdoc />        
         public override void Unregister()
         {
             session.ApplicationConnection.Received -= ApplicationConnectionReceived;
         }
-        
+
+        /// <inheritdoc />
+        /// <remarks>
+        /// Handles the following message types: <see cref="InitialContextMessage">InitialContextMessage</see>.
+        /// </remarks>        
         protected override void ApplicationConnectionReceived(object sender, Lebowski.Net.ReceivedEventArgs e)
         {
             if(e.Message is InitialContextMessage)
