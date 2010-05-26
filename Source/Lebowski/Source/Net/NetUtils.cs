@@ -1,4 +1,3 @@
-
 namespace Lebowski.Net
 {
     using System;
@@ -8,6 +7,7 @@ namespace Lebowski.Net
     using System.Runtime.Serialization;
     using System.Runtime.Serialization.Formatters.Binary;
     using System.Text.RegularExpressions;
+    
     /// <summary>
     /// Provides helper methods for networking
     /// </summary>
@@ -27,11 +27,23 @@ namespace Lebowski.Net
             return ms.ToArray();
         }
 
+        /// <summary>
+        /// Deserializes an object from a byte array
+        /// </summary>
+        /// <param name="buffer">The byte array (usually previously obtained using <see cref="Serialize">Serialize</see>)</param>
+        /// <returns>The deserialized object.</returns>
         public static object Deserialize(byte[] buffer)
         {
             return Deserialize(buffer, 0, buffer.Length);
         }
 
+        /// <summary>
+        /// Deserializes an object from a certain range of a byte array
+        /// </summary>
+        /// <param name="buffer">The byte array (usually previously obtained using <see cref="Serialize">Serialize</see>)</param>
+        /// <param name="offset">The offset of the first byte that is part of the object data.</param>
+        /// <param name="count">The number of bytes, starting at offset, that are part of the object data.</param>
+        /// <returns>The deserialized object.</returns>
         public static object Deserialize(byte[] buffer, int offset, int count)
         {
             MemoryStream ms = new MemoryStream();
@@ -42,6 +54,14 @@ namespace Lebowski.Net
             return formatter.Deserialize(ms);
         }
 
+        /// <summary>
+        /// Reads a fixed number of bytes from a network stream. If not enough
+        /// data is currently available, this method blocks until the desired
+        /// number of bytes has been read.
+        /// </summary>
+        /// <param name="stream">The NetworkStream to read from.</param>
+        /// <param name="numBytes">The number of bytes that should be read.</param>
+        /// <returns></returns>
         public static byte[] ReadBytes(NetworkStream stream, int numBytes)
         {
             byte[] buffer = new byte[numBytes];
@@ -51,20 +71,6 @@ namespace Lebowski.Net
                 bytesRead += stream.Read(buffer, bytesRead, numBytes-bytesRead);
             }
             return buffer;
-        }
-
-        public static bool IsValidIP(string ip)
-        {
-            string pattern = @"\b((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$\b";
-            Regex regex = new Regex(pattern);
-            try
-            {
-                return regex.IsMatch(ip, 0);
-            }
-            catch (ArgumentNullException)
-            {
-                return false;
-            }
         }
     }
 }
