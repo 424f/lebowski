@@ -1,5 +1,4 @@
-
-namespace Lebowski
+namespace Lebowski.Synchronization
 {
     using System;
     /// <summary>

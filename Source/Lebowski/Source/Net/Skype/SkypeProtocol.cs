@@ -8,6 +8,7 @@ namespace Lebowski.Net.Skype
     using SKYPE4COMLib;
     using System.Windows.Forms;
     using Lebowski.Net;
+    using Lebowski.Synchronization;
     using log4net;
     /// <summary>
     /// This provides a wrapper around the AP2AP Skype4COM API that allows us

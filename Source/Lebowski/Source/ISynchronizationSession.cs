@@ -1,8 +1,9 @@
 namespace Lebowski
 {
     using System;
-    using Lebowski.Synchronization.DifferentialSynchronization;
     using Lebowski.Net;
+    using Lebowski.Synchronization;
+    using Lebowski.Synchronization.DifferentialSynchronization;
 
     /// <summary>
     /// Describes the part of the state of a synchronization session

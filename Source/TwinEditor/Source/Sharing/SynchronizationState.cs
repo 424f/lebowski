@@ -1,6 +1,7 @@
 ﻿namespace TwinEditor.Sharing
 {
     using Lebowski.Net;
+    using Lebowski.Synchronization;
     
     public class SynchronizationState : SessionState
     {

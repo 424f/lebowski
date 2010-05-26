@@ -2,7 +2,9 @@
 namespace Lebowski.Net.Tcp
 {
     using System;
+    using Lebowski.Synchronization;
     using Lebowski.Synchronization.DifferentialSynchronization;
+    
     public class TcpProtocol : ICommunicationProtocol
     {
         public void Share(ISynchronizationSession session)

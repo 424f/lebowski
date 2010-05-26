@@ -4,6 +4,7 @@
     using Lebowski;
     using Lebowski.Net;
     using Lebowski.Synchronization;
+    using Lebowski.Synchronization.DifferentialSynchronization;
     using TwinEditor.Sharing;
     
     /// <summary>
