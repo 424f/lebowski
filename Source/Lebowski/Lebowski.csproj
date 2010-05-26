@@ -97,8 +97,9 @@
     <Compile Include="Source\Net\ICommunicationProtocol.cs" />
     <Compile Include="Source\Net\IConnection.cs" />
     <Compile Include="Source\Net\JoinSessionEventArgs.cs" />
-    <Compile Include="Source\Net\Lidgren\UdpConnection.cs" />
-    <Compile Include="Source\Net\Lidgren\UdpProtocol.cs" />
+    <Compile Include="Source\Net\Udp\UdpClientConnection.cs" />
+    <Compile Include="Source\Net\Udp\UdpConnection.cs" />
+    <Compile Include="Source\Net\Udp\UdpProtocol.cs" />
     <Compile Include="Source\Net\Local\LocalConnection.cs" />
     <Compile Include="Source\Net\Local\LocalProtocol.cs" />
     <Compile Include="Source\Net\MultichannelConnection.cs" />

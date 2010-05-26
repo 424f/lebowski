@@ -5,21 +5,11 @@ namespace Lebowski.Net.Tcp
     using Lebowski.Synchronization.DifferentialSynchronization;
     public class TcpProtocol : ICommunicationProtocol
     {
-        public event EventHandler<HostSessionEventArgs> HostSession;
-        public event EventHandler<JoinSessionEventArgs> JoinSession;
-        public event EventHandler<EventArgs> Waiting;
-
-        public string Name
-        {
-            get { return "TCP"; }
-        }
-
         public void Share(ISynchronizationSession session)
         {
             TcpShareForm form = new TcpShareForm();
             form.Submit += delegate
             {
-                //session.AwaitingSession();
                 form.Enabled = false;
                 session.State = SessionStates.AwaitingConnection;
                 form.Invoke((Action) delegate
@@ -27,7 +17,7 @@ namespace Lebowski.Net.Tcp
                     form.Dispose();
                 });
                 TcpServerConnection connection = new TcpServerConnection(form.Port);
-                //session.AwaitingSession();
+                
                 connection.ClientConnected += delegate
                 {
                     OnHostSession(new HostSessionEventArgs(session, connection));
@@ -36,6 +26,12 @@ namespace Lebowski.Net.Tcp
             form.ShowDialog();
         }
 
+        public string Name
+        {
+            get { return "TCP"; }
+        }
+        
+        
         public bool CanShare
         {
             get { return true; }
@@ -62,14 +58,11 @@ namespace Lebowski.Net.Tcp
             }
         }
 
-        protected virtual void OnWaiting(EventArgs e)
-        {
-            if (Waiting != null)
-            {
-                Waiting(this, e);
-            }
-        }
-
+        /// <inheritdoc/>
+        /// <remarks>
+        /// Calling this will display a form to the user to enter connection
+        /// information.
+        /// </remarks>
         public void Participate()
         {
             TcpParticipateForm form = new TcpParticipateForm();
@@ -98,9 +91,19 @@ namespace Lebowski.Net.Tcp
             form.ShowDialog();
         }
 
+        /// <inheritdoc/>
+        /// <remarks>The TCP protocol does not have any external dependencies,
+        /// so it is always enabled.</remarks>
         public bool Enabled
         {
             get { return true; }
         }
+        
+        /// <inheritdoc/>
+        public event EventHandler<HostSessionEventArgs> HostSession;
+        
+        /// <inheritdoc/>
+        public event EventHandler<JoinSessionEventArgs> JoinSession;
+
     }
 }
