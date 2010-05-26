@@ -127,6 +127,7 @@
       <DependentUpon>TcpShareForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Source\ISynchronizationSession.cs" />
+    <Compile Include="Source\Net\Udp\UdpServerConnection.cs" />
     <Compile Include="Source\StateVector.cs" />
     <Compile Include="Source\Synchronization\DifferentialSynchronization\DifferentialSynchronizationStrategy.cs" />
     <Compile Include="Source\Synchronization\DifferentialSynchronization\DiffMessage.cs" />
