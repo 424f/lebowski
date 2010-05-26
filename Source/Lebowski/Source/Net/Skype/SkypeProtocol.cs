@@ -266,7 +266,25 @@ namespace Lebowski.Net.Skype
 
                     string base64buffer = Convert.ToBase64String(both);
 
-                    stream.Write(base64buffer);
+                    try
+                    {
+                        stream.Write(base64buffer);
+                    }
+                    catch(Exception e)
+                    {
+                        Logger.ErrorFormat("Could not send on Skype Ap2Ap stream: {0}", e);
+                        
+                        // As skype does not notify us when a stream doesn't work
+                        // anymore, we detect here that a stream is not working anymore.
+                        foreach(SkypeConnection connection in connections[user].Values)
+                        {
+                            connection.OnConnectionClosed(new EventArgs());
+                        }
+                        
+                        this.streams.Remove(user);
+                        this.connections.Remove(user);
+                        this.connectionsForUser.Remove(user);
+                    }
                 }
             }, null);
         }
@@ -307,20 +325,19 @@ namespace Lebowski.Net.Skype
             foreach(ApplicationStream stream in pStreams)
             {
                 Console.WriteLine(stream.PartnerHandle + "::" + stream.Handle);
+                if (streams.ContainsKey(stream.PartnerHandle))
+                {
+                    Logger.Info(string.Format("New connection to {0} replaces old one.", pStreams[1].PartnerHandle));
+                }
+                else
+                {
+                    connections[stream.PartnerHandle] = new Dictionary<int, SkypeConnection>();
+                }
+   
+                streams[stream.PartnerHandle] = stream;
             }
             Console.WriteLine();
             Console.WriteLine("--");
-
-            if (streams.ContainsKey(pStreams[1].PartnerHandle))
-            {
-                Logger.Info(string.Format("New connection to {0} replaces old one.", pStreams[1].PartnerHandle));
-            }
-            else
-            {
-                connections[pStreams[1].PartnerHandle] = new Dictionary<int, SkypeConnection>();
-            }
-
-            streams[pStreams[1].PartnerHandle] = pStreams[1];
         }
 
         /// <summary>

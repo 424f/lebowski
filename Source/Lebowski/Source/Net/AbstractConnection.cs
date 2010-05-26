@@ -2,6 +2,7 @@
 {
     using System;
     using System.Threading;
+    using log4net;
     
     /// <summary>
     /// Provides functionality that classes implementing <see cref="Lebowski.Net.IConnection">IConnection</see>
@@ -9,6 +10,8 @@
     /// </summary>
     public abstract class AbstractConnection : IConnection
     {
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(AbstractConnection));    
+        
         /// <inheritdoc/>
         public event EventHandler<ReceivedEventArgs> Received; 
         
@@ -51,7 +54,14 @@
             }            
             if (Received != null)
             {
-                Received(this, e);
+                try
+                {
+                    Received(this, e);
+                }
+                catch(Exception exception)
+                {
+                    Logger.ErrorFormat("En exception occurred when dispatching {0}:\n{1}", e, exception);
+                }
             }
         }        
         

@@ -127,5 +127,10 @@ namespace Lebowski.Net.Skype
             }
             protocol.Send(remote, OutgoingChannel, o);
         }
+        
+        internal new void OnConnectionClosed(EventArgs e)
+        {
+            base.OnConnectionClosed(e);
+        }
     }
 }
