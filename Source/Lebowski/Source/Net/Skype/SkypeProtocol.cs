@@ -205,7 +205,7 @@ namespace Lebowski.Net.Skype
             form.Submit += delegate
             {    
                 bool succeeded = false;
-                for(int attempt = 1; attempt <= 2; ++attempt)
+                for(int attempt = 1; attempt <= 2 && !succeeded; ++attempt)
                 {
                     try
                     {
