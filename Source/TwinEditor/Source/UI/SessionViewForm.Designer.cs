@@ -191,7 +191,5 @@ namespace TwinEditor.UI
         private System.Windows.Forms.TextBox ChatHistory;
         public ICSharpCode.TextEditor.TextEditorControl SourceCode;
         private System.Windows.Forms.TabPage tabPage3;
-
-
     }
 }

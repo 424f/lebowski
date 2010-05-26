@@ -5,7 +5,7 @@ namespace TwinEditor.UI
     using System.Windows.Forms;
     using System.Collections.Generic;
     /// <summary>
-    /// RecentFilesList implements a bounded list most recently used list (MRUList)
+    /// RecentFilesList is a bounded list that realized a most recently used list (MRUList)
     /// </summary>
     public class RecentFilesList
     {
@@ -58,7 +58,7 @@ namespace TwinEditor.UI
         /// Adds the given filename to the recent files list.
         /// Removes previous occurence if necessary and place new filename at the beginning of the list.
         /// </summary>
-        /// <param name="filename"></param>
+        /// <param name="filename">The filename of the file to be added as recent file</param>
         public void Add(string filename)
         {
             // remove file from list (if already in)
@@ -75,7 +75,7 @@ namespace TwinEditor.UI
         /// Fires the RecentFilesChanged event.
         /// Is called when a new filename has been added to the recent files list.
         /// </summary>
-        /// <param name="e"><see cref="RecentFilesChangedEventArgs"></see></param>
+        /// <param name="e">A <see cref="RecentFilesChangedEventArgs"></see> that contains the event data</param>
         protected virtual void OnRecentFilesChanged(RecentFilesChangedEventArgs e)
         {
             if (RecentFilesChanged != null)
@@ -85,9 +85,9 @@ namespace TwinEditor.UI
         }
     }
 
-    /// <summary>
+    /// <remarks>
     /// <see cref="RecentFilesChangedEventArgs"></see> is the EventArgs class for <see cref="RecentFilesChanged"></see>
-    /// </summary>
+    /// </remarks>
     public sealed class RecentFilesChangedEventArgs : EventArgs
     {
         public List<string> RecentFiles { get; private set; }

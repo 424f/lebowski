@@ -34,7 +34,7 @@ namespace TwinEditor.UI
             InitializeComponent();
 
             Logger.Info("MainForm component initialized.");
-            //SourceCode.SetHighlighting("C#");
+            // SourceCode.SetHighlighting("C#");
 
             // Clear tabs
             MainTab.TabPages.Clear();

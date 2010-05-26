@@ -152,8 +152,7 @@ namespace TwinEditor
             };
             
             // Application closing
-            view.ApplicationClosing += delegate
-            {
+            view.ApplicationClosing += delegate {
                 foreach(SessionContext sessionContext in currentSessions)
                 {
                     sessionContext.Close();

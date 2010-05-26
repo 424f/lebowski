@@ -134,7 +134,6 @@
     <Compile Include="Source\Synchronization\dOPT\DeleteOperationTransformer.cs" />
     <Compile Include="Source\Synchronization\dOPT\InsertOperationTransformer.cs" />
     <Compile Include="Source\Synchronization\dOPT\Model.cs" />
-    <Compile Include="Source\Synchronization\dOPT\Request.cs" />
     <Compile Include="Source\Synchronization\ISynchronizationStrategy.cs" />
     <Compile Include="Source\Synchronization\SessionStates.cs" />
     <Compile Include="Source\TextModel\AbstractTextContext.cs" />

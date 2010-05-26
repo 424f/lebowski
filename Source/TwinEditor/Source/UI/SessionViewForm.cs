@@ -40,6 +40,7 @@ namespace TwinEditor.UI
         // Stores the exeucution view form for each user (identified by site id)
         private Dictionary<int, ExecutionViewForm> executionViewForms = new Dictionary<int, ExecutionViewForm>();
         private Dictionary<int, TabPage> executionTabs = new Dictionary<int, TabPage>();
+        private int numExecutions;
         #endregion
 
         public ITextContext Context { get; protected set; }
@@ -335,8 +336,8 @@ namespace TwinEditor.UI
 
     public sealed class StateChangedEventArgs : EventArgs
     {
-        //public IConnection Connection { get; private set; }
-        //public ISessionContext Session { get; private set; }
+        // public IConnection Connection { get; private set; }
+        // public ISessionContext Session { get; private set; }
         public SessionStates State { get; private set; }
 
         public StateChangedEventArgs(SessionStates state)
