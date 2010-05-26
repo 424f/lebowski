@@ -36,9 +36,14 @@
         {
             if(e.Message is InitialContextMessage)
             {
-                session.Context.Data = ((InitialContextMessage)e.Message).Text;
-                session.SynchronizationStrategy = new DifferentialSynchronizationStrategy(session.SiteId, session.Context, session.SynchronizationConnection);
-                session.ActivateState(new SynchronizationState(session));
+            	session.Context.Invoke((Action)
+					delegate
+					{
+		                session.Context.Data = ((InitialContextMessage)e.Message).Text;
+		                session.SynchronizationStrategy = new DifferentialSynchronizationStrategy(session.SiteId, session.Context, session.SynchronizationConnection);
+		                session.ActivateState(new SynchronizationState(session));
+					}
+				);
             }
             else
             {
