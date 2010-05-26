@@ -4,64 +4,91 @@ namespace TwinEditor.UI
     using System;
     using System.Windows.Forms;
     using System.Collections.Generic;
-	/// <summary>
-	/// Description of RecentFilesList.
-	/// </summary>
-	public class RecentFilesList
-	{
-		// TODO: shift to settings
-		private int bufferSize;
+    /// <summary>
+    /// RecentFilesList implements a bounded list most recently used list (MRUList)
+    /// </summary>
+    public class RecentFilesList
+    {
+        private int bufferSize;
+        private List<string> recentFiles;
+        /// <summary>
+        /// Occurs when recent files list has changed.
+        /// </summary>
+        public event EventHandler<RecentFilesChangedEventArgs> RecentFilesChanged;
 
-		private List<string> recentFiles;
+        /// <summary>
+        /// Constructor. 
+        /// Initializies a new instance of RcentFilesList
+        /// </summary>
+        /// <param name="size">Max size of the list</param>
+        public RecentFilesList(int size)
+        {
+            recentFiles = new List<string>();
+            bufferSize = size;
+        }
 
-		public event EventHandler<RecentFilesChangedEventArgs> RecentFilesChanged;
+        /// <summary>
+        /// CopyConstructor.
+        /// Initializes a new instance of RecentFilesList
+        /// </summary>
+        /// <param name="size">Max size of the list</param>
+        /// <param name="recentFiles">The list to copy from</param>
+        public RecentFilesList(int size, List<string> recentFiles)
+        {
+            this.recentFiles = recentFiles;
+            bufferSize = size;
+        }
+        
+        /// <summary>
+        /// Max size of the recent files list.
+        /// </summary>
+        public int BufferSize
+        {
+            get
+            {
+                return bufferSize;
+            }
+            set
+            {
+                bufferSize = Math.Max(value, 0);
+            }
+        }
 
-		public RecentFilesList(int size)
-		{
-			recentFiles = new List<string>();
-			bufferSize = size;
-		}
+        /// <summary>
+        /// Adds the given filename to the recent files list.
+        /// Removes previous occurence if necessary and place new filename at the beginning of the list.
+        /// </summary>
+        /// <param name="filename"></param>
+        public void Add(string filename)
+        {
+            // remove file from list (if already in)
+            recentFiles.Remove(filename);
+            // if recent files list is full, remove the oldest entry
+            if (recentFiles.Count == bufferSize)
+                recentFiles.RemoveAt(bufferSize - 1);
+            // insert the newly added filename
+            recentFiles.Insert(0, filename);
+            OnRecentFilesChanged(new RecentFilesChangedEventArgs(recentFiles));
+        }
 
-		public RecentFilesList(int size, List<string> recentFiles)
-		{
-			this.recentFiles = recentFiles;
-			bufferSize = size;
-		}
-		
-		public int BufferSize
-		{
-			get
-			{
-				return bufferSize;
-			}
-			set
-			{
-				bufferSize = Math.Max(value, 0);
-			}
-		}
+        /// <summary>
+        /// Fires the RecentFilesChanged event.
+        /// Is called when a new filename has been added to the recent files list.
+        /// </summary>
+        /// <param name="e"><see cref="RecentFilesChangedEventArgs"></see></param>
+        protected virtual void OnRecentFilesChanged(RecentFilesChangedEventArgs e)
+        {
+            if (RecentFilesChanged != null)
+            {
+                RecentFilesChanged(this, e);
+            }
+        }
+    }
 
-		public void Add(string filename)
-		{
-			// remove file from list (if already in)
-			recentFiles.Remove(filename);
-			// if recent files list is full, remove the oldest entry
-			if (recentFiles.Count == bufferSize)
-				recentFiles.RemoveAt(bufferSize - 1);
-			// insert the newly added filename
-			recentFiles.Insert(0, filename);
-			OnRecentFilesChanged(new RecentFilesChangedEventArgs(recentFiles));
-		}
-
-		protected virtual void OnRecentFilesChanged(RecentFilesChangedEventArgs e)
-		{
-			if (RecentFilesChanged != null)
-			{
-				RecentFilesChanged(this, e);
-			}
-		}
-	}
-
-	public sealed class RecentFilesChangedEventArgs : EventArgs
+    /// <summary>
+    /// <see cref="RecentFilesChangedEventArgs"></see> is the EventArgs class for <see cref="RecentFilesChanged"></see>
+    /// </summary>
+    public sealed class RecentFilesChangedEventArgs : EventArgs
     {
         public List<string> RecentFiles { get; private set; }
 
