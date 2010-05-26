@@ -1,5 +1,3 @@
-
-
 namespace Lebowski.Synchronization.dOPT
 {
     using System;
@@ -7,42 +5,24 @@ namespace Lebowski.Synchronization.dOPT
     using Lebowski;
     using Lebowski.TextModel;
     using Lebowski.TextModel.Operations;
-    public class Request<OperationType>
-    {
-        public int SiteId { get; protected set; }
-        public StateVector State { get; protected set; }
-        public OperationType Operation { get; protected set; }
-        public int Priority { get; protected set; }
 
-        public Request(int siteId, StateVector state, OperationType op, int priority)
-        {
-            SiteId = siteId;
-            State = state;
-            Operation = op;
-            Priority = priority;
-        }
-    }
-
+    /// <summary>
+    /// Represents the dOPT synchronization model
+    /// </summary>
+    /// <remarks>
+    /// The implementation is currently not complete and therefore
+    /// not usable.
+    /// </remarks>
     public class Model<OperationType, ContextType>
         where OperationType : TextOperation
     {
-        int SiteId;
-        List<Request<OperationType>> Requests;
-        List<Request<OperationType>> Broadcasts;
-        List<Request<OperationType>> Log;
-        public ContextType Context { get; protected set; }
-
-        public event EventHandler Received;
-        public event EventHandler Execute;
-
-        public StateVector State
-        {
-            get { return state; }
-            protected set {    state = value; }
-        }
+        private int SiteId;
+        private List<Request<OperationType>> Requests;
+        private List<Request<OperationType>> Broadcasts;
+        private List<Request<OperationType>> Log;
         private StateVector state;
 
-        public Model(int siteId, ContextType context)
+        internal Model(int siteId, ContextType context)
         {
             SiteId = siteId;
             Context = context;
@@ -51,10 +31,27 @@ namespace Lebowski.Synchronization.dOPT
             Broadcasts = new List<Request<OperationType>>();
             Log = new List<Request<OperationType>>();
             State = new StateVector(2);
+            
+            throw new NotImplementedException("Not completely implemented yet.");
 
         }
 
-        public void Generate(OperationType operation)
+        /// <summary>
+        /// The Context that represents the current local state.
+        /// </summary>
+        internal ContextType Context { get; set; }
+
+        /// <summary>
+        /// State vector with scalar entries for each remote site.
+        /// </summary>
+        internal StateVector State
+        {
+            get { return state; }
+            set { state = value; }
+        }
+                
+        
+        internal void Generate(OperationType operation)
         {
             // TODO: priority
             int p = SiteId;
@@ -64,19 +61,19 @@ namespace Lebowski.Synchronization.dOPT
             ExecuteRequests();
         }
 
-        public void Receive(Request<OperationType> req)
+        internal void Receive(Request<OperationType> req)
         {
             Requests.Add(req);
             ExecuteRequests();
             Received(this, null);
         }
 
-        public void Write(string text)
+        internal void Write(string text)
         {
             Console.WriteLine(new String('\t', 3*SiteId) + text);
         }
 
-        public void ExecuteRequests()
+        internal void ExecuteRequests()
         {
             List<Request<OperationType>> removeList = new List<Request<OperationType>>();
             foreach (Request<OperationType> req in Requests)
@@ -146,12 +143,12 @@ namespace Lebowski.Synchronization.dOPT
             Execute(this, null);
         }
 
-        void Broadcast(Request<OperationType> req)
+        internal void Broadcast(Request<OperationType> req)
         {
             Broadcasts.Add(req);
         }
 
-        public void DeliverBroadcasts(Model<OperationType, ContextType>[] others)
+        internal void DeliverBroadcasts(Model<OperationType, ContextType>[] others)
         {
             foreach (Request<OperationType> req in Broadcasts)
             {
@@ -162,5 +159,15 @@ namespace Lebowski.Synchronization.dOPT
             }
             Broadcasts.Clear();
         }
+
+        /// <summary>
+        /// Occurs when a request is received.
+        /// </summary>
+        public event EventHandler Received;
+        
+        /// <summary>
+        /// Occurs when a request is executed.
+        /// </summary>
+        public event EventHandler Execute;
     }
 }
