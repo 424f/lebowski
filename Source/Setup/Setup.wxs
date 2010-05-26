@@ -41,7 +41,6 @@
             <File Id="IronPython.Modules.dll" Name="IronPython.Modules.dll" Source="../TwinEditor/bin/Debug\IronPython.Modules.dll" />
             <File Id="Lebowski.dll" Name="Lebowski.dll" Source="../TwinEditor/bin/Debug\Lebowski.dll" />
             <File Id="Lebowski.pdb" Name="Lebowski.pdb" Source="../TwinEditor/bin/Debug\Lebowski.pdb" />
-            <File Id="Lidgren.Network.dll" Name="Lidgren.Network.dll" Source="../TwinEditor/bin/Debug\Lidgren.Network.dll" />
             <File Id="log4net.dll" Name="log4net.dll" Source="../TwinEditor/bin/Debug\log4net.dll" />
             <File Id="Microsoft.Dynamic.dll" Name="Microsoft.Dynamic.dll" Source="../TwinEditor/bin/Debug\Microsoft.Dynamic.dll" />
             <File Id="Microsoft.Scripting.Core.dll" Name="Microsoft.Scripting.Core.dll" Source="../TwinEditor/bin/Debug\Microsoft.Scripting.Core.dll" />

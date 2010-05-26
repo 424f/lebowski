@@ -1,4 +1,3 @@
-
 namespace Lebowski.Net.Skype
 {
     using System;
@@ -10,6 +9,7 @@ namespace Lebowski.Net.Skype
     using Lebowski.Net;
     using Lebowski.Synchronization;
     using log4net;
+    
     /// <summary>
     /// This provides a wrapper around the AP2AP Skype4COM API that allows us
     /// to send arbitrary objects to other skype users, even
@@ -27,63 +27,39 @@ namespace Lebowski.Net.Skype
     /// </summary>
     sealed public class SkypeProtocol : ICommunicationProtocol
     {
-        public event EventHandler<HostSessionEventArgs> HostSession;
-        public event EventHandler<JoinSessionEventArgs> JoinSession;
-
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(SkypeProtocol));        
+        
         private const int ApplicationConnectionId = 0;
-
-        private static readonly ILog Logger = LogManager.GetLogger(typeof(SkypeProtocol));
-
         private const string ApplicationName = "LEBOWSKI-01";
         private SKYPE4COMLib.Application Application;
-
         private SKYPE4COMLib.SkypeClass API;
-
         private bool isInitialized = false;
-
-        //public List<string> friends = new List<string>();
-        
-        /// <summary>
-        /// Gets all the friends that are online in the local user's friend list
-        /// </summary>
-        private Dictionary<string, User> friends = new Dictionary<string, User>();
-        
-        /// <summary>
-        /// Gets all the friends that are online in the local user's friend list
-        /// </summary>
-        public List<string> FriendNames
-        {
-            get
-            {
-                List<string> result = new List<string>();
-                foreach(User user in friends.Values)
-                {
-                    result.Add(user.Handle);
-                }
-                return result;
-            }
-        }
-
-        public bool Enabled { get; private set; }
-
         private SynchronizationContext synchronizationContext;
-
+        
+        /// <summary>
+        /// Gets all the friends that are online in the local user's friend list
+        /// </summary>
+        private Dictionary<string, User> friends = new Dictionary<string, User>();        
+        
         /// <summary>
         /// We keep only one stream per user, even if we're sharing multiple documents
         /// or in multiple directions. To enable this, we prepend the connection id for
         /// every packet that is sent over a stream. The connectionId 0 is reserved for
         /// application-wide messages (e.g. invitations)
         /// </summary>
-        Dictionary<string, ApplicationStream> streams = new Dictionary<string, ApplicationStream>();
-        Dictionary<string, Dictionary<int, SkypeConnection>> connections = new Dictionary<string, Dictionary<int, SkypeConnection>>();
-        Dictionary<string, int> connectionsForUser = new Dictionary<string, int>();
+        private Dictionary<string, ApplicationStream> streams = new Dictionary<string, ApplicationStream>();
+        private Dictionary<string, Dictionary<int, SkypeConnection>> connections = new Dictionary<string, Dictionary<int, SkypeConnection>>();
+        private Dictionary<string, int> connectionsForUser = new Dictionary<string, int>();
 
-        Dictionary<int, SharingInvitationMessage> invitations = new Dictionary<int, SharingInvitationMessage>();
-        Dictionary<int, SkypeConnection> invitationChannels = new Dictionary<int, SkypeConnection>();
-        Dictionary<int, ISynchronizationSession> invitationSessions = new Dictionary<int, ISynchronizationSession>();
+        private Dictionary<int, SharingInvitationMessage> invitations = new Dictionary<int, SharingInvitationMessage>();
+        private Dictionary<int, SkypeConnection> invitationChannels = new Dictionary<int, SkypeConnection>();
+        private Dictionary<int, ISynchronizationSession> invitationSessions = new Dictionary<int, ISynchronizationSession>();
 
-        int numInvitations = 0;
-
+        private int numInvitations = 0;        
+        
+        /// <summary>
+        /// Initializes a new instance of the SkypeProtocol class.
+        /// </summary>
         public SkypeProtocol()
         {
             Enabled = true;
@@ -106,7 +82,39 @@ namespace Lebowski.Net.Skype
                 Enabled = false;
                 Logger.WarnFormat("Could not initialize {0}:\n{1}", GetType().Name, e.ToString());
             }
+        }        
+
+        /// <inheritdoc/>
+        public bool CanShare
+        {
+            get { return true; }
         }
+
+        /// <inheritdoc/>
+        public bool CanParticipate
+        {
+            // When using skype we're actively sending invitations, so there is no way to manually participate in a session
+            get { return false; }
+        }        
+        
+        /// <inheritdoc/>
+        public bool Enabled { get; private set; }        
+        
+        /// <summary>
+        /// Gets all the friends that are online in the local user's friend list
+        /// </summary>
+        public List<string> FriendNames
+        {
+            get
+            {
+                List<string> result = new List<string>();
+                foreach(User user in friends.Values)
+                {
+                    result.Add(user.Handle);
+                }
+                return result;
+            }
+        }        
         
         /// <summary>
         /// Checks whether the friend with the given username is online.
@@ -121,13 +129,22 @@ namespace Lebowski.Net.Skype
                    friends[userName].OnlineStatus != TOnlineStatus.olsOffline;
         }
 
-        public void EstablishConnection(string user)
+        /// <inheritdoc/>
+        public string Name
+        {
+            get { return "Skype API"; }
+        }        
+
+        /// <summary>
+        /// Ensures that a connection stream is available to the specified user.
+        /// </summary>
+        /// <param name="user">The user to establish a connection to.</param>
+        private void EstablishConnection(string user)
         {
             // We might have to create a stream to this user
             if (!streams.ContainsKey(user))
             {
                 Application.Connect(user, true);
-
             }
 
             while (!streams.ContainsKey(user))
@@ -136,42 +153,11 @@ namespace Lebowski.Net.Skype
                 Thread.Sleep(100);
             }
         }
-
-        public SkypeConnection Connect(string user)
-        {
-            EstablishConnection(user);
-
-            connectionsForUser[user] = connectionsForUser.ContainsKey(user) ? connectionsForUser[user]+1 : 1;
-            Console.WriteLine("Creating connection {0} for user {1}", connectionsForUser[user], user);
-            SkypeConnection connection = new SkypeConnection(this, user, connectionsForUser[user]);
-            connections[user][connectionsForUser[user]] = connection;
-
-            return connection;
-        }
-
-        void UpdateFriends()
-        {
-            this.friends.Clear();
-
-            var friends = API.Friends;
-            
-            for(int i = 1; i <= friends.Count; ++i)
-            {
-                var friend = friends[i];
-                if (friend.OnlineStatus != TOnlineStatus.olsOffline)
-                {
-                    Console.WriteLine(friend.FullName + " / " + friend.Handle + " / " + friend.DisplayName + " / " + friend.OnlineStatus);
-                }
-                this.friends.Add(friend.Handle, friend);
-            }
-
-        }
-
-        public string Name
-        {
-            get { return "Skype API"; }
-        }
-
+        
+        /// <summary>
+        /// Initializes the protocol, by setting up event handlers and registering
+        /// our application.
+        /// </summary>
         private void Initialize()
         {
             if (isInitialized)
@@ -182,16 +168,33 @@ namespace Lebowski.Net.Skype
             Application = API.get_Application(ApplicationName);
             Application.Create();
 
-            Console.WriteLine("Application created..");
-
             API._ISkypeEvents_Event_ApplicationStreams += ApplicationStreams;
             API.ApplicationConnecting += ApplicationConnecting;
             API.ApplicationReceiving += ApplicationReceiving;
 
             isInitialized = true;
+            
+            Logger.Info("Initialized SkypeProtocol");
 
+        }        
+
+        /// <summary>
+        /// Establishes a connection to a user and returns the associated connection.
+        /// </summary>
+        /// <returns>The connection that can be used to communicate with this user.</returns>
+        private SkypeConnection Connect(string user)
+        {
+            EstablishConnection(user);
+
+            connectionsForUser[user] = connectionsForUser.ContainsKey(user) ? connectionsForUser[user]+1 : 1;
+            Logger.InfoFormat("Creating connection {0} for user {1}", connectionsForUser[user], user);
+            SkypeConnection connection = new SkypeConnection(this, user, connectionsForUser[user]);
+            connections[user][connectionsForUser[user]] = connection;
+
+            return connection;
         }
 
+        /// <inheritdoc/>
         public void Share(ISynchronizationSession session)
         {
             UpdateFriends();
@@ -218,25 +221,39 @@ namespace Lebowski.Net.Skype
             };
             form.ShowDialog();
         }
-
-        public bool CanShare
+        
+        /// <summary>
+        /// Synchronizes the cache of friends with the data provided by the 
+        /// Skype API.
+        /// </summary>
+        private void UpdateFriends()
         {
-            get { return true; }
+            this.friends.Clear();
+
+            var friends = API.Friends;
+            
+            for(int i = 1; i <= friends.Count; ++i)
+            {
+                var friend = friends[i];
+                this.friends.Add(friend.Handle, friend);
+            }
+
         }
 
-        public bool CanParticipate
-        {
-            // As when using skype, we're actively sending invitations, there is no way to manually participate in a session
-            get { return false; }
-        }
-
+        /// <summary>
+        /// Sends a message to the specified skype user using a specified
+        /// outgoing channel.
+        /// </summary>
+        /// <param name="user">The username to send a message to.</param>
+        /// <param name="connectionId">The outgoing channel (i.e. incoming channel at remote client)</param>
+        /// <param name="o">The message to send. Must be implement Serializable.</param>
         internal void Send(string user, int connectionId, object o)
         {
             var stream = streams[user];
 
             synchronizationContext.Send(delegate
             {
-                lock(streams)
+                lock (streams)
                 {
 
                     byte[] prefix = BitConverter.GetBytes(connectionId);
@@ -253,35 +270,39 @@ namespace Lebowski.Net.Skype
             }, null);
         }
 
-        void OnHostSession(HostSessionEventArgs e)
+        private void OnHostSession(HostSessionEventArgs e)
         {
-            if (HostSession != null) {
+            if (HostSession != null)
+            {
                 HostSession(this, e);
             }
         }
 
-        void OnJoinSession(JoinSessionEventArgs e)
+        private void OnJoinSession(JoinSessionEventArgs e)
         {
-            if (JoinSession != null) {
+            if (JoinSession != null)
+            {
                 JoinSession(this, e);
             }
         }
 
+        /// <inheritdoc/>
+        /// <remarks>
+        /// Participate not implemented for SkypeProtocol.
+        /// </remarks>
         public void Participate()
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Handles the Skype API ApplicationStreams event
+        /// </summary>
         private void ApplicationStreams(SKYPE4COMLib.Application pApp, ApplicationStreamCollection pStreams)
         {
             if (pApp.Name != Application.Name)
                 return;
 
-            Console.Write("Application stream: ");
-            for(int i = 1; i <= pStreams.Count; ++i)
-            {
-                Console.Write("{0} {1} | ", pStreams[i].Handle, pStreams[i].PartnerHandle);
-            }
             Console.WriteLine();
 
             if (streams.ContainsKey(pStreams[1].PartnerHandle))
@@ -296,47 +317,45 @@ namespace Lebowski.Net.Skype
             streams[pStreams[1].PartnerHandle] = pStreams[1];
         }
 
+        /// <summary>
+        /// Handles the Skype API ApplicationConnecting event.
+        /// </summary>
         private void ApplicationConnecting(SKYPE4COMLib.Application pApp, UserCollection pUsers)
         {
-            Console.Write("Connecting: " + pApp.Name + ":: ");
+            // TODO: are states correct?
+            
+            Logger.Info("Connecting: " + pApp.Name + ":: ");
             for(int i = 1; i <= pUsers.Count; ++i)
             {
-                Console.Write(pUsers[i].Handle + " ");
+                Logger.Info(pUsers[i].Handle + " ");
             }
-            Console.WriteLine();
 
 
             if (pUsers.Count == 1)
             {
-                Console.WriteLine("Connecting...");
+                Logger.Info("Connecting...");
             }
 
             if (pUsers.Count == 0)
             {
-                Console.WriteLine("Waiting for accept...");
+                Logger.Info("Waiting for accept...");
             }
         }
 
+        /// <summary>
+        /// Handles the Skype API ApplicationReceiving event.
+        /// </summary>
         private void ApplicationReceiving(SKYPE4COMLib.Application pApp, ApplicationStreamCollection pStreams)
         {
-            Console.Write("Receving: {0} ::", pApp.Name);
-            for(int i = 1; i <= pStreams.Count; ++i)
-            {
-                Console.Write("{0} ", pStreams[i].Handle);
-            }
-            Console.WriteLine();
-
+            // TODO: move GUI code out of here
+            
             if (pStreams.Count == 0)
                 return;
             if (pStreams[1].DataLength == 0)
                 return;
             string text = pStreams[1].Read();
-            Console.WriteLine("RECV " + text);
-
-            //stream.Write("hey dude");
 
             // Decode message
-            Logger.Info(string.Format("Received skype datagram: {0}", text));
             try
             {
                 byte[] both = Convert.FromBase64String(text);
@@ -435,5 +454,11 @@ namespace Lebowski.Net.Skype
                 Logger.Error("Received ill-formed skype datagram", e);
             }
         }
+        
+        /// <inheritdoc/>
+        public event EventHandler<HostSessionEventArgs> HostSession;
+        
+        /// <inheritdoc/>        
+        public event EventHandler<JoinSessionEventArgs> JoinSession;        
     }
 }

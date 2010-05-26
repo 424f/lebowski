@@ -1,6 +1,3 @@
-
-
-
 namespace TwinEditor
 {
     using System;
@@ -13,7 +10,6 @@ namespace TwinEditor
     using Lebowski;
     using Lebowski.Net;
     using Lebowski.Net.Tcp;
-    using Lebowski.Net.Udp;
     using Lebowski.TextModel;
     using Lebowski.Synchronization.DifferentialSynchronization;
     using TwinEditor.UI;

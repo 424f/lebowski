@@ -114,12 +114,13 @@ namespace Lebowski.Synchronization.dOPT
 
                         if (sj[k] <= sk[k])
                         {
-                            // TODO: priority
+                            throw new NotImplementedException();
+                            /*// TODO: priority
                             oj = (OperationType)oj.Transform(ok);
                             if (oj == null)
                             {
                                 break;
-                            }
+                            }*/
                         }
                     }
                 }

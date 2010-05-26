@@ -97,12 +97,11 @@
     <Compile Include="Source\Net\ICommunicationProtocol.cs" />
     <Compile Include="Source\Net\IConnection.cs" />
     <Compile Include="Source\Net\JoinSessionEventArgs.cs" />
-    <Compile Include="Source\Net\Udp\UdpClientConnection.cs" />
-    <Compile Include="Source\Net\Udp\UdpConnection.cs" />
-    <Compile Include="Source\Net\Udp\UdpProtocol.cs" />
     <Compile Include="Source\Net\Local\LocalConnection.cs" />
     <Compile Include="Source\Net\Local\LocalProtocol.cs" />
-    <Compile Include="Source\Net\MultichannelConnection.cs" />
+    <Compile Include="Source\Net\Multichannel\MultichannelConnection.cs" />
+    <Compile Include="Source\Net\Multichannel\MultichannelMessage.cs" />
+    <Compile Include="Source\Net\Multichannel\TunneledConnection.cs" />
     <Compile Include="Source\Net\NetUtils.cs" />
     <Compile Include="Source\Net\ReceivedEventArgs.cs" />
     <Compile Include="Source\Net\Skype\AcceptSharingInvitiationMessage.cs" />
@@ -127,12 +126,13 @@
       <DependentUpon>TcpShareForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Source\ISynchronizationSession.cs" />
-    <Compile Include="Source\Net\Udp\UdpServerConnection.cs" />
     <Compile Include="Source\StateVector.cs" />
     <Compile Include="Source\Synchronization\DifferentialSynchronization\DifferentialSynchronizationStrategy.cs" />
     <Compile Include="Source\Synchronization\DifferentialSynchronization\DiffMessage.cs" />
     <Compile Include="Source\Synchronization\DifferentialSynchronization\TokenRequestMessage.cs" />
     <Compile Include="Source\Synchronization\DifferentialSynchronization\TokenState.cs" />
+    <Compile Include="Source\Synchronization\dOPT\DeleteOperationTransformer.cs" />
+    <Compile Include="Source\Synchronization\dOPT\InsertOperationTransformer.cs" />
     <Compile Include="Source\Synchronization\dOPT\Model.cs" />
     <Compile Include="Source\Synchronization\ISynchronizationStrategy.cs" />
     <Compile Include="Source\Synchronization\SessionStates.cs" />
@@ -173,6 +173,7 @@
     <Folder Include="Source\Net\" />
     <Folder Include="Source\" />
     <Folder Include="Source\Net\Local" />
+    <Folder Include="Source\Net\Multichannel" />
     <Folder Include="Source\Synchronization\" />
     <Folder Include="Source\Synchronization\" />
     <Folder Include="Source\" />

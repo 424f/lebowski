@@ -36,65 +36,86 @@ namespace Lebowski.Net.Tcp
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.portText = new System.Windows.Forms.TextBox();
-            this.shareButton = new System.Windows.Forms.Button();
-            this.SuspendLayout();
-            //
-            // label1
-            //
-            this.label1.Location = new System.Drawing.Point(13, 13);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(306, 66);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "To share a document via TCP, you must forward the port you select below in your f" +
-            "irewall configuration. Otherwise, your partner will not be able to join your ses" +
-            "sion.";
-            //
-            // label2
-            //
-            this.label2.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(13, 83);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(100, 23);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "Port";
-            //
-            // portText
-            //
-            this.portText.Location = new System.Drawing.Point(13, 110);
-            this.portText.Name = "portText";
-            this.portText.Size = new System.Drawing.Size(306, 23);
-            this.portText.TabIndex = 2;
-            //
-            // shareButton
-            //
-            this.shareButton.Location = new System.Drawing.Point(117, 152);
-            this.shareButton.Name = "shareButton";
-            this.shareButton.Size = new System.Drawing.Size(75, 23);
-            this.shareButton.TabIndex = 3;
-            this.shareButton.Text = "Share";
-            this.shareButton.UseVisualStyleBackColor = true;
-            this.shareButton.Click += new System.EventHandler(this.ShareButtonClick);
-            //
-            // TcpShareForm
-            //
-            this.AcceptButton = this.shareButton;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(331, 185);
-            this.Controls.Add(this.shareButton);
-            this.Controls.Add(this.portText);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
-            this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "TcpShareForm";
-            this.Text = "Share";
-            this.ResumeLayout(false);
-            this.PerformLayout();
+        	System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TcpShareForm));
+        	this.label1 = new System.Windows.Forms.Label();
+        	this.label2 = new System.Windows.Forms.Label();
+        	this.portText = new System.Windows.Forms.TextBox();
+        	this.shareButton = new System.Windows.Forms.Button();
+        	this.cancelButton = new System.Windows.Forms.Button();
+        	this.SuspendLayout();
+        	// 
+        	// label1
+        	// 
+        	this.label1.Location = new System.Drawing.Point(13, 13);
+        	this.label1.Name = "label1";
+        	this.label1.Size = new System.Drawing.Size(306, 66);
+        	this.label1.TabIndex = 0;
+        	this.label1.Text = "To share a document via TCP, you must forward the port you select below in your f" +
+        	"irewall configuration. Otherwise, your partner will not be able to join your ses" +
+        	"sion.";
+        	// 
+        	// label2
+        	// 
+        	this.label2.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+        	this.label2.Location = new System.Drawing.Point(13, 83);
+        	this.label2.Name = "label2";
+        	this.label2.Size = new System.Drawing.Size(100, 23);
+        	this.label2.TabIndex = 1;
+        	this.label2.Text = "Port";
+        	// 
+        	// portText
+        	// 
+        	this.portText.Location = new System.Drawing.Point(13, 110);
+        	this.portText.Name = "portText";
+        	this.portText.Size = new System.Drawing.Size(306, 23);
+        	this.portText.TabIndex = 2;
+        	// 
+        	// shareButton
+        	// 
+        	this.shareButton.Image = ((System.Drawing.Image)(resources.GetObject("shareButton.Image")));
+        	this.shareButton.Location = new System.Drawing.Point(237, 140);
+        	this.shareButton.Name = "shareButton";
+        	this.shareButton.Size = new System.Drawing.Size(82, 33);
+        	this.shareButton.TabIndex = 3;
+        	this.shareButton.Text = "Share";
+        	this.shareButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+        	this.shareButton.UseVisualStyleBackColor = true;
+        	this.shareButton.Click += new System.EventHandler(this.ShareButtonClick);
+        	// 
+        	// cancelButton
+        	// 
+        	this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+        	this.cancelButton.Image = ((System.Drawing.Image)(resources.GetObject("cancelButton.Image")));
+        	this.cancelButton.Location = new System.Drawing.Point(152, 140);
+        	this.cancelButton.Name = "cancelButton";
+        	this.cancelButton.Size = new System.Drawing.Size(79, 33);
+        	this.cancelButton.TabIndex = 3;
+        	this.cancelButton.Text = "Cancel";
+        	this.cancelButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+        	this.cancelButton.UseVisualStyleBackColor = true;
+        	this.cancelButton.Click += new System.EventHandler(this.CancelButtonClick);
+        	// 
+        	// TcpShareForm
+        	// 
+        	this.AcceptButton = this.shareButton;
+        	this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+        	this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+        	this.CancelButton = this.cancelButton;
+        	this.ClientSize = new System.Drawing.Size(331, 185);
+        	this.Controls.Add(this.cancelButton);
+        	this.Controls.Add(this.shareButton);
+        	this.Controls.Add(this.portText);
+        	this.Controls.Add(this.label2);
+        	this.Controls.Add(this.label1);
+        	this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+        	this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+        	this.Name = "TcpShareForm";
+        	this.Text = "Share";
+        	this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.TcpShareFormFormClosed);
+        	this.ResumeLayout(false);
+        	this.PerformLayout();
         }
+        private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Button shareButton;
         private System.Windows.Forms.TextBox portText;
         private System.Windows.Forms.Label label2;

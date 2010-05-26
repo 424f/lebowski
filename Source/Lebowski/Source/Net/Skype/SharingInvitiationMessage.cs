@@ -1,10 +1,28 @@
-
 namespace Lebowski.Net.Skype
 {
     using System;
+    
+    /// <summary>
+    /// Sent when a client wants to share a session using the SkypeProtocol.
+    /// </summary>
     [Serializable]
     sealed class SharingInvitationMessage
     {
+        /// <summary>
+        /// Initializes a new instance of the SharingInvitationMessage class.
+        /// </summary>
+        /// <param name="invitationId">See <see cref="InvitationId">InvitationId</see>.</param>
+        /// <param name="documentName">See <see cref="DocumentName">DocumentName</see>.</param>
+        /// <param name="invitedUser">See <see cref="InvitedUser">InvitedUser</see>.</param>
+        /// <param name="channel">See <see cref="Channel">Channel</see>.</param>
+        public SharingInvitationMessage(int invitationId, string documentName, string invitedUser, int channel)
+        {
+            InvitationId = invitationId;
+            DocumentName = documentName;
+            InvitedUser = invitedUser;
+            Channel = channel;
+        }        
+        
         /// <summary>
         /// An identifier uniquely identifying the invitation on the host side
         /// </summary>
@@ -25,13 +43,5 @@ namespace Lebowski.Net.Skype
         /// data
         /// </summary>
         public int Channel { get; private set; }
-
-        public SharingInvitationMessage(int invitationId, string documentName, string invitedUser, int channel)
-        {
-            InvitationId = invitationId;
-            DocumentName = documentName;
-            InvitedUser = invitedUser;
-            Channel = channel;
-        }
     }
 }
