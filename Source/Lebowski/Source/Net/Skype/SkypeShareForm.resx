@@ -117,12 +117,27 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="IconColumn.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="UsernameColumn.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="SkypeUserImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAFzUkdCAK7O
+        HOkAAAAEZ0FNQQAAsY8L/GEFAAADWUlEQVQ4T22TD0yTVxTFL7SaUYhBDWhYjGwRIQ5BXcYwRiNGghA1
+        zojRZMR/pLaJC+tgVKagQiGICGiQQhPKGJlEI1PYBEu1oJYAFqlQaGkyUOlmtcUoQtFi+x1fO7u4uJuc
+        fF9e7vvlvPPeJXpfEWuCBFnKyL3SxqUlR5QhOXtyF8SKSyOjRaUR0Z/HBAazNn9f70dfYX7MZ5WdmwYU
+        /fEou70aTYbD0E9UwzjZgMEXCnRZC2YuDaS1ZSrDE/4PxC9Xb+y80L8CpR1fYvRVCwatl9FuOAOVvgKt
+        /cVo0h/BjTEJVBaxq0QdU8Qg/H9dCIuiYqt1a7nTmi/w10wHNKYyDJq7MD01g7ezLswyTU060D30G+S9
+        a9FgXoe83z89zgB+XsgPNRHfFKmiMPS8Hr3WCvQMtcDt5uB0T8LiuA3zyyuYdI6DY2s9j6tR9mABztwL
+        ebNVStFewI7vFsdV3t3AjU434+rIQTy0mOApzcM8KIe/Qs1wFKoGImF19MH0ohFl+oU43kkQ1VOl7xjz
+        /jBmWbpthWg0bYNhTOMFPLE9Qsu9Qsg7t+KUOhSnuxfjrD4UJ3sI2SqCsI4MviwE6rGfbNcfH8DPI3Go
+        0X+NiddmL4TjOJaDG44pJ3pNrchVhSNXS/j+GuGgguwMEOhxEXDNKLQ0mNdDppuDvG5CkS4AV8dS0W+v
+        8lp3cU4GA0af9kHSRhBfJHx7jv5mewUeAF9+Z3OH3LAMx+4S5LfSUHdHjKPsnAU6fxTfF+CsNt7rxFNZ
+        zcE4VEtILaZXS1dRiDcH4fmFklpjDKQawp/jA3DNcvhFK0HGdX9ktBKqbh7450pdMzjaFIJ9ckKSxA+b
+        xZTsBcwVUGj+jbCR4r5A1OlTmeVZuN66YZ+wwfrMAucblycR6C2XIFIGYPsJwq78OUhIp+2+m/BbmUSJ
+        J9qD7TIdD4qhWDyw1+LJlA626WE8et6FdqMMmb+GYaeMkJxN2F8eNB0WSeEfzgUvfA0lplfz7+eo/Thp
+        Gw/ZzUHIvBwMUV0A0i4QtrCNKVL2BhTzuI3755b850m/J3kmbsny9ZSelEGN23JIm/IjaRMzqCtBRI7d
+        hXz3XlngeNxOXgHrm//RVH6wwGP/QUyelD1axLSaKZ4pgukTX+87pyr86aDLxjQAAAAASUVORK5CYII=
+</value>
+  </data>
   <metadata name="IconColumn.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>

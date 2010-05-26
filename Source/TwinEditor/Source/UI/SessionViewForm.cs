@@ -7,6 +7,7 @@ namespace TwinEditor.UI
     using System.Windows.Forms;
     using System.Collections.Generic;
     using Lebowski;
+    using Lebowski.Synchronization;
     using Lebowski.TextModel;
     using Lebowski.Net;
     using Lebowski.Synchronization.DifferentialSynchronization;
@@ -47,6 +48,7 @@ namespace TwinEditor.UI
         #region Execution
         // Stores the exeucution view form for each user (identified by site id)
         private Dictionary<int, ExecutionViewForm> executionViewForms = new Dictionary<int, ExecutionViewForm>();
+        private Dictionary<int, TabPage> executionTabs = new Dictionary<int, TabPage>();
         private int numExecutions = 0;
         #endregion
 
@@ -109,11 +111,22 @@ namespace TwinEditor.UI
                                 newPage.Tag = e.SiteId;
                                 newPage.ImageKey = "ExecutionImage";
                                 TabControl.SelectedTab = newPage;
+                                executionTabs[e.SiteId] = newPage;
                             }
                             else
                             {
                                 executionViewForms[e.SiteId].ExecutionResult = e.ExecutionResult;
                             }
+                            
+                            // For own execution, let's jump to execution tab
+                            if(e.SiteId == SessionContext.SiteId)
+                            {
+                                TabControl.SelectedTab = executionTabs[e.SiteId];
+                            }
+                            
+                            // TODO: we should have some indicator so the local user 
+                            // is aware when the a remote user sends a new execution,
+                            // but automatically opening the tab is to intrusive.
                         }
                     );
                 };
@@ -124,6 +137,7 @@ namespace TwinEditor.UI
             {
                 int siteId = (int)TabControl.TabPages[e.TabIndex].Tag;
                 executionViewForms.Remove(siteId);
+                executionTabs.Remove(siteId);
                 TabControl.TabPages.RemoveAt(e.TabIndex);
             };
 

@@ -53,7 +53,7 @@ namespace Lebowski.Synchronization
         }
 
         /// <summary>
-        /// Retrieves the
+        /// Retrieves the numerical value of a certain dimension.
         /// <param name="index">the number of the dimension to access.
         /// Requires: 0 &lt;= index &lt; Size
         /// </param>

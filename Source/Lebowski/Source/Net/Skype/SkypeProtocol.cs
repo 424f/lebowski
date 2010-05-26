@@ -41,9 +41,30 @@ namespace Lebowski.Net.Skype
 
         private bool isInitialized = false;
 
-        public List<string> friends = new List<string>();
+        //public List<string> friends = new List<string>();
+        
+        /// <summary>
+        /// Gets all the friends that are online in the local user's friend list
+        /// </summary>
+        private Dictionary<string, User> friends = new Dictionary<string, User>();
+        
+        /// <summary>
+        /// Gets all the friends that are online in the local user's friend list
+        /// </summary>
+        public List<string> FriendNames
+        {
+            get
+            {
+                List<string> result = new List<string>();
+                foreach(User user in friends.Values)
+                {
+                    result.Add(user.Handle);
+                }
+                return result;
+            }
+        }
 
-        public bool Enabled { get; private set;    }
+        public bool Enabled { get; private set; }
 
         private SynchronizationContext synchronizationContext;
 
@@ -86,6 +107,19 @@ namespace Lebowski.Net.Skype
                 Logger.WarnFormat("Could not initialize {0}:\n{1}", GetType().Name, e.ToString());
             }
         }
+        
+        /// <summary>
+        /// Checks whether the friend with the given username is online.
+        /// </summary>
+        /// <param name="userName">The user name of a friend.</param>
+        /// <returns></returns>
+        public bool IsUserOnline(string userName)
+        {
+            if(!friends.ContainsKey(userName))
+                return false;
+            return friends[userName].OnlineStatus != TOnlineStatus.olsUnknown &&
+                   friends[userName].OnlineStatus != TOnlineStatus.olsOffline;
+        }
 
         public void EstablishConnection(string user)
         {
@@ -120,7 +154,7 @@ namespace Lebowski.Net.Skype
             this.friends.Clear();
 
             var friends = API.Friends;
-
+            
             for(int i = 1; i <= friends.Count; ++i)
             {
                 var friend = friends[i];
@@ -128,7 +162,7 @@ namespace Lebowski.Net.Skype
                 {
                     Console.WriteLine(friend.FullName + " / " + friend.Handle + " / " + friend.DisplayName + " / " + friend.OnlineStatus);
                 }
-                this.friends.Add(friend.Handle);
+                this.friends.Add(friend.Handle, friend);
             }
 
         }

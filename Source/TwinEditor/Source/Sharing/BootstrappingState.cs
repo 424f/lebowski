@@ -39,16 +39,20 @@
 
         protected override void ApplicationConnectionReceived(object sender, ReceivedEventArgs e)
         {
-            session.SynchronizationStrategy = new DifferentialSynchronizationStrategy(session.SiteId, session.Context, session.SynchronizationConnection);
-
             if ((string)e.Message == "HI 0")
             {
+                Console.WriteLine(session.SiteId.ToString() + ": " + e.Message);
                 session.ApplicationConnection.Send("HI 1");
-                session.ActivateState(new SynchronizationState(session));
             }
             else if ((string)e.Message == "HI 1")
             {
-                session.ActivateState(new SynchronizationState(session));
+                Console.WriteLine(session.SiteId.ToString() + ": " + e.Message);
+                session.ApplicationConnection.Send("HI 1");
+                session.ActivateState(new InitializationState(session));
+            }
+            else
+            {
+                base.ApplicationConnectionReceived(sender, e);
             }
 
         }

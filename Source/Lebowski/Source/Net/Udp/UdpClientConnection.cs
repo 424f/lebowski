@@ -7,9 +7,9 @@
     using Lidgren.Network;
     using log4net;
     
-    public sealed class UdpClientConnection : LidgrenConnection
+    public sealed class UdpClientConnection : UdpConnection
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof(LidgrenConnection));
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(UdpConnection));
 
         NetClient Socket;
         bool Running = true;

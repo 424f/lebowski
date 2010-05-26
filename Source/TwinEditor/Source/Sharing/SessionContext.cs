@@ -2,6 +2,7 @@ namespace TwinEditor.Sharing
 {
     using System;
     using Lebowski;
+    using Lebowski.Synchronization;
     using Lebowski.Synchronization.DifferentialSynchronization;
     using Lebowski.Net;
     using Lebowski.TextModel;
@@ -70,8 +71,6 @@ namespace TwinEditor.Sharing
             SiteId = siteId;
             ActivateState(new BootstrappingState(this));
 
-            ApplicationConnection.Received += ApplicationConnectionReceived;
-
             // TODO: this has to be altered when support for multiple sites is added
             int otherSiteId = siteId == 0 ? 1 : 0;
             // We store the the connection's site id per connection
@@ -113,29 +112,6 @@ namespace TwinEditor.Sharing
             ApplicationConnection.Send(message);
         }
 
-        private void ApplicationConnectionReceived(object sender, ReceivedEventArgs e)
-        {
-            if (e.Message is ChatMessage)
-            {
-                OnReceiveChatMessage(new ReceiveChatMessageEventArgs((ChatMessage)e.Message));
-            }
-            else if (e.Message is ExecutionResultMessage)
-            {
-                ExecutionResultMessage erm = (ExecutionResultMessage)e.Message;
-
-                ExecutionResult result = new ExecutionResult();
-
-                OnStartedExecution(new StartedExecutionEventArgs((int)ApplicationConnection.Tag, result));
-
-                result.OnExecutionChanged(new ExecutionChangedEventArgs(erm.StandardOut));
-                result.OnFinishedExecution(new FinishedExecutionEventArgs(0, erm.StandardOut));
-            }
-            else
-            {
-                Logger.WarnFormat("Received unsupported message on application connection: {0}", e.Message.GetType().Name);
-            }
-        }
-
         public void Execute()
         {
             ExecutionResult result = new ExecutionResult();
@@ -157,18 +133,26 @@ namespace TwinEditor.Sharing
         public void Reset()
         {
             ActivateState(new SessionState(this));
-            SynchronizationStrategy.Close();
-            ApplicationConnection.Close();
-            SynchronizationConnection.Close();
-
-            SynchronizationConnection = null;
-            ApplicationConnection = null;
-            SynchronizationStrategy = null;
+            if(SynchronizationStrategy != null)
+            {
+                SynchronizationStrategy.Close();
+                SynchronizationStrategy = null;
+            }
+            if(ApplicationConnection != null)
+            {
+                ApplicationConnection.Close();
+                ApplicationConnection = null;                
+            }
+            if(SynchronizationConnection != null)
+            {
+                SynchronizationConnection.Close();
+                SynchronizationConnection = null;
+            }
 
             State = SessionStates.Disconnected;
         }
 
-        protected virtual void OnStateChanged(EventArgs e)
+        internal virtual void OnStateChanged(EventArgs e)
         {
             if (StateChanged != null)
             {
@@ -176,7 +160,7 @@ namespace TwinEditor.Sharing
             }
         }
 
-        protected virtual void OnReceiveChatMessage(ReceiveChatMessageEventArgs e)
+        internal virtual void OnReceiveChatMessage(ReceiveChatMessageEventArgs e)
         {
             if (ReceiveChatMessage != null)
             {
@@ -184,7 +168,7 @@ namespace TwinEditor.Sharing
             }
         }
 
-        protected virtual void OnFileTypeChanged(EventArgs e)
+        internal virtual void OnFileTypeChanged(EventArgs e)
         {
             if (FileTypeChanged != null)
             {
@@ -192,7 +176,7 @@ namespace TwinEditor.Sharing
             }
         }
 
-        protected virtual void OnStartedExecution(StartedExecutionEventArgs e)
+        internal virtual void OnStartedExecution(StartedExecutionEventArgs e)
         {
             if (StartedExecution != null)
             {

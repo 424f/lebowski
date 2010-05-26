@@ -111,8 +111,10 @@
     <Compile Include="Source\Messaging\ChatMessage.cs" />
     <Compile Include="Source\Messaging\CloseSessionMessage.cs" />
     <Compile Include="Source\Messaging\ExecutionResultMessage.cs" />
+    <Compile Include="Source\Messaging\InitialContextMessage.cs" />
     <Compile Include="Source\Program.cs" />
     <Compile Include="Source\Sharing\BootstrappingState.cs" />
+    <Compile Include="Source\Sharing\InitializationState.cs" />
     <Compile Include="Source\Sharing\StartedExecutionEventArgs.cs" />
     <Compile Include="Source\Sharing\ISessionView.cs" />
     <Compile Include="Source\Sharing\ReceiveChatMessageEventArgs.cs" />

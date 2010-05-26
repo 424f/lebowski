@@ -17,8 +17,9 @@ namespace Lebowski.Net.Tcp
         public TcpServerConnection(int port)
         {
             tcpListener = new TcpListener(IPAddress.Any, port);
-
-            // Create networking thread
+            tcpListener.Start();
+            
+            // Create networking thread            
             ThreadStart threadStart = new ThreadStart(RunNetworkingThread);
             Thread thread = new Thread(threadStart);
             thread.Name = "TcpServerConnection Thread";
@@ -33,7 +34,6 @@ namespace Lebowski.Net.Tcp
 
         protected void RunNetworkingThread()
         {
-            tcpListener.Start();
             // TODO: handle multiple clients
             // waits for incoming client connection
             tcpClient = tcpListener.AcceptTcpClient();

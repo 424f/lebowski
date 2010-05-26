@@ -17,6 +17,15 @@ namespace Lebowski.TextModel
         {
             Data = "";
         }        
+
+        /// <summary>
+        /// Initializes a new instance of the StringTextContext where 
+        /// the document initially is not necessarily empty.
+        /// </summary>        
+        public StringTextContext(string data)
+        {
+            Data = data;
+        }
         
         /// <summary>
         /// Stores the text associated with this context. Note that for 

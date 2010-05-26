@@ -1,7 +1,8 @@
-﻿using System;
-
-namespace Lebowski.Net
+﻿namespace Lebowski.Net
 {
+    using System;
+    using System.Threading;
+    
     /// <summary>
     /// Provides functionality that classes implementing <see cref="Lebowski.Net.IConnection">IConnection</see>
     /// usually share.
@@ -42,6 +43,13 @@ namespace Lebowski.Net
         /// <param name="e">A ReceivedEventArgs that contains the event data.</param>
         protected virtual void OnReceived(ReceivedEventArgs e)
         {
+            /* As we should not dispatch packets when nobody is listening,
+             * we wait until there is at least one listener */
+            while(Received.GetInvocationList().Length == 0)
+            {
+                // TODO: solve this using activation / decativation
+                Thread.Sleep(100);
+            }            
             if (Received != null)
             {
                 Received(this, e);

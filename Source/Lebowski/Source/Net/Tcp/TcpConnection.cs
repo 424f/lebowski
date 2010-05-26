@@ -7,26 +7,12 @@ namespace Lebowski.Net.Tcp
     using Lebowski.Net;
     using log4net;
 
-    public abstract class TcpConnection : IConnection
+    public abstract class TcpConnection : AbstractConnection
     {
-        /// <summary>
-        /// Occurs when the connection has been closed
-        /// </summary>
-        public event EventHandler<EventArgs> ConnectionClosed;
-        public event EventHandler<ReceivedEventArgs> Received;
         protected NetworkStream stream;
         private bool running = true;
 
-        public object Tag { get; set; }
-
         private static readonly ILog Logger = LogManager.GetLogger(typeof(TcpConnection));
-
-        protected virtual void OnReceived(ReceivedEventArgs e)
-        {
-            if (Received != null) {
-                Received(this, e);
-            }
-        }
 
         protected void RunReceiveThread()
         {
@@ -60,7 +46,7 @@ namespace Lebowski.Net.Tcp
             }
         }
 
-        public void Send(object o)
+        public override void Send(object o)
         {
             Logger.InfoFormat("Sending packet {2} on stream from thread '{0}' #{1}", Thread.CurrentThread.Name, Thread.CurrentThread.ManagedThreadId, o.GetType().Name);
 
@@ -83,7 +69,7 @@ namespace Lebowski.Net.Tcp
             }
         }
 
-        public virtual void Close()
+        public override void Close()
         {
 
             Logger.InfoFormat("Closing stream: {0}", stream);
@@ -95,13 +81,6 @@ namespace Lebowski.Net.Tcp
             {
                 running = false;
                 OnConnectionClosed(new EventArgs());
-            }
-        }
-
-        protected virtual void OnConnectionClosed(EventArgs e)
-        {
-            if (ConnectionClosed != null) {
-                ConnectionClosed(this, e);
             }
         }
     }

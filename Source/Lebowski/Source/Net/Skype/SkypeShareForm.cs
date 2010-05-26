@@ -4,7 +4,9 @@ namespace Lebowski.Net.Skype
 {
     using System;
     using System.Drawing;
+    using System.Resources;
     using System.Windows.Forms;
+    
     public partial class SkypeShareForm : Form
     {
         public event EventHandler Submit;
@@ -25,9 +27,15 @@ namespace Lebowski.Net.Skype
 
             this.protocol = protocol;
 
-            foreach (string username in protocol.friends)
+            ResourceManager rm = new ResourceManager(this.GetType().FullName, System.Reflection.Assembly.GetExecutingAssembly());
+            Image image = (System.Drawing.Image)rm.GetObject("SkypeUserImage");            
+            
+            foreach (string username in protocol.FriendNames)
             {
-                dataGridView.Rows.Add(new object[]{ null, username });
+                if (protocol.IsUserOnline(username))
+                {
+                    dataGridView.Rows.Add(new object[]{ image, username });
+                }
             }
         }
 
