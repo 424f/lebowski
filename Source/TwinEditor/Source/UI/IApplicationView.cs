@@ -19,14 +19,12 @@ namespace TwinEditor.UI
         void Show();
         void DisplayError(string message, Exception exception);
 
-        #region Events
-
-        event EventHandler<SaveEventArgs> Save;
-        event EventHandler<OpenEventArgs> Open;
-        event EventHandler<CloseEventArgs> Close;
+        event EventHandler<SaveFileEventArgs> SaveFile;
+        event EventHandler<OpenFileEventArgs> OpenFile;
+        event EventHandler<CloseFileEventArgs> CloseFile;
+        event EventHandler<NewFileEventArgs> NewFile;
         event EventHandler<ShareSessionEventArgs> ShareSession;
-
-        #endregion
+        event EventHandler<EventArgs> ApplicationClosing;
     }
 
     public sealed class ShareSessionEventArgs : EventArgs
@@ -41,37 +39,47 @@ namespace TwinEditor.UI
         }
     }
 
-    public sealed class OpenEventArgs : EventArgs
+    public sealed class OpenFileEventArgs : EventArgs
     {
         public IFileType FileType { get; private set; }
         public string FileName { get; private set; }
 
-        public OpenEventArgs(string fileName, IFileType fileType)
+        public OpenFileEventArgs(string fileName, IFileType fileType)
         {
             FileName = fileName;
             FileType = fileType;
         }
     }
 
-    public sealed class CloseEventArgs : EventArgs
+    public sealed class CloseFileEventArgs : EventArgs
     {
-        public string FileName { get; private set; }
+        public SessionContext Session { get; private set; }
         
-        public CloseEventArgs(string fileName)
+        public CloseFileEventArgs(SessionContext session)
         {
-            FileName = fileName;   
+            Session = session;
         }
     }
     
-    public sealed class SaveEventArgs : EventArgs
+    public sealed class SaveFileEventArgs : EventArgs
     {
-        public ISessionView Session { get; private set; }
-        public string FileName { get; private set; }
-
-        public SaveEventArgs(ISessionView session, string fileName)
+        public SaveFileEventArgs(SessionContext session, string fileName)
         {
             Session = session;
             FileName = fileName;
         }
+        
+        public SessionContext Session { get; private set; }
+        public string FileName { get; private set; }        
     }
+    
+    public sealed class NewFileEventArgs : EventArgs
+    {
+        public NewFileEventArgs(IFileType fileType)
+        {
+            FileType = fileType;
+        }
+        
+        public IFileType FileType { get; private set; }        
+    }    
 }

@@ -36,7 +36,7 @@ namespace TwinEditor.UI
         	this.connectionStatusLabel = new System.Windows.Forms.Label();
         	this.connectionStatusPicture = new System.Windows.Forms.PictureBox();
         	this.splitContainer = new System.Windows.Forms.SplitContainer();
-        	this.TabControl = new TwinEditor.UI.CloseableTabControl();
+        	this.TabControl = new TwinEditor.UI.ClosableTabControl();
         	this.tabPage3 = new System.Windows.Forms.TabPage();
         	this.SourceCode = new ICSharpCode.TextEditor.TextEditorControl();
         	((System.ComponentModel.ISupportInitialize)(this.connectionStatusPicture)).BeginInit();
@@ -186,7 +186,7 @@ namespace TwinEditor.UI
         private System.Windows.Forms.Button connectionStopWaitingButton;
         private System.Windows.Forms.PictureBox connectionStatusPicture;
         private System.Windows.Forms.Label connectionStatusLabel;
-        public CloseableTabControl TabControl;
+        public ClosableTabControl TabControl;
         private System.Windows.Forms.TextBox ChatText;
         private System.Windows.Forms.TextBox ChatHistory;
         public ICSharpCode.TextEditor.TextEditorControl SourceCode;

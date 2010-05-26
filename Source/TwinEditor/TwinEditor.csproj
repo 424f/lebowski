@@ -127,7 +127,7 @@
     <Compile Include="Source\UI\AboutDialog.Designer.cs">
       <DependentUpon>AboutDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Source\UI\CloseableTabControl.cs" />
+    <Compile Include="Source\UI\ClosableTabControl.cs" />
     <Compile Include="Source\UI\ErrorMessage.cs" />
     <Compile Include="Source\UI\ErrorMessage.Designer.cs">
       <DependentUpon>ErrorMessage.cs</DependentUpon>

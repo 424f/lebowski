@@ -253,6 +253,8 @@ namespace Lebowski.Net.Skype
         {
             var stream = streams[user];
 
+            Exception occurredException = null;
+            
             synchronizationContext.Send(delegate
             {
                 lock (streams)
@@ -285,10 +287,15 @@ namespace Lebowski.Net.Skype
                         this.connections.Remove(user);
                         this.connectionsForUser.Remove(user);
                         
-                        throw new Exception("Could not send Ap2Ap message", e);
+                        occurredException = new Exception("Could not send Ap2Ap message", e);
                     }
                 }
             }, null);
+            
+            if(occurredException != null)
+            {
+                throw occurredException;
+            }
         }
 
         private void OnHostSession(HostSessionEventArgs e)

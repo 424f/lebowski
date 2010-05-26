@@ -34,13 +34,13 @@ namespace TwinEditor
         /// </value>
         public ICommunicationProtocol[] CommunicationProtocols { get; private set; }
 
+        private RecentFilesList recentFilesList;
+        private List<SessionContext> currentSessions = new List<SessionContext>();
+
         /// <summary>
         /// Initializes a new instance of the ApplicationContext class.
         /// </summary>
-        /// <param name="view">the view that we synchronize with</param>
-        private RecentFilesList recentFilesList;
-        private List<String> currentFileList;
-        
+        /// <param name="view">the view that we synchronize with</param>        
         public ApplicationContext(IApplicationView view)
         {
             // Provide view with file types
@@ -70,6 +70,7 @@ namespace TwinEditor
                 {
                     // TODO: choose correct file type
                     ISessionView sessionView = view.CreateNewSession(FileTypes[0]);
+                    currentSessions.Add(sessionView.SessionContext);
                     sessionView.SessionContext.EstablishSharedSession(1, e.Connection);
                 };
             }
@@ -89,45 +90,57 @@ namespace TwinEditor
             };
 
             // File handling
-            view.Open += delegate(object sender, OpenEventArgs e)
+            view.NewFile += delegate(object sender, NewFileEventArgs e)
             {
-            	int index = currentFileList.IndexOf(e.FileName);
-            	if (index >= 0)
+                ISessionView sessionView = view.CreateNewSession(e.FileType);
+                currentSessions.Add(sessionView.SessionContext);
+            };
+            
+            view.OpenFile += delegate(object sender, OpenFileEventArgs e)
+            {
+                SessionContext sessionContext = currentSessions.Find((SessionContext s) => s.FileName == e.FileName);
+                
+                foreach(SessionContext sc in currentSessions)
+                {
+                    System.Console.WriteLine("{0}=={1}? {2}", sc.FileName, e.FileName, sc.FileName == e.FileName);
+                }
+                
+                if (sessionContext != null)
             	{
             		Logger.Info(e.FileName + " already open");
+            		// TODO: activate tab
             	}
             	else
             	{
-            		currentFileList.Add(e.FileName);
             		// Create a new tab for the file
 		            ISessionView tab = view.CreateNewSession(e.FileType);
-		            
+		            currentSessions.Add(tab.SessionContext);
 		            
 		            // Put content into editor
 		            string content = File.ReadAllText(e.FileName);
 		            tab.SessionContext.Context.Data = content;
 		            tab.OnDisk = true;
 		            tab.FileModified = false;
-		            tab.FileName = e.FileName;
+		            tab.SessionContext.FileName = e.FileName;
 		            Logger.Info("Openend " + e.FileName);
 		            // update recent files
 		            recentFilesList.Add(e.FileName);
             	}
             };
             
-            view.Close += delegate(object sender, CloseEventArgs e)
+            view.CloseFile += delegate(object sender, CloseFileEventArgs e)
             {
-            	Logger.Info("Closed " + e.FileName);
-            	currentFileList.Remove(e.FileName);
+            	Logger.Info("Closed " + e.Session.FileName);
+            	currentSessions.Remove(e.Session);
             };
             
-            view.Save += delegate(object sender, SaveEventArgs e)
+            view.SaveFile += delegate(object sender, SaveFileEventArgs e)
             {
                 try
                 {
                     var tabControl = e.Session;
                     e.Session.FileName = e.FileName;
-                    File.WriteAllText(tabControl.FileName, tabControl.SessionContext.Context.Data);
+                    File.WriteAllText(tabControl.FileName, e.Session.Context.Data);
                     // update recent files
                     recentFilesList.Add(e.FileName);
                     Logger.Info(string.Format("{0} has been saved successfully", tabControl.FileName));
@@ -136,6 +149,17 @@ namespace TwinEditor
                 {
                     Logger.Error(string.Format("{0} could not be saved due to {1}", e.FileName, exc.Message));
                 }
+            };
+            
+            // Application closing
+            view.ApplicationClosing += delegate
+            {
+                foreach(SessionContext sessionContext in currentSessions)
+                {
+                    sessionContext.Close();
+                }
+                System.Windows.Forms.Application.Exit();
+                Environment.Exit(0);
             };
             
             // Restore or initialize recentFilesList
@@ -158,8 +182,6 @@ namespace TwinEditor
             	view.UpdateRecentFiles(e.RecentFiles);
             };
             
-            // Initialize currentFileList
-            currentFileList = new List<String>();
         }
     }
 }

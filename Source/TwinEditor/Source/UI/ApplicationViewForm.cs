@@ -49,7 +49,12 @@ namespace TwinEditor.UI
             // Get default settings
             var appSettings = Configuration.ApplicationSettings.Default;
             
-            this.Closed += delegate { Application.Exit(); };
+            this.Closing += delegate { this.OnApplicationClosing(new EventArgs()); };
+            
+            MainTab.TabClosed += delegate(object sender, TabClosedEventArgs e)
+            {
+                CloseTab(e.TabIndex);
+            };
         }        
 
         public IFileType[] FileTypes
@@ -71,7 +76,7 @@ namespace TwinEditor.UI
                     IFileType currentFileType = fileType;
                     menuItem.Click += delegate
                     {
-                        CreateNewTab(currentFileType);
+                        OnNewFile(new NewFileEventArgs(currentFileType));
                     };
                     newToolStripMenuItem.DropDown.Items.Add(menuItem);
 
@@ -234,36 +239,35 @@ namespace TwinEditor.UI
         	{
         		recentFilesToolStripMenuItem.Enabled = true;
 	        	menuStrip1.Invoke((Action) delegate
-	        	                  {
-							      	recentFilesToolStripMenuItem.DropDownItems.Clear();
-							      	
-									foreach (string file in recentFiles)
-									{
-										string filename = file; 
-										Logger.Debug("recent: " + filename);
-										IFileType type = null;
-										try
-							      		{
-								            foreach (IFileType fileType in fileTypes)
-								            {
-								            	if (fileType.FileNameMatches(filename))
-								                	type = fileType;
-								            }
-										}
-										catch (NullReferenceException e) {
-											Logger.Error("fileTypes have not been set for ApplicationViewForm");
-										}
-								           
-										ToolStripMenuItem item = new ToolStripMenuItem(filename);
-										if (type != null)
-										{
-											Logger.Debug("recent: " + filename + type);
-											item.Click += delegate { Open(this, new OpenEventArgs(filename, type)); };
-										}
-										recentFilesToolStripMenuItem.DropDownItems.Add(item);
-							      	}
-	        	                  }
-				);
+                {
+    		      	recentFilesToolStripMenuItem.DropDownItems.Clear();
+    		      	
+    				foreach (string file in recentFiles)
+    				{
+    					string filename = file; 
+    					Logger.Debug("recent: " + filename);
+    					IFileType type = null;
+    					try
+    		      		{
+    			            foreach (IFileType fileType in fileTypes)
+    			            {
+    			            	if (fileType.FileNameMatches(filename))
+    			                	type = fileType;
+    			            }
+    					}
+    					catch (NullReferenceException e) {
+    						Logger.Error("fileTypes have not been set for ApplicationViewForm");
+    					}
+    			           
+    					ToolStripMenuItem item = new ToolStripMenuItem(filename);
+    					if (type != null)
+    					{
+    						Logger.Debug("recent: " + filename + type);
+    						item.Click += delegate { OpenFile(this, new OpenFileEventArgs(filename, type)); };
+    					}
+    					recentFilesToolStripMenuItem.DropDownItems.Add(item);
+    		      	}
+                });
 	        	appSettings.RecentFileList = recentFiles;
 	        	appSettings.Save();
         	}
@@ -299,7 +303,7 @@ namespace TwinEditor.UI
 
             tab.Dock = DockStyle.Fill;
             tab.SessionContext.FileType = fileType;
-            tab.FileName = filename;
+            tab.SessionContext.FileName = filename;
             // Add callback for StateChanged in order to disable share menu item, when already shared
             tab.StateChanged += delegate(object sender, StateChangedEventArgs e)
             {
@@ -339,7 +343,7 @@ namespace TwinEditor.UI
                 return;
             }
 
-            OnOpen(new OpenEventArgs(openFileDialog.FileName, type));        
+            OnOpen(new OpenFileEventArgs(openFileDialog.FileName, type));        
             UpdateMenuItems();
         }
 
@@ -368,7 +372,7 @@ namespace TwinEditor.UI
         }
 
         // checks whether the tab is already on disk, and if yes calls 'Save' else calls 'SaveWithDialog'.
-        void SaveRequest(SessionViewForm tabControl)
+        internal void SaveRequest(SessionViewForm tabControl)
         {
             if (!tabControl.OnDisk)
             {
@@ -376,7 +380,7 @@ namespace TwinEditor.UI
             }
             else
             {
-                OnSave(new SaveEventArgs(tabControl, tabControl.FileName));
+                OnSave(new SaveFileEventArgs(tabControl.SessionContext, tabControl.SessionContext.FileName));
                 tabControl.OnDisk = true;
                 tabControl.FileModified = false;
                 UpdateMenuItems();
@@ -388,13 +392,13 @@ namespace TwinEditor.UI
         void SaveWithDialog(SessionViewForm tabControl)
         {
             saveFileDialog.RestoreDirectory = true;
-            saveFileDialog.FileName = System.IO.Path.GetFileName(tabControl.FileName);
+            saveFileDialog.FileName = System.IO.Path.GetFileName(tabControl.SessionContext.FileName);
             saveFileDialog.Filter = string.Format("{0}|{1}", tabControl.SessionContext.FileType.Name, tabControl.SessionContext.FileType.FileNamePattern);
             DialogResult result = saveFileDialog.ShowDialog();
             if (result == DialogResult.OK)
             {
-                tabControl.FileName = saveFileDialog.FileName;
-                OnSave(new SaveEventArgs(tabControl, tabControl.FileName));
+                tabControl.SessionContext.FileName = saveFileDialog.FileName;
+                OnSave(new SaveFileEventArgs(tabControl.SessionContext, tabControl.SessionContext.FileName));
                 tabControl.OnDisk = true;
                 tabControl.FileModified = false;
             }
@@ -421,23 +425,16 @@ namespace TwinEditor.UI
         {
             CloseTab(MainTab.SelectedIndex);
         }
-
-        void CloseTab(int index) {
-            SessionViewForm sessionView = tabControls[index];
-            // check if the file has been modified since last save
-            if (sessionView.FileModified)
-            {
-                if (MessageBox.Show(TranslationUtil.GetString(ApplicationUtil.LanguageResources, "_MessageBoxOnCloseMessage"), TranslationUtil.GetString(ApplicationUtil.LanguageResources, "_MessageBoxOnCloseCaption"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                {
-                    SaveRequest(sessionView);
-                }
-            }
-            sessionView.SessionContext.Close();
-            Logger.Info(string.Format("{0} has been closed", sessionView.FileName));
-            tabControls.RemoveAt(index);
-            tabPages.RemoveAt(index);
-            MainTab.TabPages.RemoveAt(index);
-            OnClose(new CloseEventArgs(sessionView.FileName));
+        
+        void CloseTab(int tabIndex)
+        {
+            SessionContext context = tabControls[tabIndex].SessionContext;
+            tabControls[tabIndex].SessionContext.Close();
+            
+            tabControls.RemoveAt(tabIndex);
+            tabPages.RemoveAt(tabIndex);
+            MainTab.TabPages.RemoveAt(tabIndex);
+            OnClose(new CloseFileEventArgs(context));
             UpdateMenuItems();
         }
 
@@ -467,35 +464,55 @@ namespace TwinEditor.UI
             }
         }
 
-        protected virtual void OnOpen(OpenEventArgs e)
+        protected virtual void OnOpen(OpenFileEventArgs e)
         {
-            if (Open != null)
+            if (OpenFile != null)
             {
-                Open(this, e);
+                OpenFile(this, e);
             }
         }
 
-      	protected virtual void OnClose(CloseEventArgs e)
+      	protected virtual void OnClose(CloseFileEventArgs e)
         {
-            if (Close != null)
+            if (CloseFile != null)
             {
-                Close(this, e);
+                CloseFile(this, e);
             }
         }
      
-        protected virtual void OnSave(SaveEventArgs e)
+        protected virtual void OnSave(SaveFileEventArgs e)
         {
-            if (Save != null)
+            if (SaveFile != null)
             {
-                Save(this, e);
+                SaveFile(this, e);
             }
         }
+        
+        protected virtual void OnApplicationClosing(EventArgs e)
+        {
+            if (ApplicationClosing != null)
+            {
+                ApplicationClosing(this, e);
+            }
+        }
+        
+        protected virtual void OnNewFile(NewFileEventArgs e)
+        {
+            if (NewFile != null)
+            {
+                NewFile(this, e);
+            }
+        }
+        
+        
         #endregion
 
         public event EventHandler<ShareSessionEventArgs> ShareSession;
-        public event EventHandler<OpenEventArgs> Open;
-        public event EventHandler<CloseEventArgs> Close;
-        public event EventHandler<SaveEventArgs> Save;        
+        public event EventHandler<OpenFileEventArgs> OpenFile;
+        public event EventHandler<CloseFileEventArgs> CloseFile;
+        public event EventHandler<SaveFileEventArgs> SaveFile;  
+        public event EventHandler<NewFileEventArgs> NewFile;  
+        public event EventHandler<EventArgs> ApplicationClosing;
         
     }
 }

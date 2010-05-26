@@ -32,7 +32,7 @@ namespace TwinEditor.UI
         /// <param name="firstClosableTabIndex">See <see cref="FirstClosableTabIndex">FirstClosableTabIndex</see>.</param>
         public ClosableTabControl(int firstClosableTabIndex)
         {
-            this.Shift = shift;
+            FirstClosableTabIndex = firstClosableTabIndex;
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace TwinEditor.UI
             {
                 Point p = e.Location;
                 // iterate over all tabs execpt of the first tab
-                for (int i = Shift; i < this.TabCount; i++)
+                for (int i = FirstClosableTabIndex; i < this.TabCount; i++)
                 {
                     // gets the rectangle of the curent tab (header)
                     Rectangle rectangle = GetTabRect(i);

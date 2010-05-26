@@ -21,6 +21,8 @@ namespace TwinEditor.Sharing
         public event EventHandler<ReceiveChatMessageEventArgs> ReceiveChatMessage;
         public event EventHandler FileTypeChanged;
         public event EventHandler<StartedExecutionEventArgs> StartedExecution;
+        public event EventHandler<EventArgs> Closing;
+        public event EventHandler FileNameChanged;
 
         SessionState currentState;
 
@@ -81,6 +83,12 @@ namespace TwinEditor.Sharing
 
         public void Close()
         {
+            Disconnect();
+            OnClosing(new EventArgs());
+        }
+        
+        public void Disconnect()
+        {
             if (State != SessionStates.Disconnected)
             {
                 try
@@ -91,10 +99,19 @@ namespace TwinEditor.Sharing
                 {
                     Logger.WarnFormat("When trying to send CloseSessionMessage, an exception occurred: {0}", e);
                 }
-            }
+            }            
         }
 
-        public string FileName { get; set; }
+        public string FileName
+        {
+            get { return fileName; }
+            set
+            {
+                fileName = value;
+                OnFileNameChanged(new EventArgs());
+            }
+        }
+        private string fileName;
 
         public void ActivateState(SessionState state)
         {
@@ -182,6 +199,22 @@ namespace TwinEditor.Sharing
             if (StartedExecution != null)
             {
                 StartedExecution(this, e);
+            }
+        }
+        
+        protected virtual void OnClosing(EventArgs e)
+        {
+            if (Closing != null)
+            {
+                Closing(this, e);
+            }
+        }
+        
+        protected virtual void OnFileNameChanged(EventArgs e)
+        {
+            if (FileNameChanged != null)
+            {
+                FileNameChanged(this, e);
             }
         }
 

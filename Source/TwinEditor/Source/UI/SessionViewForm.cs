@@ -15,6 +15,7 @@ namespace TwinEditor.UI
     using TwinEditor.Messaging;
     using TwinEditor.Sharing;
     using log4net;
+    
     public partial class SessionViewForm : UserControl, ISessionView
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(SessionViewForm));
@@ -30,16 +31,6 @@ namespace TwinEditor.UI
         #endregion
 
         #region File management members
-        public string FileName
-        {
-            get { return fileName; }
-            set
-            {
-                fileName = value;
-                tabPage.Text = fileName;
-            }
-        }
-        private string fileName;
 
         public bool OnDisk { get; set; }
         public bool FileModified { get; set; }
@@ -57,6 +48,8 @@ namespace TwinEditor.UI
         public SessionViewForm(ApplicationViewForm applicationViewForm, TabPage tabPage)
         {
             InitializeComponent();
+            
+            TabControl.FirstClosableTabIndex = 1;
 
             this.ApplicationViewForm = applicationViewForm;
             this.tabPage = tabPage;
@@ -77,6 +70,27 @@ namespace TwinEditor.UI
                 {
                     SessionContextStateChanged(sender, e);
                 });
+            };
+            
+            SessionContext.FileNameChanged += delegate{ 
+                UpdateGuiState();
+            };
+            
+            SessionContext.Context.Changed += delegate
+            {
+                FileModified = true;
+                UpdateGuiState();
+            };
+            
+            SessionContext.Closing += delegate
+            {
+                if (FileModified)
+                {
+                    if (MessageBox.Show(TranslationUtil.GetString(ApplicationUtil.LanguageResources, "_MessageBoxOnCloseMessage"), TranslationUtil.GetString(ApplicationUtil.LanguageResources, "_MessageBoxOnCloseCaption"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    {
+                        applicationViewForm.SaveRequest(this);
+                    }
+                }
             };
 
             SessionContext.FileTypeChanged += delegate
@@ -161,6 +175,9 @@ namespace TwinEditor.UI
         public void UpdateGuiState()
         {
             ApplicationViewForm.UpdateGuiState();
+            string modifier = FileModified ? "*" : "";
+            tabPage.Text = System.IO.Path.GetFileName(SessionContext.FileName) + modifier;
+            
             ChatText.Enabled = SessionContext.State == SessionStates.Connected;
         }
 

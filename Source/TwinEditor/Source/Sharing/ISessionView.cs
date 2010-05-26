@@ -10,7 +10,6 @@ namespace TwinEditor.Sharing
     
     public interface ISessionView
     {
-        string FileName { get; set; }
         SessionContext SessionContext { get; }
         
         bool OnDisk { get; set; }
