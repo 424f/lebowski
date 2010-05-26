@@ -28,7 +28,7 @@ namespace Lebowski.Net.Skype
             this.protocol = protocol;
 
             ResourceManager rm = new ResourceManager(this.GetType().FullName, System.Reflection.Assembly.GetExecutingAssembly());
-            Image image = (System.Drawing.Image)rm.GetObject("SkypeUserImage");            
+            Image image = (Image)rm.GetObject("SkypeUserImage");            
             
             foreach (string username in protocol.FriendNames)
             {

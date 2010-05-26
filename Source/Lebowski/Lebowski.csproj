@@ -97,9 +97,6 @@
     <Compile Include="Source\Net\ICommunicationProtocol.cs" />
     <Compile Include="Source\Net\IConnection.cs" />
     <Compile Include="Source\Net\JoinSessionEventArgs.cs" />
-    <Compile Include="Source\Net\Udp\UdpClientConnection.cs" />
-    <Compile Include="Source\Net\Udp\UdpConnection.cs" />
-    <Compile Include="Source\Net\Udp\UdpProtocol.cs" />
     <Compile Include="Source\Net\Local\LocalConnection.cs" />
     <Compile Include="Source\Net\Local\LocalProtocol.cs" />
     <Compile Include="Source\Net\MultichannelConnection.cs" />
@@ -127,7 +124,6 @@
       <DependentUpon>TcpShareForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Source\ISynchronizationSession.cs" />
-    <Compile Include="Source\Net\Udp\UdpServerConnection.cs" />
     <Compile Include="Source\StateVector.cs" />
     <Compile Include="Source\Synchronization\DifferentialSynchronization\DifferentialSynchronizationStrategy.cs" />
     <Compile Include="Source\Synchronization\DifferentialSynchronization\DiffMessage.cs" />
