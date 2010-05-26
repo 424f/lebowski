@@ -6,6 +6,7 @@ namespace LebowskiTests.Synchronization
     using Lebowski.TextModel;
     using Lebowski.TextModel.Operations;
     using Lebowski.Net;
+    using Lebowski.Net.Local;
     using Lebowski.Synchronization.DifferentialSynchronization;
     using NUnit.Framework;
 

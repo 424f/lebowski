@@ -54,6 +54,9 @@
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
+    <Reference Include="DiffMatchPatchDebug">
+      <HintPath>..\..\Libs\DiffMatchPatchDebug.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -126,7 +129,6 @@
     <Compile Include="Source\SessionStates.cs" />
     <Compile Include="Source\StateVector.cs" />
     <Compile Include="Source\Synchronization\DifferentialSynchronization\DifferentialSynchronizationStrategy.cs" />
-    <Compile Include="Source\Synchronization\DifferentialSynchronization\DiffMatchPatch.cs" />
     <Compile Include="Source\Synchronization\DifferentialSynchronization\DiffMessage.cs" />
     <Compile Include="Source\Synchronization\DifferentialSynchronization\TokenRequestMessage.cs" />
     <Compile Include="Source\Synchronization\DifferentialSynchronization\TokenState.cs" />
