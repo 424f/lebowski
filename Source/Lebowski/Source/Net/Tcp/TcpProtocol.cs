@@ -1,65 +1,41 @@
-
 namespace Lebowski.Net.Tcp
 {
     using System;
     using Lebowski.Synchronization;
     using Lebowski.Synchronization.DifferentialSynchronization;
-    
-    public class TcpProtocol : ICommunicationProtocol
-    {
-        public void Share(ISynchronizationSession session)
-        {
-            TcpShareForm form = new TcpShareForm();
-            form.Submit += delegate
-            {
-                form.Enabled = false;
-                session.State = SessionStates.AwaitingConnection;
-                form.Invoke((Action) delegate
-                {
-                    form.Dispose();
-                });
-                TcpServerConnection connection = new TcpServerConnection(form.Port);
-                
-                connection.ClientConnected += delegate
-                {
-                    OnHostSession(new HostSessionEventArgs(session, connection));
-                };
-            };
-            form.ShowDialog();
-        }
 
-        public string Name
-        {
-            get { return "TCP"; }
-        }
-        
-        
+    /// <summary>
+    /// Provides functionality to establish TCP connections between
+    /// two sites.
+    /// </summary>
+    public class TcpProtocol : ICommunicationProtocol
+    {        
+        /// <inheritdoc/>
         public bool CanShare
         {
             get { return true; }
         }
 
+        /// <inheritdoc/>        
         public bool CanParticipate
         {
             get { return true; }
         }
-
-        protected virtual void OnHostSession(HostSessionEventArgs e)
+        
+        /// <inheritdoc/>
+        /// <remarks>The TCP protocol does not have any external dependencies,
+        /// so it is always enabled.</remarks>
+        public bool Enabled
         {
-            if (HostSession != null)
-            {
-                HostSession(this, e);
-            }
-        }
+            get { return true; }
+        }        
 
-        protected virtual void OnJoinSession(JoinSessionEventArgs e)
+        /// <inheritdoc/>       
+        public string Name
         {
-            if (JoinSession != null)
-            {
-                JoinSession(this, e);
-            }
-        }
-
+            get { return "TCP"; }
+        }        
+        
         /// <inheritdoc/>
         /// <remarks>
         /// Calling this will display a form to the user to enter connection
@@ -92,13 +68,55 @@ namespace Lebowski.Net.Tcp
 
             form.ShowDialog();
         }
-
-        /// <inheritdoc/>
-        /// <remarks>The TCP protocol does not have any external dependencies,
-        /// so it is always enabled.</remarks>
-        public bool Enabled
+        
+        /// <inheritdoc/>    
+        /// <remarks>
+        /// Calling this will display a form to the user to enter sharing
+        /// settings.
+        /// </remarks>
+        public void Share(ISynchronizationSession session)
         {
-            get { return true; }
+            TcpShareForm form = new TcpShareForm();
+            form.Submit += delegate
+            {
+                form.Enabled = false;
+                session.State = SessionStates.AwaitingConnection;
+                form.Invoke((Action) delegate
+                {
+                    form.Dispose();
+                });
+                TcpServerConnection connection = new TcpServerConnection(form.Port);
+                
+                connection.ClientConnected += delegate
+                {
+                    OnHostSession(new HostSessionEventArgs(session, connection));
+                };
+            };
+            form.ShowDialog();
+        }        
+        
+        /// <summary>
+        /// Raises the <see cref="HostSession">HostSession</see> event.
+        /// </summary>
+        /// <param name="e">The event data.</param>
+        protected virtual void OnHostSession(HostSessionEventArgs e)
+        {
+            if (HostSession != null)
+            {
+                HostSession(this, e);
+            }
+        }
+
+        /// <summary>
+        /// Raises the <see cref="JoinSession">JoinSession</see> event.
+        /// </summary>
+        /// <param name="e">The event data.</param>
+        protected virtual void OnJoinSession(JoinSessionEventArgs e)
+        {
+            if (JoinSession != null)
+            {
+                JoinSession(this, e);
+            }
         }
         
         /// <inheritdoc/>

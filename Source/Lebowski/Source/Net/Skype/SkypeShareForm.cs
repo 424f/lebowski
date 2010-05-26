@@ -1,5 +1,3 @@
-
-
 namespace Lebowski.Net.Skype
 {
     using System;
@@ -7,20 +5,20 @@ namespace Lebowski.Net.Skype
     using System.Resources;
     using System.Windows.Forms;
     
-    public partial class SkypeShareForm : Form
+    /// <summary>
+    /// The form that is displayed to the user when he would like to share
+    /// a skype session, providing the user with choice about the exact
+    /// session parameters.
+    /// </summary>
+    public sealed partial class SkypeShareForm : Form
     {
-        public event EventHandler Submit;
-
-        private SkypeProtocol protocol;
-
-        public string SelectedUser
-        {
-            get
-            {
-                return (string)dataGridView.SelectedRows[0].Cells[1].Value;
-            }
-        }
-
+        private SkypeProtocol protocol;        
+        
+        /// <summary>
+        /// Initializes a new object of the SkypeShareForm class, which will
+        /// utilize the provided SkypeProtocol to access the Skype API.
+        /// </summary>
+        /// <param name="protocol">The SkypeProtocol this form will utilize.</param>
         public SkypeShareForm(SkypeProtocol protocol)
         {
             InitializeComponent();
@@ -39,22 +37,63 @@ namespace Lebowski.Net.Skype
             }
         }
 
-        void SkypeShareFormLoad(object sender, EventArgs e)
+        /// <summary>
+        /// Gets the user name of the currently selected friend
+        /// </summary>
+        public string SelectedUser
         {
-
+            get
+            {
+                return (string)dataGridView.SelectedRows[0].Cells[1].Value;
+            }
         }
 
-        void ShareButtonClick(object sender, EventArgs e)
+        private void ShareButtonClick(object sender, EventArgs e)
         {
             OnSubmit(new EventArgs());
         }
 
-        protected virtual void OnSubmit(EventArgs e)
+        void CancelButtonClick(object sender, EventArgs e)
         {
-            if (Submit != null) {
+            OnCancel(new EventArgs());
+            Close();
+        }
+        
+        void SkypeShareFormFormClosed(object sender, FormClosedEventArgs e)
+        {
+            OnCancel(new EventArgs());
+        }        
+        
+        /// <summary>
+        /// Raises the Submit event
+        /// </summary>
+        private void OnSubmit(EventArgs e)
+        {
+            if (Submit != null)
+            {
                 Submit(this, e);
             }
         }
-
+        
+        /// <summary>
+        /// Raises the Cancel event
+        /// </summary>
+        private void OnCancel(EventArgs e)
+        {
+            if (Cancel != null)
+            {
+                Cancel(this, e);
+            }
+        }        
+        
+        /// <summary>
+        /// Occurs when the user submits the form
+        /// </summary>
+        public event EventHandler Submit;        
+        
+        /// <summary>
+        /// Occurs when the user cancels the dialog
+        /// </summary>        
+        public event EventHandler Cancel;
     }
 }

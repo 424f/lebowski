@@ -29,77 +29,93 @@ namespace Lebowski.Net.Skype
         /// </summary>
         private void InitializeComponent()
         {
-            this.shareButton = new System.Windows.Forms.Button();
-            this.dataGridView = new System.Windows.Forms.DataGridView();
-            this.IconColumn = new System.Windows.Forms.DataGridViewImageColumn();
-            this.UsernameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
-            this.SuspendLayout();
-            //
-            // shareButton
-            //
-            this.shareButton.Location = new System.Drawing.Point(68, 227);
-            this.shareButton.Name = "shareButton";
-            this.shareButton.Size = new System.Drawing.Size(140, 23);
-            this.shareButton.TabIndex = 0;
-            this.shareButton.Text = "Share document";
-            this.shareButton.UseVisualStyleBackColor = true;
-            this.shareButton.Click += new System.EventHandler(this.ShareButtonClick);
-            //
-            // dataGridView
-            //
-            this.dataGridView.AllowUserToAddRows = false;
-            this.dataGridView.AllowUserToDeleteRows = false;
-            this.dataGridView.AllowUserToResizeColumns = false;
-            this.dataGridView.AllowUserToResizeRows = false;
-            this.dataGridView.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
-            this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-                                    this.IconColumn,
-                                    this.UsernameColumn});
-            this.dataGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-            this.dataGridView.Location = new System.Drawing.Point(13, 13);
-            this.dataGridView.Name = "dataGridView";
-            this.dataGridView.ReadOnly = true;
-            this.dataGridView.RowHeadersVisible = false;
-            this.dataGridView.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            this.dataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView.Size = new System.Drawing.Size(259, 208);
-            this.dataGridView.TabIndex = 1;
-            //
-            // IconColumn
-            //
-            this.IconColumn.FillWeight = 32F;
-            this.IconColumn.HeaderText = "";
-            this.IconColumn.Name = "IconColumn";
-            this.IconColumn.ReadOnly = true;
-            this.IconColumn.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.IconColumn.Width = 32;
-            //
-            // UsernameColumn
-            //
-            this.UsernameColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.UsernameColumn.HeaderText = "User";
-            this.UsernameColumn.Name = "UsernameColumn";
-            this.UsernameColumn.ReadOnly = true;
-            this.UsernameColumn.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            //
-            // SkypeShareForm
-            //
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 262);
-            this.Controls.Add(this.dataGridView);
-            this.Controls.Add(this.shareButton);
-            this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "SkypeShareForm";
-            this.ShowInTaskbar = false;
-            this.Text = "Share";
-            this.Load += new System.EventHandler(this.SkypeShareFormLoad);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
-            this.ResumeLayout(false);
+        	this.shareButton = new System.Windows.Forms.Button();
+        	this.dataGridView = new System.Windows.Forms.DataGridView();
+        	this.IconColumn = new System.Windows.Forms.DataGridViewImageColumn();
+        	this.UsernameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+        	this.cancelButton = new System.Windows.Forms.Button();
+        	((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
+        	this.SuspendLayout();
+        	// 
+        	// shareButton
+        	// 
+        	this.shareButton.Location = new System.Drawing.Point(145, 227);
+        	this.shareButton.Name = "shareButton";
+        	this.shareButton.Size = new System.Drawing.Size(127, 32);
+        	this.shareButton.TabIndex = 0;
+        	this.shareButton.Text = "Share document";
+        	this.shareButton.UseVisualStyleBackColor = true;
+        	this.shareButton.Click += new System.EventHandler(this.ShareButtonClick);
+        	// 
+        	// dataGridView
+        	// 
+        	this.dataGridView.AllowUserToAddRows = false;
+        	this.dataGridView.AllowUserToDeleteRows = false;
+        	this.dataGridView.AllowUserToResizeColumns = false;
+        	this.dataGridView.AllowUserToResizeRows = false;
+        	this.dataGridView.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
+        	this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+        	this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+        	        	        	this.IconColumn,
+        	        	        	this.UsernameColumn});
+        	this.dataGridView.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+        	this.dataGridView.Location = new System.Drawing.Point(13, 13);
+        	this.dataGridView.Name = "dataGridView";
+        	this.dataGridView.ReadOnly = true;
+        	this.dataGridView.RowHeadersVisible = false;
+        	this.dataGridView.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+        	this.dataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+        	this.dataGridView.Size = new System.Drawing.Size(259, 208);
+        	this.dataGridView.TabIndex = 1;
+        	// 
+        	// IconColumn
+        	// 
+        	this.IconColumn.FillWeight = 32F;
+        	this.IconColumn.HeaderText = "";
+        	this.IconColumn.Name = "IconColumn";
+        	this.IconColumn.ReadOnly = true;
+        	this.IconColumn.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+        	this.IconColumn.Width = 32;
+        	// 
+        	// UsernameColumn
+        	// 
+        	this.UsernameColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+        	this.UsernameColumn.HeaderText = "User";
+        	this.UsernameColumn.Name = "UsernameColumn";
+        	this.UsernameColumn.ReadOnly = true;
+        	this.UsernameColumn.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+        	// 
+        	// cancelButton
+        	// 
+        	this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+        	this.cancelButton.Location = new System.Drawing.Point(12, 227);
+        	this.cancelButton.Name = "cancelButton";
+        	this.cancelButton.Size = new System.Drawing.Size(127, 32);
+        	this.cancelButton.TabIndex = 0;
+        	this.cancelButton.Text = "Cancel";
+        	this.cancelButton.UseVisualStyleBackColor = true;
+        	this.cancelButton.Click += new System.EventHandler(this.CancelButtonClick);
+        	// 
+        	// SkypeShareForm
+        	// 
+        	this.AcceptButton = this.shareButton;
+        	this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+        	this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+        	this.CancelButton = this.cancelButton;
+        	this.ClientSize = new System.Drawing.Size(284, 262);
+        	this.Controls.Add(this.dataGridView);
+        	this.Controls.Add(this.cancelButton);
+        	this.Controls.Add(this.shareButton);
+        	this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+        	this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+        	this.Name = "SkypeShareForm";
+        	this.ShowInTaskbar = false;
+        	this.Text = "Share";
+        	this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.SkypeShareFormFormClosed);
+        	((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
+        	this.ResumeLayout(false);
         }
+        private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.DataGridView dataGridView;
         private System.Windows.Forms.DataGridViewTextBoxColumn UsernameColumn;
         private System.Windows.Forms.DataGridViewImageColumn IconColumn;

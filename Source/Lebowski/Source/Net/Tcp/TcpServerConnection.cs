@@ -6,14 +6,20 @@ namespace Lebowski.Net.Tcp
     using System.Net;
     using System.Net.Sockets;
     
+    /// <summary>
+    /// A TCP server that listens to incoming connections and accepts
+    /// the first one, then providing methods to communicate with it.
+    /// </summary>
     public class TcpServerConnection : TcpConnection
     {
-        public event EventHandler<EventArgs> ClientConnected;
-        public event EventHandler<EventArgs> ClientDisconnected;
-
         private TcpListener tcpListener;
         private TcpClient tcpClient;
 
+        /// <summary>
+        /// Initializes a new instance of the TcpServerConnection, listening
+        /// to connections on the specified port.
+        /// </summary>
+        /// <param name="port">The TCP port to listen for a connection.</param>
         public TcpServerConnection(int port)
         {
             tcpListener = new TcpListener(IPAddress.Any, port);
@@ -26,12 +32,17 @@ namespace Lebowski.Net.Tcp
             thread.Start();
         }
 
+        /// <inheritdoc/>
         public override void Close()
         {
             tcpListener.Stop();
             base.Close();
         }
 
+        /// <summary>
+        /// Runs a networking thread, accepting a single connection and then
+        /// behaving like <see cref="TcpConnection.RunReceiveThread">RunReceiveThread</see>.
+        /// </summary>
         protected void RunNetworkingThread()
         {
             // TODO: handle multiple clients
@@ -44,26 +55,10 @@ namespace Lebowski.Net.Tcp
             RunReceiveThread();
         }
 
-        protected void RunAsyncNetworkingThread()
-        {
-            tcpListener.Start();
-            // TODO: handle multiple clients
-            tcpListener.BeginAcceptTcpClient(new AsyncCallback(DoAcceptTcpClientCallback), tcpListener);
-        }
-
         /// <summary>
-        /// AsyncCallback passed on BeginAcceptTcpClient to avoid the application to block when waiting for a client connection
+        /// Raises the <see cref="ClientConnected">ClientConnected</see> event.
         /// </summary>
-        protected void DoAcceptTcpClientCallback(IAsyncResult ar)
-        {
-            tcpListener = (TcpListener) ar.AsyncState;
-            tcpClient = tcpListener.EndAcceptTcpClient(ar);
-            tcpListener.Stop();
-            stream = tcpClient.GetStream();
-            OnClientConnected(new EventArgs());
-            RunReceiveThread();
-        }
-
+        /// <param name="e">The event data.</param>        
         protected virtual void OnClientConnected(EventArgs e)
         {
             if (ClientConnected != null)
@@ -72,6 +67,10 @@ namespace Lebowski.Net.Tcp
             }
         }
 
+        /// <summary>
+        /// Raises the <see cref="ClientDisconnected">ClientDisconnected</see> event.
+        /// </summary>
+        /// <param name="e">The event data.</param>
         protected virtual void OnClientDisconnected(EventArgs e)
         {
             if (ClientDisconnected != null)
@@ -79,6 +78,16 @@ namespace Lebowski.Net.Tcp
                 ClientDisconnected(this, e);
             }
         }
+
+        /// <summary>
+        /// Occurs when a client connects to this server.
+        /// </summary>
+        public event EventHandler<EventArgs> ClientConnected;
+        
+        /// <summary>
+        /// Occurs when a client disconnects from this server.
+        /// </summary>
+        public event EventHandler<EventArgs> ClientDisconnected;        
 
     }
 }
