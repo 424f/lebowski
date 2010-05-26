@@ -131,6 +131,8 @@
     <Compile Include="Source\Synchronization\DifferentialSynchronization\DiffMessage.cs" />
     <Compile Include="Source\Synchronization\DifferentialSynchronization\TokenRequestMessage.cs" />
     <Compile Include="Source\Synchronization\DifferentialSynchronization\TokenState.cs" />
+    <Compile Include="Source\Synchronization\dOPT\DeleteOperationTransformer.cs" />
+    <Compile Include="Source\Synchronization\dOPT\InsertOperationTransformer.cs" />
     <Compile Include="Source\Synchronization\dOPT\Model.cs" />
     <Compile Include="Source\Synchronization\ISynchronizationStrategy.cs" />
     <Compile Include="Source\Synchronization\SessionStates.cs" />
