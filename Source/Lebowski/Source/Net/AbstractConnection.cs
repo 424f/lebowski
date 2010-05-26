@@ -44,7 +44,7 @@
         {
             /* As we should not dispatch packets when nobody is listening,
              * we wait until there is at least one listener */
-            while(Received.GetInvocationList().Length == 0)
+            while(Received == null || Received.GetInvocationList().Length == 0)
             {
                 // TODO: solve this using activation / decativation
                 Thread.Sleep(100);
