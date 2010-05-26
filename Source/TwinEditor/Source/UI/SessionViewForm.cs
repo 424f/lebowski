@@ -40,7 +40,6 @@ namespace TwinEditor.UI
         // Stores the exeucution view form for each user (identified by site id)
         private Dictionary<int, ExecutionViewForm> executionViewForms = new Dictionary<int, ExecutionViewForm>();
         private Dictionary<int, TabPage> executionTabs = new Dictionary<int, TabPage>();
-        private int numExecutions = 0;
         #endregion
 
         public ITextContext Context { get; protected set; }

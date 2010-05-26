@@ -18,8 +18,6 @@
     {
         public BootstrappingState(SessionContext session) : base(session) {}
 
-        bool receivedHandshake = false;
-
         public override void Register()
         {
             Logger.Info("Registering BootstrappingState");

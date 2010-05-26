@@ -72,11 +72,6 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
         private diff_match_patch DiffMatchPatch = new diff_match_patch();
 
         /// <summary>
-        /// Indicates whether the session has already been set up
-        /// </summary>
-        private bool isSessionEstablished = false;
-
-        /// <summary>
         /// Creates a new differential synchronization session on an already established
         /// networking connection.
         /// </summary>
@@ -98,8 +93,6 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
 
             Connection.Received += ConnectionReceived;
             Context.Changed += ContextChanged;
-
-            isSessionEstablished = false;
         }
 
         private void SendPatches()
@@ -246,8 +239,6 @@ namespace Lebowski.Synchronization.DifferentialSynchronization
         private void ConnectionReceived(object sender, ReceivedEventArgs e)
         {
             Context.Invoke(delegate {
-                isSessionEstablished = true;
-
                 Console.BackgroundColor = ConsoleColor.DarkRed;
                 //Console.WriteLine("Thread {0}: {1}", System.Threading.Thread.CurrentThread.ManagedThreadId, e.Message.GetType().Name);
                 Console.ResetColor();
