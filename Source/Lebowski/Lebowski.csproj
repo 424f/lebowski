@@ -130,6 +130,9 @@
     <Compile Include="Source\Synchronization\dOPT\Model.cs" />
     <Compile Include="Source\Synchronization\ISynchronizationStrategy.cs" />
     <Compile Include="Source\TextModel\AbstractTextContext.cs" />
+    <Compile Include="Source\TextModel\ChangeEventArgs.cs" />
+    <Compile Include="Source\TextModel\DeleteEventArgs.cs" />
+    <Compile Include="Source\TextModel\InsertEventArgs.cs" />
     <Compile Include="Source\TextModel\ITextContext.cs" />
     <Compile Include="Source\TextModel\Operations\DeleteOperation.cs" />
     <Compile Include="Source\TextModel\Operations\InsertOperation.cs" />

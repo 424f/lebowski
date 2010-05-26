@@ -8,11 +8,6 @@ namespace Lebowski.Net
     public sealed class JoinSessionEventArgs : EventArgs
     {
         /// <summary>
-        /// Gets the connection that is going to be used for this session.
-        /// </summary>        
-        public IConnection Connection { get; private set; }
-
-        /// <summary>
         /// Initializes a new instance of the HostSessionEventArgs class.
         /// </summary>
         /// <param name="connection">See <see cref="Lebowski.Net.JoinSessionEventArgs.Connection">Connection</see></param>        
@@ -20,5 +15,10 @@ namespace Lebowski.Net
         {
             Connection = connection;
         }
+        
+        /// <summary>
+        /// Gets the connection that is going to be used for this session.
+        /// </summary>        
+        public IConnection Connection { get; private set; }        
     }
 }

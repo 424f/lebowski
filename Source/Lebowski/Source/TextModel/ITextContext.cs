@@ -5,8 +5,8 @@ namespace Lebowski.TextModel
 
     public interface ITextContext
     {
-        void Refresh();
-
+        int CaretPosition { get; set; }
+        
         string Data { get; set; }
 
         /// <summary>
@@ -24,11 +24,11 @@ namespace Lebowski.TextModel
         /// </summary>
         bool HasSelection { get; }
 
-        int CaretPosition { get; set; }
         string SelectedText { get; }
 
-        void Insert(object issuer, InsertOperation operation);
         void Delete(object issuer, DeleteOperation operation);
+        void Insert(object issuer, InsertOperation operation);        
+        void Refresh();
         void SetSelection(int start, int last);
 
         /// <summary>
@@ -51,39 +51,5 @@ namespace Lebowski.TextModel
         event EventHandler<InsertEventArgs> Inserted;
         event EventHandler<DeleteEventArgs> Deleted;
         event EventHandler<ChangeEventArgs> Changed;
-    }
-
-    public class InsertEventArgs : EventArgs
-    {
-        public InsertOperation Operation { get; protected set; }
-        public object Issuer { get; protected set; }
-
-        public InsertEventArgs(object issuer, InsertOperation operation)
-        {
-            Operation = operation;
-            Issuer = issuer;
-        }
-    }
-
-    public class DeleteEventArgs : EventArgs
-    {
-        public DeleteOperation Operation { get; protected set; }
-        public object Issuer { get; protected set; }
-
-        public DeleteEventArgs(object issuer, DeleteOperation operation)
-        {
-            Operation = operation;
-            Issuer = issuer;
-        }
-    }
-
-    public class ChangeEventArgs : EventArgs
-    {
-        public object Issuer { get; protected set; }
-
-        public ChangeEventArgs(object issuer)
-        {
-            Issuer = issuer;
-        }
     }
 }
