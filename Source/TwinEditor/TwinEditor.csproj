@@ -19,7 +19,7 @@
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RunCodeAnalysis>True</RunCodeAnalysis>
+    <DocumentationFile>bin\Debug\TwinEditor.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -127,9 +127,7 @@
     <Compile Include="Source\UI\AboutDialog.Designer.cs">
       <DependentUpon>AboutDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Source\UI\CloseableTabControl.cs">
-      <DependentUpon>ErrorMessage.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Source\UI\ClosableTabControl.cs" />
     <Compile Include="Source\UI\ErrorMessage.cs" />
     <Compile Include="Source\UI\ErrorMessage.Designer.cs">
       <DependentUpon>ErrorMessage.cs</DependentUpon>

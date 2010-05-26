@@ -21,7 +21,7 @@ namespace Lebowski
         /// The synchronization that is used to keep the session in a consistent
         /// state at all sites at all times.
         /// </summary>
-        DifferentialSynchronizationStrategy SynchronizationStrategy { get; }
+        ISynchronizationStrategy SynchronizationStrategy { get; }
 
         /// <summary>
         /// The text context at the current site

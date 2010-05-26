@@ -255,7 +255,7 @@ namespace TwinEditor.UI
     			                	type = fileType;
     			            }
     					}
-    					catch (NullReferenceException e) {
+    					catch (NullReferenceException) {
     						Logger.Error("fileTypes have not been set for ApplicationViewForm");
     					}
     			           

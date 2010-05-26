@@ -12,7 +12,7 @@
         /// <summary>
         /// Initializes a new instance of the DeleteOperationTransformer.
         /// </summary>
-        /// <param name="op">See <see cref="Operation">Operation</see>.</param>        
+        /// <param name="operation">See <see cref="Operation">Operation</see>.</param>        
         public DeleteOperationTransformer(DeleteOperation operation)
         {
             Operation = operation;
