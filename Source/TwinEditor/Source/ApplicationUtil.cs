@@ -1,9 +1,13 @@
-
 namespace TwinEditor
 {
     using System;
     using System.Resources;
     using System.Reflection;
+  
+    /// <summary>
+    /// Provides helper methods and helper properties for application-wide
+    /// information like settings and resources.
+    /// </summary>
     public static class ApplicationUtil
     {
         private static bool isInitialized;
@@ -18,6 +22,9 @@ namespace TwinEditor
         /// </summary>
         public static ResourceManager Resources { get; private set; }
 
+        /// <summary>
+        /// Initializes the ApplicationUtil members.
+        /// </summary>
         public static void Initialize()
         {
             if (isInitialized)
