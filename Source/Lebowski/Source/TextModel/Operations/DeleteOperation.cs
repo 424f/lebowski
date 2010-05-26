@@ -1,9 +1,17 @@
 namespace Lebowski.TextModel.Operations
 {
+    /// <summary>
+    /// This class encapsulates a delete operation.
+    /// A delete operation is defined by a position only, as only one character is deleted at a time.
+    /// </summary>
     public class DeleteOperation : TextOperation
     {
         public int Position { get; set; }
 
+        /// <summary>
+        /// Initializes a new instance of a InsertOperation.
+        /// </summary>
+        /// <param name="position"><see cref="int"></see></param>
         public DeleteOperation(int position)
         {
             Transformer = new DeleteOperationTransformer(this);

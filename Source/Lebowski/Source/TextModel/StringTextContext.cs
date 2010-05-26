@@ -5,7 +5,7 @@ namespace Lebowski.TextModel
 
     /// <summary>
     /// A text context that does not have any GUI representation, but just
-    /// applies operations to a string instead. This is usefull for performing
+    /// applies operations to a string instead. This is useful for performing
     /// text operations on a shared context.
     /// </summary>
     public class StringTextContext : AbstractTextContext
@@ -83,8 +83,15 @@ namespace Lebowski.TextModel
         /// <inheritdoc/>
         public override void SetSelection(int start, int last)
         {
-            SelectionStart = start;
-            SelectionEnd = last;
+            if (start > last)
+                throw new ArgumentException();
+            if (last > (Data.Length -1))
+                throw new ArgumentOutOfRangeException();
+            else
+            {
+                SelectionStart = start;
+                SelectionEnd = last;
+            }
         }        
     }
 }
