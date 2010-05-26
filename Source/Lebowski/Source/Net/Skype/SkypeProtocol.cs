@@ -284,6 +284,8 @@ namespace Lebowski.Net.Skype
                         this.streams.Remove(user);
                         this.connections.Remove(user);
                         this.connectionsForUser.Remove(user);
+                        
+                        throw new Exception("Could not send Ap2Ap message", e);
                     }
                 }
             }, null);
