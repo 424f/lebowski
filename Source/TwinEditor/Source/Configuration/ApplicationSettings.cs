@@ -4,20 +4,28 @@ namespace TwinEditor.Configuration
     using System.Configuration; 
     using System.Collections.Generic;
     
+    /// <summary>
+    /// Provides per-user and per-application settings associated with this 
+    /// application.
+    /// </summary>
     public class ApplicationSettings : ApplicationSettingsBase
     {
         private static ApplicationSettings defaultInstance = (ApplicationSettings)ApplicationSettingsBase.Synchronized(new ApplicationSettings());
         
+        /// <summary>
+        /// Gets the default instance of these settings.
+        /// </summary>
+        /// <remarks>
+        /// This instance is statically initialized.
+        /// </remarks>
         public static ApplicationSettings Default
         {
             get { return defaultInstance; }
         }
-        
-        public ApplicationSettings()
-        {
-        }
-        
-        #region Settings
+               
+        /// <summary>
+        /// Gets or sets the configured username on a per-user level.
+        /// </summary>
         [UserScopedSettingAttribute]
         [DefaultSettingValue(null)]
         public string UserName
@@ -26,7 +34,10 @@ namespace TwinEditor.Configuration
             set { this["UserName"] = value; }
         }
         
-        //[ApplicationScopedSettingAttribute]
+        /// <summary>
+        /// Gets or sets the name of the ISynchronizationStrategy to be used
+        /// by default on a per-user level.
+        /// </summary>
         [UserScopedSettingAttribute]
         [DefaultSettingValue("Lebowski.DifferentialSynchronization.DifferentialSynchronizationStrategy")]
         public string SynchronizationStrategy
@@ -35,6 +46,9 @@ namespace TwinEditor.Configuration
             set { this["SynchronizationStrategy"] = value; }
         }
         
+        /// <summary>
+        /// Gets or sets the recently opened files on a per-user level.
+        /// </summary>
         [UserScopedSettingAttribute]
         [DefaultSettingValue(null)]
         public List<string> RecentFileList
@@ -43,6 +57,10 @@ namespace TwinEditor.Configuration
             set { this["RecentFileList"] = value; }
         }
         
+        /// <summary>
+        /// Gets or sets the length of the recently opened files list on a
+        /// per-user level.
+        /// </summary>
         [UserScopedSettingAttribute]
         [DefaultSettingValue("5")]
         public string RecentFileListSize
@@ -50,6 +68,5 @@ namespace TwinEditor.Configuration
         	get { return (string)this["RecentFileListSize"]; }
             set { this["RecentFileListSize"] = value; }
         }
-        #endregion
     }
 }
