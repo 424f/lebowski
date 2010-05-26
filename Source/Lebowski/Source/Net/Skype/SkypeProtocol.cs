@@ -48,6 +48,7 @@ namespace Lebowski.Net.Skype
         /// application-wide messages (e.g. invitations)
         /// </summary>
         private Dictionary<string, ApplicationStream> streams = new Dictionary<string, ApplicationStream>();
+        
         private Dictionary<string, Dictionary<int, SkypeConnection>> connections = new Dictionary<string, Dictionary<int, SkypeConnection>>();
         private Dictionary<string, int> connectionsForUser = new Dictionary<string, int>();
 
@@ -171,6 +172,7 @@ namespace Lebowski.Net.Skype
             API._ISkypeEvents_Event_ApplicationStreams += ApplicationStreams;
             API.ApplicationConnecting += ApplicationConnecting;
             API.ApplicationReceiving += ApplicationReceiving;
+            
 
             isInitialized = true;
             
@@ -255,7 +257,6 @@ namespace Lebowski.Net.Skype
             {
                 lock (streams)
                 {
-
                     byte[] prefix = BitConverter.GetBytes(connectionId);
                     byte[] buffer = NetUtils.Serialize(o);
 
@@ -303,7 +304,12 @@ namespace Lebowski.Net.Skype
             if (pApp.Name != Application.Name)
                 return;
 
+            foreach(ApplicationStream stream in pStreams)
+            {
+                Console.WriteLine(stream.PartnerHandle + "::" + stream.Handle);
+            }
             Console.WriteLine();
+            Console.WriteLine("--");
 
             if (streams.ContainsKey(pStreams[1].PartnerHandle))
             {

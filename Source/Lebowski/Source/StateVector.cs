@@ -78,16 +78,19 @@ namespace Lebowski.Synchronization
         }
 
         #region Comparison operators
+        /// <inheritdoc/>
         public static bool operator < (StateVector a, StateVector b)
         {
             return a.CompareTo(b) == -1;
         }
 
+        /// <inheritdoc/>
         public static bool operator > (StateVector a, StateVector b)
         {
             return a.CompareTo(b) == 1;
         }
 
+        /// <inheritdoc/>
         public static bool operator == (StateVector a, StateVector b)
         {
             return a.CompareTo(b) == 0;
@@ -103,11 +106,13 @@ namespace Lebowski.Synchronization
                 return false;
         }
 
+        /// <inheritdoc/>
         public bool Equals(StateVector other)
         {
             return CompareTo(other) == 0;
         }
 
+        /// <inheritdoc/>
         public override int GetHashCode()
         {
             int result = values.Count.GetHashCode();
@@ -118,6 +123,7 @@ namespace Lebowski.Synchronization
             return result;
         }
 
+        /// <inheritdoc/>
         public static bool operator != (StateVector left, StateVector right)
         {
             return !left.Equals(right);
