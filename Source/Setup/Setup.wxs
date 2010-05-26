@@ -40,6 +40,7 @@
             <File Id="IronPython.dll" Name="IronPython.dll" Source="../TwinEditor/bin/Debug\IronPython.dll" />
             <File Id="IronPython.Modules.dll" Name="IronPython.Modules.dll" Source="../TwinEditor/bin/Debug\IronPython.Modules.dll" />
             <File Id="Lebowski.dll" Name="Lebowski.dll" Source="../TwinEditor/bin/Debug\Lebowski.dll" />
+            <File Id="DiffMatchPatch.dll" Name="DiffMatchPatch.dll" Source="../TwinEditor/bin/Debug\DiffMatchPatch.dll" />            
             <File Id="Lebowski.pdb" Name="Lebowski.pdb" Source="../TwinEditor/bin/Debug\Lebowski.pdb" />
             <File Id="log4net.dll" Name="log4net.dll" Source="../TwinEditor/bin/Debug\log4net.dll" />
             <File Id="Microsoft.Dynamic.dll" Name="Microsoft.Dynamic.dll" Source="../TwinEditor/bin/Debug\Microsoft.Dynamic.dll" />

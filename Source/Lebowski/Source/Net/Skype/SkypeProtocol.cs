@@ -201,22 +201,42 @@ namespace Lebowski.Net.Skype
         {
             UpdateFriends();
             SkypeShareForm form = new SkypeShareForm(this);
+            Exception lastException = null;
             form.Submit += delegate
-            {
-                EstablishConnection(form.SelectedUser);
-
-                // TODO: connect in separate thread
-
-                // Create channel for this session
-                SkypeConnection connection = Connect(form.SelectedUser);
-
-                // Send out the invite
-                SharingInvitationMessage invitationMessage = new SharingInvitationMessage(++numInvitations, session.FileName, form.SelectedUser, connection.IncomingChannel);
-                invitations[invitationMessage.InvitationId] = invitationMessage;
-                invitationChannels[invitationMessage.InvitationId] = connection;
-                invitationSessions[invitationMessage.InvitationId] = session;
-                Send(form.SelectedUser, ApplicationConnectionId, invitationMessage);
-
+            {    
+                bool succeeded = false;
+                for(int attempt = 1; attempt <= 2; ++attempt)
+                {
+                    try
+                    {
+                        EstablishConnection(form.SelectedUser);
+        
+                        // TODO: connect in separate thread                    
+                        
+                        // Create channel for this session
+                        SkypeConnection connection = Connect(form.SelectedUser);
+        
+                        // Send out the invite
+                        SharingInvitationMessage invitationMessage = new SharingInvitationMessage(++numInvitations, session.FileName, form.SelectedUser, connection.IncomingChannel);
+                        invitations[invitationMessage.InvitationId] = invitationMessage;
+                        invitationChannels[invitationMessage.InvitationId] = connection;
+                        invitationSessions[invitationMessage.InvitationId] = session;
+                    
+                        Send(form.SelectedUser, ApplicationConnectionId, invitationMessage);
+                        
+                        succeeded = true;
+                    }
+                    catch(Exception e)
+                    {
+                        lastException = e;
+                    }
+                }
+                
+                if(!succeeded)
+                {
+                    throw lastException;
+                }
+                    
                 session.State = SessionStates.AwaitingConnection;
 
                 form.Close();
