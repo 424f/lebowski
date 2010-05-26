@@ -110,7 +110,11 @@
     <Compile Include="Source\Execution\ExecutionChangedEventArgs.cs" />
     <Compile Include="Source\Execution\ExecutionResult.cs" />
     <Compile Include="Source\Execution\FinishedExecutionEventArgs.cs" />
-    <Compile Include="Source\FileTypes\PythonInterpreter.cs" />
+    <Compile Include="Source\Execution\PythonInterpreter.cs" />
+    <Compile Include="Source\Execution\PythonStdoutWriter.cs" />
+    <Compile Include="Source\Execution\PythonStringWriter.cs" />
+    <Compile Include="Source\Execution\PythonWriter.cs" />
+    <Compile Include="Source\Execution\WriteEventArgs.cs" />
     <Compile Include="Source\Messaging\ChatMessage.cs" />
     <Compile Include="Source\Messaging\CloseSessionMessage.cs" />
     <Compile Include="Source\Messaging\ExecutionResultMessage.cs" />
@@ -155,8 +159,6 @@
     <Compile Include="Source\UI\Settings\SettingsDialog.Designer.cs">
       <DependentUpon>SettingsDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Test\PythonInterpreterTest.cs" />
-    <Compile Include="Test\UITester.cs" />
     <EmbeddedResource Include="LanguageResources.de.resx" />
     <EmbeddedResource Include="LanguageResources.resx" />
     <EmbeddedResource Include="Resources.resx" />

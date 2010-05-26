@@ -1,14 +1,8 @@
-
-
 namespace TwinEditor.Test
 {
     using System;
     using System.IO;
-    using IronPython;
-    using IronPython.Hosting;
-    using IronPython.Runtime;
-    using Microsoft.Scripting;
-    using Microsoft.Scripting.Hosting;
+    using TwinEditor.Execution;
     using NUnit.Framework;
     [TestFixture]
     public class PythonInterpreterTest

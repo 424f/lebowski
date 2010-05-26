@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwinEditor", "TwinEditor\Tw
 EndProject
 Project("{CFEE4113-1246-4D54-95CB-156813CB8593}") = "Setup", "Setup\Setup.wixproj", "{B6C8270C-05F1-400E-8055-92D9F1710222}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwinEditorTests", "TwinEditorTests\TwinEditorTests.csproj", "{F3596B6C-3D89-448B-9FA7-6B243EBA4AAD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -32,6 +34,10 @@ Global
 		{B6C8270C-05F1-400E-8055-92D9F1710222}.Debug|x86.ActiveCfg = Debug|x86
 		{B6C8270C-05F1-400E-8055-92D9F1710222}.Release|x86.Build.0 = Release|x86
 		{B6C8270C-05F1-400E-8055-92D9F1710222}.Release|x86.ActiveCfg = Release|x86
+		{F3596B6C-3D89-448B-9FA7-6B243EBA4AAD}.Debug|x86.Build.0 = Debug|x86
+		{F3596B6C-3D89-448B-9FA7-6B243EBA4AAD}.Debug|x86.ActiveCfg = Debug|x86
+		{F3596B6C-3D89-448B-9FA7-6B243EBA4AAD}.Release|x86.Build.0 = Release|x86
+		{F3596B6C-3D89-448B-9FA7-6B243EBA4AAD}.Release|x86.ActiveCfg = Release|x86
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Lebowski\Lebowski.csproj

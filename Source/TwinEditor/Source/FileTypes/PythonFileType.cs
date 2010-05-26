@@ -89,11 +89,6 @@ namespace TwinEditor.FileTypes
             t.Start();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="content">Source code to be executed.</param>
-        /// <param name="result">ExecutionResult instance that fires events according to the execution state.</param>
         private void DoExecute(string content, ExecutionResult result)
         {
             var writer = new PythonStringWriter();
