@@ -7,26 +7,31 @@ namespace TwinEditor.FileTypes
 
     public class TextFileType : IFileType
     {
+        /// <inheritdoc/>
         public string Name
         {
             get { return "Text"; }
         }
 
+        /// <inheritdoc/>
         public string FileNamePattern
         {
             get { return "*.txt"; }
         }
 
+        /// <inheritdoc/>
         public string FileExtension
         {
             get { return ".txt"; }
         }
 
+        /// <inheritdoc/>
         public bool FileNameMatches(string fileName)
         {
             return fileName.EndsWith(FileExtension);
         }
 
+        /// <inheritdoc/>
         public Image Icon
         {
             get
@@ -36,21 +41,25 @@ namespace TwinEditor.FileTypes
             }
         }
 
+        /// <inheritdoc/>
         public bool CanCompile
         {
             get { return false; }
         }
 
+        /// <inheritdoc/>
         public void Compile(string content, TextWriter stdout)
         {
 
         }
 
+        /// <inheritdoc/>
         public bool CanExecute
         {
             get { return false; }
         }
 
+        /// <inheritdoc/>
         public void Execute(string content, ExecutionResult stdout)
         {
 

@@ -9,7 +9,7 @@ namespace TwinEditor.FileTypes
     {
         /// <summary>
         /// A descriptive name that will be used to display this file type
-        /// to the user in the user interface
+        /// to the user in the user interface.
         /// </summary>
         string Name { get; }
 
@@ -21,8 +21,8 @@ namespace TwinEditor.FileTypes
         string FileNamePattern { get; }
 
         /// <summary>
-        /// The extenstion of the file type
-        /// This is basically the same as the FileNamePattern but without the asterisk
+        /// The extenstion of the file type.
+        /// This is basically the same as the FileNamePattern but without the asterisk.
         /// </summary>
         string FileExtension { get; }
 
@@ -34,14 +34,32 @@ namespace TwinEditor.FileTypes
 
         /// <summary>
         /// The icon that is associated with this type and is displayed
-        /// in the GUI (e.g. create file dialog, tab page, ...)
+        /// in the GUI (e.g. create file dialog, tab page, ...).
         /// </summary>
         Image Icon { get; }
 
+        /// <value>
+        /// Indicates whether the file can be compiled.
+        /// </value>
         bool CanCompile { get; }
+        
+        /// <summary>
+        /// Compiles the file.
+        /// </summary>
+        /// <param name="source">Source code to compile.</param>
+        /// <param name="stdout">TextWriter where the results should be written to.</param>
         void Compile(string source, TextWriter stdout);
 
+        /// <value>
+        /// Indicates whether the file can be executed.
+        /// </value>
         bool CanExecute { get; }
+        
+        /// <summary>
+        /// Execute the source of the file.
+        /// </summary>
+        /// <param name="source">Source code to execute.</param>
+        /// <param name="result">ExecutionResult instance that fires events according to the execution state.</param>
         void Execute(string source, ExecutionResult result);
     }
 }

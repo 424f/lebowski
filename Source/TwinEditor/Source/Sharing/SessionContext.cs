@@ -166,7 +166,6 @@ namespace TwinEditor.Sharing
                 SynchronizationConnection.Close();
                 SynchronizationConnection = null;
             }
-
             State = SessionStates.Disconnected;
         }
 
