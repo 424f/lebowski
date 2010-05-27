@@ -30,10 +30,14 @@
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
   <ItemGroup>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\Libs\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -46,5 +50,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Source" />
+    <ProjectReference Include="..\TwinEditor\TwinEditor.csproj">
+      <Project>{89548DEC-46B8-42FA-89BB-948B5C570762}</Project>
+      <Name>TwinEditor</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

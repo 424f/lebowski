@@ -5,6 +5,9 @@ namespace TwinEditor.FileTypes
     using System.Drawing;
     using TwinEditor.Execution;
 
+    /// <summary>
+    /// Provides support for a plain text file.
+    /// </summary>
     public class TextFileType : IFileType
     {
         /// <inheritdoc/>

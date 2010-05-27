@@ -3,7 +3,7 @@
     using System;
 
     /// <summary>
-    /// Specific EventArgs for WriteEvent
+    /// Provides data for the <see cref="PythonWriter.Write" /> event.
     /// </summary>
     public sealed class WriteEventArgs : EventArgs
     {

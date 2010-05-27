@@ -4,6 +4,10 @@ namespace TwinEditor.UI
     using System.Windows.Forms;
     using System.Drawing;
     
+    /// <summary>
+    /// A UI control that provides the same functionality as TabControl,
+    /// but also provides a way for the user to close certain tabs.
+    /// </summary>
     public class ClosableTabControl : TabControl
     {
         /// <summary>
@@ -101,15 +105,23 @@ namespace TwinEditor.UI
     }
 
     /// <summary>
-    /// TabClosedEventArgs is the EventArgs class for <see cref="TabClosed"></see>
+    /// Provides data for the <see cref="ClosableTabControl.TabClosed" /> event.
     /// </summary>
     public sealed class TabClosedEventArgs : EventArgs
     {
-        public int TabIndex { get; private set; }
+        /// <summary>
+        /// Initializes a new instance of the TabClosedEventArgs class.
+        /// </summary>
+        /// <param name="index"><see cref="TabIndex" /></param>
         public TabClosedEventArgs(int index)
         {
             TabIndex = index;
         }
+        
+        /// <summary>
+        /// The index of the tab that was closed.
+        /// </summary>
+        public int TabIndex { get; private set; }        
     }
 }
 

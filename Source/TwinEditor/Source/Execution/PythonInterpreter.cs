@@ -9,7 +9,8 @@ namespace TwinEditor.Execution
     using Microsoft.Scripting.Hosting;
 
     /// <summary>
-    /// <param>A IronPython Interpreter</param>
+    /// <param>An IronPython Interpreter that sets up a python engine
+    /// and allows execution of python scripts.</param>
     /// <param></param>
     /// </summary>
     public class PythonInterpreter

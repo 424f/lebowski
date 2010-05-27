@@ -86,15 +86,23 @@ namespace TwinEditor.UI
     }
 
     /// <remarks>
-    /// <see cref="RecentFilesChangedEventArgs"></see> is the EventArgs class for <see cref="RecentFilesChanged"></see>
+    /// <see cref="RecentFilesChangedEventArgs"></see> is the EventArgs class for <see cref="RecentFilesList.RecentFilesChanged"></see>
     /// </remarks>
     public sealed class RecentFilesChangedEventArgs : EventArgs
     {
-        public List<string> RecentFiles { get; private set; }
-
+        /// <summary>
+        /// Initializes a new instance of the RecentFilesChangedEventArgs with
+        /// the current list of recently used files.
+        /// </summary>
+        /// <param name="recentFiles">See <see cref="RecentFiles" />.</param>
         public RecentFilesChangedEventArgs(List<string> recentFiles)
         {
             RecentFiles = recentFiles;
         }
+        
+        /// <summary>
+        /// The list of recently used files.
+        /// </summary>
+        public List<string> RecentFiles { get; private set; }        
     }
 }

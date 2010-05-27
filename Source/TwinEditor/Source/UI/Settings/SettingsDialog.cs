@@ -1,14 +1,21 @@
-
-
 namespace TwinEditor.UI.Settings
 {
     using System;
     using System.Drawing;
     using System.Windows.Forms;
+    
+    /// <summary>
+    /// Displays the application settings and allows the user to make changes to them.
+    /// </summary>
     public partial class SettingsDialog : Form
     {
         private TwinEditor.ApplicationContext applicationContext;
 
+        /// <summary>
+        /// Initializes a new instance of the SettingsDialog, based on a
+        /// specified application context.
+        /// </summary>
+        /// <param name="applicationContext">The specified application context.</param>
         public SettingsDialog(TwinEditor.ApplicationContext applicationContext)
         {
             InitializeComponent();

@@ -5,6 +5,10 @@ namespace TwinEditor.FileTypes
     using System.Drawing;
     using TwinEditor.Execution;
 
+    /// <summary>
+    /// Provides the behavior and properties of a file type supported
+    /// by the editor.
+    /// </summary>
     public interface IFileType
     {
         /// <summary>
@@ -50,9 +54,9 @@ namespace TwinEditor.FileTypes
         /// <param name="stdout">TextWriter where the results should be written to.</param>
         void Compile(string source, TextWriter stdout);
 
-        /// <value>
+        /// <summary>
         /// Indicates whether the file can be executed.
-        /// </value>
+        /// </summary>
         bool CanExecute { get; }
         
         /// <summary>

@@ -81,13 +81,28 @@ namespace TwinEditor
                 try
                 {
                     args.Protocol.Share(args.Session);
-                } catch(Exception e)
+                }
+                catch(Exception e)
                 {
                     args.Session.Reset();
                     Logger.WarnFormat("Could not share session with {0}:\n{1}", args.Protocol.Name, e);
                     view.DisplayError("The session could not be shared.", e);
                 }
             };
+            
+            // Protocol: participate
+            view.Participate += delegate(object sender, ParticipateEventArgs args)
+            {
+                try
+                {
+                    args.Protocol.Participate();
+                }
+                catch(Exception e)
+                {
+                    Logger.WarnFormat("Could not participate with protocol {0}:\n{1}", args.Protocol.Name, e);
+                    view.DisplayError("Participating in a session failed.", e);
+                }
+            };            
 
             // File handling
             view.NewFile += delegate(object sender, NewFileEventArgs e)
@@ -100,11 +115,6 @@ namespace TwinEditor
             {
                 SessionContext sessionContext = currentSessions.Find((SessionContext s) => s.FileName == e.FileName);
                 
-                foreach(SessionContext sc in currentSessions)
-                {
-                    System.Console.WriteLine("{0}=={1}? {2}", sc.FileName, e.FileName, sc.FileName == e.FileName);
-                }
-                
                 if (sessionContext != null)
             	{
             		Logger.Info(e.FileName + " already open");
@@ -112,8 +122,24 @@ namespace TwinEditor
             	}
             	else
             	{
+                    // Determines file's type
+                    IFileType type = null;
+                    foreach (IFileType fileType in FileTypes)
+                    {
+                    	if (fileType.FileNameMatches(e.FileName))
+        					type = fileType;
+                    }
+        
+                    // No appropriate file type has been found
+                    // Should never happen as we already filter file types in the openFileDialog
+                    if (type == null)
+                    {
+                        view.DisplayError(string.Format((TranslationUtil.GetString(ApplicationUtil.LanguageResources, "_MessageBoxUnsupportedFileType") + " '{0}'"), e.FileName), new Exception());
+                        return;
+                    }            	    
+            	    
             		// Create a new tab for the file
-		            ISessionView tab = view.CreateNewSession(e.FileType);
+		            ISessionView tab = view.CreateNewSession(type);
 		            currentSessions.Add(tab.SessionContext);
 		            
 		            // Put content into editor

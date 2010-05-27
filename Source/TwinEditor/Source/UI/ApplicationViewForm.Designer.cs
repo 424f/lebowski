@@ -29,6 +29,7 @@ namespace TwinEditor.UI
         /// </summary>
         private void InitializeComponent()
         {
+        	System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ApplicationViewForm));
         	this.menuStrip1 = new System.Windows.Forms.MenuStrip();
         	this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         	this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -124,6 +125,7 @@ namespace TwinEditor.UI
         	// 
         	// saveToolStripMenuItem
         	// 
+        	this.saveToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("saveToolStripMenuItem.Image")));
         	this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
         	this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
         	this.saveToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
@@ -153,6 +155,7 @@ namespace TwinEditor.UI
         	// 
         	// printToolStripMenuItem
         	// 
+        	this.printToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("printToolStripMenuItem.Image")));
         	this.printToolStripMenuItem.Name = "printToolStripMenuItem";
         	this.printToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
         	this.printToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
@@ -183,6 +186,7 @@ namespace TwinEditor.UI
         	// 
         	// shareToolStripMenuItem
         	// 
+        	this.shareToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("shareToolStripMenuItem.Image")));
         	this.shareToolStripMenuItem.Name = "shareToolStripMenuItem";
         	this.shareToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D1)));
         	this.shareToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
@@ -190,6 +194,7 @@ namespace TwinEditor.UI
         	// 
         	// participateToolStripMenuItem
         	// 
+        	this.participateToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("participateToolStripMenuItem.Image")));
         	this.participateToolStripMenuItem.Name = "participateToolStripMenuItem";
         	this.participateToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D2)));
         	this.participateToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
@@ -202,6 +207,7 @@ namespace TwinEditor.UI
         	// 
         	// toolStripMenuItem1
         	// 
+        	this.toolStripMenuItem1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripMenuItem1.Image")));
         	this.toolStripMenuItem1.Name = "toolStripMenuItem1";
         	this.toolStripMenuItem1.Size = new System.Drawing.Size(170, 22);
         	this.toolStripMenuItem1.Text = "Settings";
@@ -217,16 +223,18 @@ namespace TwinEditor.UI
         	// 
         	// compileToolStripMenuItem
         	// 
+        	this.compileToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("compileToolStripMenuItem.Image")));
         	this.compileToolStripMenuItem.Name = "compileToolStripMenuItem";
         	this.compileToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F8;
-        	this.compileToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+        	this.compileToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
         	this.compileToolStripMenuItem.Text = "Compile";
         	// 
         	// runToolStripMenuItem
         	// 
+        	this.runToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("runToolStripMenuItem.Image")));
         	this.runToolStripMenuItem.Name = "runToolStripMenuItem";
         	this.runToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
-        	this.runToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
+        	this.runToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
         	this.runToolStripMenuItem.Text = "Execute";
         	this.runToolStripMenuItem.Click += new System.EventHandler(this.RunToolStripMenuItemItemClick);
         	// 
@@ -241,15 +249,17 @@ namespace TwinEditor.UI
         	// 
         	// guideToolStripMenuItem
         	// 
+        	this.guideToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("guideToolStripMenuItem.Image")));
         	this.guideToolStripMenuItem.Name = "guideToolStripMenuItem";
-        	this.guideToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
+        	this.guideToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
         	this.guideToolStripMenuItem.Text = "Guide";
         	this.guideToolStripMenuItem.Click += new System.EventHandler(this.GuideToolStripMenuItemClick);
         	// 
         	// aboutToolStripMenuItem
         	// 
+        	this.aboutToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("aboutToolStripMenuItem.Image")));
         	this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-        	this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
+        	this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
         	this.aboutToolStripMenuItem.Text = "About";
         	this.aboutToolStripMenuItem.Click += new System.EventHandler(this.AboutToolStripMenuItemClick);
         	// 

@@ -16,39 +16,29 @@ namespace TwinEditor.UI
     using TwinEditor.Sharing;
     using log4net;
     
+    /// <summary>
+    /// Provides a user view to a SessionContext using WinForms as the presentation layer.
+    /// </summary>
     public partial class SessionViewForm : UserControl, ISessionView
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(SessionViewForm));
 
-        #region Context
-        public SessionContext SessionContext { get; private set; }
-        public ApplicationViewForm ApplicationViewForm { get; private set; }
-        private TabPage tabPage;
-        #endregion
-
-        #region Events
-        public event EventHandler<StateChangedEventArgs> StateChanged;
-        #endregion
-
-        #region File management members
-
-        public bool OnDisk { get; set; }
-        public bool FileModified { get; set; }
-        #endregion
-
-        #region Execution
-        // Stores the exeucution view form for each user (identified by site id)
-        private Dictionary<int, ExecutionViewForm> executionViewForms = new Dictionary<int, ExecutionViewForm>();
-        private Dictionary<int, TabPage> executionTabs = new Dictionary<int, TabPage>();
-        private int numExecutions;
-        #endregion
-
-        public ITextContext Context { get; protected set; }
-
+        /// <summary>
+        /// The TabPage this control has been placed in.
+        /// </summary>
+        private TabPage tabPage;        
+        
+        /// <summary>
+        /// Initializes a new instance of the SessionViewForm class, creating
+        /// an empty SessionContext and subscribing to its events.
+        /// </summary>
+        /// <param name="applicationViewForm">The parent application view.</param>
+        /// <param name="tabPage">The TabPage this control is placed in.</param>
         public SessionViewForm(ApplicationViewForm applicationViewForm, TabPage tabPage)
         {
             InitializeComponent();
             
+            // User not allowed to close the source code tab
             TabControl.FirstClosableTabIndex = 1;
 
             this.ApplicationViewForm = applicationViewForm;
@@ -64,6 +54,8 @@ namespace TwinEditor.UI
             Context = new TextEditorTextContext(SourceCode);
 
             SessionContext = new SessionContext(Context);
+            
+            // Register to events
             SessionContext.StateChanged += delegate(object sender, EventArgs e)
             {
                 Context.Invoke((Action)delegate
@@ -166,7 +158,32 @@ namespace TwinEditor.UI
             TabControl.ImageList = imageList;
             tabPage3.ImageKey = "TextImage";
 
-        }
+        }        
+        
+        /// <summary>
+        /// The SessionContext whose data is displayed in this view.
+        /// </summary>
+        public SessionContext SessionContext { get; private set; }
+        
+        /// <summary>
+        /// The parent view.
+        /// </summary>
+        public ApplicationViewForm ApplicationViewForm { get; private set; }
+        
+        /// <inheritdoc />
+        public bool OnDisk { get; set; }
+        
+        /// <inheritdoc />
+        public bool FileModified { get; set; }
+        
+        // Stores the exeucution view form for each user (identified by site id)
+        private Dictionary<int, ExecutionViewForm> executionViewForms = new Dictionary<int, ExecutionViewForm>();
+        private Dictionary<int, TabPage> executionTabs = new Dictionary<int, TabPage>();
+
+        /// <summary>
+        /// The text context this view is using to display the session content.
+        /// </summary>
+        public ITextContext Context { get; protected set; }
 
         /// <summary>
         /// Ensures that changes in the state of this session are properly
@@ -181,7 +198,12 @@ namespace TwinEditor.UI
             ChatText.Enabled = SessionContext.State == SessionStates.Connected;
         }
 
-        public void SetState(SessionStates state)
+        /// <summary>
+        /// Changes the state of this view, so it can change its user interface
+        /// accordingly.
+        /// </summary>
+        /// <param name="state">The new state.</param>
+        private void SetState(SessionStates state)
         {
             Logger.InfoFormat("State changed to {0}", state);
 
@@ -234,15 +256,6 @@ namespace TwinEditor.UI
                   this.connectionStatusLabel.Text = status;
                   this.connectionStatusPicture.Visible = spinner;
                 //this.connectionStopWaitingButton.Visible = cancellable;
-            }
-        }
-
-
-        protected void OnStateChanged(StateChangedEventArgs e)
-        {
-            if (StateChanged != null)
-            {
-                StateChanged(this, e);
             }
         }
 
@@ -310,12 +323,12 @@ namespace TwinEditor.UI
             // TODO: if elegantly possible for all protocols, consider implementing this.
         }
 
-        public void SessionContextStateChanged(object o, EventArgs e)
+        void SessionContextStateChanged(object o, EventArgs e)
         {
             SetState(SessionContext.State);
         }
 
-        public void SessionContextReceiveChatMessage(object o, ReceiveChatMessageEventArgs e)
+        void SessionContextReceiveChatMessage(object o, ReceiveChatMessageEventArgs e)
         {
             Context.Invoke((Action)delegate
             {
@@ -332,17 +345,43 @@ namespace TwinEditor.UI
         {
 
         }
+
+        /// <summary>
+        /// Raises the <see cref="StateChanged" /> event.
+        /// </summary>
+        /// <param name="e"></param>
+        protected virtual void OnStateChanged(StateChangedEventArgs e)
+        {
+            if (StateChanged != null) {
+                StateChanged(this, e);
+            }
+        }        
+        
+        /// <summary>
+        /// Occurs when the state of this view has changed.
+        /// </summary>
+        public event EventHandler<StateChangedEventArgs> StateChanged;        
+
     }
 
+    /// <summary>
+    /// Provides data for the <see cref="SessionViewForm.StateChanged" /> event.
+    /// </summary>
     public sealed class StateChangedEventArgs : EventArgs
     {
-        // public IConnection Connection { get; private set; }
-        // public ISessionContext Session { get; private set; }
-        public SessionStates State { get; private set; }
-
+        /// <summary>
+        /// Initializes a new instance of the StateChangedEventArgs with
+        /// the state it now is in.
+        /// </summary>
+        /// <param name="state">See <see cref="State" />.</param>
         public StateChangedEventArgs(SessionStates state)
         {
             State = state;
-        }
+        }        
+        
+        /// <summary>
+        /// The state in the view form.
+        /// </summary>
+        public SessionStates State { get; private set; }
     }
 }

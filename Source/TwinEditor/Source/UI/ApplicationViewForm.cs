@@ -18,23 +18,46 @@ namespace TwinEditor.UI
     using TwinEditor.Sharing;
     using log4net;
 
+    /// <summary>
+    /// Displalys the information in a ApplicationContext using a WinForms
+    /// user interface.
+    /// </summary>
     public partial class ApplicationViewForm : Form, IApplicationView
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(ApplicationViewForm));
+        
         private Settings.SettingsDialog SettingsDialog;
-        ApplicationSettings appSettings = Configuration.ApplicationSettings.Default;
+        
+        private ApplicationSettings appSettings = Configuration.ApplicationSettings.Default;
+        
         /// <summary>
         /// The number that is assigned to next new file without name
         /// </summary>
-        // TODO: Track currently open files in order not to open twice,Controller.cs
         private int nextFileNumber = 1;
+
+        /// <summary>
+        /// Stores the session views that are currently being displayed
+        /// </summary>
+        private List<SessionViewForm> sessionViews = new List<SessionViewForm>();
         
+        /// <summary>
+        /// Stores the tab pages (containing <see cref="SessionViewForm" />s) that have been opened
+        /// </summary>
+        private List<TabPage> tabPages = new List<TabPage>();
+        
+        /// <summary>
+        /// Stores the menu items for selection of the current file type.
+        /// </summary>
+        protected List<ToolStripMenuItem> chooseFileTypeMenuItems = new List<ToolStripMenuItem>();
+            
+        /// <summary>
+        /// Initializes a new instance of the ApplicationViewForm.
+        /// </summary>
         public ApplicationViewForm()
         {
             InitializeComponent();
 
             Logger.Info("MainForm component initialized.");
-            // SourceCode.SetHighlighting("C#");
 
             // Clear tabs
             MainTab.TabPages.Clear();
@@ -48,15 +71,18 @@ namespace TwinEditor.UI
 
             // Get default settings
             var appSettings = Configuration.ApplicationSettings.Default;
-            
+
+            // Fire event when application is closing
             this.Closing += delegate { this.OnApplicationClosing(new EventArgs()); };
             
+            // Handle closing a session view
             MainTab.TabClosed += delegate(object sender, TabClosedEventArgs e)
             {
                 CloseTab(e.TabIndex);
             };
         }        
 
+        /// <inheritdoc/>
         public IFileType[] FileTypes
         {
             get
@@ -96,7 +122,7 @@ namespace TwinEditor.UI
                     editItems.Insert(editItems.Count-1, chooseMenuItem);
                     chooseMenuItem.Click += delegate
                     {
-                        tabControls[MainTab.SelectedIndex].SessionContext.FileType = (IFileType)chooseMenuItem.Tag;
+                        sessionViews[MainTab.SelectedIndex].SessionContext.FileType = (IFileType)chooseMenuItem.Tag;
                         UpdateMenuItems();
                     };
                     chooseFileTypeMenuItems.Add(chooseMenuItem);
@@ -124,9 +150,7 @@ namespace TwinEditor.UI
         }
         private IFileType[] fileTypes;
 
-
-        public TwinEditor.ApplicationContext ApplicationContext { get; set; }
-
+        /// <inheritdoc/>
         public ICommunicationProtocol[] CommunicationProtocols
         {
             get
@@ -156,7 +180,7 @@ namespace TwinEditor.UI
                         var menuItem = new ToolStripMenuItem(protocol.Name);
                         menuItem.Click += delegate
                         {
-                            OnShareSession(new ShareSessionEventArgs(tabControls[MainTab.SelectedIndex].SessionContext, currentProtocol));
+                            OnShareSession(new ShareSessionEventArgs(sessionViews[MainTab.SelectedIndex].SessionContext, currentProtocol));
                         };
                         shareToolStripMenuItem.DropDown.Items.Add(menuItem);
                     }
@@ -167,7 +191,7 @@ namespace TwinEditor.UI
                         var menuItem = new ToolStripMenuItem(protocol.Name);
                         menuItem.Click += delegate
                         {
-                            currentProtocol.Participate();
+                            OnParticipate(new ParticipateEventArgs(sessionViews[MainTab.SelectedIndex].SessionContext, currentProtocol));
                         };
                         participateToolStripMenuItem.DropDown.Items.Add(menuItem);
                     }
@@ -175,10 +199,12 @@ namespace TwinEditor.UI
             }
         }
         private ICommunicationProtocol[] communicationProtocols;
-        List<SessionViewForm> tabControls = new List<SessionViewForm>();
-        List<TabPage> tabPages = new List<TabPage>();
-        protected List<ToolStripMenuItem> chooseFileTypeMenuItems = new List<ToolStripMenuItem>();
 
+        /// <inheritdoc/>
+        public TwinEditor.ApplicationContext ApplicationContext { get; set; }        
+        
+        /// <inheritdoc/>
+        /// <remarks>Display an error dialog.</remarks>
         public void DisplayError(string message, System.Exception exception)
         {
             ErrorMessage errorMessage = new ErrorMessage("An error occurred", message, exception);
@@ -186,14 +212,18 @@ namespace TwinEditor.UI
         }
         
         /// <summary>
-        /// Updates GUI elements after the program state has changed
+        /// Updates GUI elements after the program's state has changed
         /// </summary>
         public void UpdateGuiState()
         {
             UpdateMenuItems();
         }
 
-        public void UpdateMenuItems()
+        /// <summary>
+        /// Updates the menu items, making sure that only menu items that 
+        /// are possible to use in a current state are enabled.
+        /// </summary>
+        private void UpdateMenuItems()
         {
             bool fileOpen = MainTab.TabPages.Count > 0;
             
@@ -202,7 +232,7 @@ namespace TwinEditor.UI
             foreach (ToolStripMenuItem item in chooseFileTypeMenuItems)
             {
                 item.Enabled = fileOpen;
-                item.Checked = MainTab.SelectedIndex != -1 && item.Tag == tabControls[MainTab.SelectedIndex].SessionContext.FileType;
+                item.Checked = MainTab.SelectedIndex != -1 && item.Tag == sessionViews[MainTab.SelectedIndex].SessionContext.FileType;
             }
 
             if (MainTab.TabPages.Count == 0)
@@ -222,13 +252,14 @@ namespace TwinEditor.UI
                 saveAllToolStripMenuItem.Enabled = true;
                 scriptToolStripMenuItem.Enabled = true;
                 printToolStripMenuItem.Enabled = true;
-                var tab = tabControls[MainTab.SelectedIndex];
+                var tab = sessionViews[MainTab.SelectedIndex];
                 compileToolStripMenuItem.Enabled = tab.SessionContext.FileType.CanCompile;
                 runToolStripMenuItem.Enabled = tab.SessionContext.FileType.CanExecute;
                 shareToolStripMenuItem.Enabled = tab.SessionContext.State == SessionStates.Disconnected;
             }
         }
 
+        /// <inheritdoc/>
         public void UpdateRecentFiles(List<string> recentFiles)
         {
         	if (recentFiles != null)
@@ -241,26 +272,8 @@ namespace TwinEditor.UI
     				foreach (string file in recentFiles)
     				{
     					string filename = file; 
-    					Logger.Debug("recent: " + filename);
-    					IFileType type = null;
-    					try
-    		      		{
-    			            foreach (IFileType fileType in fileTypes)
-    			            {
-    			            	if (fileType.FileNameMatches(filename))
-    			                	type = fileType;
-    			            }
-    					}
-    					catch (NullReferenceException) {
-    						Logger.Error("fileTypes have not been set for ApplicationViewForm");
-    					}
-    			           
     					ToolStripMenuItem item = new ToolStripMenuItem(filename);
-    					if (type != null)
-    					{
-    						Logger.Debug("recent: " + filename + type);
-    						item.Click += delegate { OpenFile(this, new OpenFileEventArgs(filename, type)); };
-    					}
+    					item.Click += delegate { OpenFile(this, new OpenFileEventArgs(filename)); };
     					recentFilesToolStripMenuItem.DropDownItems.Add(item);
     		      	}
                 });
@@ -274,17 +287,15 @@ namespace TwinEditor.UI
         	
         }
 
-        private void Translate(ToolStripMenuItem item, string id)
-        {
-            item.Text = ApplicationUtil.LanguageResources.GetString(id);
-        }
-
+        /// <inheritdoc/>
+        /// <param name="fileType"></param>
+        /// <returns></returns>
         public ISessionView CreateNewSession(IFileType fileType)
         {
             return CreateNewTab(fileType);
         }
 
-        public SessionViewForm CreateNewTab(IFileType fileType)
+        private SessionViewForm CreateNewTab(IFileType fileType)
         {
             Logger.Info(string.Format("Creating new tab of file type {0}", fileType.Name));
 
@@ -293,7 +304,7 @@ namespace TwinEditor.UI
             TabPage tabPage = new TabPage(filename);
             SessionViewForm tab = new SessionViewForm(this, tabPage);
             tabPage.Controls.Add(tab);
-            tabControls.Add(tab);
+            sessionViews.Add(tab);
             tabPages.Add(tabPage);
             MainTab.TabPages.Add(tabPage);
 
@@ -313,72 +324,54 @@ namespace TwinEditor.UI
             return tab;
         }
 
-        void OpenToolStripMenuItemClick(object sender, EventArgs e)
+        private void OpenToolStripMenuItemClick(object sender, EventArgs e)
         {
             openFileDialog.RestoreDirectory = true;
             DialogResult result = openFileDialog.ShowDialog();
             if (result != DialogResult.OK)
                 return;
-
-            // Create tab and initialize
-            IFileType type = null;
-            foreach (IFileType fileType in fileTypes)
-            {
-            	if (fileType.FileNameMatches(openFileDialog.FileName))
-					type = fileType;
-            }
-
-            // No appropriate file type has been found
-            // Should never happen as we already filter file types in the openFileDialog
-            if (type == null)
-            {
-                MessageBox.Show(
-                    string.Format((TranslationUtil.GetString(ApplicationUtil.LanguageResources, "_MessageBoxUnsupportedFileType") + " '{0}'"), openFileDialog.FileName),
-                    TranslationUtil.GetString(ApplicationUtil.LanguageResources, "_MessageBoxUnsupportedFileTypeCaption")
-                );
-                return;
-            }
-
-            OnOpen(new OpenFileEventArgs(openFileDialog.FileName, type));        
+            OnOpen(new OpenFileEventArgs(openFileDialog.FileName));        
             UpdateMenuItems();
         }
 
-        void PrintToolStripMenuItemClick(object sender, EventArgs e)
+        private void PrintToolStripMenuItemClick(object sender, EventArgs e)
         {
-            tabControls[MainTab.SelectedIndex].SourceCode.PrintDocument.Print();
+            sessionViews[MainTab.SelectedIndex].SourceCode.PrintDocument.Print();
         }
 
-        void MainTabSelected(object sender, TabControlEventArgs e)
+        private void MainTabSelected(object sender, TabControlEventArgs e)
         {
             /* After having selected a new tab, we have to update the
             menus to reflect the actions that are possible */
             UpdateMenuItems();
         }
 
-        void SaveToolStripMenuItemClick(object sender, EventArgs e)
+        private void SaveToolStripMenuItemClick(object sender, EventArgs e)
         {
-            SessionViewForm tabControl = tabControls[MainTab.SelectedIndex];
+            SessionViewForm tabControl = sessionViews[MainTab.SelectedIndex];
             SaveRequest(tabControl);
         }
 
-        void SaveAsToolStripMenuItemClick(object sender, EventArgs e)
+        private void SaveAsToolStripMenuItemClick(object sender, EventArgs e)
         {
-            SessionViewForm tabControl = tabControls[MainTab.SelectedIndex];
+            SessionViewForm tabControl = sessionViews[MainTab.SelectedIndex];
             SaveWithDialog(tabControl);
         }
 
-        // checks whether the tab is already on disk, and if yes calls 'Save' else calls 'SaveWithDialog'.
-        internal void SaveRequest(SessionViewForm tabControl)
+        /// <summary>
+        /// Checks whether the session is already on disk, and if yes calls 'Save' otherwise calls 'SaveWithDialog'.
+        /// </summary>
+        internal void SaveRequest(SessionViewForm sessionViewForm)
         {
-            if (!tabControl.OnDisk)
+            if (!sessionViewForm.OnDisk)
             {
-                SaveWithDialog(tabControl);
+                SaveWithDialog(sessionViewForm);
             }
             else
             {
-                OnSave(new SaveFileEventArgs(tabControl.SessionContext, tabControl.SessionContext.FileName));
-                tabControl.OnDisk = true;
-                tabControl.FileModified = false;
+                OnSave(new SaveFileEventArgs(sessionViewForm.SessionContext, sessionViewForm.SessionContext.FileName));
+                sessionViewForm.OnDisk = true;
+                sessionViewForm.FileModified = false;
                 UpdateMenuItems();
 
             }
@@ -406,7 +399,7 @@ namespace TwinEditor.UI
 
         void SaveAllToolStripMenuItemClick(object sender, EventArgs e)
         {
-            foreach (SessionViewForm tabControl in tabControls)
+            foreach (SessionViewForm tabControl in sessionViews)
             {
                 SaveRequest(tabControl);
             }
@@ -424,10 +417,10 @@ namespace TwinEditor.UI
         
         void CloseTab(int tabIndex)
         {
-            SessionContext context = tabControls[tabIndex].SessionContext;
-            tabControls[tabIndex].SessionContext.Close();
+            SessionContext context = sessionViews[tabIndex].SessionContext;
+            sessionViews[tabIndex].SessionContext.Close();
             
-            tabControls.RemoveAt(tabIndex);
+            sessionViews.RemoveAt(tabIndex);
             tabPages.RemoveAt(tabIndex);
             MainTab.TabPages.RemoveAt(tabIndex);
             OnClose(new CloseFileEventArgs(context));
@@ -436,7 +429,7 @@ namespace TwinEditor.UI
 
         void RunToolStripMenuItemItemClick(object sender, EventArgs e)
         {
-            SessionViewForm sessionView = tabControls[MainTab.SelectedIndex];
+            SessionViewForm sessionView = sessionViews[MainTab.SelectedIndex];
             sessionView.SessionContext.Execute();
 
         }
@@ -451,7 +444,10 @@ namespace TwinEditor.UI
             System.Diagnostics.Process.Start("http://wiki.github.com/424f/lebowski/manual");
         }
 
-        #region OnFoo event methods
+        /// <summary>
+        /// Raises the <see cref="ShareSession" /> event.
+        /// </summary>
+        /// <param name="e">The event data.</param>
         protected virtual void OnShareSession(ShareSessionEventArgs e)
         {
             if (ShareSession != null)
@@ -460,6 +456,11 @@ namespace TwinEditor.UI
             }
         }
 
+        
+        /// <summary>
+        /// Raises the <see cref="OpenFile" /> event.
+        /// </summary>
+        /// <param name="e">The event data.</param>        
         protected virtual void OnOpen(OpenFileEventArgs e)
         {
             if (OpenFile != null)
@@ -468,6 +469,10 @@ namespace TwinEditor.UI
             }
         }
 
+        /// <summary>
+        /// Raises the <see cref="CloseFile" /> event.
+        /// </summary>
+        /// <param name="e">The event data.</param>        
       	protected virtual void OnClose(CloseFileEventArgs e)
         {
             if (CloseFile != null)
@@ -476,6 +481,11 @@ namespace TwinEditor.UI
             }
         }
      
+        /// <summary>
+        /// Raises the <see cref="SaveFile" /> event.
+        /// </summary>
+        /// <param name="e">The event data.</param>        
+      	
         protected virtual void OnSave(SaveFileEventArgs e)
         {
             if (SaveFile != null)
@@ -484,6 +494,10 @@ namespace TwinEditor.UI
             }
         }
         
+        /// <summary>
+        /// Raises the <see cref="ApplicationClosing" /> event.
+        /// </summary>
+        /// <param name="e">The event data.</param>        
         protected virtual void OnApplicationClosing(EventArgs e)
         {
             if (ApplicationClosing != null)
@@ -492,6 +506,10 @@ namespace TwinEditor.UI
             }
         }
         
+        /// <summary>
+        /// Raises the <see cref="NewFile" /> event.
+        /// </summary>
+        /// <param name="e">The event data.</param>        
         protected virtual void OnNewFile(NewFileEventArgs e)
         {
             if (NewFile != null)
@@ -500,15 +518,37 @@ namespace TwinEditor.UI
             }
         }
         
+        /// <summary>
+        /// Raises the <see cref="Participate" /> event.
+        /// </summary>
+        /// <param name="e">The event data.</param>        
+        protected virtual void OnParticipate(ParticipateEventArgs e)
+        {
+            if (Participate != null)
+            {
+                Participate(this, e);
+            }
+        }        
         
-        #endregion
-
-        public event EventHandler<ShareSessionEventArgs> ShareSession;
-        public event EventHandler<OpenFileEventArgs> OpenFile;
-        public event EventHandler<CloseFileEventArgs> CloseFile;
-        public event EventHandler<SaveFileEventArgs> SaveFile;  
-        public event EventHandler<NewFileEventArgs> NewFile;  
+        /// <inheritdoc />
         public event EventHandler<EventArgs> ApplicationClosing;
         
+        /// <inheritdoc />
+        public event EventHandler<CloseFileEventArgs> CloseFile;
+        
+        /// <inheritdoc />
+        public event EventHandler<NewFileEventArgs> NewFile;          
+        
+        /// <inheritdoc />
+        public event EventHandler<OpenFileEventArgs> OpenFile;        
+        
+        /// <inheritdoc />
+        public event EventHandler<SaveFileEventArgs> SaveFile;  
+        
+        /// <inheritdoc />
+        public event EventHandler<ShareSessionEventArgs> ShareSession;                        
+        
+        /// <inheritdoc />
+        public event EventHandler<ParticipateEventArgs> Participate;  
     }
 }

@@ -134,6 +134,7 @@
       <DependentUpon>AboutDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Source\UI\ClosableTabControl.cs" />
+    <Compile Include="Source\UI\CloseFileEventArgs.cs" />
     <Compile Include="Source\UI\ErrorMessage.cs" />
     <Compile Include="Source\UI\ErrorMessage.Designer.cs">
       <DependentUpon>ErrorMessage.cs</DependentUpon>
@@ -150,7 +151,11 @@
     <Compile Include="Source\UI\ApplicationViewForm.Designer.cs">
       <DependentUpon>ApplicationViewForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Source\UI\NewFileEventArgs.cs" />
+    <Compile Include="Source\UI\OpenFileEventArgs.cs" />
+    <Compile Include="Source\UI\ParticipateEventArgs.cs" />
     <Compile Include="Source\UI\RecentFilesList.cs" />
+    <Compile Include="Source\UI\SaveFileEventArgs.cs" />
     <Compile Include="Source\UI\SessionViewForm.cs" />
     <Compile Include="Source\UI\SessionViewForm.Designer.cs">
       <DependentUpon>SessionViewForm.cs</DependentUpon>
@@ -159,6 +164,7 @@
     <Compile Include="Source\UI\Settings\SettingsDialog.Designer.cs">
       <DependentUpon>SettingsDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Source\UI\ShareSessionEventArgs.cs" />
     <EmbeddedResource Include="LanguageResources.de.resx" />
     <EmbeddedResource Include="LanguageResources.resx" />
     <EmbeddedResource Include="Resources.resx" />
@@ -171,8 +177,8 @@
     <EmbeddedResource Include="Source\UI\ExecutionViewForm.resx">
       <DependentUpon>ExecutionViewForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Source\UI\MainForm.resx">
-      <DependentUpon>ApplicationViewForm.Designer.cs</DependentUpon>
+    <EmbeddedResource Include="Source\UI\ApplicationViewForm.resx">
+      <DependentUpon>ApplicationViewForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Source\UI\SessionViewForm.resx">
       <DependentUpon>SessionViewForm.cs</DependentUpon>

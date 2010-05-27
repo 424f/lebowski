@@ -27,19 +27,10 @@ namespace TwinEditor.Configuration
         {
             get { return defaultInstance; }
         }
-        
-        public ApplicationSettings()
-        {
-        }
-        
-        #region Settings
                
         /// <summary>
         /// Gets or sets the configured username on a per-user level.
         /// </summary>
-
-
-
         [UserScopedSettingAttribute]
         [DefaultSettingValue(null)]
         public string UserName
@@ -85,6 +76,5 @@ namespace TwinEditor.Configuration
         	get { return (string)this["RecentFileListSize"]; }
             set { this["RecentFileListSize"] = value; }
         }
-        #endregion
     }
 }
