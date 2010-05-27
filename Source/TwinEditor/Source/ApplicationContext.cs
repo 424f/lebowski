@@ -15,6 +15,9 @@ namespace TwinEditor
     using TwinEditor.UI;
     using TwinEditor.Sharing;
 
+    // TODO: this should be better separated into Model / Controller, as it 
+    // currently basically contains both.
+    
     /// <summary>
     /// Contains behavior of the application. It is used with a IApplicationView that
     /// subscribes to its events and displays data to the user.
