@@ -11,7 +11,7 @@ namespace Lebowski
     {
         /// <summary>
         /// Finds all types in loaded assemblies implementing a certain interface
-        /// (or inheriting from a class), that have a zero-argument constructor
+        /// (or inheriting from a class), that has a constructor
         /// </summary>
         /// <param name="type">The type that returned types have to be a subtype from</param>
         /// <returns>The types fulfilling the above requirements</returns>

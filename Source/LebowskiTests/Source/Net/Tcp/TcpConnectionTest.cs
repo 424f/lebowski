@@ -93,8 +93,8 @@ namespace LebowskiTests.Net.Tcp
                 serverReceived += e.Message.ToString();
             };                        
 
-            TestUtil.WaitAreEqual("FooBar", () =>  serverReceived, 500);
-            TestUtil.WaitAreEqual("BarFoo", () =>  clientReceived, 500);
+            TestUtil.WaitAreEqual("FooBar", () =>  serverReceived, 1000);
+            TestUtil.WaitAreEqual("BarFoo", () =>  clientReceived, 1000);
 
             server.Close();
             client.Close();

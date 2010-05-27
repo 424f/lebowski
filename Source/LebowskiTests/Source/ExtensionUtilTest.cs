@@ -6,23 +6,23 @@
     
     interface ISuperInterface {};
     
-    class A : ISuperInterface
+    public class A : ISuperInterface
     {
-        A() {}
+        public A() {}
     };
-    class B : ISuperInterface
+    public class B : ISuperInterface
     {
-        B() {}
+        public B() {}
     };
-    class C : ISuperInterface
+    internal class C : ISuperInterface
     {
-        C(int foo) {}
+        internal C(int foo) {}
     }
     
     interface IUnpopularInterface {};
-    class D : IUnpopularInterface 
+    internal class D : IUnpopularInterface 
     {
-        D(string bar) {}
+        internal D(string bar) {}
     }
     
     [TestFixture]
@@ -30,7 +30,7 @@
     {
         /// <summary>
         /// Tests that ExtensionUtil indeed does only return implementing
-        /// classes that have a 0-argument constructor.
+        /// classes that have a public constructor.
         /// </summary>
         [Test]
         public void FindSuperInterfaceImplementers()
@@ -41,12 +41,12 @@
         
         /// <summary>
         /// Tests that ExtensionUtil indeed does only return implementing
-        /// classes that have a 0-argument constructor.
+        /// classes that have a public constructor.
         /// </summary>
         [Test]
         public void FindUnpopularInterfaceImplementers()
         {
-            var types = ExtensionUtil.FindTypesImplementing(typeof(ISuperInterface));
+            var types = ExtensionUtil.FindTypesImplementing(typeof(IUnpopularInterface));
             CollectionAssert.AreEquivalent(new Type[]{}, types);
         }        
     }
