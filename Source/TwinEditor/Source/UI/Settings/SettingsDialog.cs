@@ -50,6 +50,7 @@ namespace TwinEditor.UI.Settings
             appSettings.SynchronizationStrategy = synchronizationStrategy.Text;
 
             appSettings.Save();
+            Close();
         }
 
         void CancelButtonClick(object sender, EventArgs e)
