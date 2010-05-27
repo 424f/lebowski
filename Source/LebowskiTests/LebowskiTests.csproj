@@ -58,7 +58,9 @@
   <ItemGroup>
     <Folder Include="Source\" />
     <Folder Include="Source\Net" />
+    <Folder Include="Source\Net\Multichannel" />
     <Folder Include="Source\Net\Tcp" />
+    <Compile Include="Source\Net\Multichannel\MultichannelConnectionTest.cs" />
     <Compile Include="Source\Net\Tcp\TcpConnectionTest.cs" />
     <Compile Include="Source\TestUtil.cs" />
     <ProjectReference Include="..\Lebowski\Lebowski.csproj">
