@@ -52,6 +52,14 @@ namespace TwinEditor.Sharing
             }
         }
         private SessionStates state;
+        
+        /// <summary>
+        /// Gets the session's current behavioral state
+        /// </summary>
+        internal SessionState CurrentState
+        {
+            get { return currentState; }
+        }
 
         /// <summary>
         /// Gets the Synchronization strategy that is used in this session.
@@ -161,7 +169,7 @@ namespace TwinEditor.Sharing
         /// and then registering the new one.
         /// </summary>
         /// <param name="state">The new state to register.</param>
-        public void ActivateState(SessionState state)
+        internal void ActivateState(SessionState state)
         {
             if (currentState != null)
             {

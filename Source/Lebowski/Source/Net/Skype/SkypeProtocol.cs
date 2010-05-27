@@ -204,6 +204,10 @@ namespace Lebowski.Net.Skype
             Exception lastException = null;
             form.Submit += delegate
             {    
+                /* As skype does not report when a session is closed,
+                we might at this point think that we have already established
+                a connection to a user, but it will fail at the Send(...) call.
+                Therefore, we have to allow for 2 connection attempts before giving up */
                 bool succeeded = false;
                 for(int attempt = 1; attempt <= 2 && !succeeded; ++attempt)
                 {
@@ -465,11 +469,9 @@ namespace Lebowski.Net.Skype
                         invitationChannels.Remove(accept.InvitationId);
                         invitationSessions.Remove(accept.InvitationId);
 
-                        // We have to use a multichannel connection
+                        // Start the session!
                         connection.OutgoingChannel = accept.Channel;
                         OnHostSession(new HostSessionEventArgs(session, connection));
-
-                        MessageBox.Show("Invitation was accepted");
                     }
 
                     // Another user has rejected a sharing invitation

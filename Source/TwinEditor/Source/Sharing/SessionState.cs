@@ -7,14 +7,14 @@
     /// Describes the behavior of a <see cref="SessionContext">SessionContext</see>
     /// in a specific state.
     /// </summary>
-    public class SessionState
+    internal class SessionState
     {
         /// <summary>
         /// Initializes a new member of the SessionState class, associated
         /// with a provided <see cref="SessionContext">SessionContext</see>.
         /// </summary>
         /// <param name="session">The session this state will be operating on.</param>
-        public SessionState(SessionContext session)
+        internal SessionState(SessionContext session)
         {
             this.session = session;
         }        
@@ -32,7 +32,7 @@
         /// <summary>
         /// Registers this state with the session's events.
         /// </summary>
-        public virtual void Register()
+        internal virtual void Register()
         {
 
         }
@@ -40,7 +40,7 @@
         /// <summary>
         /// Unregisters this state from the session's events.
         /// </summary>        
-        public virtual void Unregister()
+        internal virtual void Unregister()
         {
 
         }
