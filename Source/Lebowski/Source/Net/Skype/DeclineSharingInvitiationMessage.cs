@@ -7,7 +7,7 @@ namespace Lebowski.Net.Skype
     /// the SkypeProtocol.
     /// </summary>
     [Serializable]
-    sealed class DeclineSharingInvitationMessage
+    internal sealed class DeclineSharingInvitationMessage
     {
         /// <summary>
         /// Initializes a new instance of the DeclineSharingInvitationMessage.

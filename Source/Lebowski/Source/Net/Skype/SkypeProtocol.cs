@@ -85,6 +85,14 @@ namespace Lebowski.Net.Skype
             }
         }        
 
+        /// <summary>
+        /// Indicates whether the Skype API has already been initialized.
+        /// </summary>
+        public bool IsInitialized
+        {
+            get { return isInitialized; }
+        }
+        
         /// <inheritdoc/>
         public bool CanShare
         {
@@ -147,7 +155,7 @@ namespace Lebowski.Net.Skype
             // We might have to create a stream to this user
             if (!streams.ContainsKey(user))
             {
-                Application.Connect(user, true);
+                Application.Connect(user, false);
             }
 
             int waitInterval = 100;
@@ -195,7 +203,10 @@ namespace Lebowski.Net.Skype
         /// <returns>The connection that can be used to communicate with this user or null, if the operation timed out.</returns>
         private SkypeConnection Connect(string user, int timeOut)
         {
-            EstablishConnection(user, timeOut);
+            if(!EstablishConnection(user, timeOut))
+            {
+                return null;
+            }
 
             connectionsForUser[user] = connectionsForUser.ContainsKey(user) ? connectionsForUser[user]+1 : 1;
             Logger.InfoFormat("Creating connection {0} for user {1}", connectionsForUser[user], user);
@@ -208,11 +219,17 @@ namespace Lebowski.Net.Skype
         /// <inheritdoc/>
         public void Share(ISynchronizationSession session)
         {
+            if(!isInitialized)
+            {
+                throw new ConnectionFailedException("The Skype API is not yet initialized or Skype rejected our API requests.");
+            }
             UpdateFriends();
             SkypeShareForm form = new SkypeShareForm(this);
             Exception lastException = null;
             form.Submit += delegate
             {    
+                // TODO: calls to Share should be made asynchronously, so the UI doesn't block
+                
                 /* As skype does not report when a session is closed,
                 we might at this point think that we have already established
                 a connection to a user, but it will fail at the Send(...) call.
@@ -222,9 +239,7 @@ namespace Lebowski.Net.Skype
                 {
                     try
                     {
-                        int maxWaitTime = 5000;
-        
-                        // TODO: connect in separate thread                    
+                        int maxWaitTime = 5000;                 
                         
                         // Create channel for this session
                         SkypeConnection connection = Connect(form.SelectedUser, maxWaitTime);

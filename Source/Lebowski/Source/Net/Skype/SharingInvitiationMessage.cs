@@ -6,7 +6,7 @@ namespace Lebowski.Net.Skype
     /// Sent when a client wants to share a session using the SkypeProtocol.
     /// </summary>
     [Serializable]
-    sealed class SharingInvitationMessage
+    internal sealed class SharingInvitationMessage
     {
         /// <summary>
         /// Initializes a new instance of the SharingInvitationMessage class.
