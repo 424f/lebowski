@@ -14,6 +14,7 @@
     <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
     <NoStdLib>False</NoStdLib>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DocumentationFile>bin\Debug\LebowskiTests.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -44,6 +45,9 @@
     <FileAlignment>4096</FileAlignment>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ICSharpCode.TextEditor">
+      <HintPath>..\..\Libs\ICSharpCode.TextEditor.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\Libs\log4net.dll</HintPath>
     </Reference>
@@ -54,6 +58,7 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Source\" />
@@ -63,6 +68,7 @@
     <Compile Include="Source\Net\Multichannel\MultichannelConnectionTest.cs" />
     <Compile Include="Source\Net\Tcp\TcpConnectionTest.cs" />
     <Compile Include="Source\TestUtil.cs" />
+    <Compile Include="Source\TextEditorTextContextTest.cs" />
     <ProjectReference Include="..\Lebowski\Lebowski.csproj">
       <Project>{B3907A05-1EF4-4985-9440-46442FE1EFE6}</Project>
       <Name>Lebowski</Name>
