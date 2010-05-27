@@ -139,8 +139,10 @@ namespace Lebowski.Net.Skype
         /// <summary>
         /// Ensures that a connection stream is available to the specified user.
         /// </summary>
+        /// <returns>True, if a connection has been established in the given timeout; otherwise, false.</returns>
         /// <param name="user">The user to establish a connection to.</param>
-        private void EstablishConnection(string user)
+        /// <param name="timeOut">The timeout for this operation, in milliseconds.</param>
+        private bool EstablishConnection(string user, int timeOut)
         {
             // We might have to create a stream to this user
             if (!streams.ContainsKey(user))
@@ -148,11 +150,16 @@ namespace Lebowski.Net.Skype
                 Application.Connect(user, true);
             }
 
-            while (!streams.ContainsKey(user))
+            int waitInterval = 100;
+            int timeWaited = 0;
+            while (!streams.ContainsKey(user) && timeWaited < timeOut)
             {
                 // TODO: is wait necessary? if yes, use Monitor
-                Thread.Sleep(100);
+                Thread.Sleep(waitInterval);
+                timeWaited += waitInterval;
             }
+            
+            return streams.ContainsKey(user);
         }
         
         /// <summary>
@@ -183,10 +190,12 @@ namespace Lebowski.Net.Skype
         /// <summary>
         /// Establishes a connection to a user and returns the associated connection.
         /// </summary>
-        /// <returns>The connection that can be used to communicate with this user.</returns>
-        private SkypeConnection Connect(string user)
+        /// <param name="user">The user's name we want to connect to.</param>
+        /// <param name="timeOut">The number of milliseconds to wait before just returning null.</param>
+        /// <returns>The connection that can be used to communicate with this user or null, if the operation timed out.</returns>
+        private SkypeConnection Connect(string user, int timeOut)
         {
-            EstablishConnection(user);
+            EstablishConnection(user, timeOut);
 
             connectionsForUser[user] = connectionsForUser.ContainsKey(user) ? connectionsForUser[user]+1 : 1;
             Logger.InfoFormat("Creating connection {0} for user {1}", connectionsForUser[user], user);
@@ -213,12 +222,16 @@ namespace Lebowski.Net.Skype
                 {
                     try
                     {
-                        EstablishConnection(form.SelectedUser);
+                        int maxWaitTime = 5000;
         
                         // TODO: connect in separate thread                    
                         
                         // Create channel for this session
-                        SkypeConnection connection = Connect(form.SelectedUser);
+                        SkypeConnection connection = Connect(form.SelectedUser, maxWaitTime);
+                        if(connection == null)
+                        {
+                            throw new ConnectionFailedException(string.Format("Could not connect to Skype user {0}", form.SelectedUser));                            
+                        }
         
                         // Send out the invite
                         SharingInvitationMessage invitationMessage = new SharingInvitationMessage(++numInvitations, session.FileName, form.SelectedUser, connection.IncomingChannel);
@@ -433,7 +446,7 @@ namespace Lebowski.Net.Skype
                         var result = MessageBox.Show(text, "Invitation", MessageBoxButtons.YesNo);
                         if (result == DialogResult.Yes)
                         {
-                            SkypeConnection connection = Connect(partner);
+                            SkypeConnection connection = Connect(partner, 1000);
                             connection.OutgoingChannel = sharingInvitation.Channel;
 
                             OnJoinSession(new JoinSessionEventArgs(connection));
