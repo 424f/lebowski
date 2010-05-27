@@ -14,7 +14,7 @@ namespace LebowskiTests.Synchronization
     [TestFixture]
     public class DifferentialSynchronizationTest
     {
-        const int maxWaitTime = 250;
+        const int maxWaitTime = 500;
         
         LocalConnection serverConnection;
         LocalConnection clientConnection;

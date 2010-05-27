@@ -65,6 +65,7 @@
     <Folder Include="Source\Net" />
     <Folder Include="Source\Net\Multichannel" />
     <Folder Include="Source\Net\Tcp" />
+    <Compile Include="Source\ExtensionUtilTest.cs" />
     <Compile Include="Source\Net\Multichannel\MultichannelConnectionTest.cs" />
     <Compile Include="Source\Net\NetUtilsTest.cs" />
     <Compile Include="Source\Net\Tcp\TcpConnectionTest.cs" />

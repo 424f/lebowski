@@ -74,6 +74,7 @@
     <Folder Include="Source" />
     <Folder Include="Source\FileTypes" />
     <Folder Include="Source\Execution" />
+    <Folder Include="Source\Sharing" />
     <ProjectReference Include="..\LebowskiTests\LebowskiTests.csproj">
       <Project>{05713227-AAD4-43F8-BBB5-F35912314C91}</Project>
       <Name>LebowskiTests</Name>
