@@ -36,6 +36,7 @@ namespace Lebowski.Net.Tcp
         public override void Close()
         {
             tcpListener.Stop();
+            tcpClient.Client.Close();
             base.Close();
         }
 

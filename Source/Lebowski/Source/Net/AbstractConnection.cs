@@ -11,21 +11,15 @@
     public abstract class AbstractConnection : IConnection
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(AbstractConnection));    
-        
+
         /// <inheritdoc/>
-        public event EventHandler<ReceivedEventArgs> Received; 
-        
-        /// <inheritdoc/>
-        public event EventHandler<EventArgs> ConnectionClosed;
+        public object Tag { get; set; }        
 
         /// <inheritdoc/>
         public abstract void Send(object o);        
         
         /// <inheritdoc/>
-        public abstract void Close();
-        
-        /// <inheritdoc/>
-        public object Tag { get; set; }
+        public abstract void Close();        
         
         /// <summary>
         /// Raises the ConnectionClosed event
@@ -40,18 +34,22 @@
         }
 
         /// <summary>
-        /// Raises the Received event
+        /// Raises the Received event.
         /// </summary>
         /// <param name="e">A ReceivedEventArgs that contains the event data.</param>
         protected virtual void OnReceived(ReceivedEventArgs e)
         {
             /* As we should not dispatch packets when nobody is listening,
              * we wait until there is at least one listener */
-            while(Received == null || Received.GetInvocationList().Length == 0)
+            if(Received == null || Received.GetInvocationList().Length == 0)
             {
-                // TODO: solve this using activation / decativation
-                Thread.Sleep(100);
-            }            
+                Logger.InfoFormat("No listener attached to {0}.Received, waiting with dispatching.", this);
+                while(Received == null || Received.GetInvocationList().Length == 0)
+                {
+                    // TODO: solve this using activation / deactivation
+                    Thread.Sleep(100);
+                }            
+            }
             if (Received != null)
             {
                 try
@@ -63,8 +61,13 @@
                     Logger.ErrorFormat("En exception occurred when dispatching {0}:\n{1}", e, exception);
                 }
             }
-        }        
+        }      
         
+        /// <inheritdoc/>
+        public event EventHandler<ReceivedEventArgs> Received; 
         
+        /// <inheritdoc/>
+        public event EventHandler<EventArgs> ConnectionClosed;        
+               
     }
 }

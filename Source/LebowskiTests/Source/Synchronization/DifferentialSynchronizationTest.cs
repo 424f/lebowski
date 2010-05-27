@@ -7,99 +7,162 @@ namespace LebowskiTests.Synchronization
     using Lebowski.TextModel.Operations;
     using Lebowski.Net;
     using Lebowski.Net.Local;
+    using Lebowski.Synchronization;
     using Lebowski.Synchronization.DifferentialSynchronization;
     using NUnit.Framework;
 
     [TestFixture]
     public class DifferentialSynchronizationTest
     {
-        public DifferentialSynchronizationTest()
+        const int maxWaitTime = 250;
+        
+        LocalConnection serverConnection;
+        LocalConnection clientConnection;
+        
+        StringTextContext serverContext;
+        StringTextContext clientContext;
+        
+        ISynchronizationStrategy server;
+        ISynchronizationStrategy client;
+        
+        [SetUp]
+        public void SetUp()
         {
-        }
-
-
-
-        [Test]
-        public void TestThis()
-        {
-            LocalConnection serverConnection = new LocalConnection();
-            LocalConnection clientConnection = new LocalConnection();
+            log4net.Config.BasicConfigurator.Configure();
+            
+            serverConnection = new LocalConnection();
+            clientConnection = new LocalConnection();
             LocalProtocol.Connect(serverConnection, clientConnection);
 
-            ITextContext serverContext = new StringTextContext();
-            ITextContext clientContext = new StringTextContext();
+            serverContext = new StringTextContext();
+            clientContext = new StringTextContext();
 
-            var server = new DifferentialSynchronizationStrategy(0, serverContext, serverConnection);
-            var client = new DifferentialSynchronizationStrategy(1, clientContext, clientConnection);
+            server = new DifferentialSynchronizationStrategy(0, serverContext, serverConnection);
+            client = new DifferentialSynchronizationStrategy(1, clientContext, clientConnection);            
+        }
 
+        [Test]
+        public void TestSimpleSession()
+        {
             clientContext.Insert(clientContext, new InsertOperation('f', 0));
             clientContext.Insert(clientContext, new InsertOperation('o', 1));
             clientContext.Insert(clientContext, new InsertOperation('o', 2));
-            serverConnection.DispatchAll();
-            clientConnection.DispatchAll();
-            TestUtil.WaitAreEqual("foo", () => clientContext.Data, 250);
-            TestUtil.WaitAreEqual("foo", () => serverContext.Data, 250);
+
+            TestUtil.WaitAreEqual("foo", () => clientContext.Data, maxWaitTime);
+            TestUtil.WaitAreEqual("foo", () => serverContext.Data, maxWaitTime);
 
             serverContext.Insert(serverContext, new InsertOperation('!', 0));
             serverConnection.DispatchAll();
             clientConnection.DispatchAll();
-            TestUtil.WaitAreEqual("!foo", () => clientContext.Data, 250);
-            TestUtil.WaitAreEqual("!foo", () => serverContext.Data, 250);
+            TestUtil.WaitAreEqual("!foo", () => serverContext.Data, maxWaitTime);
+            TestUtil.WaitAreEqual("!foo", () => clientContext.Data, maxWaitTime);
         }
 
+        [Test]
+        public void TestDeletion()
+        {
+            clientContext.Insert(clientContext, new InsertOperation('f', 0));
+            clientContext.Insert(clientContext, new InsertOperation('o', 1));
+            clientContext.Insert(clientContext, new InsertOperation('o', 2));
+
+            TestUtil.WaitAreEqual("foo", () => clientContext.Data, maxWaitTime);
+            TestUtil.WaitAreEqual("foo", () => serverContext.Data, maxWaitTime);
+
+            serverContext.SetDataAsUser("");
+            TestUtil.WaitAreEqual("", () => serverContext.Data, maxWaitTime);
+            TestUtil.WaitAreEqual("", () => clientContext.Data, maxWaitTime);
+        }        
+        
+        [Test]
+        public void TestDeletion2()
+        {
+            clientContext.Insert(clientContext, new InsertOperation('f', 0));
+            clientContext.Insert(clientContext, new InsertOperation('o', 1));
+            clientContext.Insert(clientContext, new InsertOperation('o', 2));
+
+            clientContext.CaretPosition = 2;
+            clientContext.SetSelectionAsUser(2, 3);
+            
+            TestUtil.WaitAreEqual("foo", () => clientContext.Data, maxWaitTime);
+            TestUtil.WaitAreEqual("foo", () => serverContext.Data, maxWaitTime);
+
+            serverContext.SetDataAsUser("oo");
+            TestUtil.WaitAreEqual("oo", () => serverContext.Data, maxWaitTime);
+            TestUtil.WaitAreEqual("oo", () => clientContext.Data, maxWaitTime);
+            Assert.AreEqual(1, clientContext.CaretPosition);
+            Assert.AreEqual(1, clientContext.SelectionStart);
+            Assert.AreEqual(2, clientContext.SelectionEnd);
+        }             
+        
+        [Test]
+        public void TestAsynchronousSession()
+        {
+            clientContext.SetDataAsUser("bbb");
+
+            TestUtil.WaitAreEqual("bbb", () => clientContext.Data, maxWaitTime);
+            TestUtil.WaitAreEqual("bbb", () => serverContext.Data, maxWaitTime);
+            
+            // Now both users edit asynchronously
+            clientConnection.PauseSending();
+            serverConnection.PauseSending();
+
+            clientContext.SetDataAsUser("aaa bbb");
+            serverContext.SetDataAsUser("bbb ccc");
+            
+            // And the connection is up again
+            clientConnection.ResumeSending();
+            serverConnection.ResumeSending();
+            
+            TestUtil.WaitAreEqual("aaa bbb ccc", () => serverContext.Data, maxWaitTime);
+            TestUtil.WaitAreEqual("aaa bbb ccc", () => clientContext.Data, maxWaitTime);
+        }        
+        
         [Test]
         public void TestSelectionPreservation()
         {
-            LocalConnection serverConnection = new LocalConnection();
-            LocalConnection clientConnection = new LocalConnection();
-            LocalProtocol.Connect(serverConnection, clientConnection);
-
-            StringTextContext serverContext = new StringTextContext();
-            StringTextContext clientContext = new StringTextContext();
-
-            var server = new DifferentialSynchronizationStrategy(0, serverContext, serverConnection);
-            var client = new DifferentialSynchronizationStrategy(1, clientContext, clientConnection);
-
             clientContext.Insert(clientContext, new InsertOperation("foo", 0));
             clientContext.CaretPosition = 2;
-            clientContext.SetSelection(0, 3);
+            clientContext.SetSelectionAsUser(0, 3);
+            TestUtil.WaitAreEqual("foo", () => clientContext.Data, maxWaitTime);
+            TestUtil.WaitAreEqual("foo", () => serverContext.Data, maxWaitTime);
 
-            // TODO: find better solution for testing than sleeping (e.g. not using
-            // a dispatcher thread)
-
-            Thread.Sleep(100);
-
-            serverContext.Insert(clientContext, new InsertOperation("bar", 0));
-            Thread.Sleep(100);
+            serverContext.Insert(serverContext, new InsertOperation("bar", 0));
+            TestUtil.WaitAreEqual("barfoo", () => clientContext.Data, maxWaitTime);
             Assert.AreEqual("foo", clientContext.SelectedText);
             Assert.AreEqual(5, clientContext.CaretPosition);
 
-            serverContext.Insert(clientContext, new InsertOperation("bar", 6));
-            Thread.Sleep(100);
+            serverContext.Insert(serverContext, new InsertOperation("bar", 6));
+            TestUtil.WaitAreEqual("barfoobar", () => clientContext.Data, maxWaitTime);
             Assert.AreEqual("foo", clientContext.SelectedText);
             Assert.AreEqual(5, clientContext.CaretPosition);
         }
-
+        
         [Test]
-        /// <summary>
-        /// Tests that the client starts out with the server's current context
-        /// </summary>
-        public void TestSharedContextEstablishment()
+        public void TestSelectionPreservation2()
         {
-            LocalConnection serverConnection = new LocalConnection();
-            LocalConnection clientConnection = new LocalConnection();
-            LocalProtocol.Connect(serverConnection, clientConnection);
+            clientContext.Insert(clientContext, new InsertOperation("foo", 0));
+            clientContext.CaretPosition = 2;
+            clientContext.SetSelectionAsUser(0, 3);
+            TestUtil.WaitAreEqual("foo", () => clientContext.Data, maxWaitTime);
+            TestUtil.WaitAreEqual("foo", () => serverContext.Data, maxWaitTime);
 
-            string testString = "foo bar";
-            StringTextContext serverContext = new StringTextContext();
-            serverContext.Data = testString;
+            serverContext.Insert(serverContext, new InsertOperation("rr", 1));
+            TestUtil.WaitAreEqual("frroo", () => clientContext.Data, maxWaitTime);
+            Assert.AreEqual("frroo", clientContext.SelectedText);
+            Assert.AreEqual(4, clientContext.CaretPosition);
+        }        
+        
+        [Test]
+        public void TestRemoteSelection()
+        {
+            clientContext.Insert(clientContext, new InsertOperation("foo", 0));
+            TestUtil.WaitAreEqual("foo", () => clientContext.Data, maxWaitTime);
+            TestUtil.WaitAreEqual("foo", () => serverContext.Data, maxWaitTime);
 
-            StringTextContext clientContext = new StringTextContext();
-
-            var server = new DifferentialSynchronizationStrategy(0, serverContext, serverConnection);
-            var client = new DifferentialSynchronizationStrategy(1, clientContext, clientConnection);
-
-            TestUtil.WaitAreEqual(testString, () => clientContext.Data, 250);
-        }
+            clientContext.SetSelectionAsUser(0, 3);
+            
+            TestUtil.WaitAreEqual(true, () => serverContext.RemoteSelectionStart == 0 && serverContext.RemoteSelectionEnd == 3, maxWaitTime);
+            
+        }           
     }
 }

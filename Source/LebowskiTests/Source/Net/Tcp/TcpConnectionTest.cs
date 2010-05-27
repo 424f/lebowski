@@ -10,6 +10,7 @@ namespace LebowskiTests.Net.Tcp
     {
         private int port = 12345;
         private TcpServerConnection server = null;
+        private TcpClientConnection client = null;
 
         public TcpConnectionTest()
         {
@@ -19,23 +20,36 @@ namespace LebowskiTests.Net.Tcp
         public void SetUp()
         {
             server = new TcpServerConnection(port);
+            client = new TcpClientConnection("localhost", port);            
         }
 
         [TearDown]
         public void TearDown()
         {
-            server.Close();
-            server = null;
+            if(server != null)
+            {
+                server.Close();
+                server = null;
+            }
+            
+            if(client != null)
+            {
+                client.Close();
+                client = null;
+            }
         }
 
 
         [Test]
         public void TestHostAndConnect()
         {
+        }
+        
+        [Test]
+        public void TestSimpleSession()
+        {
             string serverReceived = "";
             string clientReceived = "";
-
-            TcpClientConnection client = new TcpClientConnection("localhost", port);
 
             server.Received += delegate(object sender, ReceivedEventArgs e)
             {
@@ -54,10 +68,38 @@ namespace LebowskiTests.Net.Tcp
 
             TestUtil.WaitAreEqual("FooBar", () =>  serverReceived, 500);
             TestUtil.WaitAreEqual("BarFoo", () =>  clientReceived, 500);
-
-            server.Close();
         }
 
+        [Test]
+        public void TestDelayedRegistration()
+        {
+            string serverReceived = "";
+            string clientReceived = "";
+
+            client.Received += delegate(object sender, ReceivedEventArgs e)
+            {
+                clientReceived += e.Message.ToString();
+            };
+
+            client.Send("Foo");            
+            server.Send("Bar");
+            client.Send("Bar");
+            server.Send("Foo");
+            
+            // We just now register the event handler, but the previously
+            // received messages should have been queued up and dispatched now.
+            server.Received += delegate(object sender, ReceivedEventArgs e)
+            {
+                serverReceived += e.Message.ToString();
+            };                        
+
+            TestUtil.WaitAreEqual("FooBar", () =>  serverReceived, 500);
+            TestUtil.WaitAreEqual("BarFoo", () =>  clientReceived, 500);
+
+            server.Close();
+            client.Close();
+        }        
+        
         [Test]
         /// <summary>
         /// At the moment, we do not support multiple connections, so after an initial
@@ -66,7 +108,6 @@ namespace LebowskiTests.Net.Tcp
         /// </summary>
         public void TestDiscardMultipleConnections()
         {
-            TcpClientConnection client = new TcpClientConnection("localhost", port);
             Assert.Throws(typeof(ConnectionFailedException), delegate { var c = new TcpClientConnection("localhost", port); });
             Assert.Throws(typeof(ConnectionFailedException), delegate { var c = new TcpClientConnection("localhost", port); });
             Assert.Throws(typeof(ConnectionFailedException), delegate { var c = new TcpClientConnection("localhost", port); });
@@ -92,8 +133,6 @@ namespace LebowskiTests.Net.Tcp
         /// </summary>
         public void TestServerShutdown()
         {
-            TcpClientConnection client = new TcpClientConnection("localhost", port);
-
             string serverReceived = "";
             bool connectionClosed = false;
 
@@ -113,8 +152,9 @@ namespace LebowskiTests.Net.Tcp
 
             TestUtil.WaitAreEqual(text, () => serverReceived, 250);
             server.Close();
+            server = null;
 
-            TestUtil.WaitAreEqual(true, () => connectionClosed, 250);
+            TestUtil.WaitAreEqual(true, () => connectionClosed, 750);
 
         }
     }

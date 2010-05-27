@@ -28,11 +28,40 @@ namespace Lebowski.TextModel
         }
         
         /// <summary>
+        /// The start index of the remote selection.
+        /// </summary>
+        public int RemoteSelectionStart { get; private set; }
+        
+        /// <summary>
+        /// The end index of the remote selection.
+        /// </summary>
+        public int RemoteSelectionEnd { get; private set; }
+        
+        /// <summary>
         /// Stores the text associated with this context. Note that for 
         /// the StringTextContext, we don't have a GUI element corresponding
         /// to this data.
         /// </summary>
-        public override string Data { get; set; }
+        public override string Data
+        {
+            get { return data; }
+            set
+            {
+                data = value;
+            }
+        }
+        private string data;
+        
+        /// <summary>
+        /// Behaves the same as this.Data=data, but also issues a event
+        /// that the text context has changed, as if a user had changed it.
+        /// </summary>
+        /// <param name="data">the new context data</param>
+        public void SetDataAsUser(string data)
+        {
+            Data = data;
+            OnChanged(new ChangeEventArgs(null));            
+        }
         
         /// <inheritdoc/>
         public override bool HasSelection
@@ -77,7 +106,8 @@ namespace Lebowski.TextModel
         /// <inheritdoc/>
         public override void SetRemoteSelection(object siteIdentifier, int start, int end)
         {
-
+            RemoteSelectionStart = start;
+            RemoteSelectionEnd = end;
         }        
         
         /// <inheritdoc/>
@@ -85,13 +115,22 @@ namespace Lebowski.TextModel
         {
             if (start > last)
                 throw new ArgumentException();
-            if (last > (Data.Length -1))
+            if (last > (Data.Length))
                 throw new ArgumentOutOfRangeException();
-            else
-            {
-                SelectionStart = start;
-                SelectionEnd = last;
-            }
+
+            SelectionStart = start;
+            SelectionEnd = last;
         }        
+        
+        /// <summary>
+        /// Behaves like SetSelection but also 
+        /// </summary>
+        /// <param name="start">The first index part of the selection.</param>
+        /// <param name="last">The index of the character after the last selected character.</param>
+        public void SetSelectionAsUser(int start, int last)
+        {
+            SetSelection(start, last);
+            OnChanged(new ChangeEventArgs(null));
+        }
     }
 }

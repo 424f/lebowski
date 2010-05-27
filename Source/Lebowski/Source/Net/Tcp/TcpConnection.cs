@@ -47,7 +47,6 @@ namespace Lebowski.Net.Tcp
                     {
                         Logger.ErrorFormat("Encountered error while dispatching message: {0}", e);
                     }
-                    // TODO: handle disconnection
                 }
             }
             catch(Exception e)
@@ -91,7 +90,10 @@ namespace Lebowski.Net.Tcp
             Logger.InfoFormat("Closing stream: {0}", stream);
             try
             {
-                stream.Close();
+                if(stream != null)
+                {
+                    stream.Close();
+                }
             }
             finally
             {

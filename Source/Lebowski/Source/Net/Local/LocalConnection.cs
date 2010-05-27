@@ -10,10 +10,10 @@
     /// </summary>
     public class LocalConnection : AbstractConnection
     {
-        private int ReceiveDelay = 0;
         private Thread dispatcherThread;
         private Queue<ReceivedEventArgs> eventQueue;
         private bool dispatcherRunning;
+        private bool paused;
         
         /// <summary>
         /// Initializes a new instance of the LocalConnection class.
@@ -51,7 +51,27 @@
             dispatcherRunning = false;
             OnConnectionClosed(new EventArgs());
         }
+        
+        /// <summary>
+        /// Pauses the sending of messages.
+        /// </summary>
+        public void PauseSending()
+        {
+            paused = true;
+        }
 
+        /// <summary>
+        /// Resume the sending of messages.
+        /// </summary>
+        public void ResumeSending()
+        {
+            paused = false;
+            lock (eventQueue)
+            {
+                Monitor.PulseAll(eventQueue);
+            }            
+        }        
+        
         /// <summary>
         /// Makes sure that all packets currently enqueued are dispatched,
         /// before the method returns. This is handy for writing tests, as
@@ -81,17 +101,12 @@
                 ReceivedEventArgs e = null;
                 lock (eventQueue)
                 {
-                    while (eventQueue.Count == 0)
+                    while (eventQueue.Count == 0 || paused)
                     {
                         Monitor.Wait(eventQueue);
                     }
                     e = eventQueue.Dequeue();
                 }
-                if (ReceiveDelay > 0)
-                {
-                    Thread.Sleep(ReceiveDelay);
-                }
-                System.Console.WriteLine("Receive({0})", e.Message);
                 Endpoint.OnReceived(e);
                 lock (eventQueue)
                 {
