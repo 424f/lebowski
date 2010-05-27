@@ -1,14 +1,15 @@
-namespace TwinEditor.Test
+namespace TwinEditorTests.Execution
 {
     using System;
     using System.IO;
     using TwinEditor.Execution;
     using NUnit.Framework;
+    
     [TestFixture]
     public class PythonInterpreterTest
     {
         [Test]
-        public void testExecution()
+        public void TestExecution()
         {
             var interpreter = new PythonInterpreter();
             var writer = new PythonStringWriter();
@@ -17,7 +18,7 @@ namespace TwinEditor.Test
         }
 
         [Test]
-        public void testExecution2()
+        public void TestExecution2()
         {
             var interpreter = new PythonInterpreter();
             var writer = new PythonStringWriter();
@@ -31,7 +32,7 @@ for i in xrange(5):
         }
 
         [Test]
-        public void testErrorHandling1()
+        public void TestErrorHandling1()
         {
             var interpreter = new PythonInterpreter();
             var writer = new PythonStringWriter();

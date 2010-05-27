@@ -9,18 +9,18 @@
     /// the initial context present on the server, so they are initially
     /// synchronized.
     /// </summary>
-    public class InitializationState : SessionState
+    internal class InitializationState : SessionState
     {
         /// <summary>
         /// Initializes a new instance of the InitializationState class.
         /// </summary>
         /// <param name="session"></param>
-        public InitializationState(SessionContext session) : base(session)
+        internal InitializationState(SessionContext session) : base(session)
         {
         }
         
         /// <inheritdoc />
-        public override void Register()
+        internal override void Register()
         {
             // Server sends his state to client and then changes to SynchronizationState
             if(session.SiteId == 0)
@@ -33,7 +33,7 @@
         }
 
         /// <inheritdoc />        
-        public override void Unregister()
+        internal override void Unregister()
         {
             session.ApplicationConnection.Received -= ApplicationConnectionReceived;
         }

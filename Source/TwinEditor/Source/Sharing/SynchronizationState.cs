@@ -10,19 +10,19 @@
     /// among multiple sites, using a ISynchronizationStrategy to achieve this
     /// goal.
     /// </summary>
-    public class SynchronizationState : SessionState
+    internal class SynchronizationState : SessionState
     {
         /// <summary>
         /// Initializes a new instance of the SynchronizationState class.
         /// </summary>
         /// <param name="session">The session this instance is operating on.</param>
-        public SynchronizationState(SessionContext session) : base(session)
+        internal SynchronizationState(SessionContext session) : base(session)
         {
 
         }
 
         /// <inheritdoc/>
-        public override void Register()
+        internal override void Register()
         {
             Logger.Info("Registering SynchronizationState");
             session.State = SessionStates.Connected;
@@ -30,7 +30,7 @@
         }
 
         /// <inheritdoc/>
-        public override void Unregister()
+        internal override void Unregister()
         {
             session.ApplicationConnection.Received -= ApplicationConnectionReceived;
         }

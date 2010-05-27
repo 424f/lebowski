@@ -14,16 +14,16 @@
     ///     - Agree on a synchronization strategy
     ///     - Check password information
     /// </summary>
-    public class BootstrappingState : SessionState
+    internal class BootstrappingState : SessionState
     {
         /// <summary>
         /// Initializes a new instance of the BootstrappingState class.
         /// </summary>
         /// <param name="session">The session this instance will be operating on.</param>
-        public BootstrappingState(SessionContext session) : base(session) {}
+        internal BootstrappingState(SessionContext session) : base(session) {}
 
         /// <inheritdoc/>
-        public override void Register()
+        internal override void Register()
         {
             Logger.Info("Registering BootstrappingState");
 
@@ -36,7 +36,7 @@
         }
 
         /// <inheritdoc/>
-        public override void Unregister()
+        internal override void Unregister()
         {
             session.ApplicationConnection.Received -= ApplicationConnectionReceived;
         }

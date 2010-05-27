@@ -30,6 +30,27 @@
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
   <ItemGroup>
+    <Reference Include="IronPython">
+      <HintPath>..\..\Libs\IronPython.dll</HintPath>
+    </Reference>
+    <Reference Include="IronPython.Modules">
+      <HintPath>..\..\Libs\IronPython.Modules.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\Libs\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Dynamic">
+      <HintPath>..\..\Libs\Microsoft.Dynamic.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Scripting">
+      <HintPath>..\..\Libs\Microsoft.Scripting.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Scripting.Core">
+      <HintPath>..\..\Libs\Microsoft.Scripting.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Scripting.Debugging">
+      <HintPath>..\..\Libs\Microsoft.Scripting.Debugging.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\Libs\nunit.framework.dll</HintPath>
     </Reference>
@@ -45,10 +66,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Source\PythonInterpreterTest.cs" />
+    <Compile Include="Source\Execution\PythonInterpreterTest.cs" />
+    <Compile Include="Source\FileTypes\PythonFileTypeTest.cs" />
+    <Compile Include="Source\FileTypes\TextFileTypeTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Source" />
+    <Folder Include="Source\FileTypes" />
+    <Folder Include="Source\Execution" />
+    <ProjectReference Include="..\LebowskiTests\LebowskiTests.csproj">
+      <Project>{05713227-AAD4-43F8-BBB5-F35912314C91}</Project>
+      <Name>LebowskiTests</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Lebowski\Lebowski.csproj">
+      <Project>{B3907A05-1EF4-4985-9440-46442FE1EFE6}</Project>
+      <Name>Lebowski</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TwinEditor\TwinEditor.csproj">
       <Project>{89548DEC-46B8-42FA-89BB-948B5C570762}</Project>
       <Name>TwinEditor</Name>
