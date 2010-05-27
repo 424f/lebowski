@@ -235,20 +235,6 @@ namespace LebowskiTests
         
         [Test]
         [STAThread]
-        public void Test_SetSelectionInvalid()
-        {
-            Assert.AreEqual(0, textEditorTextContext.SelectionStart, "Initial SelectionStart not 0!");
-            Assert.AreEqual(0, textEditorTextContext.SelectionEnd, "Initial SelectionEnd not 0!");
-            Assert.Throws(typeof(ArgumentException),
-                          delegate
-                          {
-                              textEditorTextContext.SetSelection(5, 1);
-                          },
-                         "Invalid selection accepted!");
-        }
-        
-        [Test]
-        [STAThread]
         public void Test_RefreshEmpty()
         {
             Assert.AreEqual("", textEditorTextContext.Data, "Initial Data is not empty!");

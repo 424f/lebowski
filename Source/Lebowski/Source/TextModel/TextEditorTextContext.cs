@@ -99,7 +99,7 @@ namespace Lebowski.TextModel
         public override void Delete(object issuer, DeleteOperation operation)
         {
             UnsubscribeFromTextBox();
-            TextBox.Text.Remove(operation.Position, 1);
+            TextBox.Document.Remove(operation.Position, 1);
             SubscribeToTextBox();
         }        
         
@@ -107,7 +107,7 @@ namespace Lebowski.TextModel
         public override void Insert(object issuer, InsertOperation operation)
         {
             UnsubscribeFromTextBox();
-            TextBox.Text.Insert(operation.Position, operation.Text.ToString());
+            TextBox.Document.Insert(operation.Position, operation.Text.ToString());
             SubscribeToTextBox();
         }
 
