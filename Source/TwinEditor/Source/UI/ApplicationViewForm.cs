@@ -196,12 +196,8 @@ namespace TwinEditor.UI
         public void UpdateMenuItems()
         {
             bool fileOpen = MainTab.TabPages.Count > 0;
-
-            copyToolStripMenuItem.Enabled = fileOpen;
-            pasteToolStripMenuItem.Enabled = fileOpen;
+            
             shareToolStripMenuItem.Enabled = fileOpen;
-            cutToolStripMenuItem.Enabled = fileOpen;
-            deleteToolStripMenuItem.Enabled = fileOpen;
 
             foreach (ToolStripMenuItem item in chooseFileTypeMenuItems)
             {

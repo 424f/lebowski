@@ -101,7 +101,7 @@ namespace TwinEditor.UI
     }
 
     /// <summary>
-    /// <see cref="TabClosedEventArgs"></see> is the EventArgs class for <see cref="TabClosed"></see>
+    /// TabClosedEventArgs is the EventArgs class for <see cref="TabClosed"></see>
     /// </summary>
     public sealed class TabClosedEventArgs : EventArgs
     {
