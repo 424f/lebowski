@@ -47,7 +47,7 @@ namespace TwinEditor.UI
         	this.shareToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         	this.participateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         	this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
-        	this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+        	this.SettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         	this.scriptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         	this.compileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         	this.runToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -179,7 +179,7 @@ namespace TwinEditor.UI
         	        	        	this.shareToolStripMenuItem,
         	        	        	this.participateToolStripMenuItem,
         	        	        	this.toolStripSeparator5,
-        	        	        	this.toolStripMenuItem1});
+        	        	        	this.SettingsToolStripMenuItem});
         	this.editToolStripMenuItem.Name = "editToolStripMenuItem";
         	this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
         	this.editToolStripMenuItem.Text = "Edit";
@@ -205,12 +205,13 @@ namespace TwinEditor.UI
         	this.toolStripSeparator5.Name = "toolStripSeparator5";
         	this.toolStripSeparator5.Size = new System.Drawing.Size(167, 6);
         	// 
-        	// toolStripMenuItem1
+        	// SettingsToolStripMenuItem
         	// 
-        	this.toolStripMenuItem1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripMenuItem1.Image")));
-        	this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-        	this.toolStripMenuItem1.Size = new System.Drawing.Size(170, 22);
-        	this.toolStripMenuItem1.Text = "Settings";
+        	this.SettingsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("SettingsToolStripMenuItem.Image")));
+        	this.SettingsToolStripMenuItem.Name = "SettingsToolStripMenuItem";
+        	this.SettingsToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
+        	this.SettingsToolStripMenuItem.Text = "Settings";
+        	this.SettingsToolStripMenuItem.Click += new System.EventHandler(this.SettingsToolStripMenuItemClick);
         	// 
         	// scriptToolStripMenuItem
         	// 
@@ -314,8 +315,8 @@ namespace TwinEditor.UI
         	this.ResumeLayout(false);
         	this.PerformLayout();
         }
+        private System.Windows.Forms.ToolStripMenuItem SettingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem participateToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
