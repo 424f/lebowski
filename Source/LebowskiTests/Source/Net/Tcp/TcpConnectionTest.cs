@@ -157,5 +157,14 @@ namespace LebowskiTests.Net.Tcp
             TestUtil.WaitAreEqual(true, () => connectionClosed, 750);
 
         }
+        
+        /// <summary>
+        /// Tests whether connecting to an inexistent host correctly fails.
+        /// </summary>
+        [Test]
+        public void TestFailedConnection()
+        {
+            Assert.Throws(typeof(ConnectionFailedException), () => new TcpClientConnection("thisaddressprobablydoesnotexistinthecurrentenvironment", 123456));
+        }
     }
 }
